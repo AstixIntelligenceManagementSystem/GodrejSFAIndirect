@@ -103,7 +103,7 @@ GoogleApiClient.OnConnectionFailedListener,CategoryCommunicator
 {
 	public TextView tvRateHeading;
 
-
+//Nitish Dubey Changes
 	CustomKeyboard mCustomKeyboardNum,mCustomKeyboardNumWithoutDecimal;
 	public String VisitTypeStatus="1";
 	public boolean flgAllTotalOrderValueCrossesCutOff=false;
@@ -11087,5 +11087,6 @@ if(hmapProductListOnWhichWholePriceNeedsToApplyIfRequired.containsKey(ProductID)
 		alertDialogSubmitConfirm.setIcon(R.drawable.info_ico);
 		AlertDialog alert = alertDialogSubmitConfirm.create();
 		alert.show();
+		//Nitish DUbey Completed Task
 	}
 }
