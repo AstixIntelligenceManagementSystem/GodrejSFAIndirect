@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "542081408622",
+    "firebase_url": "https://godrejsfaindirect.firebaseio.com",
+    "project_id": "godrejsfaindirect",
+    "storage_bucket": "godrejsfaindirect.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:542081408622:android:385c3a17ef234576",
+        "android_client_info": {
+          "package_name": "project.astix.com.godrejsfaindirect"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "542081408622-lilb0mobjdp6jj2tdc5fhqnknjr36ib1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApf6VwLSaT92OIKhT0sojaOxGrbDjCCN0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
