@@ -103,7 +103,7 @@ GoogleApiClient.OnConnectionFailedListener,CategoryCommunicator
 {
 	public TextView tvRateHeading;
 
-
+//Abhinav
 	CustomKeyboard mCustomKeyboardNum,mCustomKeyboardNumWithoutDecimal;
 	public String VisitTypeStatus="1";
 	public boolean flgAllTotalOrderValueCrossesCutOff=false;
