@@ -203,7 +203,7 @@ GoogleApiClient.OnConnectionFailedListener,CategoryCommunicator
 		 public int StoreCatNodeId=0;
 		 public ListView lvProduct;
 		 public EditText inputSearch;
-	//Nitish DUbey1
+	//Nitish DUbey2
 //Abhinav Raj
 	CustomKeyboard mCustomKeyboardNum,mCustomKeyboardNumWithoutDecimal;
 	int countSubmitClicked=0;
