@@ -103,7 +103,8 @@ GoogleApiClient.OnConnectionFailedListener,CategoryCommunicator
 {
 	public TextView tvRateHeading;
 
-//Abhinav
+	//Nitish DUbey
+//Abhinav Raj
 	CustomKeyboard mCustomKeyboardNum,mCustomKeyboardNumWithoutDecimal;
 	public String VisitTypeStatus="1";
 	public boolean flgAllTotalOrderValueCrossesCutOff=false;
