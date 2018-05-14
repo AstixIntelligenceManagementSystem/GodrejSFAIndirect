@@ -98,22 +98,16 @@ import java.util.regex.Pattern;
 public class ProductOrderEntry extends BaseActivity implements OnItemSelectedListener, OnClickListener, OnFocusChangeListener, LocationListener,GoogleApiClient.ConnectionCallbacks,
 GoogleApiClient.OnConnectionFailedListener,CategoryCommunicator
 {
+	    private static final String TAG = "LocationActivity";
+	    private static final long INTERVAL = 1000 * 10;
+	    private static final long FASTEST_INTERVAL = 1000 * 5;
+		  private static final long MIN_TIME_BW_UPDATES = 1000  * 1; //1 second
+	    private final long startTime = 15000;
+	    private final long interval = 200;
  public int flgTransferStatus=0;
-	//hmapProductStock= key =ProductID         value=ProductSelectedUOMId
-	HashMap<String, String> hmapProductSelectedUOMId=new HashMap<String, String>();
-
-	//hmapProductStock= key =ProductID         value=LineValBfrTxAftrDscnt
-	HashMap<String, String> hmapLineValBfrTxAftrDscnt=new HashMap<String, String>();
-
-	//hmapProductStock= key =ProductID         value=LineValAftrTxAftrDscnt
-	HashMap<String, String> hmapLineValAftrTxAftrDscnt=new HashMap<String, String>();
-
 	public String VisitTimeInSideStore="NA";
-
 	public TextView tvRateHeading;
 	public String StoreVisitCode="NA";
-	//nitika
-	CustomKeyboard mCustomKeyboardNum,mCustomKeyboardNumWithoutDecimal;
 	public String VisitTypeStatus="1";
 	public boolean flgAllTotalOrderValueCrossesCutOff=false;
 	public TextView tvPreAmtOutstandingVALNew;
@@ -121,7 +115,6 @@ GoogleApiClient.OnConnectionFailedListener,CategoryCommunicator
 	// variable
 	public TableLayout tbl1_dyntable_For_ExecutionDetails;
 	public TableLayout tbl1_dyntable_For_OrderDetails;
-
 	public  int flgLocationServicesOnOffOrderReview=0;
 	public  int flgGPSOnOffOrderReview=0;
 	public  int flgNetworkOnOffOrderReview=0;
@@ -132,50 +125,111 @@ GoogleApiClient.OnConnectionFailedListener,CategoryCommunicator
     public int PriceApplyDiscountLevelType=0;
     public Double cutoffvalue=0.0;
 	public int powerCheck=0;
-
-
-
-	int countSubmitClicked=0;
-	ArrayList<String> productFullFilledSlabGlobal=new ArrayList<String>();
-
-	ImageView img_ctgry;
-	String previousSlctdCtgry="";
-	LocationRequest mLocationRequest;
 	public int StoreCurrentStoreType=0;
 	public String Noti_text="Null";
 	public int MsgServerID=0;
-	Timer timer;
-
-		//MyTimerTask myTimerTask;
-		String defaultValForAlert;
 		public  String[] arrSchId;
 		public String SchemeDesc="NA";
-		int progressBarStatus=0;
-		Thread myThread;
-		private Handler mHandler = new Handler();
 		public TextView spinner_product;
-		boolean disValClkdOpenAlert=false;
 		public String ProductIdOnClickedEdit;
 		public String CtaegoryIddOfClickedView;
 		public String condtnOddEven;
 		public String storeID;
 		public String imei;
-		String progressTitle;
 		public ProgressDialog pDialog2STANDBYabhi;
 		public String date;
 		public String pickerDate;
 		public String SN;
+		//public ProgressDialog pDialogSync;
+		 public String productID;
+	public String strFinalAllotedInvoiceIds="NA";
+	     public String TmpInvoiceCodePDA="NA";
+		public int chkflgInvoiceAlreadyGenerated=0;
+		public String strGlobalOrderID="0";
+		public LinearLayout ll_prdct_detal;
+		//Invoice TextView
+		public TextView tv_NetInvValue;
+		public TextView tvTAmt;
+		public TextView tvDis;
+		public TextView tv_GrossInvVal;
+		public TextView tvFtotal;
+		public TextView tvAddDisc;
+		public TextView tv_NetInvAfterDiscount;
+		public TextView tvAmtPrevDueVAL;
+		public EditText etAmtCollVAL;
+		public TextView tvAmtOutstandingVAL;
+		public TextView tvCredAmtVAL;
+		public TextView tvINafterCredVAL;
+		public TextView textView1_CredAmtVAL_new;
+		public TextView tvNoOfCouponValue;
+		public TextView txttvCouponAmountValue;
+		public String lastKnownLocLatitude="";
+		public String lastKnownLocLongitude="";
+		public String accuracy="0";
+		public String locationProvider="Default";
+		public double glbNetOrderLevelPercentDiscount=0.00;
+		public double glbNetOderLevelFlatDiscount=0.00;
+		public double glbGrossOrderLevelPercentDiscount=0.00;
+		public double glbGrossOrderLevelFlatDiscount=0.00;
+		public String newfullFileName;
+		public int butClickForGPS=0;
+		public String FusedLocationLatitude="0";
+	    public String FusedLocationLongitude="0";
+	    public String FusedLocationProvider="";
+	    public String FusedLocationAccuracy="0";
+	    public String GPSLocationLatitude="0";
+	    public String GPSLocationLongitude="0";
+	    public String GPSLocationProvider="";
+	    public String GPSLocationAccuracy="0";
+	    public String NetworkLocationLatitude="0";
+	    public String NetworkLocationLongitude="0";
+	    public String NetworkLocationProvider="";
+	    public String NetworkLocationAccuracy="0";
+	    public AppLocationService appLocationService;
+	    public CoundownClass2 countDownTimer2;
+	    public String fnAccurateProvider="";
+	    public String fnLati="0";
+	    public String fnLongi="0";
+	    public Double fnAccuracy=0.0;
+	 public EditText   ed_search;
+		public ImageView  btn_go;
+	public String[] prductId;
+		 public int flgApplyFreeProductSelection=0;
+		 public int isbtnExceptionVisible=0;
+		 public LocationManager locationManager;
+		  public Location location;
+		  public ProgressDialog pDialog2STANDBY;
+		 public int flgProDataCalculation=1;
+		 public int StoreCatNodeId=0;
+		 public ListView lvProduct;
+		 public EditText inputSearch;
+	//hmapProductStock= key =ProductID         value=ProductSelectedUOMId
+	HashMap<String, String> hmapProductSelectedUOMId=new HashMap<String, String>();
+	//hmapProductStock= key =ProductID         value=LineValBfrTxAftrDscnt
+	HashMap<String, String> hmapLineValBfrTxAftrDscnt=new HashMap<String, String>();
+	//hmapProductStock= key =ProductID         value=LineValAftrTxAftrDscnt
+	HashMap<String, String> hmapLineValAftrTxAftrDscnt=new HashMap<String, String>();
+	//nitika
+	CustomKeyboard mCustomKeyboardNum,mCustomKeyboardNumWithoutDecimal;
+	int countSubmitClicked=0;
+	ArrayList<String> productFullFilledSlabGlobal=new ArrayList<String>();
+	ImageView img_ctgry;
+	String previousSlctdCtgry="";
+	LocationRequest mLocationRequest;
+	Timer timer;
+		//MyTimerTask myTimerTask;
+		String defaultValForAlert;
+		int progressBarStatus=0;
+		Thread myThread;
+		boolean disValClkdOpenAlert=false;
+		String progressTitle;
 		 boolean alertOpens=false;
 		 int flagClkdButton=0;
 		String distID="";
-
 	HashMap<String,Integer> hmapDistPrdctStockCountText =new HashMap<String,Integer>();
 		HashMap<String,Integer> hmapDistPrdctStockCount =new HashMap<String,Integer>();
 	HashMap<String,String> hmapPrdctIdOutofStock=new HashMap<String,String> ();
-
 		LinkedHashMap<String,Integer> hmapflgProduct =new LinkedHashMap<String,Integer>();
-		//public ProgressDialog pDialogSync;
-		 public String productID;
 		 String spinnerCategorySelected;
 		 String spinnerCategoryIdSelected;
 		 Location lastKnownLoc;
@@ -184,7 +238,6 @@ GoogleApiClient.OnConnectionFailedListener,CategoryCommunicator
 		 String alrtPrdctId;
 		 String productIdOnLastEditTextVal="0";
 		 String alrtValueSpnr;
-		private boolean alrtStopResult = false;
 		int alrtObjectTypeFlag=1; //1=spinner,edittext=0;
 		// Decimal Format
 		Locale locale  = new Locale("en", "UK");
@@ -192,15 +245,7 @@ GoogleApiClient.OnConnectionFailedListener,CategoryCommunicator
 		DecimalFormat decimalFormat = (DecimalFormat)NumberFormat.getNumberInstance(locale);
 		int CheckIfStoreExistInStoreProdcutPurchaseDetails=0;
 		int CheckIfStoreExistInStoreProdcutInvoiceDetails=0;
-
-	public String strFinalAllotedInvoiceIds="NA";
-	     public String TmpInvoiceCodePDA="NA";
-		public int chkflgInvoiceAlreadyGenerated=0;
-
-		public String strGlobalOrderID="0";
 		ProgressDialog mProgressDialog;
-
-
 	//****************************************************************
 		//Field
 		String fusedData;
@@ -215,102 +260,20 @@ GoogleApiClient.OnConnectionFailedListener,CategoryCommunicator
 		 Spinner alrtPrvsSpnrSlctd;
 		Spinner spinner_category;
 		ImageView btn_bck;
-		public LinearLayout ll_prdct_detal;
 		TextView txtVwRate;
 		TextView textViewFreeQty,textViewRate,textViewDiscount;
-		//Invoice TextView
-		public TextView tv_NetInvValue;
-		public TextView tvTAmt;
-		public TextView tvDis;
-		public TextView tv_GrossInvVal;
-		public TextView tvFtotal;
-		public TextView tvAddDisc;
-		public TextView tv_NetInvAfterDiscount;
-
-		public TextView tvAmtPrevDueVAL;
-		public EditText etAmtCollVAL;
-		public TextView tvAmtOutstandingVAL;
 		LinearLayout ll_scheme_detail;
-		public TextView tvCredAmtVAL;
-		public TextView tvINafterCredVAL;
-		public TextView textView1_CredAmtVAL_new;
-
-		public TextView tvNoOfCouponValue;
-
-		public TextView txttvCouponAmountValue;
-
-		public String lastKnownLocLatitude="";
-		public String lastKnownLocLongitude="";
-		public String accuracy="0";
-		public String locationProvider="Default";
-
-		public double glbNetOrderLevelPercentDiscount=0.00;
-		public double glbNetOderLevelFlatDiscount=0.00;
-
-		public double glbGrossOrderLevelPercentDiscount=0.00;
-		public double glbGrossOrderLevelFlatDiscount=0.00;
-
-
-		public String newfullFileName;
 		int isReturnClkd=0;
-
-		public int butClickForGPS=0;
-
-
-
-		public String FusedLocationLatitude="0";
-	    public String FusedLocationLongitude="0";
-	    public String FusedLocationProvider="";
-	    public String FusedLocationAccuracy="0";
-
-	    public String GPSLocationLatitude="0";
-	    public String GPSLocationLongitude="0";
-	    public String GPSLocationProvider="";
-	    public String GPSLocationAccuracy="0";
-
-	    public String NetworkLocationLatitude="0";
-	    public String NetworkLocationLongitude="0";
-	    public String NetworkLocationProvider="";
-	    public String NetworkLocationAccuracy="0";
-
-	    public AppLocationService appLocationService;
-
-
-	    public CoundownClass2 countDownTimer2;
-	    private final long startTime = 15000;
-	    private final long interval = 200;
-
-	    private static final String TAG = "LocationActivity";
-	    private static final long INTERVAL = 1000 * 10;
-	    private static final long FASTEST_INTERVAL = 1000 * 5;
-
-
-	    public String fnAccurateProvider="";
-	    public String fnLati="0";
-	    public String fnLongi="0";
-	    public Double fnAccuracy=0.0;
-
-
-	 public EditText   ed_search;
-		public ImageView  btn_go;
-
-
 	//****************************************************************
 		//Arrays, HashMap
 		View[] hide_View;
 		List<String> categoryNames;
 	String defaultCatName_Id="0";
-	public String[] prductId;
 		LinkedHashMap<String, String> hmapctgry_details=new LinkedHashMap<String, String>();
-
 		HashMap<String, String> hmapProductToBeFree=new HashMap<String, String>();    //Not is use
-
 		ArrayList<HashMap<String, String>> arrLstHmapPrdct=new ArrayList<HashMap<String,String>>();
-
 		//hmapSchemeIDandDescr= key=SchId,val=SchDescr
 		HashMap<String, String> hmapSchemeIDandDescr=new HashMap<String, String>();
-
-
 		//hmapCtgryPrdctDetail= key=prdctId,val=CategoryID
 		HashMap<String, String> hmapCtgryPrdctDetail=new HashMap<String, String>();
 		//hmapCtgryPrdctDetail= key=prdctId,val=Volume^Rate^TaxAmount
@@ -323,36 +286,26 @@ GoogleApiClient.OnConnectionFailedListener,CategoryCommunicator
 		HashMap<String, String> hmapPrdctFreeQty=new HashMap<String, String>();
 		//hmapCtgryPrdctDetail= key=prdctId,val=ProductName
 		HashMap<String, String> hmapPrdctIdPrdctName=new HashMap<String, String>();
-
 		HashMap<String, String> hmapPrdctIdPrdctNameVisible=new HashMap<String, String>();
 		//hmapCtgryPrdctDetail= key=prdctId,val=ProductDiscount
 		HashMap<String, String> hmapPrdctIdPrdctDscnt=new HashMap<String, String>();
-
 		//hmapCtgryPrdctDetail= key=prdctId,val=PrdString Applied Schemes,Slabs and other details
 		HashMap<String, String> hmapProductRelatedSchemesList=new HashMap<String, String>();
-
-
 		 // hmapSchemeIdStoreID= key=SchemeId value StoreId
 		 HashMap<String, String> hmapSchemeIdStoreID=new HashMap<String, String>();
-
 		 // hmapSchmSlabIdSchmID key=SchemeSlabId value = SchemeID
 		 HashMap<String, String> hmapSchmSlabIdSchmID=new HashMap<String, String>();
-
 		 // hmaSchemeSlabIdSlabDes key=SchemeSlabId value=SchemeSlab Description
 		 HashMap<String, String> hmapSchemeSlabIdSlabDes=new HashMap<String, String>();
-
+		   //HashMap<String, String> hmapSchemeStoreID=new HashMap<String, String>();
 		 // hmapSchemeSlabIdBenifitDes key=SchemeSlabId value = BenifitDescription
 		 HashMap<String, String> hmapSchemeSlabIdBenifitDes=new HashMap<String, String>();
-
 		 // hmapProductIdOrdrVal key=Product Id value=ProductOrderVal
 		 HashMap<String, String> hmapProductIdOrdrVal =new HashMap<String, String>();
-
 		 // hmapProductIdStock key = ProductID value= flgPriceAva
 		 HashMap<String, String> hmapProductflgPriceAva=new HashMap<String, String>();
-
 	// hmapProductIdStock key = ProductID value= Stock
 	HashMap<String, String> hmapProductIdStock=new HashMap<String, String>();
-
 		 ArrayList<HashMap<String, String>> arrayListSchemeSlabDteail=new ArrayList<HashMap<String,String>>();
 		 //hmapSchmeSlabIdSchemeId= key =SchemeSlabId         value=SchemeID
 		   HashMap<String, String> hmapSchmeSlabIdSchemeId=new HashMap<String, String>();
@@ -360,129 +313,125 @@ GoogleApiClient.OnConnectionFailedListener,CategoryCommunicator
 		   HashMap<String, String> hmapSchmeSlabIdSlabDes=new HashMap<String, String>();
 		   //hmapSchmeSlabIdBenifitDes= key = SchemeSlabId        value=BenifitDescription
 		   HashMap<String, String> hmapSchmeSlabIdBenifitDes=new HashMap<String, String>();
-		   //HashMap<String, String> hmapSchemeStoreID=new HashMap<String, String>();
-
 		 //hmapProductRetailerMarginPercentage= key =ProductID         value=RetailerMarginPercentage
 		   HashMap<String, String> hmapProductRetailerMarginPercentage=new HashMap<String, String>();
-
 		 //hmapProductVatTaxPerventage= key =ProductID         value=VatTaxPercentage
 		   HashMap<String, String> hmapProductVatTaxPerventage=new HashMap<String, String>();
-
 		 //hmapProductVatTaxPerventage= key =ProductID         value=ProductMRP
 		   HashMap<String, String> hmapProductMRP=new HashMap<String, String>();
-
 		 //hmapProductVolumePer= key =ProductID         value=Per
 		   HashMap<String, String> hmapProductVolumePer=new HashMap<String, String>();
-
 		   //hmapProductDiscountPercentageGive= key =ProductID         value=DiscountPercentageGivenOnProduct
 		   HashMap<String, String> hmapProductDiscountPercentageGive=new HashMap<String, String>();
-
 		 //hmapProductVolumePer= key =ProductID         value=TaxValue
 		   HashMap<String, String> hmapProductTaxValue=new HashMap<String, String>();
-
 		   //hmapProductVolumePer= key =ProductID         value=TaxValue
 		   HashMap<String, String> hmapProductViewTag=new HashMap<String, String>();
-
 		 //hmapProductVolumePer= key =ProductID         value=LODQty
 		   HashMap<String, String> hmapProductLODQty=new HashMap<String, String>();
-
-
 			 //hmapProductStandardRate= key =ProductID         value=StandardRate
 		   HashMap<String, String> hmapProductStandardRate=new HashMap<String, String>();
-
 		   //hmapProductStandardRateBeforeTax= key =ProductID         value=StandardRateBeforeTax
 		   HashMap<String, String> hmapProductStandardRateBeforeTax=new HashMap<String, String>();
-
 		   //hmapProductStandardTax= key =ProductID         value=StandardTax
 		   HashMap<String, String> hmapProductStandardTax=new HashMap<String, String>();
-
 		   LinkedHashMap<String, String> hmapFilterProductList=new LinkedHashMap<String, String>();
 		   //hmapMinDlvrQty= key =ProductID         value=MinQty
 		   LinkedHashMap<String, Integer> hmapMinDlvrQty=new LinkedHashMap<String, Integer>();
-
 			LinkedHashMap<String,String> hmapPerUnitName;
+			LinkedHashMap<String,String> hmapPerBaseQty;
 		   //hmapMinDlvrQty= key =ProductID         value=QPBT
 		   LinkedHashMap<String, String> hmapMinDlvrQtyQPBT=new LinkedHashMap<String, String>();
-
-
 		 //hmapMinDlvrQty= key =ProductID         value=QPBT
 		   LinkedHashMap<String, String> hmapMinDlvrQtyQPAT=new LinkedHashMap<String, String>();
-
-
 		   //hmapMinDlvrQty= key =ProductID         value=QPTaxAmount
 		   LinkedHashMap<String, String> hmapMinDlvrQtyQPTaxAmount=new LinkedHashMap<String, String>();
-
 		HashMap<String, HashMap<String, HashMap<String, String>>> hmapPrdtAppliedSchIdsAppliedSlabIdsDefination;
 
-
+		//Database
 	//hmapProductStock= key =ProductID         value=flgWholeSellApplicable
 	HashMap<String, String> hmapflgWholeSellApplicable=new HashMap<String, String>();
-
 	//hmapProductStock= key =ProductID         value=flgPriceRangeWholeSellApplicable
 	HashMap<String, String> hmapPriceRangeWholeSellApplicable=new HashMap<String, String>();
 
-
+		 //Common Controls Box
 	//hmapProductStock= key =ProductID         value=StandardRateWholeSale
 	HashMap<String, String> hmapStandardRateWholeSale=new HashMap<String, String>();
-
-
 	//hmapProductStock= key =ProductID         value=StandardRateBeforeTaxWholeSell
 	HashMap<String, String> hmapStandardRateBeforeTaxWholeSell=new HashMap<String, String>();
-
 	//hmapProductStock= key =ProductID         value=StandardTaxWholeSale
 	HashMap<String, String> hmapStandardTaxWholeSale=new HashMap<String, String>();
-
 	//hmapMinDlvrQty= key =ProductID         value=ProductListOnWhichWholePriceNeedsToApplyIfRequired
 	LinkedHashMap<String, String> hmapProductListOnWhichWholePriceNeedsToApplyIfRequired=new LinkedHashMap<String, String>();
-
-
-		 public int flgApplyFreeProductSelection=0;
-
 		 ArrayList<String> arredtboc_OderQuantityFinalSchemesToApply;
-
-		//Database
-
 		PRJDatabase dbengine = new PRJDatabase(this);
 		DatabaseAssistant DA = new DatabaseAssistant(this);
-
-		 //Common Controls Box
-
 		 EditText edtBox;
 		 TextView viewBox;
 		 String viewCurrentBoxValue="";
-		 public int isbtnExceptionVisible=0;
 		 ImageView img_return;
-
-
-		 public LocationManager locationManager;
-
 		  boolean isGPSEnabled = false;
 		  boolean isNetworkEnabled = false;
-		  public Location location;
-
 		  PowerManager pm;
 		  PowerManager.WakeLock wl;
-		  public ProgressDialog pDialog2STANDBY;
-
 		  LocationListener locationListener;
 		  double latitude;
 		  double longitude;
-
-		  private static final long MIN_TIME_BW_UPDATES = 1000  * 1; //1 second
-
-		 public int flgProDataCalculation=1;
-
-		 public int StoreCatNodeId=0;
-
 		 View convertView;
-
-		 public ListView lvProduct;
-
-		 public EditText inputSearch;
 		 ArrayAdapter<String> adapter;
 		 AlertDialog ad;
-
 		 String[] products;
+		Runnable myRunnable = new Runnable(){
+
+		     @Override
+		     public void run() {
+
+		       runOnUiThread(new Runnable(){
+
+		         @Override
+		         public void run() {
+
+
+		          new CountDownTimer(2000, 1000) {
+
+		              public void onTick(long millisUntilFinished) {
+		               if(pDialog2STANDBYabhi != null && pDialog2STANDBYabhi.isShowing())
+		               {
+		                pDialog2STANDBYabhi.setCancelable(false);
+
+		               }
+		              }
+
+		              public void onFinish() {
+		               /*try {
+		          Thread.sleep(2000);
+		         } catch (InterruptedException e) {
+		          // TODO Auto-generated catch block
+		          e.printStackTrace();
+		         }*/
+		              new IAmABackgroundTask().execute();
+		              // createProductPrepopulateDetailWhileSearch(CheckIfStoreExistInStoreProdcutPurchaseDetails);
+		              }
+		           }.start();
+
+
+
+		               //pDialog2STANDBYabhi.show(ProductOrderFilterSearch.this,getText(R.string.genTermPleaseWaitNew) ,"Loading Data Abhinav", true);
+		           //pDialog2STANDBYabhi.getCurrentFocus();
+		           // pDialog2STANDBYabhi.show();
+
+
+
+
+		         }
+
+		        });
+
+		     }
+		       };
+		private Handler mHandler = new Handler();
+		private boolean alrtStopResult = false;
+
 		 public void showSettingsAlert()
 		 {
 			 AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
@@ -505,6 +454,7 @@ GoogleApiClient.OnConnectionFailedListener,CategoryCommunicator
 		        // Showing Alert Message
 		        alertDialog.show();
 			 }
+
 		 @Override
 			protected void onResume()
 			{
@@ -646,6 +596,7 @@ GoogleApiClient.OnConnectionFailedListener,CategoryCommunicator
 
 
 			}
+
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		// TODO Auto-generated method stub
 		if(keyCode==KeyEvent.KEYCODE_BACK)
@@ -771,7 +722,6 @@ GoogleApiClient.OnConnectionFailedListener,CategoryCommunicator
 
 		}
 
-
 		public void onDestroy()
 		{
 			   super.onDestroy();
@@ -779,9 +729,6 @@ GoogleApiClient.OnConnectionFailedListener,CategoryCommunicator
 			  // LocalBroadcastManager.getInstance(ProductList.this).unregisterReceiver(mLocationReceiver);
 
 			  }
-
-
-
 
 		 public void CustomAlertBoxForSchemeDetails()
 		 {
@@ -1624,8 +1571,6 @@ GoogleApiClient.OnConnectionFailedListener,CategoryCommunicator
 
 		}
 
-
-
 	private boolean isGooglePlayServicesAvailable() {
 	    int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
 	    if (ConnectionResult.SUCCESS == status) {
@@ -1635,6 +1580,7 @@ GoogleApiClient.OnConnectionFailedListener,CategoryCommunicator
 	        return false;
 	    }
 	}
+
 	protected void createLocationRequest() {
 	    mLocationRequest = new LocationRequest();
 	    mLocationRequest.setInterval(INTERVAL);
@@ -1655,7 +1601,6 @@ GoogleApiClient.OnConnectionFailedListener,CategoryCommunicator
 
 
 			 }
-
 
 		private void getProductData() {
 			// CategoryID,ProductID,ProductShortName,ProductRLP,Date/Qty)
@@ -1730,6 +1675,7 @@ GoogleApiClient.OnConnectionFailedListener,CategoryCommunicator
 
 
 	}
+
 		private void getCutOffDetailsForProduct()
 		{
             PriceApplyDiscountLevelType=dbengine.fnGettblPriceApplyDiscountLevelType(storeID);
@@ -1742,6 +1688,7 @@ GoogleApiClient.OnConnectionFailedListener,CategoryCommunicator
                 cutoffvalue=dbengine.fnGettblPriceApplycutoffvalue(storeID);
             }
         }
+
 		private void getCategoryDetail()
 		{
 
@@ -1767,7 +1714,6 @@ GoogleApiClient.OnConnectionFailedListener,CategoryCommunicator
 
 
 		}
-
 
 		public void createDynamicProduct(String productIdDynamic,int CheckIfStoreExistInStoreProdcutPurchaseDetails,String ProductValuesToFill)
 		{
@@ -1860,6 +1806,19 @@ GoogleApiClient.OnConnectionFailedListener,CategoryCommunicator
 					et_ProductMDQ.setText(hmapPerUnitName.get(productIdDynamic));
 				}
 			}
+
+			TextView et_ProductUnitQty=(TextView) viewProduct.findViewById(R.id.tv_UnitQty);
+			et_ProductUnitQty.setTag("etProductUnitQty"+"_"+productIdDynamic);
+			/*if(hmapPerBaseQty!=null && hmapPerBaseQty.size()>0)
+			{
+				if(hmapPerBaseQty.containsKey(productIdDynamic))
+				{
+					et_ProductUnitQty.setText(hmapPerBaseQty.get(productIdDynamic));
+				}
+			}*/
+
+
+
 	          /*if(hmapMinDlvrQty!=null && hmapMinDlvrQty.size()>0)
 	          {
 	        	  if(hmapMinDlvrQty.containsKey(productIdDynamic))
@@ -2658,8 +2617,6 @@ GoogleApiClient.OnConnectionFailedListener,CategoryCommunicator
 
 		}
 
-
-
 		public void createProductPrepopulateDetailWhileSearch(int CheckIfStoreExistInStoreProdcutPurchaseDetails) {
 
 
@@ -2755,6 +2712,7 @@ GoogleApiClient.OnConnectionFailedListener,CategoryCommunicator
 
 
 		}
+
 		@SuppressLint("ResourceAsColor")
 		public void createProductRowColor() {
 			// LayoutInflater inflater=(LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -2775,6 +2733,7 @@ GoogleApiClient.OnConnectionFailedListener,CategoryCommunicator
 				    }
 				}
 		}
+
 		public void createProductDetail(int CheckIfStoreExistInStoreProdcutPurchaseDetails) {
 
 			/*
@@ -3309,14 +3268,12 @@ GoogleApiClient.OnConnectionFailedListener,CategoryCommunicator
 				filterProduct(spinnerCategorySelected);
 			}
 
-
-
-
 		@Override
 		public void onNothingSelected(AdapterView<?> parent) {
 			// TODO Auto-generated method stub
 
 		}
+
 	private void filterProduct(String slctdProduct)
 	{
 
@@ -3643,8 +3600,6 @@ GoogleApiClient.OnConnectionFailedListener,CategoryCommunicator
 
 
 	}
-
-
 
 	@Override
 	public void onClick(View v) {
@@ -4046,6 +4001,9 @@ GoogleApiClient.OnConnectionFailedListener,CategoryCommunicator
 
 					((TextView)(vRow).findViewById(R.id.tv_FreeQty)).setText(hmapPrdctFreeQty.get(ProductID).toString());
 					TotalFreeQTY=TotalFreeQTY+Integer.parseInt(hmapPrdctFreeQty.get(ProductID));
+					((TextView)(vRow).findViewById(R.id.tv_UnitQty)).setText("0.00");
+
+
 					hmapProductTaxValue.put(ProductID, "0.00");
 					hmapMinDlvrQtyQPTaxAmount.put(ProductID, "0.00");
 					hmapProductSelectedUOMId.put(ProductID, "0");
@@ -4055,6 +4013,9 @@ GoogleApiClient.OnConnectionFailedListener,CategoryCommunicator
 					((TextView)(vRow).findViewById(R.id.tv_Orderval)).setText("0.00");
 					if(Integer.parseInt(hmapPrdctOdrQty.get(ProductID))>0)
 					{
+						Double OverAllPerBaseQty=Double.parseDouble (hmapPrdctOdrQty.get(ProductID))/Double.parseDouble (hmapPerBaseQty.get(ProductID));
+						OverAllPerBaseQty=Double.parseDouble(new DecimalFormat("##.##").format(OverAllPerBaseQty));
+						((TextView)(vRow).findViewById(R.id.tv_UnitQty)).setText(""+OverAllPerBaseQty);
 						/*StandardRate=Double.parseDouble(hmapProductMRP.get(ProductID))/((1+(Double.parseDouble(hmapProductRetailerMarginPercentage.get(ProductID))/100)));
 						StandardRateBeforeTax=StandardRate/(1+(Double.parseDouble(hmapProductVatTaxPerventage.get(ProductID))/100));
 						StandardTax=StandardRateBeforeTax*(Double.parseDouble(hmapProductVatTaxPerventage.get(ProductID))/100);*/
@@ -4416,7 +4377,6 @@ GoogleApiClient.OnConnectionFailedListener,CategoryCommunicator
 		}
 	//Now the its Time to Show the OverAll Summary Code Starts Here
 	}
-
 
 	public void CalculateInvoiceLevelOrProductLevelWholeSaleValue(int flgPriceApplyDiscountLevelType)
 	{
@@ -4844,9 +4804,6 @@ if(hmapProductListOnWhichWholePriceNeedsToApplyIfRequired.containsKey(ProductID)
 
 	}
 
-
-
-
 	public void fnSaveFilledDataToDatabase(int valBtnClickedFrom)
 	{
 
@@ -5101,7 +5058,6 @@ if(hmapProductListOnWhichWholePriceNeedsToApplyIfRequired.containsKey(ProductID)
 	 }
 
 	}
-
 
 	public void TransactionTableDataDeleteAndSaving(int Outstat)
 	{
@@ -5372,11 +5328,6 @@ if(hmapProductListOnWhichWholePriceNeedsToApplyIfRequired.containsKey(ProductID)
 
 	}
 
-
-
-
-
-
 	public void SyncNow()
 	{
 
@@ -5428,7 +5379,6 @@ if(hmapProductListOnWhichWholePriceNeedsToApplyIfRequired.containsKey(ProductID)
 		}
 
 	}
-
 
 		public void saveFreeProductDataWithSchemeToDatabase(HashMap<String, ArrayList<String>> hashMapSelectionFreeQty,String savProductIdOnClicked)
 		{
@@ -5585,7 +5535,6 @@ if(hmapProductListOnWhichWholePriceNeedsToApplyIfRequired.containsKey(ProductID)
 			}
 		}
 
-
 		 public String genOutOrderID()
 			{
 				//store ID generation <x>
@@ -5618,239 +5567,6 @@ if(hmapProductListOnWhichWholePriceNeedsToApplyIfRequired.containsKey(ProductID)
 						//-_
 			}
 
-		public class GetData extends AsyncTask<Void, Void, Void>
-		 {
-
-		   @Override
-		         protected void onPreExecute() {
-		             super.onPreExecute();
-
-		             mProgressDialog = new ProgressDialog(ProductOrderEntry.this);
-		             mProgressDialog.setTitle(ProductOrderEntry.this.getResources().getString(R.string.genTermPleaseWaitNew));
-		             mProgressDialog.setMessage(ProductOrderEntry.this.getResources().getString(R.string.Loading));
-		             mProgressDialog.setIndeterminate(true);
-		             mProgressDialog.setCancelable(false);
-		            mProgressDialog.show();
-		         }
-
-		  @Override
-		  protected Void doInBackground(Void... params)
-		  {
-			  dbengine.open();
-			  StoreCurrentStoreType=Integer.parseInt(dbengine.fnGetStoreTypeOnStoreIdBasis(storeID));
-			  dbengine.close();
-
-
-
-
-
-			  chkflgInvoiceAlreadyGenerated=dbengine.fnCheckForNewInvoiceOrPreviousValue(storeID,StoreVisitCode);//0=Need to Generate Invoice Number,1=No Need of Generating Invoice Number
-			 if(chkflgInvoiceAlreadyGenerated==1)
-			 {
-				 TmpInvoiceCodePDA=dbengine.fnGetInvoiceCodePDA(storeID,StoreVisitCode);
-
-			 }
-			 else
-			 {
-				 TmpInvoiceCodePDA=genTempInvoiceCodePDA();
-			 }
-			 CheckIfStoreExistInStoreProdcutPurchaseDetails=dbengine.fnCheckIfStoreExistInStoreProdcutPurchaseDetails(storeID,TmpInvoiceCodePDA);
-			  CheckIfStoreExistInStoreProdcutInvoiceDetails=dbengine.fnCheckIfStoreExistInStoreProdcutInvoiceDetails(storeID,TmpInvoiceCodePDA);
-              strGlobalOrderID= TmpInvoiceCodePDA;
-		  /* if(CheckIfStoreExistInStoreProdcutPurchaseDetails==1 || CheckIfStoreExistInStoreProdcutInvoiceDetails==1)
-           {
-			   strGlobalOrderID=dbengine.fngetOrderIDAganistStore(storeID,TmpInvoiceCodePDA);
-           }
-		   else
-		   {
-			   strGlobalOrderID= genOutOrderID();
-		   }*/
-		   getCategoryDetail();
-
-		   getProductData();
-
-		   getCutOffDetailsForProduct();
-
-			 distID=dbengine.getDisId(storeID);
-			  hmapDistPrdctStockCount=dbengine.fnGetFinalInvoiceQtyProductWise();
-			  hmapPerUnitName=dbengine.getPerUnitName();
-			/*  if(hmapPrdctIdOutofStock!=null && hmapPrdctIdOutofStock.size()>0)
-			  {
-
-			  }
-			  else {
-				  hmapDistPrdctStockCount=dbengine.fnGetFinalInvoiceQtyProductWise();
-				  hmapPrdctIdOutofStock=dbengine.getProductStock(TmpInvoiceCodePDA,distID);
-			  }*/
-		   return null;
-		  }
-		   @Override
-		         protected void onPostExecute(Void args) {
-
-			   hmapFilterProductList.clear();
-	        	hmapPrdctIdPrdctNameVisible.clear();
-
-	        	ll_prdct_detal.removeAllViews();
-
-		       hmapFilterProductList=dbengine.getFileredOrderReviewProductListMap(storeID,TmpInvoiceCodePDA);
-
-	       			/*Iterator it11new = hmapPrdctIdPrdctName.entrySet().iterator();
-	       			String crntPID="0";
-	       			int cntPsize=0;
-				    while (it11new.hasNext()) {
-				        Entry pair = (Entry)it11new.next();
-				        if(hmapFilterProductList.containsKey(pair.getKey().toString())){
-
-				        	crntPID	=pair.getKey().toString();
-
-				        }
-
-			    }*/
-
-
-				    createProductPrepopulateDetail(CheckIfStoreExistInStoreProdcutPurchaseDetails);
-				    setInvoiceTableView();
-				    if(mProgressDialog!=null) {
-						mProgressDialog.dismiss();
-					}
-			   if(defaultCatName_Id.contains("^"))
-			   {
-				   ed_search.setText(defaultCatName_Id.split(Pattern.quote("^"))[0]);
-
-				   searchProduct(defaultCatName_Id.split(Pattern.quote("^"))[0],defaultCatName_Id.split(Pattern.quote("^"))[1]);
-			   }
-		  }
-
-		 }
-
-
-		public class SaveData extends AsyncTask<String, String, Void>
-		 {
-
-		   @Override
-		         protected void onPreExecute() {
-		             super.onPreExecute();
-		             //Text need to e changed according to btn Click
-
-
-		             if(mProgressDialog.isShowing()==false)
-		             {
-		             mProgressDialog = new ProgressDialog(ProductOrderEntry.this);
-		             mProgressDialog.setTitle(ProductOrderEntry.this.getResources().getString(R.string.Loading));
-		             mProgressDialog.setMessage(progressTitle);
-		             mProgressDialog.setIndeterminate(true);
-		             mProgressDialog.setCancelable(false);
-		            mProgressDialog.show();
-		             }
-		         }
-
-		  @Override
-		  protected Void doInBackground(String... params)
-		  {
-			  String executedData=params[0];
-
-			  int btnClkd;
-			  if(executedData.contains("~"))
-			  {
-				  btnClkd=Integer.parseInt(executedData.split(Pattern.quote("~"))[0]);
-				  isReturnClkd=Integer.parseInt(executedData.split(Pattern.quote("~"))[1]);
-			  }
-
-			  else
-			  {
-				  btnClkd=Integer.parseInt(executedData);
-			  }
-
-
-			  fnSaveFilledDataToDatabase(btnClkd);
-		   return null;
-		  }
-		   @Override
-		         protected void onPostExecute(Void args) {
-
-			   if(mProgressDialog.isShowing()==true)
-	           {
-		     mProgressDialog.dismiss();
-	           }
-			   long syncTIMESTAMP = System.currentTimeMillis();
-				Date dateobj = new Date(syncTIMESTAMP);
-				SimpleDateFormat df = new SimpleDateFormat(
-						"dd-MM-yyyy HH:mm:ss",Locale.ENGLISH);
-				String startTS = df.format(dateobj);
-				dbengine.open();
-				dbengine.UpdateStoreEndVisit(storeID,startTS);
-				dbengine.close();
-		     if(isReturnClkd==3)
-		     {
-		    	   Intent fireBackDetPg=new Intent(ProductOrderEntry.this,ReturnActivity.class);
-		           fireBackDetPg.putExtra("storeID", storeID);
-		           fireBackDetPg.putExtra("SN", SN);
-		           fireBackDetPg.putExtra("bck", 1);
-		           fireBackDetPg.putExtra("imei", imei);
-		           fireBackDetPg.putExtra("userdate", date);
-		           fireBackDetPg.putExtra("pickerDate", pickerDate);
-		           fireBackDetPg.putExtra("OrderPDAID", strGlobalOrderID);
-		           fireBackDetPg.putExtra("flgPageToRedirect", "1");
-		          // fireBackDetPg.putExtra("rID", routeID);
-
-		           startActivity(fireBackDetPg);
-		           finish();
-		     }
-
-		     else if(isReturnClkd==2)
-		     {
-		    	 //Intent fireBackDetPg=new Intent(ProductOrderSearch.this,POSMaterialActivity.class);
-		    	Intent fireBackDetPg=new Intent(ProductOrderEntry.this,LastVisitDetails.class);
-			    fireBackDetPg.putExtra("storeID", storeID);
-			    fireBackDetPg.putExtra("SN", SN);
-			    fireBackDetPg.putExtra("bck", 1);
-			    fireBackDetPg.putExtra("imei", imei);
-			    fireBackDetPg.putExtra("userdate", date);
-			    fireBackDetPg.putExtra("pickerDate", pickerDate);
-			    //fireBackDetPg.putExtra("rID", routeID);
-			    startActivity(fireBackDetPg);
-			    finish();
-		     }
-
-
-
-		   }
-
-
-		 }
-
-
-		 public class standBYtask extends AsyncTask<Void, Void, Void>
-			{
-
-				@Override
-				protected Void doInBackground(Void... params)
-				{
-					// TODO Auto-generated method stub
-
-					// Thread ttt = new Thread();
-					return null;
-				}
-
-				@Override
-				protected void onPostExecute(Void result)
-				{
-					// TODO Auto-generated method stub
-					super.onPostExecute(result);
-				}
-
-				@Override
-				protected void onPreExecute()
-				{
-					// TODO Auto-generated method stub
-					super.onPreExecute();
-				}
-
-			}
-
-
-
-
 		 public void callBroadCast() {
 		        if (Build.VERSION.SDK_INT >= 14) {
 		            Log.e("-->", " >= 14");
@@ -5866,263 +5582,37 @@ if(hmapProductListOnWhichWholePriceNeedsToApplyIfRequired.containsKey(ProductID)
 		                    Uri.parse("file://" + Environment.getExternalStorageDirectory())));
 		        }
 		    }
+
 		@Override
 		public void onConnectionFailed(ConnectionResult arg0) {
 			// TODO Auto-generated method stub
 			LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, appLocationService);
 
 		}
+
 		@Override
 		public void onConnected(Bundle arg0) {
 			// TODO Auto-generated method stub
 			LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, appLocationService);
 			startLocationUpdates();
 		}
+
 		protected void startLocationUpdates() {
 		    PendingResult<Status> pendingResult = LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
 		}
+
 		@Override
 		public void onConnectionSuspended(int arg0) {
 			// TODO Auto-generated method stub
 			LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, appLocationService);
 		}
-		public class CoundownClass2 extends CountDownTimer{
-			public CoundownClass2(long startTime, long interval) {
-				super(startTime, interval);
-				// TODO Auto-generated constructor stub
-			}
-			@Override
-			public void onTick(long millisUntilFinished) {
-			}
-			@Override
-			public void onFinish() {
-				isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-				String GpsLat="0";
-				String GpsLong="0";
-				String GpsAccuracy="0";
-				String GpsAddress="0";
-				 if(isGPSEnabled)
-				 {
 
-					 Location nwLocation=appLocationService.getLocation(locationManager,LocationManager.GPS_PROVIDER,location);
-					 if(nwLocation!=null){
-					   double lattitude=nwLocation.getLatitude();
-					   double longitude=nwLocation.getLongitude();
-					   double accuracy= nwLocation.getAccuracy();
-						 GpsLat=""+lattitude;
-						 GpsLong=""+longitude;
-						 GpsAccuracy=""+accuracy;
-
-					   GPSLocationLatitude=""+lattitude;
-					   GPSLocationLongitude=""+longitude;
-					   GPSLocationProvider="GPS";
-					   GPSLocationAccuracy=""+accuracy;
-					  // System.out.println("LOCATION(GPS)  LATTITUDE: " +lattitude + "LONGITUDE:" + longitude+ "accuracy:" + accuracy);
-					   //text2.setText(" LOCATION(GPS) \n LATTITUDE: " +lattitude + "\nLONGITUDE:" + longitude+ "\naccuracy:" + accuracy);
-					   //Toast.makeText(getApplicationContext(), " LOCATION(NW) \n LATTITUDE: " +lattitude + "\nLONGITUDE:" + longitude+ "\naccuracy:" + accuracy, Toast.LENGTH_LONG).show();
-					 }
-				 }
-
-					 Location gpsLocation=appLocationService.getLocation(locationManager,LocationManager.NETWORK_PROVIDER,location);
-				String NetwLat="0";
-				String NetwLong="0";
-				String NetwAccuracy="0";
-				String NetwAddress="0";
-					   if(gpsLocation!=null){
-					   double lattitude1=gpsLocation.getLatitude();
-					   double longitude1=gpsLocation.getLongitude();
-					   double accuracy1= gpsLocation.getAccuracy();
-						   NetwLat=""+lattitude1;
-						   NetwLong=""+longitude1;
-						   NetwAccuracy=""+accuracy1;
-
-					   NetworkLocationLatitude=""+lattitude1;
-					   NetworkLocationLongitude=""+longitude1;
-					   NetworkLocationProvider="Network";
-					   NetworkLocationAccuracy=""+accuracy1;
-					 //  System.out.println("LOCATION(N/W)  LATTITUDE: " +lattitude1 + "LONGITUDE:" + longitude1+ "accuracy:" + accuracy1);
-					  // Toast.makeText(this, " LOCATION(NW) \n LATTITUDE: " +lattitude + "\nLONGITUDE:" + longitude, Toast.LENGTH_LONG).show();
-					   //text1.setText(" LOCATION(N/W) \n LATTITUDE: " +lattitude1 + "\nLONGITUDE:" + longitude1+ "\naccuracy:" + accuracy1);
-
-				 }
-					 /* TextView accurcy=(TextView) findViewById(R.id.Acuracy);
-					  accurcy.setText("GPS:"+GPSLocationAccuracy+"\n"+"NETWORK"+NetworkLocationAccuracy+"\n"+"FUSED"+fusedData);*/
-
-					 // System.out.println("LOCATION Fused"+fusedData);
-				String FusedLat="0";
-				String FusedLong="0";
-				String FusedAccuracy="0";
-				String FusedAddress="0";
-
-				if(!FusedLocationProvider.equals(""))
-				{
-					fnAccurateProvider="Fused";
-					fnLati=FusedLocationLatitude;
-					fnLongi=FusedLocationLongitude;
-					fnAccuracy= Double.parseDouble(FusedLocationAccuracy);
-
-					FusedLat=FusedLocationLatitude;
-					FusedLong=FusedLocationLongitude;
-					FusedAccuracy=FusedLocationAccuracy;
-				}
-
-
-
-
-					  appLocationService.KillServiceLoc(appLocationService,locationManager);
-				try {
-					if(mGoogleApiClient!=null && mGoogleApiClient.isConnected())
-					{
-						stopLocationUpdates();
-						mGoogleApiClient.disconnect();
-					}
-				}
-				catch (Exception e){
-
-				}
-
-
-
-
-					     fnAccurateProvider="";
-					     fnLati="0";
-					     fnLongi="0";
-					     fnAccuracy=0.0;
-
-					 if(!FusedLocationProvider.equals(""))
-					  {
-						 fnAccurateProvider="Fused";
-						 fnLati=FusedLocationLatitude;
-						 fnLongi=FusedLocationLongitude;
-						 fnAccuracy= Double.parseDouble(FusedLocationAccuracy);
-					  }
-
-					   if(!fnAccurateProvider.equals(""))
-					   {
-						   if(!GPSLocationProvider.equals(""))
-						   {
-							   if(Double.parseDouble(GPSLocationAccuracy)<=fnAccuracy)
-							   {
-								   fnAccurateProvider="Gps";
-								   fnLati=GPSLocationLatitude;
-								   fnLongi=GPSLocationLongitude;
-								   fnAccuracy= Double.parseDouble(GPSLocationAccuracy);
-							   }
-						   }
-					   }
-					   else
-					   {
-						   if(!GPSLocationProvider.equals(""))
-						   {
-						   	 fnAccurateProvider="Gps";
-							 fnLati=GPSLocationLatitude;
-							 fnLongi=GPSLocationLongitude;
-							 fnAccuracy= Double.parseDouble(GPSLocationAccuracy);
-						   }
-					   }
-
-					   if(!fnAccurateProvider.equals(""))
-					   {
-						   if(!NetworkLocationProvider.equals(""))
-						   {
-							   if(Double.parseDouble(NetworkLocationAccuracy)<=fnAccuracy)
-							   {
-								   fnAccurateProvider="Network";
-									 fnLati=NetworkLocationLatitude;
-									 fnLongi=NetworkLocationLongitude;
-									 fnAccuracy= Double.parseDouble(NetworkLocationAccuracy);
-							   }
-						   }
-					   }
-					   else
-					   {
-						   if(!NetworkLocationProvider.equals(""))
-						   {
-						   	 fnAccurateProvider="Network";
-							 fnLati=NetworkLocationLatitude;
-							 fnLongi=NetworkLocationLongitude;
-							 fnAccuracy= Double.parseDouble(NetworkLocationAccuracy);
-						   }
-					   }
-					 //  fnAccurateProvider="";
-					   if(fnAccurateProvider.equals(""))
-					   {
-						   if(pDialog2STANDBY.isShowing())
-						   {
-							   pDialog2STANDBY.dismiss();
-						   }
-						   //alert ... try again nothing found // return back
-
-						  // Toast.makeText(getApplicationContext(), "Please try again, No Fused,GPS or Network found.", Toast.LENGTH_LONG).show();
-
-						  showAlertForEveryOne(ProductOrderEntry.this.getResources().getString(R.string.AlertTryAgain));
-					   }
-					   else
-					   {
-
-
-						   if(pDialog2STANDBY.isShowing())
-						   {
-							   pDialog2STANDBY.dismiss();
-						   }
-						   if(!GpsLat.equals("0") )
-						   {
-							   fnCreateLastKnownGPSLoction(GpsLat,GpsLong,GpsAccuracy);
-						   }
-						  // 28.4873017  77.1045772   10.0
-						 //  if(!checkLastFinalLoctionIsRepeated("28.4873017", "77.1045772", "10.0"))
-						   if(!checkLastFinalLoctionIsRepeated(String.valueOf(fnLati), String.valueOf(fnLongi), String.valueOf(fnAccuracy)))
-						   {
-
-							   fnCreateLastKnownFinalLocation(String.valueOf(fnLati), String.valueOf(fnLongi), String.valueOf(fnAccuracy));
-							   UpdateLocationAndProductAllData();
-						   }
-						   else
-						   {countSubmitClicked++;
-							   if(countSubmitClicked==1)
-							   {
-								   AlertDialog.Builder alertDialog = new AlertDialog.Builder(ProductOrderEntry.this);
-
-								   // Setting Dialog Title
-								   alertDialog.setTitle(ProductOrderEntry.this.getResources().getString(R.string.genTermInformation));
-								   alertDialog.setIcon(R.drawable.error_info_ico);
-								   alertDialog.setCancelable(false);
-								   // Setting Dialog Message
-								   alertDialog.setMessage(ProductOrderEntry.this.getResources().getString(R.string.AlertSameLoc));
-
-								   // On pressing Settings button
-								   alertDialog.setPositiveButton(ProductOrderEntry.this.getResources().getString(R.string.AlertDialogOkButton), new DialogInterface.OnClickListener() {
-									   public void onClick(DialogInterface dialog, int which) {
-										   countSubmitClicked++;
-										   Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-										   startActivity(intent);
-									   }
-								   });
-
-								   // Showing Alert Message
-								   alertDialog.show();
-
-
-
-							   }
-							   else
-							   	{
-									UpdateLocationAndProductAllData();
-								}
-
-
-						   }
-
-					   }
-
-			}
-
-		}
 		 protected void stopLocationUpdates() {
 		        LocationServices.FusedLocationApi.removeLocationUpdates(
 		                mGoogleApiClient, this);
 
 		    }
+
 		private void updateUI() {
 			 Location loc =mCurrentLocation;
 			        if (null != mCurrentLocation) {
@@ -6143,13 +5633,6 @@ if(hmapProductListOnWhichWholePriceNeedsToApplyIfRequired.containsKey(ProductID)
 
 			        }
 			    }
-
-
-
-
-
-
-
 
 		public void showAlertForEveryOne(String msg)
 		{
@@ -6278,6 +5761,7 @@ if(hmapProductListOnWhichWholePriceNeedsToApplyIfRequired.containsKey(ProductID)
 
 
 		}
+
 		@Override
 		public void onLocationChanged(Location args0) {
 			// TODO Auto-generated method stub
@@ -6286,7 +5770,6 @@ if(hmapProductListOnWhichWholePriceNeedsToApplyIfRequired.containsKey(ProductID)
 	         updateUI();
 
 		}
-
 
 		private void allMessageAlert(String message) {
 			 AlertDialog.Builder alertDialogNoConn = new AlertDialog.Builder(ProductOrderEntry.this);
@@ -6313,80 +5796,6 @@ if(hmapProductListOnWhichWholePriceNeedsToApplyIfRequired.containsKey(ProductID)
 
 		}
 
-		Runnable myRunnable = new Runnable(){
-
-		     @Override
-		     public void run() {
-
-		       runOnUiThread(new Runnable(){
-
-		         @Override
-		         public void run() {
-
-
-		          new CountDownTimer(2000, 1000) {
-
-		              public void onTick(long millisUntilFinished) {
-		               if(pDialog2STANDBYabhi != null && pDialog2STANDBYabhi.isShowing())
-		               {
-		                pDialog2STANDBYabhi.setCancelable(false);
-
-		               }
-		              }
-
-		              public void onFinish() {
-		               /*try {
-		          Thread.sleep(2000);
-		         } catch (InterruptedException e) {
-		          // TODO Auto-generated catch block
-		          e.printStackTrace();
-		         }*/
-		              new IAmABackgroundTask().execute();
-		              // createProductPrepopulateDetailWhileSearch(CheckIfStoreExistInStoreProdcutPurchaseDetails);
-		              }
-		           }.start();
-
-
-
-		               //pDialog2STANDBYabhi.show(ProductOrderFilterSearch.this,getText(R.string.genTermPleaseWaitNew) ,"Loading Data Abhinav", true);
-		           //pDialog2STANDBYabhi.getCurrentFocus();
-		           // pDialog2STANDBYabhi.show();
-
-
-
-
-		         }
-
-		        });
-
-		     }
-		       };
-
-		      class IAmABackgroundTask extends
-		         AsyncTask<String, Integer, Boolean> {
-		     @SuppressWarnings("static-access")
-		  @Override
-		     protected void onPreExecute() {
-		      createProductPrepopulateDetailWhileSearch(CheckIfStoreExistInStoreProdcutPurchaseDetails);
-		     }
-
-		     @Override
-		     protected void onPostExecute(Boolean result) {
-
-
-		      fnAbhinav(1000);
-		     }
-
-		     @Override
-		     protected Boolean doInBackground(String... params) {
-
-
-		         return true;
-
-		     }
-
-		 }
-
 		 public void countUp(int start)
 		  {
 
@@ -6406,11 +5815,11 @@ if(hmapProductListOnWhichWholePriceNeedsToApplyIfRequired.containsKey(ProductID)
 		    }
 		  }
 
-
 		     public void fnAbhinav(int mytimeval)
 		     {
 		    countUp(1);
 		     }
+
 		     public SpannableStringBuilder textWithMandatory(String text_Value)
 
 		 	{
@@ -6431,7 +5840,7 @@ if(hmapProductListOnWhichWholePriceNeedsToApplyIfRequired.containsKey(ProductID)
 		 		return builder;
 
 		 	}
-		     
+
 		     public Double getAccAsignValue(int schSlabSubBucketType,int chkflgProDataCalculation,double BenSubBucketValue,double schSlabSubBucketValue,int totalProductQty,int totalProductLine,double totalProductValue,double totalProductVol,double totalInvoice,double per,String productIdForFree,boolean isLastPrdct)
 		     {
 		    	 Double accAsignVal=0.0;
@@ -6440,20 +5849,20 @@ if(hmapProductListOnWhichWholePriceNeedsToApplyIfRequired.containsKey(ProductID)
 					//2. Invoice Value
 					//3. Product Lines
 					//4. Product Value
-		    	 
+
 		    	 //Product Quantity
 					if(schSlabSubBucketType==1)
 					{
 						if(chkflgProDataCalculation==1)
 						{
-							
+
 							if(isLastPrdct)
 							{
 								accAsignVal=BenSubBucketValue*(totalProductQty/schSlabSubBucketValue);
 								accAsignVal=  Double.valueOf(Math.abs(accAsignVal.intValue())) ;
 							}
 							//accAsignVal=Double.valueOf(Double.valueOf(hmapPrdctOdrQty.get(productIdForFree))*accAsignVal/totalProductQty);
-							
+
 						}
 						else
 						{
@@ -6461,9 +5870,9 @@ if(hmapProductListOnWhichWholePriceNeedsToApplyIfRequired.containsKey(ProductID)
 							{
 								accAsignVal=BenSubBucketValue;
 							}
-							
+
 						}
-						
+
 					}
 					//Invoice Value
 					else if(schSlabSubBucketType==2)
@@ -6472,7 +5881,7 @@ if(hmapProductListOnWhichWholePriceNeedsToApplyIfRequired.containsKey(ProductID)
 						if(chkflgProDataCalculation==1)
 						{
 							accAsignVal=BenSubBucketValue*(totalInvoice/schSlabSubBucketValue);
-							
+
 						}
 						else
 						{
@@ -6498,35 +5907,35 @@ if(hmapProductListOnWhichWholePriceNeedsToApplyIfRequired.containsKey(ProductID)
 						if(chkflgProDataCalculation==1)
 						{
 							accAsignVal=BenSubBucketValue*(totalProductValue/schSlabSubBucketValue);
-						
+
 							//product value
-							
+
 							Double prodRate= Double.parseDouble(hmapPrdctVolRatTax.get(productIdForFree).split(Pattern.quote("^"))[1]);
 							Double oderRateOfCurrentMapedProduct=prodRate *Double.valueOf(hmapPrdctOdrQty.get(productIdForFree)) ;
 							//oderRateOnProduct=oderRateOnProduct + oderRateOfCurrentMapedProduct;
 							double singleProductVal=oderRateOfCurrentMapedProduct;
-							
+
 							if(per>0.0)
 							{
 								singleProductVal=singleProductVal/per;
 							}
 							accAsignVal=Double.valueOf(Double.valueOf(singleProductVal)*(accAsignVal/totalProductValue));
-							
-							
+
+
 						}
 						else
 						{
-							
+
 							accAsignVal=BenSubBucketValue;
 						}
-						
+
 					}
 					// Product Volume
 					else if(schSlabSubBucketType==5)
 					{
 						if(chkflgProDataCalculation==1)
 						{
-							
+
 							accAsignVal=BenSubBucketValue*(totalProductVol/(schSlabSubBucketValue*1000));
 							// product volume
 							Double prodVolume= Double.parseDouble(hmapPrdctVolRatTax.get(productIdForFree).split(Pattern.quote("^"))[0]);
@@ -6537,7 +5946,7 @@ if(hmapProductListOnWhichWholePriceNeedsToApplyIfRequired.containsKey(ProductID)
 								singleProductVol=singleProductVol/per;
 							}
 							accAsignVal=Double.valueOf(Double.valueOf(singleProductVol)*accAsignVal/totalProductVol);
-							
+
 						}
 						else
 						{
@@ -6606,7 +6015,6 @@ if(hmapProductListOnWhichWholePriceNeedsToApplyIfRequired.containsKey(ProductID)
 
 	}
 
-
 	@Override
 	public void selectedOption(String selectedCategory, Dialog dialog) {
 		dialog.dismiss();
@@ -6626,7 +6034,6 @@ if(hmapProductListOnWhichWholePriceNeedsToApplyIfRequired.containsKey(ProductID)
 
 
 	}
-
 
 	public void searchProduct(String filterSearchText,String ctgryId)
 	{
@@ -6665,6 +6072,7 @@ if(hmapProductListOnWhichWholePriceNeedsToApplyIfRequired.containsKey(ProductID)
 
 
 	}
+
 	public void fnCreateLastKnownGPSLoction(String chekLastGPSLat,String chekLastGPSLong,String chekLastGpsAccuracy)
 	{
 
@@ -6730,6 +6138,7 @@ if(hmapProductListOnWhichWholePriceNeedsToApplyIfRequired.containsKey(ProductID)
 
 		}
 	}
+		     
 	public boolean checkLastFinalLoctionIsRepeated(String currentLat,String currentLong,String currentAccuracy){
 		boolean repeatedLoction=false;
 
@@ -6865,6 +6274,7 @@ if(hmapProductListOnWhichWholePriceNeedsToApplyIfRequired.containsKey(ProductID)
 
 		}
 	}
+
 	public void UpdateLocationAndProductAllData()
 	{
 		checkHighAccuracyLocationMode(ProductOrderEntry.this);
@@ -7018,6 +6428,7 @@ if(hmapProductListOnWhichWholePriceNeedsToApplyIfRequired.containsKey(ProductID)
 		}
 
 	}
+
 	public void alertForOrderExceedStock(final String productOIDClkd, final EditText edOrderCurrent, final EditText edOrderCurrentLast, final int flagClkdButton)
 	{
 		AlertDialog.Builder alertDialogSubmitConfirm = new AlertDialog.Builder(ProductOrderEntry.this);
@@ -7067,7 +6478,6 @@ if(hmapProductListOnWhichWholePriceNeedsToApplyIfRequired.containsKey(ProductID)
 		AlertDialog alert = alertDialogSubmitConfirm.create();
 		alert.show();
 	}
-
 
 	public void alertForRetailerCreditLimit(final int btnClkd)
 	{
@@ -7725,8 +7135,6 @@ if(hmapProductListOnWhichWholePriceNeedsToApplyIfRequired.containsKey(ProductID)
 		alert.show();
 	}
 
-
-
 	public String genTempInvoiceCodePDA()
 	{
 		//store ID generation <x>
@@ -7758,4 +7166,491 @@ if(hmapProductListOnWhichWholePriceNeedsToApplyIfRequired.containsKey(ProductID)
 		return cxz;
 		//-_
 	}
+
+		public class GetData extends AsyncTask<Void, Void, Void>
+		 {
+
+		   @Override
+		         protected void onPreExecute() {
+		             super.onPreExecute();
+
+		             mProgressDialog = new ProgressDialog(ProductOrderEntry.this);
+		             mProgressDialog.setTitle(ProductOrderEntry.this.getResources().getString(R.string.genTermPleaseWaitNew));
+		             mProgressDialog.setMessage(ProductOrderEntry.this.getResources().getString(R.string.Loading));
+		             mProgressDialog.setIndeterminate(true);
+		             mProgressDialog.setCancelable(false);
+		            mProgressDialog.show();
+		         }
+
+		  @Override
+		  protected Void doInBackground(Void... params)
+		  {
+			  dbengine.open();
+			  StoreCurrentStoreType=Integer.parseInt(dbengine.fnGetStoreTypeOnStoreIdBasis(storeID));
+			  dbengine.close();
+
+
+
+
+
+			  chkflgInvoiceAlreadyGenerated=dbengine.fnCheckForNewInvoiceOrPreviousValue(storeID,StoreVisitCode);//0=Need to Generate Invoice Number,1=No Need of Generating Invoice Number
+			 if(chkflgInvoiceAlreadyGenerated==1)
+			 {
+				 TmpInvoiceCodePDA=dbengine.fnGetInvoiceCodePDA(storeID,StoreVisitCode);
+
+			 }
+			 else
+			 {
+				 TmpInvoiceCodePDA=genTempInvoiceCodePDA();
+			 }
+			 CheckIfStoreExistInStoreProdcutPurchaseDetails=dbengine.fnCheckIfStoreExistInStoreProdcutPurchaseDetails(storeID,TmpInvoiceCodePDA);
+			  CheckIfStoreExistInStoreProdcutInvoiceDetails=dbengine.fnCheckIfStoreExistInStoreProdcutInvoiceDetails(storeID,TmpInvoiceCodePDA);
+              strGlobalOrderID= TmpInvoiceCodePDA;
+		  /* if(CheckIfStoreExistInStoreProdcutPurchaseDetails==1 || CheckIfStoreExistInStoreProdcutInvoiceDetails==1)
+           {
+			   strGlobalOrderID=dbengine.fngetOrderIDAganistStore(storeID,TmpInvoiceCodePDA);
+           }
+		   else
+		   {
+			   strGlobalOrderID= genOutOrderID();
+		   }*/
+		   getCategoryDetail();
+
+		   getProductData();
+
+		   getCutOffDetailsForProduct();
+
+			  distID=dbengine.getDisId(storeID);
+			  hmapDistPrdctStockCount=dbengine.fnGetFinalInvoiceQtyProductWise();
+			  hmapPerUnitName=dbengine.getPerUnitName();
+			  hmapPerBaseQty=dbengine.getPerBaseQty();
+			/*  if(hmapPrdctIdOutofStock!=null && hmapPrdctIdOutofStock.size()>0)
+			  {
+
+			  }
+			  else {
+				  hmapDistPrdctStockCount=dbengine.fnGetFinalInvoiceQtyProductWise();
+				  hmapPrdctIdOutofStock=dbengine.getProductStock(TmpInvoiceCodePDA,distID);
+			  }*/
+		   return null;
+		  }
+		   @Override
+		         protected void onPostExecute(Void args) {
+
+			   hmapFilterProductList.clear();
+	        	hmapPrdctIdPrdctNameVisible.clear();
+
+	        	ll_prdct_detal.removeAllViews();
+
+		       hmapFilterProductList=dbengine.getFileredOrderReviewProductListMap(storeID,TmpInvoiceCodePDA);
+
+	       			/*Iterator it11new = hmapPrdctIdPrdctName.entrySet().iterator();
+	       			String crntPID="0";
+	       			int cntPsize=0;
+				    while (it11new.hasNext()) {
+				        Entry pair = (Entry)it11new.next();
+				        if(hmapFilterProductList.containsKey(pair.getKey().toString())){
+
+				        	crntPID	=pair.getKey().toString();
+
+				        }
+
+			    }*/
+
+
+				    createProductPrepopulateDetail(CheckIfStoreExistInStoreProdcutPurchaseDetails);
+				    setInvoiceTableView();
+				    if(mProgressDialog!=null) {
+						mProgressDialog.dismiss();
+					}
+			   if(defaultCatName_Id.contains("^"))
+			   {
+				   ed_search.setText(defaultCatName_Id.split(Pattern.quote("^"))[0]);
+
+				   searchProduct(defaultCatName_Id.split(Pattern.quote("^"))[0],defaultCatName_Id.split(Pattern.quote("^"))[1]);
+			   }
+		  }
+
+		 }
+
+		public class SaveData extends AsyncTask<String, String, Void>
+		 {
+
+		   @Override
+		         protected void onPreExecute() {
+		             super.onPreExecute();
+		             //Text need to e changed according to btn Click
+
+
+		             if(mProgressDialog.isShowing()==false)
+		             {
+		             mProgressDialog = new ProgressDialog(ProductOrderEntry.this);
+		             mProgressDialog.setTitle(ProductOrderEntry.this.getResources().getString(R.string.Loading));
+		             mProgressDialog.setMessage(progressTitle);
+		             mProgressDialog.setIndeterminate(true);
+		             mProgressDialog.setCancelable(false);
+		            mProgressDialog.show();
+		             }
+		         }
+
+		  @Override
+		  protected Void doInBackground(String... params)
+		  {
+			  String executedData=params[0];
+
+			  int btnClkd;
+			  if(executedData.contains("~"))
+			  {
+				  btnClkd=Integer.parseInt(executedData.split(Pattern.quote("~"))[0]);
+				  isReturnClkd=Integer.parseInt(executedData.split(Pattern.quote("~"))[1]);
+			  }
+
+			  else
+			  {
+				  btnClkd=Integer.parseInt(executedData);
+			  }
+
+
+			  fnSaveFilledDataToDatabase(btnClkd);
+		   return null;
+		  }
+		   @Override
+		         protected void onPostExecute(Void args) {
+
+			   if(mProgressDialog.isShowing()==true)
+	           {
+		     mProgressDialog.dismiss();
+	           }
+			   long syncTIMESTAMP = System.currentTimeMillis();
+				Date dateobj = new Date(syncTIMESTAMP);
+				SimpleDateFormat df = new SimpleDateFormat(
+						"dd-MM-yyyy HH:mm:ss",Locale.ENGLISH);
+				String startTS = df.format(dateobj);
+				dbengine.open();
+				dbengine.UpdateStoreEndVisit(storeID,startTS);
+				dbengine.close();
+		     if(isReturnClkd==3)
+		     {
+		    	   Intent fireBackDetPg=new Intent(ProductOrderEntry.this,ReturnActivity.class);
+		           fireBackDetPg.putExtra("storeID", storeID);
+		           fireBackDetPg.putExtra("SN", SN);
+		           fireBackDetPg.putExtra("bck", 1);
+		           fireBackDetPg.putExtra("imei", imei);
+		           fireBackDetPg.putExtra("userdate", date);
+		           fireBackDetPg.putExtra("pickerDate", pickerDate);
+		           fireBackDetPg.putExtra("OrderPDAID", strGlobalOrderID);
+		           fireBackDetPg.putExtra("flgPageToRedirect", "1");
+		          // fireBackDetPg.putExtra("rID", routeID);
+
+		           startActivity(fireBackDetPg);
+		           finish();
+		     }
+
+		     else if(isReturnClkd==2)
+		     {
+		    	 //Intent fireBackDetPg=new Intent(ProductOrderSearch.this,POSMaterialActivity.class);
+		    	Intent fireBackDetPg=new Intent(ProductOrderEntry.this,LastVisitDetails.class);
+			    fireBackDetPg.putExtra("storeID", storeID);
+			    fireBackDetPg.putExtra("SN", SN);
+			    fireBackDetPg.putExtra("bck", 1);
+			    fireBackDetPg.putExtra("imei", imei);
+			    fireBackDetPg.putExtra("userdate", date);
+			    fireBackDetPg.putExtra("pickerDate", pickerDate);
+			    //fireBackDetPg.putExtra("rID", routeID);
+			    startActivity(fireBackDetPg);
+			    finish();
+		     }
+
+
+
+		   }
+
+
+		 }
+
+		 public class standBYtask extends AsyncTask<Void, Void, Void>
+			{
+
+				@Override
+				protected Void doInBackground(Void... params)
+				{
+					// TODO Auto-generated method stub
+
+					// Thread ttt = new Thread();
+					return null;
+				}
+
+				@Override
+				protected void onPostExecute(Void result)
+				{
+					// TODO Auto-generated method stub
+					super.onPostExecute(result);
+				}
+
+				@Override
+				protected void onPreExecute()
+				{
+					// TODO Auto-generated method stub
+					super.onPreExecute();
+				}
+
+			}
+
+		public class CoundownClass2 extends CountDownTimer{
+			public CoundownClass2(long startTime, long interval) {
+				super(startTime, interval);
+				// TODO Auto-generated constructor stub
+			}
+			@Override
+			public void onTick(long millisUntilFinished) {
+			}
+			@Override
+			public void onFinish() {
+				isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+				String GpsLat="0";
+				String GpsLong="0";
+				String GpsAccuracy="0";
+				String GpsAddress="0";
+				 if(isGPSEnabled)
+				 {
+
+					 Location nwLocation=appLocationService.getLocation(locationManager,LocationManager.GPS_PROVIDER,location);
+					 if(nwLocation!=null){
+					   double lattitude=nwLocation.getLatitude();
+					   double longitude=nwLocation.getLongitude();
+					   double accuracy= nwLocation.getAccuracy();
+						 GpsLat=""+lattitude;
+						 GpsLong=""+longitude;
+						 GpsAccuracy=""+accuracy;
+
+					   GPSLocationLatitude=""+lattitude;
+					   GPSLocationLongitude=""+longitude;
+					   GPSLocationProvider="GPS";
+					   GPSLocationAccuracy=""+accuracy;
+					  // System.out.println("LOCATION(GPS)  LATTITUDE: " +lattitude + "LONGITUDE:" + longitude+ "accuracy:" + accuracy);
+					   //text2.setText(" LOCATION(GPS) \n LATTITUDE: " +lattitude + "\nLONGITUDE:" + longitude+ "\naccuracy:" + accuracy);
+					   //Toast.makeText(getApplicationContext(), " LOCATION(NW) \n LATTITUDE: " +lattitude + "\nLONGITUDE:" + longitude+ "\naccuracy:" + accuracy, Toast.LENGTH_LONG).show();
+					 }
+				 }
+
+					 Location gpsLocation=appLocationService.getLocation(locationManager,LocationManager.NETWORK_PROVIDER,location);
+				String NetwLat="0";
+				String NetwLong="0";
+				String NetwAccuracy="0";
+				String NetwAddress="0";
+					   if(gpsLocation!=null){
+					   double lattitude1=gpsLocation.getLatitude();
+					   double longitude1=gpsLocation.getLongitude();
+					   double accuracy1= gpsLocation.getAccuracy();
+						   NetwLat=""+lattitude1;
+						   NetwLong=""+longitude1;
+						   NetwAccuracy=""+accuracy1;
+
+					   NetworkLocationLatitude=""+lattitude1;
+					   NetworkLocationLongitude=""+longitude1;
+					   NetworkLocationProvider="Network";
+					   NetworkLocationAccuracy=""+accuracy1;
+					 //  System.out.println("LOCATION(N/W)  LATTITUDE: " +lattitude1 + "LONGITUDE:" + longitude1+ "accuracy:" + accuracy1);
+					  // Toast.makeText(this, " LOCATION(NW) \n LATTITUDE: " +lattitude + "\nLONGITUDE:" + longitude, Toast.LENGTH_LONG).show();
+					   //text1.setText(" LOCATION(N/W) \n LATTITUDE: " +lattitude1 + "\nLONGITUDE:" + longitude1+ "\naccuracy:" + accuracy1);
+
+				 }
+					 /* TextView accurcy=(TextView) findViewById(R.id.Acuracy);
+					  accurcy.setText("GPS:"+GPSLocationAccuracy+"\n"+"NETWORK"+NetworkLocationAccuracy+"\n"+"FUSED"+fusedData);*/
+
+					 // System.out.println("LOCATION Fused"+fusedData);
+				String FusedLat="0";
+				String FusedLong="0";
+				String FusedAccuracy="0";
+				String FusedAddress="0";
+
+				if(!FusedLocationProvider.equals(""))
+				{
+					fnAccurateProvider="Fused";
+					fnLati=FusedLocationLatitude;
+					fnLongi=FusedLocationLongitude;
+					fnAccuracy= Double.parseDouble(FusedLocationAccuracy);
+
+					FusedLat=FusedLocationLatitude;
+					FusedLong=FusedLocationLongitude;
+					FusedAccuracy=FusedLocationAccuracy;
+				}
+
+
+
+
+					  appLocationService.KillServiceLoc(appLocationService,locationManager);
+				try {
+					if(mGoogleApiClient!=null && mGoogleApiClient.isConnected())
+					{
+						stopLocationUpdates();
+						mGoogleApiClient.disconnect();
+					}
+				}
+				catch (Exception e){
+
+				}
+
+
+
+
+					     fnAccurateProvider="";
+					     fnLati="0";
+					     fnLongi="0";
+					     fnAccuracy=0.0;
+
+					 if(!FusedLocationProvider.equals(""))
+					  {
+						 fnAccurateProvider="Fused";
+						 fnLati=FusedLocationLatitude;
+						 fnLongi=FusedLocationLongitude;
+						 fnAccuracy= Double.parseDouble(FusedLocationAccuracy);
+					  }
+
+					   if(!fnAccurateProvider.equals(""))
+					   {
+						   if(!GPSLocationProvider.equals(""))
+						   {
+							   if(Double.parseDouble(GPSLocationAccuracy)<=fnAccuracy)
+							   {
+								   fnAccurateProvider="Gps";
+								   fnLati=GPSLocationLatitude;
+								   fnLongi=GPSLocationLongitude;
+								   fnAccuracy= Double.parseDouble(GPSLocationAccuracy);
+							   }
+						   }
+					   }
+					   else
+					   {
+						   if(!GPSLocationProvider.equals(""))
+						   {
+						   	 fnAccurateProvider="Gps";
+							 fnLati=GPSLocationLatitude;
+							 fnLongi=GPSLocationLongitude;
+							 fnAccuracy= Double.parseDouble(GPSLocationAccuracy);
+						   }
+					   }
+
+					   if(!fnAccurateProvider.equals(""))
+					   {
+						   if(!NetworkLocationProvider.equals(""))
+						   {
+							   if(Double.parseDouble(NetworkLocationAccuracy)<=fnAccuracy)
+							   {
+								   fnAccurateProvider="Network";
+									 fnLati=NetworkLocationLatitude;
+									 fnLongi=NetworkLocationLongitude;
+									 fnAccuracy= Double.parseDouble(NetworkLocationAccuracy);
+							   }
+						   }
+					   }
+					   else
+					   {
+						   if(!NetworkLocationProvider.equals(""))
+						   {
+						   	 fnAccurateProvider="Network";
+							 fnLati=NetworkLocationLatitude;
+							 fnLongi=NetworkLocationLongitude;
+							 fnAccuracy= Double.parseDouble(NetworkLocationAccuracy);
+						   }
+					   }
+					 //  fnAccurateProvider="";
+					   if(fnAccurateProvider.equals(""))
+					   {
+						   if(pDialog2STANDBY.isShowing())
+						   {
+							   pDialog2STANDBY.dismiss();
+						   }
+						   //alert ... try again nothing found // return back
+
+						  // Toast.makeText(getApplicationContext(), "Please try again, No Fused,GPS or Network found.", Toast.LENGTH_LONG).show();
+
+						  showAlertForEveryOne(ProductOrderEntry.this.getResources().getString(R.string.AlertTryAgain));
+					   }
+					   else
+					   {
+
+
+						   if(pDialog2STANDBY.isShowing())
+						   {
+							   pDialog2STANDBY.dismiss();
+						   }
+						   if(!GpsLat.equals("0") )
+						   {
+							   fnCreateLastKnownGPSLoction(GpsLat,GpsLong,GpsAccuracy);
+						   }
+						  // 28.4873017  77.1045772   10.0
+						 //  if(!checkLastFinalLoctionIsRepeated("28.4873017", "77.1045772", "10.0"))
+						   if(!checkLastFinalLoctionIsRepeated(String.valueOf(fnLati), String.valueOf(fnLongi), String.valueOf(fnAccuracy)))
+						   {
+
+							   fnCreateLastKnownFinalLocation(String.valueOf(fnLati), String.valueOf(fnLongi), String.valueOf(fnAccuracy));
+							   UpdateLocationAndProductAllData();
+						   }
+						   else
+						   {countSubmitClicked++;
+							   if(countSubmitClicked==1)
+							   {
+								   AlertDialog.Builder alertDialog = new AlertDialog.Builder(ProductOrderEntry.this);
+
+								   // Setting Dialog Title
+								   alertDialog.setTitle(ProductOrderEntry.this.getResources().getString(R.string.genTermInformation));
+								   alertDialog.setIcon(R.drawable.error_info_ico);
+								   alertDialog.setCancelable(false);
+								   // Setting Dialog Message
+								   alertDialog.setMessage(ProductOrderEntry.this.getResources().getString(R.string.AlertSameLoc));
+
+								   // On pressing Settings button
+								   alertDialog.setPositiveButton(ProductOrderEntry.this.getResources().getString(R.string.AlertDialogOkButton), new DialogInterface.OnClickListener() {
+									   public void onClick(DialogInterface dialog, int which) {
+										   countSubmitClicked++;
+										   Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+										   startActivity(intent);
+									   }
+								   });
+
+								   // Showing Alert Message
+								   alertDialog.show();
+
+
+
+							   }
+							   else
+							   	{
+									UpdateLocationAndProductAllData();
+								}
+
+
+						   }
+
+					   }
+
+			}
+
+		}
+
+		      class IAmABackgroundTask extends
+		         AsyncTask<String, Integer, Boolean> {
+		     @SuppressWarnings("static-access")
+		  @Override
+		     protected void onPreExecute() {
+		      createProductPrepopulateDetailWhileSearch(CheckIfStoreExistInStoreProdcutPurchaseDetails);
+		     }
+
+		     @Override
+		     protected void onPostExecute(Boolean result) {
+
+
+		      fnAbhinav(1000);
+		     }
+
+		     @Override
+		     protected Boolean doInBackground(String... params) {
+
+
+		         return true;
+
+		     }
+
+		 }
 }

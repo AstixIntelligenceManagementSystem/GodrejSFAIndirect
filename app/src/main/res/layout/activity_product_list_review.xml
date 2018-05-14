@@ -6,49 +6,49 @@
  >
 
     <RelativeLayout
-    android:layout_height="48dp"
-    android:layout_width="fill_parent"
-    android:background="@drawable/custom_header_color"
-    android:paddingLeft="16dp"
     android:id="@+id/rtv_hdr"
-    android:layout_alignParentTop="true"
+    android:layout_width="fill_parent"
+    android:layout_height="48dp"
     android:layout_alignParentLeft="true"
-    android:layout_alignParentStart="true">
+    android:layout_alignParentStart="true"
+    android:layout_alignParentTop="true"
+    android:background="@drawable/custom_header_color"
+    android:paddingLeft="16dp">
     
     <ImageView 
     android:id="@+id/btn_bck"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:src="@drawable/ic_back"
     android:layout_alignParentLeft="true"
-    android:layout_centerVertical="true"/>
+    android:layout_centerVertical="true"
+    android:src="@drawable/ic_back"/>
 
 <TextView 
    android:id="@+id/order_detail"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:textColor="#FFFFFF"
+    android:layout_centerInParent="true"
     android:layout_toRightOf="@+id/backbutton"
-   android:paddingLeft="10dp"
- 	android:layout_centerInParent="true"
-    android:gravity="center_horizontal|left"
-      android:shadowRadius="7" 
+   android:gravity="center_horizontal|left"
+ 	android:paddingLeft="10dp"
+    android:shadowColor="#80FFFFFF"
+      android:shadowDx="4"
     android:shadowDy="4" 
-    android:shadowDx="4" 
-	android:textStyle="bold"
-    android:shadowColor="#80FFFFFF" 
+    android:shadowRadius="7"
+	android:text="@string/OrderReview"
+    android:textColor="#FFFFFF"
     android:textSize="18sp"
-    android:text="@string/OrderReview"/>
+    android:textStyle="bold"/>
 
  <ImageView
      android:id="@+id/img_return"
-     android:layout_toRightOf="@+id/order_detail"
      android:layout_width="50dp"
      android:layout_height="50dp"
      android:layout_alignParentRight="true"
      android:layout_alignParentTop="true"
-     android:src="@drawable/return_order"
      android:layout_marginLeft="20dp"
+     android:layout_toRightOf="@+id/order_detail"
+     android:src="@drawable/return_order"
      android:visibility="gone" />
 
 </RelativeLayout>
@@ -56,29 +56,29 @@
     android:id="@+id/ll_ctgry"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="2dp"
-    android:paddingBottom="2dp"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-   android:layout_below="@+id/rtv_hdr"
-    android:visibility="gone"
+    android:layout_below="@+id/rtv_hdr"
     android:background="#9E9E9E"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:paddingBottom="2dp"
+   android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="2dp"
+    android:visibility="gone">
 
     <EditText 
         android:id="@+id/ed_search"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Search"
-        android:layout_toLeftOf="@+id/btn_go"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:drawableLeft="@drawable/ic_action_search"
-        android:background="@drawable/edit_text_bg"
-        android:textSize="16sp"
         android:layout_marginRight="5dp"
+        android:layout_toLeftOf="@+id/btn_go"
+        android:background="@drawable/edit_text_bg"
+        android:drawableLeft="@drawable/ic_action_search"
         android:gravity="center_vertical"
-        android:textColor="#000000"/>
+        android:hint="Search"
+        android:textColor="#000000"
+        android:textSize="16sp"/>
     
    <ImageView 
        android:id="@+id/btn_go"
@@ -94,14 +94,14 @@
     android:id="@+id/ll_schm_applcbl"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="1dp"
+    android:layout_below="@+id/ll_ctgry"
+    android:background="#ffffff"
+    android:gravity="center"
+    android:orientation="horizontal"
     android:paddingBottom="1dp"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
-    android:gravity="center"
-    android:layout_below="@+id/ll_ctgry"
-    android:background="#ffffff"
-    android:orientation="horizontal"
+    android:paddingTop="1dp"
     android:visibility="gone"
    >
 
@@ -110,15 +110,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/prodlstSchmeApplicable"
-        android:textSize="12sp"
-        android:textColor="#000000"/>
+        android:textColor="#000000"
+        android:textSize="12sp"/>
     
      <TextView
                 android:id="@+id/txtVw_schemeApld"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-               android:layout_marginRight="16dp"
                android:layout_alignParentRight="true"
+               android:layout_marginRight="16dp"
                 android:layout_toRightOf="@+id/textView1_scheme"
                android:gravity="center|right"
                 android:text=""
@@ -132,15 +132,15 @@
     android:id="@+id/ll_header"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="5dp"
-    android:paddingRight="5dp"
-   android:paddingTop="1dp"
-   android:paddingBottom="1dp"
-    android:gravity="center_vertical"
-
     android:layout_below="@+id/ll_schm_applcbl"
     android:background="#9E9E9E"
-    android:orientation="horizontal">
+   android:gravity="center_vertical"
+   android:orientation="horizontal"
+    android:paddingBottom="1dp"
+
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    android:paddingTop="1dp">
 
    <!-- <TextView
         android:layout_width="0dp"
@@ -155,42 +155,42 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight=".75"
-        android:text="@string/LastStock"
         android:gravity="center"
+        android:text="@string/LastStock"
+        android:textColor="#201359"
         android:textSize="10sp"
         android:textStyle="bold"
-        android:textColor="#201359"
         android:visibility="invisible"/>
 
     <TextView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight=".75"
-        android:text="@string/currentStock"
         android:gravity="center"
+        android:text="@string/currentStock"
+        android:textColor="#201359"
         android:textSize="10sp"
         android:textStyle="bold"
-        android:textColor="#201359"
         android:visibility="invisible"/>
      <TextView 
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="@string/SmplQty"
-         android:gravity="center"
-          android:textSize="10sp"
+        android:gravity="center"
+         android:text="@string/SmplQty"
+          android:textColor="#201359"
+        android:textSize="10sp"
         android:textStyle="bold"
-        android:visibility="gone"
-         android:textColor="#201359"/>
+         android:visibility="gone"/>
       <TextView 
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1.5"
-        android:text="@string/OQty"
-         android:gravity="center"
+        android:gravity="center"
+         android:text="@string/OQty"
+        android:textColor="#201359"
         android:textSize="10sp"
-        android:textStyle="bold"
-        android:textColor="#201359"/>
+        android:textStyle="bold"/>
         <LinearLayout 
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -201,33 +201,33 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:text="@string/MinDQ"
-         android:gravity="center"
-         android:textSize="10sp"
+        android:gravity="center"
+         android:text="@string/MinDQ"
+         android:textColor="#000000"
+        android:textSize="10sp"
         android:textStyle="bold"
-        android:visibility="gone"
-        android:textColor="#000000"/>
+        android:visibility="gone"/>
              <TextView 
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:text="@string/MRP"
-         android:gravity="center"
-         android:textSize="10sp"
+        android:gravity="center"
+         android:text="@string/MRP"
+         android:textColor="#000000"
+        android:textSize="10sp"
         android:textStyle="bold"
-        android:visibility="gone"
-        android:textColor="#000000"/>
+        android:visibility="gone"/>
        
                 <TextView 
+        android:id="@+id/tvRateHeading"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:text="@string/Rate"
-        android:id="@+id/tvRateHeading"
-         android:gravity="center"
-         android:textSize="10sp"
-        android:textStyle="bold"
-        android:textColor="#000000"/>
+        android:gravity="center"
+         android:text="@string/Rate"
+         android:textColor="#000000"
+        android:textSize="10sp"
+        android:textStyle="bold"/>
       
         </LinearLayout>
       
@@ -235,9 +235,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:weightSum="2"
+            android:orientation="vertical"
             android:visibility="gone"
-            android:orientation="vertical">
+            android:weightSum="2">
 
             <TextView
                 android:layout_width="match_parent"
@@ -253,11 +253,11 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:text="@string/DVal"
-         android:gravity="center"
+        android:gravity="center"
+         android:text="@string/DVal"
+        android:textColor="#D42625"
         android:textSize="10sp"
-        android:textStyle="bold"
-        android:textColor="#D42625"/> 
+        android:textStyle="bold"/>
         </LinearLayout>
         
          <LinearLayout 
@@ -269,55 +269,65 @@
              <TextView 
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="2dp"
         android:layout_weight="1"
-        android:text="@string/LODQty"
          android:gravity="center"
-         android:textSize="10sp"
-                 android:layout_marginLeft="2dp"
-        android:textStyle="bold"
-                 android:visibility="gone"
-        android:textColor="#000000"/>
+         android:text="@string/LODQty"
+                 android:textColor="#000000"
+        android:textSize="10sp"
+                 android:textStyle="bold"
+        android:visibility="gone"/>
 
        <TextView 
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:text="@string/OVal"
-           android:layout_marginLeft="2dp"
-         android:gravity="center"
-         android:textSize="10sp"
-        android:textStyle="bold"
-        android:textColor="#D42625"/> 
+        android:layout_marginLeft="2dp"
+        android:layout_weight="1"
+           android:gravity="center"
+         android:text="@string/OVal"
+         android:textColor="#D42625"
+        android:textSize="10sp"
+        android:textStyle="bold"/>
+             <TextView
+                 android:layout_width="0dp"
+                 android:layout_height="wrap_content"
+                 android:layout_weight="0.70"
+                 android:gravity="center"
+                 android:text="F. Unit Qty"
+                 android:textColor="#D42625"
+                 android:textSize="10sp"
+                 android:textStyle="bold"/>
         </LinearLayout>
-       
+
   <TextView 
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="0.70"
-      android:layout_marginLeft="2dp"
-        android:text="@string/Remove"
-         android:gravity="center"
+        android:layout_marginLeft="2dp"
+      android:layout_weight="0.70"
+        android:gravity="center"
+         android:text="@string/Remove"
+        android:textColor="#D42625"
         android:textSize="10sp"
-        android:textStyle="bold"
-        android:textColor="#D42625"/>
+      android:textStyle="bold"
+        android:visibility="gone"/>
     
 </LinearLayout>
 
 <LinearLayout 
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:layout_below="@+id/ll_header"
     android:layout_above="@+id/ll_buttonsnew"
+    android:layout_below="@+id/ll_header"
+    android:orientation="vertical"
     android:weightSum="1">
     
   <ScrollView
     android:layout_width="match_parent"
     android:layout_height="0dp"
-  	android:clipToPadding="false"
-    android:layout_marginTop="1dp"
-  	android:scrollbarStyle="outsideOverlay"
+  	android:layout_marginTop="1dp"
     android:layout_weight="0.60"
+  	android:clipToPadding="false"
+    android:scrollbarStyle="outsideOverlay"
   >
     <LinearLayout 
         android:id="@+id/ll_prdct_detal"
@@ -351,8 +361,8 @@
 
             <TableRow
                 android:id="@+id/tblrow_TotalLineCount"
-                android:layout_height="wrap_content"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:background="#f1f1f1"
                 android:gravity="center_vertical"
                 android:weightSum="4">
@@ -360,27 +370,27 @@
                     android:id="@+id/txt_TotalLineCount"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Total Line Count"
                     android:layout_weight="2"
-                    android:paddingTop="1dp"
                     android:paddingBottom="1dp"
+                    android:paddingLeft="16dp"
+                    android:paddingTop="1dp"
 
-                    android:textSize="14sp"
-                    android:textStyle="bold"
+                    android:text="Total Line Count"
                     android:textColor="#201359"
-                    android:paddingLeft="16dp" />
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
                 <TextView
                     android:id="@+id/txt_TotalLineCount_Value"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="0"
                     android:layout_weight="2"
+                    android:gravity="center"
 
+                    android:padding="1dp"
+                    android:text="0"
                     android:textColor="#201359"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    android:padding="1dp"
-                    android:gravity="center"
                     />
 
 
@@ -388,8 +398,8 @@
 
             <TableRow
                 android:id="@+id/tblrow_TotalInvoiceCount"
-                android:layout_height="wrap_content"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:background="#f1f1f1"
                 android:gravity="center_vertical"
                 android:weightSum="4">
@@ -397,27 +407,27 @@
                     android:id="@+id/txt_TotalInvoiceCount"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Total Invoice Qty"
                     android:layout_weight="2"
-                    android:paddingTop="1dp"
                     android:paddingBottom="1dp"
+                    android:paddingLeft="16dp"
+                    android:paddingTop="1dp"
 
-                    android:textSize="14sp"
-                    android:textStyle="bold"
+                    android:text="Total Invoice Qty"
                     android:textColor="#201359"
-                    android:paddingLeft="16dp" />
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
                 <TextView
                     android:id="@+id/txt_TotalInvoiceCount_Value"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="0"
                     android:layout_weight="2"
+                    android:gravity="center"
 
+                    android:padding="1dp"
+                    android:text="0"
                     android:textColor="#201359"
                     android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:padding="1dp"
-                    android:gravity="center"/>
+                    android:textStyle="bold"/>
 
 
             </TableRow>
@@ -449,8 +459,8 @@
 
          <TableRow
         android:id="@+id/tableRow1"
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
           android:background="#f1f1f1"
           android:gravity="center_vertical"
         android:weightSum="8">
@@ -458,53 +468,53 @@
             android:id="@+id/txt_detalis"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/OrderTotal"
             android:layout_weight="4"
-            android:paddingTop="1dp"
             android:paddingBottom="1dp"
+            android:paddingLeft="16dp"
+            android:paddingTop="1dp"
 
-             android:textSize="14sp"
-            android:textStyle="bold"
+             android:text="@string/OrderTotal"
             android:textColor="#201359"
-            android:paddingLeft="16dp" />
+            android:textSize="14sp"
+            android:textStyle="bold" />
         <TextView
             android:id="@+id/txt_cr_amnt"
              android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/CrAmt"
             android:layout_weight="1"
+            android:gravity="center"
 
+            android:padding="1dp"
+            android:text="@string/CrAmt"
             android:textColor="#201359"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:padding="1dp"
-            android:gravity="center"
             android:visibility="gone"/>
         <TextView
             android:id="@+id/txt_cr_adj"
               android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/CrAdj"
             android:layout_weight="1"
-
-             android:textSize="14sp"
-            android:textStyle="bold"
-            android:textColor="#201359"
-            android:padding="1dp"
             android:gravity="center"
+
+             android:padding="1dp"
+            android:text="@string/CrAdj"
+            android:textColor="#201359"
+            android:textSize="14sp"
+            android:textStyle="bold"
             android:visibility="gone"/>
            <TextView
             android:id="@+id/txt_cr_bal"
               android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/CrBal"
             android:layout_weight="1"
-
-             android:textSize="14sp"
-            android:textStyle="bold"
-            android:textColor="#201359"
-            android:padding="1dp"
             android:gravity="center"
+
+             android:padding="1dp"
+            android:text="@string/CrBal"
+            android:textColor="#201359"
+            android:textSize="14sp"
+            android:textStyle="bold"
             android:visibility="gone"/>
 
            <TextView
@@ -512,15 +522,15 @@
               android:layout_width="0dp"
 
             android:layout_height="wrap_content"
-            android:text="@string/UpdateTotal"
-            android:background="@drawable/custom_button"
             android:layout_weight="3"
-           android:paddingRight="10dp"
-             android:textSize="14sp"
-            android:textStyle="bold"
-            android:textColor="#ffffff"
-            android:padding="1dp"
+            android:background="@drawable/custom_button"
             android:gravity="center"
+           android:padding="1dp"
+             android:paddingRight="10dp"
+            android:text="@string/UpdateTotal"
+            android:textColor="#ffffff"
+            android:textSize="14sp"
+            android:textStyle="bold"
             />
 
     </TableRow>
@@ -550,103 +560,103 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
 
-    android:background="#f1f1f1"
-    android:orientation="vertical"
     android:layout_alignParentBottom="true"
     android:layout_alignParentLeft="true"
-    android:layout_alignParentStart="true">
+    android:layout_alignParentStart="true"
+    android:background="#f1f1f1"
+    android:orientation="vertical">
 <Button 
              android:id="@+id/btn_OrderPayment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.9"
+        android:layout_marginBottom="5dp"
           android:layout_marginLeft="10dp"
          android:layout_marginRight="10dp"
-        android:layout_marginBottom="5dp"
-         android:gravity="center"
-        android:textColor="#ffffff"
+        android:layout_weight="0.9"
+         android:background="@drawable/custom_button"
+        android:gravity="center"
         android:text="@string/OrderDeliveryDetails"
+        android:textColor="#ffffff"
         android:textSize="14sp"
-        android:visibility="gone"
-        android:background="@drawable/custom_button"/>
+        android:visibility="gone"/>
 <Button 
              android:id="@+id/btn_collectAmount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.9"
+        android:layout_marginBottom="2dp"
 
           android:layout_marginLeft="2dp"
-        android:layout_marginBottom="2dp"
-         android:gravity="center"
-        android:textColor="#ffffff"
+        android:layout_weight="0.9"
+         android:background="@drawable/custom_button"
+        android:gravity="center"
         android:text="@string/CollectAmount"
+        android:textColor="#ffffff"
         android:textSize="14sp"
-        android:visibility="visible"
-        android:background="@drawable/custom_button"/>
+        android:visibility="visible"/>
 <LinearLayout 
     android:id="@+id/ll_buttons"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="4dp"
-    android:paddingRight="4dp"
-    android:paddingTop="2dp"
-    android:paddingBottom="2dp"
     android:layout_alignParentBottom="true"
     android:background="#f1f1f1"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:paddingBottom="2dp"
+    android:paddingLeft="4dp"
+    android:paddingRight="4dp"
+    android:paddingTop="2dp">
  
      <Button 
         android:id="@+id/btn_Cancel"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="0.9"
+        android:background="@drawable/custom_button"
+        android:gravity="center"
+        android:paddingBottom="5dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:gravity="center"
-        android:textColor="#ffffff"
         android:text="@string/Cancel"
+         android:textColor="#ffffff"
          android:textSize="14sp"
-         android:visibility="gone"
-        android:background="@drawable/custom_button"/>
+        android:visibility="gone"/>
      
     <Button 
         android:id="@+id/btn_save"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="0.9"
-       android:gravity="center"
+        android:layout_marginLeft="2dp"
+       android:layout_weight="0.9"
+        android:background="@drawable/custom_button"
+        android:gravity="center"
+         android:text="@string/Save"
         android:textColor="#ffffff"
-        android:text="@string/Save"
-         android:textSize="14sp"
-        android:visibility="gone"
-          android:layout_marginLeft="2dp"
-        android:background="@drawable/custom_button"/>
+          android:textSize="14sp"
+        android:visibility="gone"/>
     
       <Button 
            android:id="@+id/btn_saveExit"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-          android:visibility="gone"
         android:layout_marginLeft="2dp"
+          android:layout_weight="1"
+        android:background="@drawable/custom_button"
          android:gravity="center"
-        android:textColor="#ffffff"
         android:text="@string/SaveExit"
+        android:textColor="#ffffff"
         android:textSize="14sp"
-       android:background="@drawable/custom_button"/>
+       android:visibility="gone"/>
         <Button 
              android:id="@+id/btn_sbmt"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-          android:layout_marginLeft="2dp"
-         android:gravity="center"
-        android:textColor="#ffffff"
+        android:layout_marginLeft="2dp"
+          android:layout_weight="1"
+         android:background="@drawable/custom_button"
+        android:gravity="center"
         android:text="@string/Submit"
-        android:textSize="14sp"
-        android:background="@drawable/custom_button"/>
+        android:textColor="#ffffff"
+        android:textSize="14sp"/>
 </LinearLayout>
 
     <android.inputmethodservice.KeyboardView

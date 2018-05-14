@@ -3,14 +3,14 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	
    
-       android:orientation="vertical"
-		android:layout_width="match_parent"
+       android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:paddingLeft="2dp"
-		android:paddingRight="2dp"
-		 android:paddingTop="3dp"
-      android:paddingBottom="3dp"  
-		android:descendantFocusability="afterDescendants" >
+		android:descendantFocusability="afterDescendants"
+		android:orientation="vertical"
+		android:paddingBottom="3dp"
+		 android:paddingLeft="2dp"
+      android:paddingRight="2dp"
+		android:paddingTop="3dp" >
 
 	 <LinearLayout
 		 android:layout_width="match_parent"
@@ -315,15 +315,27 @@
 					 android:layout_width="0dp"
 					 android:layout_height="wrap_content"
 					 android:layout_marginLeft="2dp"
+					 android:layout_weight="1"
+					 android:background="@drawable/edit_text_diable_bg_transprent"
+					 android:gravity="center"
 					 android:padding="1dp"
 					 android:singleLine="true"
 					 android:text="0.00"
-					 android:gravity="center"
-					 android:textSize="12sp"
 					 android:textColor="#D42625"
+					 android:textSize="12sp" />
+				 <TextView
+					 android:id="@+id/tv_UnitQty"
+					 android:layout_width="0dp"
+					 android:layout_height="wrap_content"
+					 android:layout_marginLeft="2dp"
+					 android:layout_weight="1"
 					 android:background="@drawable/edit_text_diable_bg_transprent"
-					 android:layout_weight="1" />
-
+					 android:gravity="center"
+					 android:padding="1dp"
+					 android:singleLine="true"
+					 android:text="0.00"
+					 android:textColor="#D42625"
+					 android:textSize="12sp" />
 
 			 </LinearLayout>
 		 </LinearLayout>

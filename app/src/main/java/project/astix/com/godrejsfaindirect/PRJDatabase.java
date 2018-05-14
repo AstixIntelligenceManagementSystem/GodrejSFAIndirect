@@ -33,13 +33,8 @@ import com.astix.Common.CommonInfo;
 public class PRJDatabase
 {
 
-    public Cursor cursor;
     public static final String KEY_PHID = "phID";
-
     private static final String TAG = "PRJDatabase";
-    private boolean isDBOpenflag = false;
-
-
     private static final String DATABASE_TABLE_INVOICE_DETAILS = "tblInvoiceDetails";//
     private static final String DATABASE_TABLE_MAIN32 = "tblTmpInvoiceHeader";//
     private static final String DATABASE_TABLE_MAIN210 = "tblTmpInvoiceDetails";//DATABASE_TABLE_TMPINVOICE_DETAILS
@@ -47,92 +42,50 @@ public class PRJDatabase
     private static final String  DATABASE_TABLE_INVOICE_HEADER = "tblInvoiceHeader";//DATABASE_TABLE_MAIN32,DATABASE_CREATE_TABLE_32
     private static final String DATABASE_CREATE_TABLE_INVOICE_HEADER = "create table tblInvoiceHeader (StoreVisitCode text not null,InvoiceNumber int not null,TmpInvoiceCodePDA text null, StoreID text not null, InvoiceDate string not null, TotalBeforeTaxDis real not null, TaxAmt real not null, TotalDis real not null, InvoiceVal real not null, FreeTotal integer not null, Sstat integer not null, InvAfterDis real not null, AddDis real not null,  NoCoupon int null, TotalCoupunAmount real null,TransDate string not null,FlgInvoiceType text not null,flgWholeSellApplicable int null,flgProcessedInvoice int not null,CycleID  int not null);";
     private static final String DATABASE_CREATE_TABLE_STOREVISIT="create table tblStoreVisitMstr(IMEINumber text null,StoreVisitCode text null,StoreID text not null, Sstat integer not null, ForDate string not null, ActualLatitude text null, ActualLongitude text null,VisitTimeOutSideStore text null,VisitTimeInSideStore text null,VisitTimeCheckStore text null, VisitEndTS text null, LocProvider text null, Accuracy text null,BateryLeftStatus text null,StoreClose integer null,StoreNextDay integer null,ISNewStore int null,IsNewStoreDataCompleteSaved int null,flgFromWhereSubmitStatus int null,flgSubmitFromQuotation int null,flgLocationServicesOnOff int null,flgGPSOnOff int null,flgNetworkOnOff int null,flgFusedOnOff int null,flgInternetOnOffWhileLocationTracking int null,flgStoreOrder int null,flgRetailerCreditBalnce integer null,VisitTypeStatus text null);";
-
     private static final String  DATABASE_TABLE_DayCheckIn = "tblDayCheckIn";//DATABASE_TABLE_MAIN32,DATABASE_CREATE_TABLE_32
     private static final String DATABASE_CREATE_TABLE_DayCheckIn = "create table tblDayCheckIn (DateOfDayCheckIn text not null,flgDayDayCheckIn int not null);";
-
-
     private static final String DATABASE_TABLE_NewAddedStoreLocationDetails="tblNewAddedStoreLocationDetails";
-
-
     private static final String DATABASE_CREATE_TABLE_NewAddedStoreLocationDetails="create table tblNewAddedStoreLocationDetails(StoreID text not null, VisitEndTS text null, LocProvider text null, Accuracy text null, BateryLeftStatus text null,flgLocationServicesOnOff int null,flgGPSOnOff int null,flgNetworkOnOff int null,flgFusedOnOff int null,flgInternetOnOffWhileLocationTracking int null, Sstat integer not null);";
-
     //
     private static final String DATABASE_CREATE_TABLE_INVOICE_DETAILS = "create table tblInvoiceDetails (InvoiceNumber int not null,TmpInvoiceCodePDA text null,StoreID text not null,CatID text  null,ProdID text not null,ProductPrice real null, TaxRate real null,flgRuleTaxVal integer null,OrderQty integer not null,UOMId integer not null,LineValBfrTxAftrDscnt real not null,LineValAftrTxAftrDscnt real not null,FreeQty integer not null,DisVal real not null,Sstat integer not null,SampleQuantity int null,ProductShortName text null,TaxValue real null,OrderIDPDA text null,flgIsQuoteRateApplied int null,ServingDBRId text null,flgWholeSellApplicable int null);";
     private static final String DATABASE_CREATE_TABLE_210 = "create table tblTmpInvoiceDetails (TmpInvoiceCodePDA text null,StoreID text not null,CatID text  null,ProdID text not null,ProductPrice real null, TaxRate real null,flgRuleTaxVal integer null,OrderQty integer not null,UOMId integer not null,LineValBfrTxAftrDscnt real not null,LineValAftrTxAftrDscnt real not null,FreeQty integer not null,DisVal real not null,Sstat integer not null,SampleQuantity int null,ProductShortName text null,TaxValue real null,OrderIDPDA text null,flgIsQuoteRateApplied int null,ServingDBRId text null,flgWholeSellApplicable int null);";
     private static final String DATABASE_CREATE_TABLE_32 = "create table tblTmpInvoiceHeader (StoreVisitCode text not null,TmpInvoiceCodePDA text null, StoreID text not null, InvoiceDate string not null, TotalBeforeTaxDis real not null, TaxAmt real not null, TotalDis real not null, InvoiceVal real not null, FreeTotal integer not null, Sstat integer not null, InvAfterDis real not null, AddDis real not null,  NoCoupon int null, TotalCoupunAmount real null,TransDate string not null,FlgInvoiceType text not null,flgWholeSellApplicable int null,flgTransferStatus int not null);";
-
-
-
-
     private static final String DATABASE_TABLE_tblInvoiceCaption = "tblInvoiceCaption";
     private static final String DATABASE_CREATE_TABLE_tblInvoiceCaption = "create table tblInvoiceCaption(INVPrefix text null,VanIntialInvoiceIds int null,INVSuffix int null);";
-
-
     private static final String DATABASE_TABLE_tblPriceApplyType = "tblPriceApplyType";
     private static final String DATABASE_CREATE_TABLE_tblPriceApplyType = "create table tblPriceApplyType(DiscountLevelType int null,cutoffvalue real null);";
-
-
-
     private static final String DATABASE_TABLE_tblLastOutstanding = "tblLastOutstanding";
     private static final String DATABASE_CREATE_TABLE_tblLastOutstanding = "create table tblLastOutstanding(StoreID text null,Outstanding real null,AmtOverdue real null);";
-
     private static final String DATABASE_TABLE_tblInvoiceLastVisitDetails = "tblInvoiceLastVisitDetails";
     private static final String DATABASE_CREATE_TABLE_tblInvoiceLastVisitDetails = "create table tblInvoiceLastVisitDetails(StoreID text null,InvCode text null,InvDate text null,OutstandingAmt text null,AmtOverdue text null);";
-
-
-
-
     //setock out flg by Sunil, we are using below table
     private static final String DATABASE_TABLE_tblStockUploadedStatus="tblStockUploadedStatus";
     private static final String DATABASE_CREATE_TABLE_tblStockUploadedStatus="create table tblStockUploadedStatus(flgStockTrans int null,VanLoadUnLoadCycID int null,CycleTime text null,StatusID int null);";
-
-
     private static final String DATABASE_TABLE_TMP_DISTRIBUTOR_STOCK = "tblTmpDistributorStock";
     private static final String DATABASE_CREATE_TABLE_TEMP_DISTRIBUTOR_STOCK="create table tblTMPDistributorStock(PrdctId text null,StockQntty text null,DistributorNodeIdNodeType text null,SKUName text null,OpeningStock text null,TodaysAddedStock text null,CycleAddedStock text null,NetSalesQty text null,TodaysUnloadStk text null,CycleUnloadStk text null,CategoryID text null);";
-
-
-
-
     private static final String DATABASE_TABLE_tblStockConfirm="tblStockConfirm";
     private static final String DATABASE_CREATE_TABLE_tblStockConfirm="create table tblStockConfirm(UserId text null,confirmFlg text null);";
-
-
     //setock out flg not using below tavle
     private static final String DATABASE_TABLE_tblStockOut="dtDistributorStockOutFlg";
     private static final String DATABASE_CREATE_TABLE_tblStockOut="create table dtDistributorStockOutFlg(flgStockOutEntryDone int null);";
+    private static final String DATABASE_TABLE_tblBankMaster="tblBankMaster";
+    private static final String DATABASE_TABLE_tblInstrumentMaster="tblInstrumentMaster";
 
 
     //Amount Collction
-
-    private static final String DATABASE_TABLE_tblBankMaster="tblBankMaster";
-    private static final String DATABASE_TABLE_tblInstrumentMaster="tblInstrumentMaster";
     private static final String DATABASE_TABLE_tblAllCollectionData="tblAllCollectionData";
-
-
-
     //Amount Collection
     private static final String DATABASE_CREATE_TABLE_tblBankMaster="create table tblBankMaster (BankId text null, BankName text null, LoginIdIns text null, TimeStampIns text null, LoginIdUpd text null, TimeStampUpd text null);";
     private static final String DATABASE_CREATE_TABLE_tblInstrumentMaster="create table tblInstrumentMaster (InstrumentModeId text null, InstrumentMode text null, InstrumentType text null);";
-    //private static final String DATABASE_CREATE_TABLE_tblAllCollectionData="create table tblAllCollectionData (StoreID text null, PaymentMode text null, Amount text null, RefNoChequeNoTrnNo text null, Date text null, Bank text null,Sstat text null,OrderPDAID text null);";
-
     private static final String DATABASE_CREATE_TABLE_tblAllCollectionData="create table tblAllCollectionData (StoreVisitCode text not null,StoreID text not null, PaymentMode text null,PaymentModeID text null, Amount text null, RefNoChequeNoTrnNo text null, Date text null, Bank text null,Sstat text null,TmpInvoiceCodePDA text null);";
-
-
     //map distributor
     private static final String TABLE_tblDistribtorMstr = "tblDistribtorMstr";
+    //private static final String DATABASE_CREATE_TABLE_tblAllCollectionData="create table tblAllCollectionData (StoreID text null, PaymentMode text null, Amount text null, RefNoChequeNoTrnNo text null, Date text null, Bank text null,Sstat text null,OrderPDAID text null);";
     private static final String DATABASE_CREATE_TABLE_tblDistribtorMstr = "create table tblDistribtorMstr (DBRNodeID int null,DistributorNodeType int null,Distributor text null, flgRemap int null);";
-
     private static final String TABLE_tblIsDBRStockSubmitted = "tblIsDBRStockSubmitted";
     private static final String DATABASE_CREATE_TABLE_tblIsDBRStockSubmitted = "create table tblIsDBRStockSubmitted (IsDBRStockSubmitted int null);";
-
-
     private static final String DATABASE_TABLE_MAIN4 = "tblDistributorListMaster";
     private static final String DATABASE_CREATE_TABLE_4 = "create table tblDistributorListMaster (DBRNodeID int null,DistributorNodeType int null,Distributor text null);";
-
-
-
-
     private static final String TABLE_tblDistributorMapping="tblDistributorMapping";
     private static final String DATABASE_CREATE_TABLE_tblDistributorMapping="create table tblDistributorMapping(" +
             "DistribtrUniqueId text null, DistribtrId text null,DistributorNodeType text null,flgGSTCapture text null," +
@@ -143,109 +96,71 @@ public class PRJDatabase
             "NetwLong text null, NetwAccuracy text null, NetwAddress text null, FusedLat text null, FusedLong text null, " +
             "FusedAccuracy text null, FusedAddress text null,FusedLocationLatitudeWithFirstAttempt text null," +
             "FusedLocationLongitudeWithFirstAttempt text null,FusedLocationAccuracyWithFirstAttempt text null,Sstat int null,flgLocationServicesOnOff int null,flgGPSOnOff int null,flgNetworkOnOff int null,flgFusedOnOff int null,flgInternetOnOffWhileLocationTracking int null,flgRestart int null);";
-
-
-
-
-
     private static final String DATABASE_TABLE_DISTRIBUTOR_ORDERPDAID = "tblDistributorOrderPdaId";
-
     private static final String DATABASE_TABLE_DISTRIBUTOR_STOCK = "tblDistributorStock";
     //
     private static final String DATABASE_TABLE_DISTRIBUTOR_LEFTPRODUCT = "tblDistributorProductLeft";
-
     private static final String DATABASE_TABLE_DayAndSummary = "tblAllSummaryDay";
     private static final String DATABASE_CREATE_TABLE_DayAndSummary = "create table tblAllSummaryDay (AutoId int not null,Measures text null," +
             "TodaysSummary text null,MTDSummary text null,TableNo text not null,ColorCode text not null);";
-
     private static final String DATABASE_TABLE_Main271 = "tblLatLongDetails";
     private static final String DATABASE_CREATE_TABLE_271 = "create table tblLatLongDetails (StoreID text null,fnLati text null,fnLongi text null,fnAccuracy text null,flgLocNotFound text null,fnAccurateProvider text null,AllProvidersLocation text null,fnAddress text null,GpsLat text null, GpsLong text null, GpsAccuracy text null, GpsAddress text null, NetwLat text null, NetwLong text null, NetwAccuracy text null, NetwAddress text null, FusedLat text null, FusedLong text null, FusedAccuracy text null, FusedAddress text null,FusedLocationLatitudeWithFirstAttempt text null,FusedLocationLongitudeWithFirstAttempt text null,FusedLocationAccuracyWithFirstAttempt text null,Sstat integer null);";
-
     private static final String DATABASE_TABLE_tblSameLocationForStoreRestartDone = "tblsameLocationForStoreRestartDone";
     private static final String DATABASE_CREATE_TABLE_tblSameLocationForStoreRestartDone="create table tblsameLocationForStoreRestartDone(UniqueID INTEGER PRIMARY KEY AUTOINCREMENT,prvsStoreID text null,CrntStoreID text null,isSavedOrSubmittedStore text null,isMsgToRestartPopUpShown text null,isRestartDoneByDSR text null ,Sstat integer null,ActionTime text null);";
-
-
     private static final String DATABASE_TABLE_MAIN23 = "tblStoreWiseTarget";
     private static final String DATABASE_TABLE_MAIN235 = "tblTargetVsAchievedSummary";
-
     private static final String DATABASE_CREATE_TABLE_DISTRIBUTOR_ORDERPDAID="create table tblDistributorOrderPdaId(DistributorNodeIdNodeType text null,OrderPDAID text null,ProductId text null,OrderQntty text null,Sstat integer not null);";
     private static final String DATABASE_CREATE_TABLE_DISTRIBUTOR_STOCK="create table tblDistributorStock(PrdctId text null,StockQntty text null,DistributorNodeIdNodeType text null,SKUName text null,OpeningStock text null,TodaysAddedStock text null,CycleAddedStock text null,NetSalesQty text null,TodaysUnloadStk text null,CycleUnloadStk text null,CategoryID text null);";
    private static final String DATABASE_TABLE_CYCLEID="tblCycleID";
     private static final String DATABASE_CREATE_TABLE_CYCLEID="create table tblCycleID(CycleID int null,Sstat int null,CycStartTime text null,CycleTime text null);";
-
     private static final String DATABASE_CREATE_TABLE_DISTRIBUTOR_LEFTPRODUCT="create table tblDistributorProductLeft(DistributorNodeIdNodeType text null,OrderId text null,flgProcessedInvoice int not null);";
     private static final String DATABASE_CREATE_TABLE_23 = "create table tblStoreWiseTarget (StoreID text not null,TargetValue text null);";
     private static final String DATABASE_CREATE_TABLE_235 = "create table tblTargetVsAchievedSummary (AutoId int not null,Descr text null," +
             "TodayTarget text null,TodayAchieved text null,TodayBal text null,Todayflg text null,MonthTarget text null,MonthAchieved text null,MonthBal text null,Monthflg text null,ValTgtOrPrdctFlg int not null);";
-
     private static final String DATABASE_TABLE_MAIN236 = "tblTargetVsAchievedNote";
     private static final String DATABASE_CREATE_TABLE_236 = "create table tblTargetVsAchievedNote (MsgToDisplay text null);";
-
     // Tables Data Coming at Splash Screen Starts
     private static final String TABLE_tblUserAuthenticationMstr_Define = "tblUserAuthenticationMstr";
     private static final String TABLE_tblUserAuthenticationMstr_Definition = "create table tblUserAuthenticationMstr (flgUserAuthenticated text null,PersonName text null,FlgRegistered text null,PersonNodeID text null,PersonNodeType text null);";
-
     private static final String TABLE_tblBloodGroup_Define = "tblBloodGroup";
     private static final String DATABASE_CREATE_TABLE_tblBloodGroup = "create table tblBloodGroup (BloddGroups text null);";
-
     private static final String TABLE_tblEducationQuali = "tblEducationQuali";
     private static final String DATABASE_CREATE_TABLE_tblEducationQuali = "create table tblEducationQuali (Qualification text null);";
-
-
     private static final String TABLE_tblDsrRegDetails = "tblDsrRegDetails";
     private static final String DATABASE_CREATE_TABLE_tblDsrRegDetails = "create table tblDsrRegDetails (IMEI text null,  ClickedDateTime text null,FirstName text null,LastName text null,ContactNo text null,DOB text null,Sex text null,MaritalStatus text null,MarriedDate text null,Qualification text null,SelfieName text null,SelfiePath text null,EmailID text null,BloodGroup text null,SignName text null,SignPath text null,Sstat integer null,PhotoName text null,  PersonNodeId text null, PersonNodeType text null);";
     private static final String TABLE_tblUserRegistarationStatus = "tblUserRegistarationStatus";
     private static final String DATABASE_CREATE_TABLE_tblUserRegistarationStatus = "create table tblUserRegistarationStatus (Flag text null,MsgToDisplay text null);";
-
-
-
     private static final String TABLE_tblAvailableVersionMstr_Define = "tblAvailableVersionMstr";
     private static final String TABLE_tblAvailableVersionMstr_Definition = "create table tblAvailableVersionMstr (VersionID text null,VersionSerialNo text null,VersionDownloadStatus text null,ServerDate text null);";//, AutoIdOutlet int null
-
     private static final String TABLE_tblRouteMstr_Define = "tblRouteMstr";
     private static final String TABLE_tblRouteMstr_Definition = "create table tblRouteMstr(ID string null,RouteType string null, Descr string null, Active integer null,flgTodayRoute integer null,RouteDate string null);";
-
     private static final String TABLE_tblNotificationMstr_Define = "tblNotificationMstr";
     private static final String TABLE_tblNotificationMstr_Definition = "create table tblNotificationMstr (SerialNo int null,IMEI text null, Noti_text text null,Noti_DateTime text null,Noti_ReadStatus int null,Noti_NewOld int null,Noti_ReadDateTime text null,Sstat int null,MsgServerID int null);";
-
     private static final String TABLE_tblNoVisitReasonMaster_Define = "tblNoVisitReasonMaster";
     private static final String TABLE_tblNoVisitReasonMaster_Definition = "create table tblNoVisitReasonMaster(AutoIdStore integer null,ReasonId text null,ReasonDescr text null,FlgToShowTextBox integer null);";
-
     private static final String TABLE_tblNoVisitStoreDetails_Define = "tblNoVisitStoreDetails";
     private static final String TABLE_tblNoVisitStoreDetails_Definition = "create table tblNoVisitStoreDetails(IMEI text null,CurDate text null,ReasonId text null,ReasonDescr text null,flgHasVisit integer null,Sstat integer not null);";
-
-
-
-
     //new Store master data Start
     private static final String DATABASE_TABLE_NewStoreSalesQuotePaymentDetails="tblNewStoreSalesQuotePaymentDetails";
     private static final String DATABASE_NewStoreSalesQuotePaymentDetails = "create table tblNewStoreSalesQuotePaymentDetails (StoreId text null,PymtStageId text null,Sstat text null);";
-
     private static final String TABLE_QSTOUTCHANNEL = "tblQuestIDForOutChannel"; // show how many section we have to show
     private static final String DATABASE_CREATE_TABLE_QSTOUTCHANNEL = "create table tblQuestIDForOutChannel(GrpQstId int null,QuestID int null,OptID text null,SectionCount int null);";
-
     private static final String TABLE_QST_NAME = "tblQuestIDForName";
     private static final String DATABASE_CREATE_TABLE_QST_NAME = "create table tblQuestIDForName(ID int null,GrpQstId int null,QuestID int null,QuestDesc text null);";
-
     private static final String TABLE_QuestionMstr = "tblQuestionMstr";
     private static final String DATABASE_CREATE_TABLE_QUESTIONMstr = "create table tblQuestionMstr(QuestID int null,QuestCode int null,QuestDesc text null,QuestType int null,AnsControlType int null,AnsControlInputTypeID int null,AnsControlInputTypeMinLength int null,AnsControlInputTypeMaxLength int null,AnsMustRequiredFlg int null,QuestBundleFlg int null,ApplicationTypeID int null,Sequence int null,AnsHint text null,flgQuestIDForOutChannel int null,QuestDescHindi text null);";
-
     private static final String TABLE_QuestGrpMappingMstr = "tblPDAQuestGrpMappingMstr";
     private static final String DATABASE_CREATE_TABLE_QuestGrpMappingMstr = "create table tblPDAQuestGrpMappingMstr(GrpQuestID int null,QuestID int null,GrpID int null,GrpNodeID int null,GrpDesc text null,SectionNo int null,GrpCopyID int null,QuestCopyID int null,Sequence int null);";
-
-
     private static final String TABLE_OptionMstr = "tblOptionMstr";
     private static final String DATABASE_CREATE_TABLE_OPTIONMstr = "create table tblOptionMstr(OptID text null,QuestID int null,OptionNo int null,OptionDescr text null,Sequence int null );";
-
-
     private static final String TABLE_QuestOptionDependentMstr = "tblPDAQuestOptionDependentMstr";
     private static final String DATABASE_CREATE_TABLE_QUESTION_OPTION_DEPENDENTMstr = "create table tblPDAQuestOptionDependentMstr(QstID int null,DepQstId int null,GrpQuestID int null,GrpDepQuestID int null);";
-
     private static final String TABLE_QuestOptionValuesDependentMstr = "tblPDAQuestOptionValuesDependentMstr";
     private static final String DATABASE_CREATE_TABLE_QUESTION_OPTION_VAL_DEPENDENTMstr = "create table tblPDAQuestOptionValuesDependentMstr(DepQstId int null,DepAnswValId text null,QstId int null,AnswValId text null,OptDescr text null,Sequence int null,GrpQuestID int null,GrpDepQuestID int null);";
-
     private static final String DATABASE_TABLE_tblUserName = "tblUserName";
     private static final String DATABASE_CREATE_TABLE_tblUserName = "create table tblUserName (UserName text null);";
+    private static final String DATABASE_TABLE_tblLocationDetails = "tblLocationDetails";
+    private static final String DATABASE_CREATE_TABLE_tblLocationDetails = "create table tblLocationDetails (Lattitude text null,Longitude text null,Accuracy text null,Address text null,City text null,Pincode text null,State text null,fnAccurateProvider  text null,GpsLat  text null,GpsLong  text null,GpsAccuracy  text null,NetwLat  text null,NetwLong  text null,NetwAccuracy  text null,FusedLat  text null,FusedLong  text null,FusedAccuracy  text null,AllProvidersLocation  text null,GpsAddress  text null,NetwAddress  text null,FusedAddress  text null,FusedLocationLatitudeWithFirstAttempt  text null,FusedLocationLongitudeWithFirstAttempt  text null,FusedLocationAccuracyWithFirstAttempt  text null);";
 
 //	private static final String DATABASE_TABLE_tblStoreCountDetails = "tblStoreCountDetails";
 //	private static final String DATABASE_CREATE_TABLE_tblStoreCountDetails = "create table tblStoreCountDetails (TotStoreAdded int null,TodayStoreAdded int null);";
@@ -255,9 +170,8 @@ public class PRJDatabase
 
 //	private static final String DATABASE_TABLE_tblPreAddedStoresDataDetails = "tblPreAddedStoresDataDetails";
 //	private static final String DATABASE_CREATE_TABLE_tblPreAddedStoresDataDetails = "create table tblPreAddedStoresDataDetails (StoreIDDB text null,GrpQuestID text null,QstId text null,AnsControlTypeID text null,AnsTextVal text null,flgPrvVal text null);";
-
-    private static final String DATABASE_TABLE_tblLocationDetails = "tblLocationDetails";
-    private static final String DATABASE_CREATE_TABLE_tblLocationDetails = "create table tblLocationDetails (Lattitude text null,Longitude text null,Accuracy text null,Address text null,City text null,Pincode text null,State text null,fnAccurateProvider  text null,GpsLat  text null,GpsLong  text null,GpsAccuracy  text null,NetwLat  text null,NetwLong  text null,NetwAccuracy  text null,FusedLat  text null,FusedLong  text null,FusedAccuracy  text null,AllProvidersLocation  text null,GpsAddress  text null,NetwAddress  text null,FusedAddress  text null,FusedLocationLatitudeWithFirstAttempt  text null,FusedLocationLongitudeWithFirstAttempt  text null,FusedLocationAccuracyWithFirstAttempt  text null);";
+    private static final String TABLE_IMAGE = "tableImage";
+    private static final String DATABASE_CREATE_TABLE_Image = "create table tableImage(StoreID text null,QstIdAnsCntrlTyp text null,imageName text null,imagePath text null,ImageClicktime text null,Sstat integer null);";
 
     //private static final String DATABASE_TABLE_MAINtblStoreDeatils = "tblStoreDetails";
 /*
@@ -267,145 +181,78 @@ public class PRJDatabase
 			"IsStoreDataCompleteSaved int null,PaymentStage text null," +
 			"flgLocationTrackEnabled integer null,StoreAddress text null,StoreCity text null,StorePinCode text null,StoreState text null,Sstat integer not null);";
 */
-
-
-    private static final String TABLE_IMAGE = "tableImage";
-    private static final String DATABASE_CREATE_TABLE_Image = "create table tableImage(StoreID text null,QstIdAnsCntrlTyp text null,imageName text null,imagePath text null,ImageClicktime text null,Sstat integer null);";
-
     private static final String TABLE_OutletQuestAnsMstr = "tblOutletQuestAnsMstr";
     private static final String DATABASE_CREATE_TABLE_tblOutletQuestAnsMstr = "create table tblOutletQuestAnsMstr (OutletID text not null,QuestID text not null,AnswerType text null, AnswerValue text null,QuestionGroupID integer null,sectionID integer null,Sstat integer not null);";
-
-
-    // Tables Data Coming at Splash Screen Ends
-
     // Surbhi Change for Incentive
     private static final String TABLE_tblIncentiveMaster = "tblIncentiveMaster";
     private static final String CREATE_TABLE_tblIncentiveMaster = "create table tblIncentiveMaster(IncId int null, OutputType int null, IncentiveName text null,flgAcheived text null,Earning text null);";
 
-    private static final String TABLE_tblIncentiveDetailsData = "tblIncentiveDetailsData";
-    private static String DATABASE_CREATE_TABLE_tblIncentiveDetailsData="";
 
+    // Tables Data Coming at Splash Screen Ends
+    private static final String TABLE_tblIncentiveDetailsData = "tblIncentiveDetailsData";
     private static final String TABLE_tblIncentiveDetailsColumnsDesc = "tblIncentiveDetailsColumnsDesc";
     private static final String CREATE_TABLE_tblIncentiveDetailsColumnsDesc = "create table tblIncentiveDetailsColumnsDesc(IncId int null, ReportColumnName text null, DisplayColumnName text null);";
-
     private static final String TABLE_tblTotalEarning = "tblTotalEarning";
     private static final String CREATE_TABLE_tblTotalEarning = "create table tblTotalEarning(Total_Earning text null);";
-
     private static final String TABLE_tblIncentivePastDetailsData = "tblIncentivePastDetailsData";
-    private static String DATABASE_CREATE_TABLE_tblIncentivePastDetailsData="";
-
     private static final String TABLE_tblIncentivePastDetailsColumnsDesc = "tblIncentivePastDetailsColumnsDesc";
     private static final String CREATE_TABLE_tblIncentivePastDetailsColumnsDesc = "create table tblIncentivePastDetailsColumnsDesc(IncId int null, ReportColumnName text null, DisplayColumnName text null, Ordr text null);";
-
     private static final String TABLE_tblIncentiveMsgToDisplay_Define = "tblIncentiveMsgToDisplay";
     private static final String CREATE_tblIncentiveMsgToDisplay_Definition = "create table tblIncentiveMsgToDisplay(MsgToDisplay text null);";
+    private static final String DATABASE_TABLE_StoreSalesOrderPaymentDetails="tblStoreSalesOrderPaymentDetails";
+    private static final String DATABASE_TABLE_StoreAddressMapDetailsMstr="tblStoreAddressMapDetailsMstr";
+    private static final String DATABASE_TABLE_StoreOrderBillAddressDetails="tblStoreOrderBillAddressDetails";
+    private static final String TABLE_XMLFILES = "tbl_XMLfiles";
 
 
     // End Surbhi Change for Incentive
-
-
-
-
-    private static final String DATABASE_TABLE_StoreSalesOrderPaymentDetails="tblStoreSalesOrderPaymentDetails";
-
-    private static final String DATABASE_TABLE_StoreAddressMapDetailsMstr="tblStoreAddressMapDetailsMstr";
-    private static final String DATABASE_TABLE_StoreOrderBillAddressDetails="tblStoreOrderBillAddressDetails";
-
-    private static final String TABLE_XMLFILES = "tbl_XMLfiles";
     private static final String DATABASE_CREATE_TABLE_XMLfiles = "create table tbl_XMLfiles(XmlFileName text null,Sstat text null,filetype text null);";
+    private static final String TABLE_RETURN_REASON = "tblReturnReason";
+    private static final String TABLE_OutletChannelBusinessSegmentMaster = "tblOutletChannelBusinessSegmentMaster";
+    private static final String TABLE_OutletMstr = "tblOutletMstr";
+    private static final String TABLE_ViewOutletQuestAnsMstr = "tblViewOutletQuestAnsMstr";
 
 
     // static final String TABLE_XMLFILES = "tbl_XMLfiles";
     //private static final String DATABASE_CREATE_TABLE_XMLfiles = "create table tbl_XMLfiles(XmlFileName text null,Sstat text null);";
-
-    private static final String TABLE_RETURN_REASON = "tblReturnReason";
-    // Dynamic Store Mapping Start
-
-
-    private static final String TABLE_OutletChannelBusinessSegmentMaster = "tblOutletChannelBusinessSegmentMaster";
-    private static final String TABLE_OutletMstr = "tblOutletMstr";
-
-
-
-    private static final String TABLE_ViewOutletQuestAnsMstr = "tblViewOutletQuestAnsMstr";
-
     private static final String TABLE_ViewOutletNameAndId = "tblViewOutletNameAndId";
-
+    // Dynamic Store Mapping Start
     private static final String TABLE_StoreProductPhotoDetail = "tblOutletPhotoDetail";
     private static final String TABLE_QuestionDependentMstr = "tblQuestionDependentMstr";
-
     private static final String TABLE_MinDeliverQntty = "tblMinDeliverQntty";
-
-
-
-
     private static final String DATABASE_CREATE_TABLE_OutletPhotoDetail = "create table tblOutletPhotoDetail(OutletID text null,ClickedDateTime text null,PhotoName text null,PhotoComment text null,PDAPhotoPath text null,Sstat integer null);";
-
-
-
     private static final String DATABASE_CREATE_TABLE_OutletChannelBusinessSegmentMasterr = "create table tblOutletChannelBusinessSegmentMaster(OutChannelID int null,ChannelName text null,BusinessSegmentID int null,BusinessSegment text null);";
-
-
     private static final String DATABASE_CREATE_TABLE_tblOutletMstr = "create table tblOutletMstr (OutletID text not null,VisitStartTS text not null,VisitEndTS text null,AppVersion int null,ActualLatitude text null, ActualLongitude text null, LocProvider text null, Accuracy text null, BateryLeftStatus text null,StoreName text null,imei text null, ISNewStore int null,Sstat integer not null);";
     private static final String DATABASE_CREATE_TABLE_tblViewOutletQuestAnsMstr = "create table tblViewOutletQuestAnsMstr (OutletID text not null,QuestID text not null,AnswerType text null, AnswerValue text null);";
-
     private static final String DATABASE_CREATE_TABLE_ViewOutletNameAndId = "create table tblViewOutletNameAndId(OutletID text not null,OutletName text not null);";
-
     private static final String DATABASE_CREATE_TABLE_QUESTION_DEPENDENTMstr = "create table tblQuestionDependentMstr(QuestionID int null,OptionID int null,DependentQuestionID int null,GrpID int null,GrpDepQuestID int null);";
     private static final String DATABASE_StoreSalesOrderPaymentDetails = "create table tblStoreSalesOrderPaymentDetails (StoreId text null,OrderID text null,PymtStageId text null,Sstat text null,TmpInvoiceCodePDA text null);";
     private static final String DATABASE_StoreAddressMapDetailsMstr = "create table tblStoreAddressMapDetailsMstr (StoreID text null,OutAddTypeID int null,Address text null,AddressDet text null,OutAddID int null);";
     private static final String DATABASE_StoreOrderBillAddressDetails = "create table tblStoreOrderBillAddressDetails (StoreID text null,OrderID text null,BillToAddress text null,ShipToAddress int null,Sstat text null);";
-
     private static final String DATABASE_MinDeliverQntty = "create table tblMinDeliverQntty (PrdId text null,StoreID text null,QPBT text null,QPAT text null,QPTaxAmount text null,MinDlvrQty int null,UOMID text null,Sstat text null);";
-
     private static final String TABLE_tblSalesQuoteSponsorMstr = "tblSalesQuoteSponsorMstr";
     private static final String TABLE_tblManufacturerMstrMain = "tblManufacturerMstrMain";
     private static final String TABLE_tblRateDistribution = "tblRateDistribution";
-
     //nitika
     private static final String DATABASE_CREATE_TABLE_tblSalesQuoteSponsorMstr = "create table tblSalesQuoteSponsorMstr(SalesQuoteSponsorID text null,SponsorDescr text null,Ordr text null);";
     private static final String DATABASE_CREATE_TABLE_tblManufacturerMstrMain = "create table tblManufacturerMstrMain(ManufacturerID text null,ManufacturerName text null,NodeType text null);";
     private static final String DATABASE_CREATE_TABLE_tblRateDistribution = "create table tblRateDistribution(SalesQuoteId text null,StoreId text null,SalesQuoteSponsorID  text null,ManufacturerID  text null,Percentage  text null,SponsorDescr  text null,ManufacturerName  text null,Sstat text null);";
-
-    //  private static final String TABLE_MinDeliverQntty = "tblMinDeliverQntty";
-    // Dynamic Store Mapping End
-
-
-
-
-
-
-
-
-
     private static final String DATABASE_TABLE_Main214 = "tblAlrtVal";
     private static final String DATABASE_TABLE_Main215 = "tblProductMappedWithSchemeSlabApplied";
-
-
     // Tables for Launcher Screen
     private static final String DATABASE_TABLE_MAIN11 = "tblPdaDate";
     private static final String DATABASE_TABLE_MAIN12 = "tblDayStartEndDetails";
 
+    //  private static final String TABLE_MinDeliverQntty = "tblMinDeliverQntty";
+    // Dynamic Store Mapping End
     private static final String DATABASE_TABLE_MAIN13 = "tblStoreList";
     private static final String DATABASE_TABLE_MAIN14 = "tblProductList";
     private static final String DATABASE_TABLE_MAINProductSegementMap = "tblProductSegementMap";
     private static final String DATABASE_TABLE_MAIN15 = "tblCatagoryMstr";
-
-
-
-
     private static final String DATABASE_TABLE_MAIN19 = "tblPDAProductReturnMstr";
     private static final String DATABASE_TABLE_MAIN20 = "tblPDAProductReturnDetails";
-
-
     private static final String DATABASE_TABLE_MAIN21 = "tblNewStoreEntries";
     private static final String DATABASE_TABLE_MAIN22 = "tblTemp";
-
-
-
-
-
-
     private static final String DATABASE_TABLE_MAIN201 = "tblSchemeStoreMapping";
     private static final String DATABASE_TABLE_MAIN202 = "tblSchemeMstr";
     private static final String DATABASE_TABLE_MAIN203 = "tblSchemeSlabDetail";
@@ -415,100 +262,54 @@ public class PRJDatabase
     private static final String DATABASE_TABLE_MAIN207 = "tblSchemeSlabBenefitsProductMappingDetail";
     private static final String DATABASE_TABLE_MAIN208 = "tblSchemeSlabBenefitsValueDetail";
     private static final String DATABASE_TABLE_MAIN209 = "tblProductRelatedScheme";
-
     private static final String DATABASE_TABLE_Main211 = "tblStoreProductAppliedSchemesBenifitsRecords";
-
-
-
     private static final String DATABASE_TABLE_MAIN221 = "tblStoreTypeMstr";
     private static final String DATABASE_TABLE_MAIN222 = "tblStoreProductClassificationTypeListMstr";
     private static final String DATABASE_TABLE_MAIN223 = "tblTradeChannelMstr";
-
-
     private static final String DATABASE_TABLE_MAIN231 = "tblSKUWiseDaySummary";
     private static final String DATABASE_TABLE_MAIN232 = "tblStoreWiseDaySummary";
     private static final String DATABASE_TABLE_MAIN233 = "tblStoreSKUWiseDaySummary";
-
     private static final String DATABASE_TABLE_MAIN234 = "tblAllSummary";
-
-
-
     private static final String DATABASE_TABLE_MAIN251 = "tblMessageTextFileContainer";
-
-
-
-
-
-
-
-
     private static final String DATABASE_TABLE_MAIN51 = "tblSchemeList";
     private static final String DATABASE_TABLE_MAIN52 = "tblSchemeDetails";
     private static final String DATABASE_TABLE_MAIN53 = "tblschemeStoreTypeMap";
     private static final String DATABASE_TABLE_MAIN54 = "tblschemeProductMap";
     private static final String DATABASE_TABLE_MAIN55 = "tblspForPDASchemeApplicableList";
     private static final String DATABASE_TABLE_MAIN56 = "tblPDAIsSchemeApplicable";
-
-
     private static final String DATABASE_TABLE_MAIN61 = "tblLastTransactionDetails";
     private static final String DATABASE_TABLE_MAIN62 = "tblPDALastTranDateForSecondPage";
     private static final String DATABASE_TABLE_MAIN63 = "tblStorTypeMstr";
-
     private static final String DATABASE_TABLE_MAIN9 = "tblVisibilityMstr";
     private static final String DATABASE_TABLE_MAIN10 = "tblVisibilityDetails";
     //private static final String DATABASE_TABLE_MAIN11 = "tblschemeProductMap";
     private static final String DATABASE_TABLE_MAIN16 = "tblNewStoreListEntries";
-
     private static final String DATABASE_TABLE_MAIN17 = "tblPDALastInvoiceDet";
-
     private static final String DATABASE_TABLE_MAIN18 = "tblPDATargetQtyForSecondPage";
     private static final String DATABASE_TABLE_MAIN31 = "tblTransac";
-
-
-
     private static final String DATABASE_TABLE_MAIN71 = "tblSyncSummuryDetails";
     private static final String DATABASE_TABLE_MAIN72 = "tblSyncSummuryForProductDetails";
-
     private static final String DATABASE_TABLE_MAIN81 = "tblStrachApplicableOnScheme";
     private static final String DATABASE_TABLE_MAIN82 = "tblStrachOnSchemeDetails";
-
     private static final String DATABASE_TABLE_MAIN91 = "tblOutLetInfoOnQuadVolumeCategoryBasis";
-
     private static final String DATABASE_TABLE_MAINStoreProductMap = "tblStoreProductMap";
     private static final String DATABASE_TABLE_MAIN92 = "tblSelectedStoreIDinChangeRouteCase";
-
-
     private static final String DATABASE_TABLE_MAIN94 = "tblSysVisitID";
-
-
-
     private static final String DATABASE_TABLE_MAIN101 = "tblFirstOrderDetailsOnLastVisitDetailsActivity";
-
     private static final String DATABASE_TABLE_MAIN102 = "tblSecondVisitDetailsOnLastVisitDetailsActivity";
-
     private static final String DATABASE_TABLE_MAIN103 = "tblLODOnLastSalesSummary";
-
-
-
     private static final String DATABASE_TABLE_MAIN111 = "tblInvoiceButtonStoreMstr";
     private static final String DATABASE_TABLE_MAIN112 = "tblInvoiceButtonProductMstr";
     private static final String DATABASE_TABLE_MAIN113 = "tblInvoiceButtonStoreProductwiseOrder";
-
     private static final String DATABASE_TABLE_MAIN114 = "tblInvoiceButtonTransac";
-
-
-
-
     private static final String DATABASE_TABLE_MAIN141 = "tblForPDAGetLastVisitDate";
     private static final String DATABASE_TABLE_MAIN142 = "tblForPDAGetLastOrderDate";
     private static final String DATABASE_TABLE_MAIN143 = "tblForPDAGetLastVisitDetails";
     private static final String DATABASE_TABLE_MAIN144 = "tblForPDAGetLastOrderDetails";
     private static final String DATABASE_TABLE_MAIN145 = "tblspForPDAGetLastOrderDetailsTotalValues";
     private static final String DATABASE_TABLE_MAIN146 = "tblForPDAGetExecutionSummary";
-
     private static final String DATABASE_TABLE_MAIN151 = "tblProductListForAvailableStock";
     private static final String DATABASE_TABLE_MAIN152 = "tblCatagoryMstrForDailyTarget";
-
     //surbhi
     private static final String DATABASE_TABLE_UOMMstr="tblUOMMstr";
     private static final String DATABASE_TABLE_SalesQuotePrcsMstr="tblSalesQuotePrcsMstr";
@@ -516,108 +317,65 @@ public class PRJDatabase
     private static final String DATABASE_TABLE_SalesQuoteProductsMstr="tblSalesQuoteProductsMstr";
     private static final String DATABASE_TABLE_tblSalesQuotePaymentModeMstr="tblSalesQuotePaymentModeMstr";
     private static final String DATABASE_TABLE_tblSalesQuotePaymentStageMstr="tblSalesQuotePaymentStageMstr";
-
     private static final String DATABASE_TABLE_tblSalesQuoteTypeMstr="tblSalesQuoteTypeMstr";
-
     private static final String DATABASE_TABLE_tblSalesQuotePaymentStageModeMapMstr="tblSalesQuotePaymentStageModeMapMstr";
-
-
     //surbhi
     private static final String DATABASE_CREATE_TABLE_UOMMstr = "create table tblUOMMstr (UOMID text null,UOM text null);";
     private static final String DATABASE_CREATE_TABLE_SalesQuotePrcsMstr = "create table tblSalesQuotePrcsMstr (SalesQuotePrcsId text null, SalesQuotePrcs text null);";
     private static final String DATABASE_SalesQuotePersonMeetMstr = "create table tblSalesQuotePersonMeetMstr (SalesQuoteId text null,SalesQuoteCode text null,SalesQuotePrcsId text null,SalesQuotePrcs text null,StoreName text null,Remarks text null,StoreId text null,CreditLimit text null,CreditDays text null,ExpectedBusinessValue text null,SalesQuoteValidFrom text null,SalesQuoteValidTo text null,SalesQuoteDate text null,SalesQuoteType text null,ContactPerson text null,ContactPersonEmail text null,ContactPersonPhone text null,PaymentModeId text null,Sstat text null,PymtStageId text null,ManufacturerID text null,ManufacturerName text null);";
     private static final String DATABASE_CREATE_SalesQuoteProductsMstr = "create table tblSalesQuoteProductsMstr (SalesQuoteId text null,Row_No text null,PrdId text null,StandardRate text null,StandardRateBeforeTax text null,RateOffer text null,InclusiveTax text null,ValidFrom text null,ValidTo text null,MinDlvryQty text null,UOMID text null,Remarks text null,LastTranscRate text null,Sstat text null,TaxRate text null);";
     private static final String DATABASE_CREATE_TABLE_tblSalesQuotePaymentModeMstr="create table tblSalesQuotePaymentModeMstr (PymtModeId text null,PymtMode text null);";
-
     private static final String DATABASE_CREATE_TABLE_tblSalesQuotePaymentStageMstr="create table tblSalesQuotePaymentStageMstr (PymtStageId text null,PymtStage text null,PymtModeId text null);";
-
     private static final String DATABASE_CREATE_TABLE_tblSalesQuoteTypeMstr="create table tblSalesQuoteTypeMstr (SalesQuotetypeId	text null, SalesQuoteType text null);";
-
     private static final String DATABASE_CREATE_TABLE_tblSalesQuotePaymentStageModeMapMstr="create table tblSalesQuotePaymentStageModeMapMstr (PymtStageId text null, PymtModeId text null);";
-
     //private static final String DATABASE_TABLE_Summarytable = "tblDaySummary";
     private static final String DATABASE_TABLE_SummaryDayTableSummaryNew = "tblDaySummaryNew";
-
     private static final String DATABASE_TABLE_Main212 = "tblStoreProductPhotoDetail";
     private static final String DATABASE_TABLE_Main213 = "tblStoreReturnDetail";
-
-
     private static final String DATABASE_TABLE_MAIN161 = "tblPOSMaterialMstr";
     private static final String DATABASE_TABLE_MAIN162 = "tblStoreIDAndMaterialIDMap";
     private static final String DATABASE_TABLE_Main163 = "tblStoreMaterialDetail";
     private static final String DATABASE_TABLE_Main164 = "tblStoreMaterialPhotoDetail";
-
-
     private static final String DATABASE_TABLE_Main165 = "tblStorePOSLastVisitDateDetail";
-
     private static final String DATABASE_TABLE_Main166 = "tblStorePOSLastVisitALLMaterialDetails";
-
-
     private static final String DATABASE_CREATE_TABLE_165 = "create table tblStorePOSLastVisitDateDetail (StoreID text null,LastVisitDate text null);";
     private static final String DATABASE_CREATE_TABLE_166 = "create table tblStorePOSLastVisitALLMaterialDetails (StoreID text null,POSMaterialID text null,POSMaterialDescr text null,CurrentStockQty text null,NewOrderQty text null,ReturnQty text null,DamageQty text null);";
-
-
-
-
-
-    public static String DATABASE_NAME = CommonInfo.DATABASE_NAME;
-    public static int DATABASE_VERSION = CommonInfo.DATABASE_VERSIONID;
-    public static String AppVersionID = CommonInfo.AppVersionID.trim();
-
-    public static int Application_TypeID = CommonInfo.Application_TypeID; //1=Parag Store Mapping,2=Parag SFA Indirect,3=Parag SFA Direct
-
-    public int checkNumberOfStore=1;
-
-
-    // ReasonId,ReasonDescr,FlgToShowTextBox
-
-
-
     private static final String DATABASE_CREATE_TABLE_161 = "create table tblPOSMaterialMstr (POSMaterialID text null,POSMaterialDescr text null);";
     private static final String DATABASE_CREATE_TABLE_162 = "create table tblStoreIDAndMaterialIDMap (StoreID text null,VisitID text null,MaterialID text null,CurrentStockQty text null);";
-
-
     private static final String DATABASE_CREATE_TABLE_163 = "create table tblStoreMaterialDetail (RouteID text null,StoreID text null,MaterialID text null,ExistStock integer null,ReturntoDistributor integer null,FreshOrder integer null,DiscardDamage integer null,Sstat integer null);";
     private static final String DATABASE_CREATE_TABLE_164 = "create table tblStoreMaterialPhotoDetail (RouteID text null,StoreID text null,MaterialID text null,ClickedDateTime text null,PhotoName text null,PhotoValidation text null,PDAPhotoPath text null,Sstat integer null);";
-
-
-
     private static final String DATABASE_CREATE_TABLE_214 = "create table tblAlrtVal (StoreId text null,ProductID text null,SpinnerVal text null,SpinnerPosition text null,Product text null,schSlabId text null,schmAlrtId text null,OrderIDPDA text null,TmpInvoiceCodePDA text null);";
     private static final String DATABASE_CREATE_TABLE_215 = "create table tblProductMappedWithSchemeSlabApplied (StoreId text null,ProductID text null,schSlabId text null,schmIdMapped text null,Sstat int null,OrderIDPDA text null,TmpInvoiceCodePDA text null);";
-
-
-
     private static final String DATABASE_CREATE_TABLE_213 = "create table tblStoreReturnDetail (RouteID text null,StoreID text null,ReturnProductID text null, ProdReturnQty text null, ProdReturnReason text null, ProdReturnReasonIndex text null,ReturnDate text null,Sstat integer null,OrderIDPDA text null,TmpInvoiceCodePDA text null);";
     private static final String DATABASE_CREATE_TABLE_212 = "create table tblStoreProductPhotoDetail (StoreID text null,ProductID text null,ClickedDateTime text null,PhotoName text null,ReasonForReturn text null,PhotoValidation text null,PDAPhotoPath text null,Sstat integer null,OrderIDPDA text null,TmpInvoiceCodePDA text null);";
     private static final String DATABASE_CREATE_TABLE_221 = "create table tblStoreTypeMstr(AutoIdStore integer null,StoreTypeID integer null,StoreTypeDescr text null);";
 
 
+    // ReasonId,ReasonDescr,FlgToShowTextBox
     private static final String DATABASE_CREATE_TABLE_222 = "create table tblStoreProductClassificationTypeListMstr(AutoIdStore integer null," +
             "CategoryNodeID integer null,CategoryNodeType integer null, Category text null,ProductTypeNodeID integer null,ProductTypeNodeType integer null,ProductType text null,IsCategorySeleted int null,IsSubCategorySeleted int null,SubCategoryValue text null);";
-
     private static final String DATABASE_CREATE_TABLE_223 = "create table tblTradeChannelMstr(AutoIdStore integer null,TradeChannelID integer null,TradeChannelName text null);";
-
-
-
     private static final String DATABASE_CREATE_TABLE_21 = "create table tblNewStoreEntries (RouteID text null,StoreID text not null,StoreName text null," +
             "RetailerName text  null,emailID text null,TinNo text null,RetailerContactNo text  null," +
             "StoreAddress text  null,StorePincode text  null,City text  null,KeyAccount text null,TradeChannelID integer null,StoreAttrHierID integer null,StoreProductClassificationID text null,ActualLatitude text null, ActualLongitude text null," +
             "LocProvider text null, Accuracy text null," +
             "VisitStartTS text null, VisitEndTS text null,Imei text null,BatteryStatus text null,Sstat integer null," +
             "CityId integer null,AppVersion text null);";
-
-
-
-
     private static final String DATABASE_CREATE_TABLE_22 = "create table tblTemp(RouteID text null,StoreID text not null," +
             "CategoryNodeID integer null,CategoryNodeType integer null,Category text null,ProductTypeNodeID integer null,ProductTypeNodeType integer null,ProductType text null,IsCategorySeleted int null,IsSubCategorySeleted int null,SubCategoryValue text null,Sstat integer null);";
-
-
-
-
-
-
     private static final String DATABASE_CREATE_TABLE_251 = "create table tblMessageTextFileContainer (FileName text null,FileFlag integer null);";
+    private static final String DATABASE_CREATE_TABLE_201 = "create table tblSchemeStoreMapping (StoreID text null,SchemeID text null);";
+    private static final String DATABASE_CREATE_TABLE_202 = "create table tblSchemeMstr (SchemeID text null,SchemeName text null,SchemeApplicationID text null,SchemeAppliedRule text null);";
+    private static final String DATABASE_CREATE_TABLE_203 = "create table tblSchemeSlabDetail (SchemeID text null,SchemeSlabID text null,SchemeSlabDesc text null,BenifitDescr text null);";
+    private static final String DATABASE_CREATE_TABLE_204 = "create table tblSchemeSlabBucketDetails (RowID text null,SchemeID text null" +
+            ",SchemeSlabID text null,BucketID text null,SubBucketID text null,SlabSubBucketType text null,SlabSubBucketValue text null,SubBucketValType text null);";
+    private static final String DATABASE_CREATE_TABLE_205 = "create table tblSchemeSlabBucketProductMapping (RowID text null,ProductID text null);";
+    private static final String DATABASE_CREATE_TABLE_206 = "create table tblSchemeSlabBenefitsBucketDetails (RowID text null," +
+            "SchemeID text null,SchemeSlabID text null,BucketID text null,SubBucketID text null,BenSubBucketType text null," +
+            "BenDiscApplied text null,CouponCode text null,BenSubBucketValue text null,Per real null,UOM real null,ProRata int null);";
+    private static final String DATABASE_CREATE_TABLE_207 = "create table tblSchemeSlabBenefitsProductMappingDetail (RowID text null,ProductID text null);";
+    private static final String DATABASE_CREATE_TABLE_208 = "create table tblSchemeSlabBenefitsValueDetail (RowID text null,BenValue text null,Remarks text null,Type text null);";
+    private static final String DATABASE_CREATE_TABLE_209 = "create table tblProductRelatedScheme (ProductID text null,PrdString text null);";
 
 
 
@@ -629,43 +387,33 @@ public class PRJDatabase
 
 
     // Tables for New Schemes Structure
-
-    private static final String DATABASE_CREATE_TABLE_201 = "create table tblSchemeStoreMapping (StoreID text null,SchemeID text null);";
-    private static final String DATABASE_CREATE_TABLE_202 = "create table tblSchemeMstr (SchemeID text null,SchemeName text null,SchemeApplicationID text null,SchemeAppliedRule text null);";
-    private static final String DATABASE_CREATE_TABLE_203 = "create table tblSchemeSlabDetail (SchemeID text null,SchemeSlabID text null,SchemeSlabDesc text null,BenifitDescr text null);";
-
-    private static final String DATABASE_CREATE_TABLE_204 = "create table tblSchemeSlabBucketDetails (RowID text null,SchemeID text null" +
-            ",SchemeSlabID text null,BucketID text null,SubBucketID text null,SlabSubBucketType text null,SlabSubBucketValue text null,SubBucketValType text null);";
-
-    private static final String DATABASE_CREATE_TABLE_205 = "create table tblSchemeSlabBucketProductMapping (RowID text null,ProductID text null);";
-
-    private static final String DATABASE_CREATE_TABLE_206 = "create table tblSchemeSlabBenefitsBucketDetails (RowID text null," +
-            "SchemeID text null,SchemeSlabID text null,BucketID text null,SubBucketID text null,BenSubBucketType text null," +
-            "BenDiscApplied text null,CouponCode text null,BenSubBucketValue text null,Per real null,UOM real null,ProRata int null);";
-
-    private static final String DATABASE_CREATE_TABLE_207 = "create table tblSchemeSlabBenefitsProductMappingDetail (RowID text null,ProductID text null);";
-
-    private static final String DATABASE_CREATE_TABLE_208 = "create table tblSchemeSlabBenefitsValueDetail (RowID text null,BenValue text null,Remarks text null,Type text null);";
-
-    private static final String DATABASE_CREATE_TABLE_209 = "create table tblProductRelatedScheme (ProductID text null,PrdString text null);";
-
-
-
     private static final String DATABASE_CREATE_TABLE_211 = "create table tblStoreProductAppliedSchemesBenifitsRecords (StoreID text not null,ProductID int not null,schId int not null,schSlabId integer not null,schSlbBuckId integer not null,schSlabSubBucketValue real not null,schSubBucketValType integer not null,schSlabSubBucketType int not null,BenifitRowID integer not null,BenSubBucketType int null,FreeProductID int null,BenifitSubBucketValue real null,BenifitMaxValue real null,BenifitAssignedValue real null,BenifitAssignedValueType int null,BenifitDiscountApplied int null,BenifitCouponCode text null,Sstat integer not null,Per real null,UOM real null,WhatFinallyApplied int null,schSlbRowId int null,SchTypeId int null,DiscountPercentage real null,OrderIDPDA text null,TmpInvoiceCodePDA text null);";
-
-
     private static final String DATABASE_CREATE_TABLE_RETURNREASON = "create table tblReturnReason(StockStatusId text not null,StockStatus text not null);";
-
-
     private static final String TABLE_tblDistributorDayReport="tblDistributorDayReport";
     private static final String TABLE_tblDistributorDayReportColumnsDesc="tblDistributorDayReportColumnsDesc";
     private static final String TABLE_tblDistributorSavedData="tblDistributorSavedData";
     private static final String TABLE_tblDistributorOldStockData="tblDistributorOldStockData";
-
     private static final String CREATE_TABLE_tblDistributorDayReport="create table tblDistributorDayReport(ProductNodeID text null, ProductNodeType text null, SKUName text null, FlvShortName text null,StockDate text null,DistributorNodeID int null,DistributorNodeType int null);";
     private static final String CREATE_TABLE_tblDistributorDayReportColumnsDesc="create table tblDistributorDayReportColumnsDesc(DistDayReportCoumnName text null, DistDayReportColumnDisplayName text null,DistributorNodeID int null,DistributorNodeType int null);";
     private static final String CREATE_TABLE_tblDistributorSavedData="create table tblDistributorSavedData(ProductName text null,ShortName text null,ProductID text null,Date text null,EnteredValue text null,DistribtrId int null,DistributorNodeType int null,ProductNodeType int null,StockDate text null,EntryType int null,StockPcsCaseType int null,Sstat int null);";
     private static final String CREATE_TABLE_tblDistributorOldStockData="create table tblDistributorOldStockData (DistribtrId text null,DistributorNodeType text null,DistribtrTag text null,EnteredValue text null);";
+    private static final String DATABASE_CREATE_TABLE_231 = "create table tblSKUWiseDaySummary (AutoId int not null,ProductId text null," +
+            "Product text null,MRP text null,Rate text null,NoofStores text null,OrderQty text null,FreeQty text null," +
+            "DiscValue text null,ValBeforeTax text null,TaxValue text null,ValAfterTax text null,Lvl text null," +
+            "Category text null,UOM text null);";
+    private static final String DATABASE_CREATE_TABLE_232 = "create table tblStoreWiseDaySummary (AutoId int not null,Store text null," +
+            "LinesperBill text null,StockValue text null,DiscValue text null,ValBeforeTax text null,TaxValue text null," +
+            "ValAfterTax text null,Lvl text null);";
+    private static final String DATABASE_CREATE_TABLE_233 = "create table tblStoreSKUWiseDaySummary (AutoId int not null,ProductId text null," +
+            "Product text null,MRP text null,Rate text null,OrderQty text null,FreeQty text null," +
+            "DiscValue text null,ValBeforeTax text null,TaxValue text null,ValAfterTax text null,Lvl text null,StoreId text null,StockQty text null);";
+    private static final String DATABASE_CREATE_TABLE_234 = "create table tblAllSummary (AutoId int not null,Measures text null," +
+            "TodaysSummary text null,MTDSummary text null);";
+    private static final String DATABASE_CREATE_TABLE_11 = "create table tblPdaDate (PdaDate text null);";
+    private static final String DATABASE_CREATE_TABLE_12 = "create table tblDayStartEndDetails (IMEINo text null,SyncTime text null,RouteID text null,EndTime text null,DayEndFlag int null,ChangeRouteFlg int null,ForDate text null,AppVersionID string null,Sstat int null);";//,AppVersionID int null//, VersionNo string null
+    private static final String DATABASE_CREATE_TABLE_13 = "create table tblStoreList(IMEINumber text null,AutoIdStore INTEGER PRIMARY KEY AUTOINCREMENT not null,StoreID text not null, StoreName string not null,OwnerName text null,StoreContactNo text null,StoreAddress text null,StoreType string not null,chainID integer null,StoreLatitude real not null, StoreLongitude real not null, LastVisitDate string not null, LastTransactionDate string not null, Sstat integer not null,ISNewStore int null,StoreRouteID int null,RouteNodeType int null,StoreCatNodeId int null,PaymentStage text null,flgHasQuote int null,flgAllowQuotation int null,flgGSTCapture text null,flgGSTCompliance text null,GSTNumber text null,flgGSTRecordFromServer int null,DistanceNear int null,flgStoreOrder int null,StoreCity text null,StorePinCode text not null,StoreState text null,OutStanding float null,OverDue float null,DBR text null,flgRuleTaxVal integer null,flgTransType integer null,StoreCatType text null,IsNewStoreDataCompleteSaved int null,StoreClose int null);";
+    private static final String DATABASE_CREATE_TABLE_14 = "create table tblProductList(CategoryID text  null,ProductID text  null, ProductShortName text  null, DisplayUnit text null, CalculateKilo real  null,ProductMRP real null, ProductRLP real null, ProductTaxAmount real null, KGLiter string null,RetMarginPer real null,VatTax real null,StandardRate real null,StandardRateBeforeTax real null,StandardTax real null,CatOrdr int null,PrdOrdr int null,StoreCatNodeId int null,SearchField text null,ManufacturerID int null,RptUnitName text null,PerbaseUnit text null);";
+    private static final String DATABASE_CREATE_TABLE_ProductSegementMap = "create table tblProductSegementMap(ProductID text  null,ProductMRP real not null, ProductRLP real not null, ProductTaxAmount real not null,RetMarginPer real null,VatTax real null,StandardRate real null,StandardRateBeforeTax real null,StandardTax real null,BusinessSegmentId int null,flgPriceAva int null,flgWholeSellApplicable int null,PriceRangeWholeSellApplicable real null,StandardRateWholeSale real null,StandardRateBeforeTaxWholeSell real null,StandardTaxWholeSale real null);";
 
 
 
@@ -690,11 +438,7 @@ public class PRJDatabase
 		String UOM="0";*/
 
     //AutoId int null
-
-    private static final String DATABASE_CREATE_TABLE_231 = "create table tblSKUWiseDaySummary (AutoId int not null,ProductId text null," +
-            "Product text null,MRP text null,Rate text null,NoofStores text null,OrderQty text null,FreeQty text null," +
-            "DiscValue text null,ValBeforeTax text null,TaxValue text null,ValAfterTax text null,Lvl text null," +
-            "Category text null,UOM text null);";
+    private static final String DATABASE_CREATE_TABLE_15 = "create table tblCatagoryMstr (CategoryID text not null,CategoryDescr text null,CatOrdr int null);";
 
 	 /*String Store="0";
 	 String LinesperBill="0";
@@ -704,10 +448,7 @@ public class PRJDatabase
 	 String TaxValue="0";
 	 String ValAfterTax="0";
 	 String Lvl="0";*/
-
-    private static final String DATABASE_CREATE_TABLE_232 = "create table tblStoreWiseDaySummary (AutoId int not null,Store text null," +
-            "LinesperBill text null,StockValue text null,DiscValue text null,ValBeforeTax text null,TaxValue text null," +
-            "ValAfterTax text null,Lvl text null);";
+    private static final String DATABASE_CREATE_TABLE_9 = "create table tblVisibilityMstr (VisibilityID text null, VisibilityDescr text null);";
 
 	/* String ProductId="0";
 	 String Product="0";
@@ -722,67 +463,32 @@ public class PRJDatabase
 	 String Lvl="0";
 	 String StoreId="0";
 	 */
-
-
-
-
-    private static final String DATABASE_CREATE_TABLE_233 = "create table tblStoreSKUWiseDaySummary (AutoId int not null,ProductId text null," +
-            "Product text null,MRP text null,Rate text null,OrderQty text null,FreeQty text null," +
-            "DiscValue text null,ValBeforeTax text null,TaxValue text null,ValAfterTax text null,Lvl text null,StoreId text null,StockQty text null);";
-
-
-    private static final String DATABASE_CREATE_TABLE_234 = "create table tblAllSummary (AutoId int not null,Measures text null," +
-            "TodaysSummary text null,MTDSummary text null);";
-
-
-
-
-
-
-
-
-
-
-    private static final String DATABASE_CREATE_TABLE_11 = "create table tblPdaDate (PdaDate text null);";
-    private static final String DATABASE_CREATE_TABLE_12 = "create table tblDayStartEndDetails (IMEINo text null,SyncTime text null,RouteID text null,EndTime text null,DayEndFlag int null,ChangeRouteFlg int null,ForDate text null,AppVersionID string null,Sstat int null);";//,AppVersionID int null//, VersionNo string null
-
-    //private static final String DATABASE_CREATE_TABLE_13 = "create table tblStoreList (StoreID text not null, StoreType string not null, StoreName string not null, StoreLatitude real not null, StoreLongitude real not null, LastVisitDate string not null, LastTransactionDate string not null, Sstat integer not null, ForDate string not null, ActualLatitude text null, ActualLongitude text null, VisitStartTS text null, VisitEndTS text null, ISNewStore int null, AutoIdStore int null, LocProvider text null, Accuracy text null, BateryLeftStatus text null,StoreRouteID text null);";
-
-
-    private static final String DATABASE_CREATE_TABLE_13 = "create table tblStoreList(IMEINumber text null,AutoIdStore INTEGER PRIMARY KEY AUTOINCREMENT not null,StoreID text not null, StoreName string not null,OwnerName text null,StoreContactNo text null,StoreAddress text null,StoreType string not null,chainID integer null,StoreLatitude real not null, StoreLongitude real not null, LastVisitDate string not null, LastTransactionDate string not null, Sstat integer not null,ISNewStore int null,StoreRouteID int null,RouteNodeType int null,StoreCatNodeId int null,PaymentStage text null,flgHasQuote int null,flgAllowQuotation int null,flgGSTCapture text null,flgGSTCompliance text null,GSTNumber text null,flgGSTRecordFromServer int null,DistanceNear int null,flgStoreOrder int null,StoreCity text null,StorePinCode text not null,StoreState text null,OutStanding float null,OverDue float null,DBR text null,flgRuleTaxVal integer null,flgTransType integer null,StoreCatType text null,IsNewStoreDataCompleteSaved int null,StoreClose int null);";
-
-    //private static final String DATABASE_CREATE_TABLE_2 = "create table tblProductList (ProductID text not null, ProductShortName text not null, ProductMRP real not null, ProductRLP real not null, ProductTaxAmount real not null, KGLiter string nulll);";//,DisplayUnit string nul
-
-
-    private static final String DATABASE_CREATE_TABLE_14 = "create table tblProductList(CategoryID text  null,ProductID text  null, ProductShortName text  null, DisplayUnit text null, CalculateKilo real  null,ProductMRP real null, ProductRLP real null, ProductTaxAmount real null, KGLiter string null,RetMarginPer real null,VatTax real null,StandardRate real null,StandardRateBeforeTax real null,StandardTax real null,CatOrdr int null,PrdOrdr int null,StoreCatNodeId int null,SearchField text null,ManufacturerID int null,RptUnitName text null,PerbaseUnit text null);";
-
-//	private static final String DATABASE_CREATE_TABLE_ProductSegementMap = "create table tblProductSegementMap(ProductID text  null,ProductMRP real not null, ProductRLP real not null, ProductTaxAmount real not null,RetMarginPer real null,VatTax real null,StandardRate real null,StandardRateBeforeTax real null,StandardTax real null,BusinessSegmentId int null,flgPriceAva int null);";
-
-
-    private static final String DATABASE_CREATE_TABLE_ProductSegementMap = "create table tblProductSegementMap(ProductID text  null,ProductMRP real not null, ProductRLP real not null, ProductTaxAmount real not null,RetMarginPer real null,VatTax real null,StandardRate real null,StandardRateBeforeTax real null,StandardTax real null,BusinessSegmentId int null,flgPriceAva int null,flgWholeSellApplicable int null,PriceRangeWholeSellApplicable real null,StandardRateWholeSale real null,StandardRateBeforeTaxWholeSell real null,StandardTaxWholeSale real null);";
-
-
-    private static final String DATABASE_CREATE_TABLE_15 = "create table tblCatagoryMstr (CategoryID text not null,CategoryDescr text null,CatOrdr int null);";
-
-    //private static final String DATABASE_CREATE_TABLE_5 = "create table tblCategoryQuestionInformation (CategoryID text null,ProductID text null, Stock text null,Sstat integer not null,StoreID text not null);";
-
-    //private static final String DATABASE_CREATE_TABLE_7 = "create table tblDistributionStoreProductWiseDetails (CatId integer not null,ProductID integer not null,StoreID text not null,Stock text null,ProductMfgDate text null,Sstat integer not null);";
-
-
-    private static final String DATABASE_CREATE_TABLE_9 = "create table tblVisibilityMstr (VisibilityID text null, VisibilityDescr text null);";
-
     private static final String DATABASE_CREATE_TABLE_10 = "create table tblVisibilityDetails (StoreID text not null,VisibilityID text null, VisibilityStock text null,Sstat  integer not null);";
-
     private static final String DATABASE_CREATE_TABLE_16 = "create table tblNewStoreListEntries (StoreID text null, StoreCity text null, StorePinCode text not null, StoreState text null, ActiveRouteID text null, Sstat integer not null);";
     private static final String DATABASE_CREATE_TABLE_17 = "create table tblPDALastInvoiceDet (StoreID text null, InvoiceID text null, LastTransDate text not null, BalanceAmount text null,CreditPreviousDue real null);";
     private static final String DATABASE_CREATE_TABLE_18 = "create table tblPDATargetQtyForSecondPage (StoreID text null, ProductID text null, SKUShortName text not null, TargetQty text null);";
 
-
+    //private static final String DATABASE_CREATE_TABLE_13 = "create table tblStoreList (StoreID text not null, StoreType string not null, StoreName string not null, StoreLatitude real not null, StoreLongitude real not null, LastVisitDate string not null, LastTransactionDate string not null, Sstat integer not null, ForDate string not null, ActualLatitude text null, ActualLongitude text null, VisitStartTS text null, VisitEndTS text null, ISNewStore int null, AutoIdStore int null, LocProvider text null, Accuracy text null, BateryLeftStatus text null,StoreRouteID text null);";
     private static final String DATABASE_CREATE_TABLE_19 = "create table tblPDAProductReturnMstr (AutoReturnIdMstr int null,StoreID text null, ReturnDate text null, Comment text null, TotalReturnQty int null, TotalReturnValue real null, Sstat integer null,TotalAdjustQty integer null,TotalAdjustValue real null,FinalBalanceAmount real null,LastCreditAmount real null,OrderIDPDA text not null,TmpInvoiceCodePDA text null);";
+
+    //private static final String DATABASE_CREATE_TABLE_2 = "create table tblProductList (ProductID text not null, ProductShortName text not null, ProductMRP real not null, ProductRLP real not null, ProductTaxAmount real not null, KGLiter string nulll);";//,DisplayUnit string nul
     private static final String DATABASE_CREATE_TABLE_20 = "create table tblPDAProductReturnDetails (AutoReturnDetailsId int null,ReturnIdMstr int null, ProductId text null, ProdReturnQty text null, ProdRate real null, ProdReturnValue real null, ProdReturnReason text null, ProdReturnReasonDescr text null, ProdLastOrderDate text null, ProdLastOrderQyt text null, Sstat integer null,AdjustReturnQty integer null,AdjustReturnValue real null,TmpInvoiceCodePDA text null);";
 
-
+//	private static final String DATABASE_CREATE_TABLE_ProductSegementMap = "create table tblProductSegementMap(ProductID text  null,ProductMRP real not null, ProductRLP real not null, ProductTaxAmount real not null,RetMarginPer real null,VatTax real null,StandardRate real null,StandardRateBeforeTax real null,StandardTax real null,BusinessSegmentId int null,flgPriceAva int null);";
     private static final String DATABASE_CREATE_TABLE_31 = "create table tblTransac (IMEIno text not null, TransDate string not null, StoreID text not null, ProdID text not null, Stock integer not null, OrderQty integer not null, OrderVal real not null, FreeQty integer not null, DisVal real not null, SchemeID text null, AppliedSlab text null, AppliedAbsVal text null, Sstat integer not null, SampleQuantity int null, ProductShortName text null, ProductPrice real null,RouteID int null,CatID text  null);";//, DisplayUnit text null
+    private static final String DATABASE_CREATE_TABLE_StoreProductMap = "create table tblStoreProductMap (StoreID text  null,ProductID text  null, ProductMRP real  null, ProductRLP real  null, ProductTaxAmount real  null, DistributorPrice real null,CategoryID integer null);";
+
+    //private static final String DATABASE_CREATE_TABLE_5 = "create table tblCategoryQuestionInformation (CategoryID text null,ProductID text null, Stock text null,Sstat integer not null,StoreID text not null);";
+
+    //private static final String DATABASE_CREATE_TABLE_7 = "create table tblDistributionStoreProductWiseDetails (CatId integer not null,ProductID integer not null,StoreID text not null,Stock text null,ProductMfgDate text null,Sstat integer not null);";
+    private static final String DATABASE_CREATE_TABLE_51 = "create table tblSchemeList (SchemeID text not null, SchemeName string not null, SchemeType string not null, StoreType string null, CombTypeID integer null,flgDiscountType integer null);";
+    private static final String DATABASE_CREATE_TABLE_52 = "create table tblSchemeDetails (SchemeDetID text not null, SchemeID text not null, SlabFrom integer not null, SlabTo integer not null, FreeQuantity integer not null, Discount real not null, FreeProductID text null);";
+    private static final String DATABASE_CREATE_TABLE_53 = "create table tblschemeStoreTypeMap (SchemeID text not null, StoreTypeID integer not null);";
+    private static final String DATABASE_CREATE_TABLE_54 = "create table tblschemeProductMap (SchemeID text not null, ProductID text not null, SchemeType int null);";
+    private static final String DATABASE_CREATE_TABLE_55 = "create table tblspForPDASchemeApplicableList(SchemeID string null, StoreType string null, SchemeDesc string null,flgSpecialScheme integer null);";
+    private static final String DATABASE_CREATE_TABLE_56 = "create table tblPDAIsSchemeApplicable (IsSchemeApplicable int null);";
+    private static final String DATABASE_CREATE_TABLE_61 = "create table tblLastTransactionDetails (StoreID text not null, ProductID text not null, LastTransDate string not null, Quantity integer not null, SampleQuantity int null,CategoryID integer null);";
+    private static final String DATABASE_CREATE_TABLE_62 = "create table tblPDALastTranDateForSecondPage(StoreID text null, LastTransDate string null, RetailerName string null, SKUName string null, Stock string null, OrderQty string null, FreeQty string null);";
 
     //private static final String DATABASE_CREATE_TABLE_31 = "create table tblTransac (IMEIno text not null, TransDate string not null, StoreID text not null, ProdID text not null, OrderQty integer not null, OrderVal real not null, Sstat integer not null,ProductMRP real not null,TaxRate real not null);";
     //private static final String DATABASE_CREATE_TABLE_32 = "create table tblTmpInvoiceHeader (IMEIno text not null, StoreID text not null, InvoiceDate string not null,  TaxAmt real not null,  InvoiceVal real not null,GrossVal real not null,  Sstat integer not null, AmtColl real null, AmtOut real null);";
@@ -790,589 +496,78 @@ public class PRJDatabase
 
 
     //private static final String DATABASE_CREATE_TABLE_StoreProductMap = "create table tblSIMEInotoreProductMap (StoreID text  null,ProductID text  null, ProductMRP real  null, ProductRLP real  null, ProductTaxAmount real  null, DistributorPrice real null);";
-
-    private static final String DATABASE_CREATE_TABLE_StoreProductMap = "create table tblStoreProductMap (StoreID text  null,ProductID text  null, ProductMRP real  null, ProductRLP real  null, ProductTaxAmount real  null, DistributorPrice real null,CategoryID integer null);";
-
-
-    private static final String DATABASE_CREATE_TABLE_51 = "create table tblSchemeList (SchemeID text not null, SchemeName string not null, SchemeType string not null, StoreType string null, CombTypeID integer null,flgDiscountType integer null);";
-    private static final String DATABASE_CREATE_TABLE_52 = "create table tblSchemeDetails (SchemeDetID text not null, SchemeID text not null, SlabFrom integer not null, SlabTo integer not null, FreeQuantity integer not null, Discount real not null, FreeProductID text null);";
-    private static final String DATABASE_CREATE_TABLE_53 = "create table tblschemeStoreTypeMap (SchemeID text not null, StoreTypeID integer not null);";
-    private static final String DATABASE_CREATE_TABLE_54 = "create table tblschemeProductMap (SchemeID text not null, ProductID text not null, SchemeType int null);";
-    private static final String DATABASE_CREATE_TABLE_55 = "create table tblspForPDASchemeApplicableList(SchemeID string null, StoreType string null, SchemeDesc string null,flgSpecialScheme integer null);";
-    private static final String DATABASE_CREATE_TABLE_56 = "create table tblPDAIsSchemeApplicable (IsSchemeApplicable int null);";
-
-
-    private static final String DATABASE_CREATE_TABLE_61 = "create table tblLastTransactionDetails (StoreID text not null, ProductID text not null, LastTransDate string not null, Quantity integer not null, SampleQuantity int null,CategoryID integer null);";
-    private static final String DATABASE_CREATE_TABLE_62 = "create table tblPDALastTranDateForSecondPage(StoreID text null, LastTransDate string null, RetailerName string null, SKUName string null, Stock string null, OrderQty string null, FreeQty string null);";
     private static final String DATABASE_CREATE_TABLE_63 = "create table tblStorTypeMstr(ID string null, Descr string null);";
-
-
     private static final String DATABASE_CREATE_TABLE_71 = "create table tblSyncSummuryDetails (ActualCalls int null,ProductiveCalls int null, TotSalesValue text null, TotKGSales text null, TotFreeQtyKGSales text null, TotSampleKGSales text null, TotLTSales text null, TotFreeQtyLTSales text null, TotSampleLTSales text null, TotDiscountKGSales text null, TotDiscountLTales text null,Lines int null);";
     private static final String DATABASE_CREATE_TABLE_72 = "create table tblSyncSummuryForProductDetails (SkuName text null,OrderQty text null, FreeQty text null, SampleQty text null, TotalOrderKgs text null, TotalFreeKgs text null, TotalSampleKgs text null, TotalSales text null,Lines int null,OrderVal text null,DisVal text null,ProductPrice text null);";
-
     private static final String DATABASE_CREATE_TABLE_81 = "create table tblStrachApplicableOnScheme (SchID int null, flgIsStrachApplicable int null);";
     private static final String DATABASE_CREATE_TABLE_82 = "create table tblStrachOnSchemeDetails (SchID int null, cardStrachID int null, Slab int Null, Qty int null, ProductValueOrSlabBased int null);";
-
     private static final String DATABASE_CREATE_TABLE_91 = "create table tblOutLetInfoOnQuadVolumeCategoryBasis (OutID text null,OutletName text  null," +
             " OwnerName text  null,ContactNo text null,MarketAreaName text null,Latitude text null,Longitutde text null);";
     private static final String DATABASE_CREATE_TABLE_92 = "create table tblSelectedStoreIDinChangeRouteCase (StoreID text null);";
-
-
     private static final String DATABASE_CREATE_TABLE_94 = "create table tblSysVisitID (IMEINo text null,SysVisitID int null );";
-
-
-    // private static final String DATABASE_CREATE_tblDaySummary = "create table tblDaySummary (StoreID text null,flgTarget int null,flgActualVisited int null,flgProductiveDay int null,flgProductiveMTD int null,DaySales real null,MTDSales real null);";//, AutoIdOutlet int null
-
     private static final String DATABASE_CREATE_tblDaySummaryNew = "create table tblDaySummaryNew (TargetCalls int null,ActualCallOnRoute int null,ActualCallOffRoute int null,ProdCallOnRoute int null,ProdCallOffRoute real null,TargetSalesForDay real null,TotalSalesForDay real null,CallsRemaining int null,TargetSalesMTD real null,AchievedSalesMTD real null,ProdStoresMTD int null,RunRate real null);";//, AutoIdOutlet int null
-
-
     private static final String DATABASE_CREATE_TABLE_101 = "create table tblFirstOrderDetailsOnLastVisitDetailsActivity(StoreID text null,Date text null,SKUID text null,OrderQty integer null,FreeQty integer null,Stock integer null,SKUName text null);";
-
     private static final String DATABASE_CREATE_TABLE_102 = "create table tblSecondVisitDetailsOnLastVisitDetailsActivity(StoreID text null,Date text null,SKUID text  null,OrderQty integer null,SKUName text null);";
-
     private static final String DATABASE_CREATE_TABLE_103 = "create table tblLODOnLastSalesSummary(StoreID text null,Date text null,SKUID text  null,Qty integer null,SKUName text null);";
-
-
-
-
-
-
     private static final String DATABASE_CREATE_TABLE_111 = "create table tblInvoiceButtonStoreMstr(StoreID text null," +
             "StoreName text null,RouteId text null,RouteName text null,DistId text null,DistName text null," +
             "InvoiceForDate text null,flgSubmit text null,Sstat integer not null,IMEIno text not null,OrderID text  null,flgCancel int null,ServerOrdersFlg int null);";
-
     private static final String DATABASE_CREATE_TABLE_112 = "create table tblInvoiceButtonProductMstr (ProductId text null, ProductName text null);";
-
     private static final String DATABASE_CREATE_TABLE_113 = "create table tblInvoiceButtonStoreProductwiseOrder (StoreID text null," +
             " ProductID text null,OrderQty text null,ProductPrice text null,InvoiceForDate text null,OrderID text null,CatID text null,Freeqty int null,TotLineDiscVal real null);";
-
     private static final String DATABASE_CREATE_TABLE_114 = "create table tblInvoiceButtonTransac (IMEIno text not null, " +
             "TransDate string not null, StoreID text not null, ProdID text not null, OrderQty integer not null, " +
             "DelQty integer not null,FreeQty integer not null,Sstat integer not null,ProductShortName text null, ProductPrice real null," +
             "RouteID int null,OrderID text  null,CatID text null,flgCancel int null,DiscountVal real null,additionalDiscount text null);";
-
-    //private static final String DATABASE_CREATE_TABLE_115 = "create table tblPdaDate (PdaDate text null);";
-
-
     private static final String DATABASE_CREATE_TABLE_141 = "create table tblForPDAGetLastVisitDate(StoreID text null,VisitDate text null,flgOrder text null);";
+
+
+    // private static final String DATABASE_CREATE_tblDaySummary = "create table tblDaySummary (StoreID text null,flgTarget int null,flgActualVisited int null,flgProductiveDay int null,flgProductiveMTD int null,DaySales real null,MTDSales real null);";//, AutoIdOutlet int null
     private static final String DATABASE_CREATE_TABLE_142 = "create table tblForPDAGetLastOrderDate(StoreID text null,OrderDate text null,flgExecutionSummary text null);";
     private static final String DATABASE_CREATE_TABLE_143 = "create table tblForPDAGetLastVisitDetails(StoreID text null,Date123 text null,Order123 text null,Stock text null,SKUName text null,ExecutionQty text null);";
     private static final String DATABASE_CREATE_TABLE_144 = "create table tblForPDAGetLastOrderDetails(StoreID text null,OrderDate text null,ProductID text null,OrderQty text null,FreeQty text null,PrdName text null,ExecutionQty text null);";
     private static final String DATABASE_CREATE_TABLE_145 = "create table tblspForPDAGetLastOrderDetailsTotalValues(StoreID text null,OrderValue text null,ExecutionValue text null);";
-
     private static final String DATABASE_CREATE_TABLE_146 = "create table tblForPDAGetExecutionSummary(StoreID text null,OrderDate text null,ProductID text null,OrderQty text null,flgInvStatus text null,ProductQty text null,PrdName text null);";
     private static final String DATABASE_CREATE_TABLE_147 = "create table tblStoreSchemeFreeProQtyOtherDetails(StoreID text null,StoreType text null,SchemeID text null,SchemeType string not null,CombTypeID integer null,flgDiscountType integer null,FreeProductID text null,FreeProductQty text null,Discount real not null);";
-
-
     private static final String DATABASE_CREATE_TABLE_151 = "create table tblProductListForAvailableStock (ProductID text  null, ProductName text  null);";
-    //private static final String DATABASE_CREATE_TABLE_152 = "create table tblCatagoryMstr (CategoryID text not null,CategoryDescr text null);";
-
-
     private static final String DATABASE_TABLE_MAIN261 = "tblManagerMstr";
+
+    //private static final String DATABASE_CREATE_TABLE_115 = "create table tblPdaDate (PdaDate text null);";
     private static final String DATABASE_TABLE_MAIN262 = "tblSelectedManagerDetails";
-
-
-
     private static final String DATABASE_CREATE_TABLE_261 = "create table tblManagerMstr(PersonID text null,PersonType text null" +
             ",PersonName text null,ManagerID text null,ManagerType text null,ManagerName text null);";
-
     private static final String DATABASE_CREATE_TABLE_262 = "create table tblSelectedManagerDetails(IMEI text null,CurDate text null,PersonID text null,PersonType text null" +
             ",PersonName text null,ManagerID text null,ManagerType text null,ManagerName text null,OtherName text null,Sstat integer not null);";
-
-
     //store close info
     private static final String DATABASE_TABLE_tblStoreCloseLocationDetails = "tblStoreCloseLocationDetails";
     private static final String DATABASE_CREATE_TABLE_tblStoreCloseLocationDetails = "create table tblStoreCloseLocationDetails (StoreID text null,Lattitude text null,Longitude text null,Accuracy text null,Address text null,City text null,Pincode text null,State text null,fnAccurateProvider  text null,GpsLat  text null,GpsLong  text null,GpsAccuracy  text null,NetwLat  text null,NetwLong  text null,NetwAccuracy  text null,FusedLat  text null,FusedLong  text null,FusedAccuracy  text null,AllProvidersLocation  text null,GpsAddress  text null,NetwAddress  text null,FusedAddress  text null,FusedLocationLatitudeWithFirstAttempt  text null,FusedLocationLongitudeWithFirstAttempt  text null,FusedLocationAccuracyWithFirstAttempt  text null,Sstat int null,StoreVisitCode text null);";
-
     private static final String DATABASE_TABLE_tblStoreClosedPhotoDetail = "tblStoreClosedPhotoDetail";
     private static final String DATABASE_CREATE_TABLE_tblStoreClosedPhotoDetail = "create table tblStoreClosedPhotoDetail (StoreID text null,ClickedDateTime text null,PhotoName text null,PDAPhotoPath text null,Sstat integer null,StoreVisitCode text null);";
-
     private static final String DATABASE_TABLE_tblStoreCloseReasonMaster = "tblStoreCloseReasonMaster";
+    //private static final String DATABASE_CREATE_TABLE_152 = "create table tblCatagoryMstr (CategoryID text not null,CategoryDescr text null);";
     private static final String DATABASE_CREATE_TABLE_tblStoreCloseReasonMaster = "create table tblStoreCloseReasonMaster (CloseReasonID text null,CloseReasonDescr text null);";
-
     private static final String DATABASE_TABLE_tblStoreCloseReasonSaving = "tblStoreCloseReasonSaving";
     private static final String DATABASE_CREATE_TABLE_tblStoreCloseReasonSaving = "create table tblStoreCloseReasonSaving (StoreID text null,ReasonID text null,ReasonDescr text null,Sstat integer null,StoreVisitCode text null);";
-
+    public static String DATABASE_NAME = CommonInfo.DATABASE_NAME;
+    public static int DATABASE_VERSION = CommonInfo.DATABASE_VERSIONID;
+    public static String AppVersionID = CommonInfo.AppVersionID.trim();
+    public static int Application_TypeID = CommonInfo.Application_TypeID; //1=Parag Store Mapping,2=Parag SFA Indirect,3=Parag SFA Direct
+    private static String DATABASE_CREATE_TABLE_tblIncentiveDetailsData="";
+    private static String DATABASE_CREATE_TABLE_tblIncentivePastDetailsData="";
     private final Context context;
-
-    private DatabaseHelper DBHelper;
-    private SQLiteDatabase db;
-
+    public Cursor cursor;
+    public int checkNumberOfStore=1;
     Locale locale  = new Locale("en", "UK");
     String pattern = "###.##";
     DecimalFormat decimalFormat = (DecimalFormat)NumberFormat.getNumberInstance(locale);
+    private boolean isDBOpenflag = false;
+    private DatabaseHelper DBHelper;
+    private SQLiteDatabase db;
 
     public PRJDatabase(Context ctx)
     {
         this.context = ctx;
         DBHelper = new DatabaseHelper(context);
-    }
-
-    private static class DatabaseHelper extends SQLiteOpenHelper
-    {
-        DatabaseHelper(Context context)
-        {
-            super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        }
-
-        @Override
-        public void onCreate(SQLiteDatabase db)
-        {
-
-            try
-            {
-                //
-                db.execSQL(DATABASE_CREATE_TABLE_DayCheckIn);
-                db.execSQL(DATABASE_CREATE_TABLE_TEMP_DISTRIBUTOR_STOCK);
-                db.execSQL(DATABASE_CREATE_TABLE_CYCLEID);
-
-                db.execSQL(DATABASE_CREATE_TABLE_INVOICE_HEADER);
-                db.execSQL(DATABASE_CREATE_TABLE_INVOICE_DETAILS);
-
-
-                db.execSQL(DATABASE_CREATE_TABLE_STOREVISIT);
-                db.execSQL(DATABASE_CREATE_TABLE_tblPriceApplyType);
-
-                db.execSQL(DATABASE_CREATE_TABLE_tblInvoiceCaption);
-                db.execSQL(DATABASE_CREATE_TABLE_tblLastOutstanding);
-                db.execSQL(DATABASE_CREATE_TABLE_tblInvoiceLastVisitDetails);
-
-                db.execSQL(DATABASE_CREATE_TABLE_tblStockConfirm);
-                db.execSQL(DATABASE_CREATE_TABLE_tblStockUploadedStatus);
-                //stock out flg
-                db.execSQL(DATABASE_CREATE_TABLE_tblStockOut);
-
-
-                //Amount Collection
-                db.execSQL(DATABASE_CREATE_TABLE_tblBankMaster);
-                db.execSQL(DATABASE_CREATE_TABLE_tblInstrumentMaster);
-                db.execSQL(DATABASE_CREATE_TABLE_tblAllCollectionData);
-
-                //store close info
-
-
-
-                db.execSQL(DATABASE_CREATE_TABLE_tblIsDBRStockSubmitted);
-                db.execSQL(DATABASE_CREATE_TABLE_tblStoreCloseLocationDetails);
-                db.execSQL(DATABASE_CREATE_TABLE_tblStoreClosedPhotoDetail);
-                db.execSQL(DATABASE_CREATE_TABLE_tblStoreCloseReasonMaster );
-                db.execSQL(DATABASE_CREATE_TABLE_tblStoreCloseReasonSaving );
-
-                // Splash Screen Tables
-                db.execSQL(DATABASE_CREATE_TABLE_tblDistribtorMstr);
-
-                db.execSQL(DATABASE_CREATE_TABLE_tblDistributorMapping);
-
-                db.execSQL(DATABASE_CREATE_TABLE_DISTRIBUTOR_ORDERPDAID);
-                db.execSQL(DATABASE_CREATE_TABLE_DISTRIBUTOR_LEFTPRODUCT);
-                db.execSQL(DATABASE_CREATE_TABLE_DISTRIBUTOR_STOCK);
-
-                db.execSQL(DATABASE_CREATE_TABLE_tblSameLocationForStoreRestartDone);
-                db.execSQL(DATABASE_CREATE_TABLE_23);
-
-                db.execSQL(DATABASE_CREATE_TABLE_DayAndSummary);
-
-                db.execSQL(DATABASE_CREATE_TABLE_235);
-                db.execSQL(DATABASE_CREATE_TABLE_236);
-                db.execSQL(DATABASE_CREATE_TABLE_4);
-
-                db.execSQL(DATABASE_CREATE_TABLE_271);
-
-                db.execSQL(CREATE_TABLE_tblDistributorDayReport);
-                db.execSQL(CREATE_TABLE_tblDistributorDayReportColumnsDesc);
-                db.execSQL(CREATE_TABLE_tblDistributorSavedData);
-                db.execSQL(CREATE_TABLE_tblDistributorOldStockData);
-
-                db.execSQL(CREATE_tblIncentiveMsgToDisplay_Definition);
-                db.execSQL(CREATE_TABLE_tblIncentiveMaster);
-                //db.execSQL(CREATE_TABLE_tblIncentiveDetailsData);
-                db.execSQL(CREATE_TABLE_tblIncentiveDetailsColumnsDesc);
-                db.execSQL(CREATE_TABLE_tblTotalEarning);
-                db.execSQL(CREATE_TABLE_tblIncentivePastDetailsColumnsDesc);
-
-
-
-
-                db.execSQL(TABLE_tblUserAuthenticationMstr_Definition);
-                db.execSQL(DATABASE_CREATE_TABLE_tblBloodGroup);
-                db.execSQL(DATABASE_CREATE_TABLE_tblEducationQuali);
-                db.execSQL(DATABASE_CREATE_TABLE_tblDsrRegDetails);
-                db.execSQL(DATABASE_CREATE_TABLE_tblUserRegistarationStatus);
-
-
-                db.execSQL(TABLE_tblAvailableVersionMstr_Definition);
-                db.execSQL(TABLE_tblRouteMstr_Definition);
-                db.execSQL(TABLE_tblNotificationMstr_Definition);
-                db.execSQL(TABLE_tblNoVisitReasonMaster_Definition);
-                db.execSQL(TABLE_tblNoVisitStoreDetails_Definition);
-
-                db.execSQL(DATABASE_CREATE_TABLE_QSTOUTCHANNEL);
-                db.execSQL(DATABASE_CREATE_TABLE_QST_NAME);
-                db.execSQL(DATABASE_CREATE_TABLE_QUESTIONMstr);
-                db.execSQL(DATABASE_CREATE_TABLE_QuestGrpMappingMstr);
-                db.execSQL(DATABASE_CREATE_TABLE_QUESTION_OPTION_DEPENDENTMstr);
-                db.execSQL(DATABASE_CREATE_TABLE_QUESTION_OPTION_VAL_DEPENDENTMstr);
-
-                db.execSQL(DATABASE_CREATE_TABLE_Image);
-                db.execSQL(DATABASE_CREATE_TABLE_tblLocationDetails);
-
-
-
-
-                db.execSQL(DATABASE_NewStoreSalesQuotePaymentDetails);
-                db.execSQL(DATABASE_StoreSalesOrderPaymentDetails);
-                db.execSQL(DATABASE_StoreAddressMapDetailsMstr);
-                db.execSQL(DATABASE_StoreOrderBillAddressDetails);
-
-                db.execSQL(DATABASE_MinDeliverQntty);
-
-                db.execSQL(DATABASE_CREATE_TABLE_RETURNREASON);
-
-                //db.execSQL(DATABASE_CREATE_TABLE_QuestGrpMappingMstr);
-                db.execSQL(DATABASE_CREATE_TABLE_XMLfiles);
-                db.execSQL(DATABASE_CREATE_TABLE_13);
-
-                db.execSQL(DATABASE_CREATE_TABLE_NewAddedStoreLocationDetails);
-
-
-                db.execSQL(DATABASE_CREATE_TABLE_OutletPhotoDetail);
-                // db.execSQL(DATABASE_CREATE_TABLE_QUESTIONMstr);
-                db.execSQL(DATABASE_CREATE_TABLE_OutletChannelBusinessSegmentMasterr);
-                db.execSQL(DATABASE_CREATE_TABLE_OPTIONMstr);
-                db.execSQL(DATABASE_CREATE_TABLE_tblOutletMstr);
-                db.execSQL(DATABASE_CREATE_TABLE_tblOutletQuestAnsMstr);
-                db.execSQL( DATABASE_CREATE_TABLE_tblViewOutletQuestAnsMstr);
-
-                db.execSQL(  DATABASE_CREATE_TABLE_ViewOutletNameAndId);
-
-
-                db.execSQL(DATABASE_CREATE_TABLE_QUESTION_DEPENDENTMstr);
-
-
-
-
-                db.execSQL(DATABASE_CREATE_TABLE_11);
-                db.execSQL(DATABASE_CREATE_TABLE_12);
-
-                db.execSQL(DATABASE_CREATE_TABLE_14);
-                db.execSQL(DATABASE_CREATE_TABLE_ProductSegementMap);
-                db.execSQL(DATABASE_CREATE_TABLE_15);
-
-                db.execSQL(DATABASE_CREATE_TABLE_UOMMstr);
-                db.execSQL(DATABASE_CREATE_TABLE_SalesQuotePrcsMstr);
-                db.execSQL(DATABASE_SalesQuotePersonMeetMstr);
-                db.execSQL(DATABASE_CREATE_SalesQuoteProductsMstr);
-                db.execSQL(DATABASE_CREATE_TABLE_tblSalesQuotePaymentModeMstr);
-                db.execSQL(DATABASE_CREATE_TABLE_tblSalesQuotePaymentStageMstr);
-                db.execSQL(DATABASE_CREATE_TABLE_tblSalesQuoteTypeMstr);
-                db.execSQL(DATABASE_CREATE_TABLE_tblSalesQuotePaymentStageModeMapMstr);
-                //db.execSQL(DATABASE_CREATE_TABLE_5);
-                //db.execSQL(DATABASE_CREATE_TABLE_7);
-                db.execSQL(DATABASE_CREATE_TABLE_9);
-                db.execSQL(DATABASE_CREATE_TABLE_10);
-                db.execSQL(DATABASE_CREATE_TABLE_16);
-                db.execSQL(DATABASE_CREATE_TABLE_17);
-                db.execSQL(DATABASE_CREATE_TABLE_18);
-                db.execSQL(DATABASE_CREATE_TABLE_19);
-                db.execSQL(DATABASE_CREATE_TABLE_20);
-                db.execSQL(DATABASE_CREATE_TABLE_31);
-                db.execSQL(DATABASE_CREATE_TABLE_32);
-
-                db.execSQL(DATABASE_CREATE_TABLE_StoreProductMap);
-                db.execSQL(DATABASE_CREATE_TABLE_51);
-                db.execSQL(DATABASE_CREATE_TABLE_52);
-                db.execSQL(DATABASE_CREATE_TABLE_53);
-                db.execSQL(DATABASE_CREATE_TABLE_54);
-                db.execSQL(DATABASE_CREATE_TABLE_55);
-                db.execSQL(DATABASE_CREATE_TABLE_56);
-                db.execSQL(DATABASE_CREATE_TABLE_61);
-                db.execSQL(DATABASE_CREATE_TABLE_62);
-                db.execSQL(DATABASE_CREATE_TABLE_63);
-                db.execSQL(DATABASE_CREATE_TABLE_71);
-                db.execSQL(DATABASE_CREATE_TABLE_72);
-                db.execSQL(DATABASE_CREATE_TABLE_81);
-                db.execSQL(DATABASE_CREATE_TABLE_82);
-                db.execSQL(DATABASE_CREATE_TABLE_91);
-                db.execSQL(DATABASE_CREATE_TABLE_92);
-
-                db.execSQL(DATABASE_CREATE_TABLE_94);
-
-                db.execSQL(DATABASE_CREATE_tblDaySummaryNew);
-
-
-                db.execSQL(DATABASE_CREATE_TABLE_101);
-                db.execSQL(DATABASE_CREATE_TABLE_102);
-                db.execSQL(DATABASE_CREATE_TABLE_103);
-
-
-                db.execSQL(DATABASE_CREATE_TABLE_111);
-                db.execSQL(DATABASE_CREATE_TABLE_112);
-                db.execSQL(DATABASE_CREATE_TABLE_113);
-                db.execSQL(DATABASE_CREATE_TABLE_114);
-
-
-                db.execSQL(DATABASE_CREATE_TABLE_141);
-                db.execSQL(DATABASE_CREATE_TABLE_142);
-                db.execSQL(DATABASE_CREATE_TABLE_143);
-                db.execSQL(DATABASE_CREATE_TABLE_144);
-                db.execSQL(DATABASE_CREATE_TABLE_145);
-                db.execSQL(DATABASE_CREATE_TABLE_146);
-                db.execSQL(DATABASE_CREATE_TABLE_147);
-
-                db.execSQL(DATABASE_CREATE_TABLE_151);
-
-                db.execSQL(DATABASE_CREATE_TABLE_161);
-                db.execSQL(DATABASE_CREATE_TABLE_162);
-                db.execSQL(DATABASE_CREATE_TABLE_163);
-                db.execSQL(DATABASE_CREATE_TABLE_164);
-
-                db.execSQL(DATABASE_CREATE_TABLE_165);
-                db.execSQL(DATABASE_CREATE_TABLE_166);
-
-
-                db.execSQL(DATABASE_CREATE_TABLE_201);
-                db.execSQL(DATABASE_CREATE_TABLE_202);
-                db.execSQL(DATABASE_CREATE_TABLE_203);
-                db.execSQL(DATABASE_CREATE_TABLE_204);
-                db.execSQL(DATABASE_CREATE_TABLE_205);
-                db.execSQL(DATABASE_CREATE_TABLE_206);
-                db.execSQL(DATABASE_CREATE_TABLE_207);
-                db.execSQL(DATABASE_CREATE_TABLE_208);
-                db.execSQL(DATABASE_CREATE_TABLE_209);
-                db.execSQL(DATABASE_CREATE_TABLE_210);
-                db.execSQL(DATABASE_CREATE_TABLE_211);
-
-                db.execSQL(DATABASE_CREATE_TABLE_221);
-                db.execSQL(DATABASE_CREATE_TABLE_222);
-                db.execSQL(DATABASE_CREATE_TABLE_223);
-
-                db.execSQL(DATABASE_CREATE_TABLE_231);
-                db.execSQL(DATABASE_CREATE_TABLE_232);
-                db.execSQL(DATABASE_CREATE_TABLE_233);
-                db.execSQL(DATABASE_CREATE_TABLE_234);
-
-                db.execSQL(DATABASE_CREATE_TABLE_251);
-
-
-
-
-                db.execSQL(DATABASE_CREATE_TABLE_21);
-                db.execSQL(DATABASE_CREATE_TABLE_22);
-
-                db.execSQL(DATABASE_CREATE_TABLE_212);
-
-                db.execSQL(DATABASE_CREATE_TABLE_213);
-
-                db.execSQL(DATABASE_CREATE_TABLE_214);
-                db.execSQL(DATABASE_CREATE_TABLE_215);
-
-                db.execSQL(DATABASE_CREATE_TABLE_tblSalesQuoteSponsorMstr);
-                db.execSQL(DATABASE_CREATE_TABLE_tblManufacturerMstrMain);
-                db.execSQL(DATABASE_CREATE_TABLE_tblRateDistribution);
-
-
-                db.execSQL(DATABASE_CREATE_TABLE_261);
-                db.execSQL(DATABASE_CREATE_TABLE_262);
-
-            } catch (Exception e) {
-                Log.e(TAG, "Error: onCreate db");
-            }
-        }
-
-        @Override
-        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            try
-            {
-                db.execSQL("DROP TABLE IF EXISTS tblDayCheckIn");
-                db.execSQL("DROP TABLE IF EXISTS tblTmpDistributorStock");
-                db.execSQL("DROP TABLE IF EXISTS tblCycleID");
-                db.execSQL("DROP TABLE IF EXISTS tblTmpInvoiceHeader");
-                db.execSQL("DROP TABLE IF EXISTS tblStoreVisitMstr");
-
-                db.execSQL("DROP TABLE IF EXISTS tblPriceApplyType");
-                db.execSQL("DROP TABLE IF EXISTS tblInvoiceCaption");
-
-                db.execSQL("DROP TABLE IF EXISTS tblLastOutstanding");
-
-                db.execSQL("DROP TABLE IF EXISTS tblInvoiceLastVisitDetails");
-
-
-                db.execSQL("DROP TABLE IF EXISTS tblStockConfirm");
-                db.execSQL("DROP TABLE IF EXISTS tblStockUploadedStatus");
-                //stock out flg
-                db.execSQL("DROP TABLE IF EXISTS dtDistributorStockOutFlg");
-
-                //Amount Collection
-                db.execSQL("DROP TABLE IF EXISTS tblBankMaster");
-                db.execSQL("DROP TABLE IF EXISTS tblInstrumentMaster");
-                db.execSQL("DROP TABLE IF EXISTS tblAllCollectionData");
-
-
-
-                //store close info
-                db.execSQL("DROP TABLE IF EXISTS tblIsDBRStockSubmitted");
-                db.execSQL("DROP TABLE IF EXISTS tblStoreCloseLocationDetails");
-                db.execSQL("DROP TABLE IF EXISTS tblStoreClosedPhotoDetail");
-                db.execSQL("DROP TABLE IF EXISTS tblStoreCloseReasonMaster");
-                db.execSQL("DROP TABLE IF EXISTS tblStoreCloseReasonSaving");
-
-                db.execSQL("DROP TABLE IF EXISTS tblDistribtorMstr");
-
-                db.execSQL("DROP TABLE IF EXISTS tblDistributorOrderPdaId");
-                db.execSQL("DROP TABLE IF EXISTS tblDistributorStock");
-                db.execSQL("DROP TABLE IF EXISTS tblDistributorProductLeft");
-
-                db.execSQL("DROP TABLE IF EXISTS tblsameLocationForStoreRestartDone");
-                db.execSQL("DROP TABLE IF EXISTS tblLatLongDetails");
-                db.execSQL("DROP TABLE IF EXISTS tblTargetVsAchievedNote");
-                db.execSQL("DROP TABLE IF EXISTS tblDistributorOldStockData");
-                db.execSQL("DROP TABLE IF EXISTS tblDistributorListMaster");
-                db.execSQL("DROP TABLE IF EXISTS tblDistributorDayReport");
-                db.execSQL("DROP TABLE IF EXISTS tblDistributorDayReportColumnsDesc");
-                db.execSQL("DROP TABLE IF EXISTS tblDistributorSavedData");
-
-
-                db.execSQL("DROP TABLE IF EXISTS tblNoVisitReasonMaster");
-
-                db.execSQL("DROP TABLE IF EXISTS tblNoVisitStoreDetails");
-
-                db.execSQL("DROP TABLE IF EXISTS tblManagerMstr");
-                db.execSQL("DROP TABLE IF EXISTS tblSelectedManagerDetails");
-                db.execSQL("DROP TABLE IF EXISTS tblTargetVsAchievedSummary");
-
-                db.execSQL("DROP TABLE IF EXISTS tblStoreWiseTarget");
-
-
-
-                db.execSQL("DROP TABLE IF EXISTS tblMinDeliverQntty");
-
-
-                db.execSQL("DROP TABLE IF EXISTS tblNewStoreSalesQuotePaymentDetails");
-                db.execSQL("DROP TABLE IF EXISTS tblStoreSalesOrderPaymentDetails");
-                db.execSQL("DROP TABLE IF EXISTS tblStoreAddressMapDetailsMstr");
-                db.execSQL("DROP TABLE IF EXISTS tblStoreOrderBillAddressDetails");
-
-
-                db.execSQL("DROP TABLE IF EXISTS tblReturnReason");
-                db.execSQL("DROP TABLE IF EXISTS tbl_XMLfiles");
-                db.execSQL("DROP TABLE IF EXISTS tblUserAuthenticationMstr");
-                db.execSQL("DROP TABLE IF EXISTS tblBloodGroup");
-                db.execSQL("DROP TABLE IF EXISTS tblEducationQuali");
-                db.execSQL("DROP TABLE IF EXISTS tblDsrRegDetails");
-                db.execSQL("DROP TABLE IF EXISTS tblUserRegistarationStatus");
-
-                db.execSQL("DROP TABLE IF EXISTS tblAvailableVersionMstr");
-                db.execSQL("DROP TABLE IF EXISTS tblRouteMstr");
-                db.execSQL("DROP TABLE IF EXISTS tblNotificationMstr");
-                //surbhi
-                db.execSQL("DROP TABLE IF EXISTS tblUOMMstr");
-                db.execSQL("DROP TABLE IF EXISTS tblSalesQuotePrcsMstr");
-                db.execSQL("DROP TABLE IF EXISTS tblSalesQuotePersonMeetMstr");
-                db.execSQL("DROP TABLE IF EXISTS tblSalesQuoteProductsMstr");
-                db.execSQL("DROP TABLE IF EXISTS tblSalesQuotePaymentModeMstr");
-                db.execSQL("DROP TABLE IF EXISTS tblSalesQuotePaymentStageMstr");
-                db.execSQL("DROP TABLE IF EXISTS tblSalesQuoteTypeMstr");
-                db.execSQL("DROP TABLE IF EXISTS tblSalesQuotePaymentStageModeMapMstr");
-
-
-
-                db.execSQL("DROP TABLE IF EXISTS tblPDAQuestGrpMappingMstr");
-
-
-                db.execSQL("DROP TABLE IF EXISTS tblStoreList");
-                db.execSQL("DROP TABLE IF EXISTS tblNewAddedStoreLocationDetails");
-                db.execSQL("DROP TABLE IF EXISTS tblProductList");
-                db.execSQL("DROP TABLE IF EXISTS tblProductSegementMap");
-                db.execSQL("DROP TABLE IF EXISTS tblCatagoryMstr");
-                //db.execSQL("DROP TABLE IF EXISTS tblCategoryQuestionInformation");
-                db.execSQL("DROP TABLE IF EXISTS tblVisibilityMstr");
-                db.execSQL("DROP TABLE IF EXISTS tblVisibilityDetails");
-                db.execSQL("DROP TABLE IF EXISTS tblTransac");
-                db.execSQL("DROP TABLE IF EXISTS tblInvoiceHeader");
-                db.execSQL("DROP TABLE IF EXISTS tblPDALastInvoiceDet");
-                db.execSQL("DROP TABLE IF EXISTS tblStoreProductMap");
-                db.execSQL("DROP TABLE IF EXISTS tblSelectedStoreIDinChangeRouteCase");
-                db.execSQL("DROP TABLE IF EXISTS tblDayStartEndDetails");
-                db.execSQL("DROP TABLE IF EXISTS tblSysVisitID");
-                db.execSQL("DROP TABLE IF EXISTS tblDaySummaryNew");
-
-                db.execSQL("DROP TABLE IF EXISTS tblFirstOrderDetailsOnLastVisitDetailsActivity");
-                db.execSQL("DROP TABLE IF EXISTS tblSecondVisitDetailsOnLastVisitDetailsActivity");
-                db.execSQL("DROP TABLE IF EXISTS tblLODOnLastSalesSummary");
-
-
-                db.execSQL("DROP TABLE IF EXISTS tblInvoiceButtonStoreMstr");
-                db.execSQL("DROP TABLE IF EXISTS tblInvoiceButtonProductMstr");
-                db.execSQL("DROP TABLE IF EXISTS tblInvoiceButtonStoreProductwiseOrder");
-                db.execSQL("DROP TABLE IF EXISTS tblInvoiceButtonTransac");
-                db.execSQL("DROP TABLE IF EXISTS tblPdaDate");
-                //db.execSQL("DROP TABLE IF EXISTS tblNotificationMstr");
-
-                db.execSQL("DROP TABLE IF EXISTS tblForPDAGetLastVisitDate");
-                db.execSQL("DROP TABLE IF EXISTS tblForPDAGetLastOrderDate");
-                db.execSQL("DROP TABLE IF EXISTS tblForPDAGetLastVisitDetails");
-                db.execSQL("DROP TABLE IF EXISTS tblForPDAGetLastOrderDetails");
-                db.execSQL("DROP TABLE IF EXISTS tblspForPDAGetLastOrderDetailsTotalValues");
-                db.execSQL("DROP TABLE IF EXISTS tblForPDAGetExecutionSummary");
-                db.execSQL("DROP TABLE IF EXISTS tblStoreSchemeFreeProQtyOtherDetails");
-
-                db.execSQL("DROP TABLE IF EXISTS tblProductListForAvailableStock");
-                db.execSQL("DROP TABLE IF EXISTS tblCatagoryMstrForDailyTarget");
-
-                db.execSQL("DROP TABLE IF EXISTS tblSchemeStoreMapping");
-                db.execSQL("DROP TABLE IF EXISTS tblSchemeMstr");
-                db.execSQL("DROP TABLE IF EXISTS tblSchemeSlabDetail");
-                db.execSQL("DROP TABLE IF EXISTS tblSchemeSlabBucketDetails");
-                db.execSQL("DROP TABLE IF EXISTS tblSchemeSlabBucketProductMapping");
-                db.execSQL("DROP TABLE IF EXISTS tblSchemeSlabBenefitsBucketDetails");
-                db.execSQL("DROP TABLE IF EXISTS tblSchemeSlabBenefitsProductMappingDetail");
-                db.execSQL("DROP TABLE IF EXISTS tblSchemeSlabBenefitsValueDetail");
-                db.execSQL("DROP TABLE IF EXISTS tblProductRelatedScheme");
-                db.execSQL("DROP TABLE IF EXISTS tblTmpInvoiceDetails");
-                db.execSQL("DROP TABLE IF EXISTS tblInvoiceDetails");
-                db.execSQL("DROP TABLE IF EXISTS tblStoreProductAppliedSchemesBenifitsRecords");
-
-                db.execSQL("DROP TABLE IF EXISTS tblStoreReturnDetail");
-
-                db.execSQL("DROP TABLE IF EXISTS tblStoreTypeMstr");
-                db.execSQL("DROP TABLE IF EXISTS tblStoreProductClassificationTypeListMstr");
-                db.execSQL("DROP TABLE IF EXISTS tblTradeChannelMstr");
-
-                db.execSQL("DROP TABLE IF EXISTS tblNewStoreEntries");
-                db.execSQL("DROP TABLE IF EXISTS tblTemp");
-
-
-                db.execSQL("DROP TABLE IF EXISTS tblStoreProductPhotoDetail");
-
-
-
-                db.execSQL("DROP TABLE IF EXISTS tblSKUWiseDaySummary");
-                db.execSQL("DROP TABLE IF EXISTS tblStoreWiseDaySummary");
-                db.execSQL("DROP TABLE IF EXISTS tblStoreSKUWiseDaySummary");
-
-                db.execSQL("DROP TABLE IF EXISTS tblProductMappedWithSchemeSlabApplied");
-                db.execSQL("DROP TABLE IF EXISTS tblAlrtVal");
-                db.execSQL("DROP TABLE IF EXISTS tblAllSummary");
-
-
-                db.execSQL("DROP TABLE IF EXISTS tblPOSMaterialMstr");
-                db.execSQL("DROP TABLE IF EXISTS tblStoreIDAndMaterialIDMap");
-                db.execSQL("DROP TABLE IF EXISTS tblStoreMaterialDetail");
-                db.execSQL("DROP TABLE IF EXISTS tblStoreMaterialPhotoDetail");
-
-                db.execSQL("DROP TABLE IF EXISTS tblNoVisitReasonMaster");
-                //
-                db.execSQL("DROP TABLE IF EXISTS tblNoVisitStoreDetails");
-                db.execSQL("DROP TABLE IF EXISTS tblSalesQuoteSponsorMstr");
-                db.execSQL("DROP TABLE IF EXISTS tblManufacturerMstrMain");
-                db.execSQL("DROP TABLE IF EXISTS tblRateDistribution");
-
-                onCreate(db);
-
-            } catch (Exception e) {
-                Log.e(TAG, "Error: onUpgrade db");
-            }
-        }
     }
 
     // ---opens the database---
@@ -1393,9 +588,6 @@ public class PRJDatabase
         DBHelper.close();
     }
 
-
-    // function for new store master data start
-
     public void saveOutletChammetQstnIdGrpId(int grpQstId,int qstId,String optId,int section_count)
     {
   /*private static final String TABLE_QSTOUTCHANNEL = "tblQuestIDForOutChannel";
@@ -1412,6 +604,9 @@ public class PRJDatabase
         db.insert(TABLE_QSTOUTCHANNEL, null, values);
 
     }
+
+
+    // function for new store master data start
 
     public void savetblQuestIDForName(int id,int grpQstId,int qstId,String QuestDesc)
     {
@@ -1456,29 +651,33 @@ public class PRJDatabase
 
     }
 
-
-    // function for new store master data end
-
     public void Delete_tblMessageTextFileContainer()
     {
         db.execSQL("DELETE FROM tblMessageTextFileContainer");
     }
+
+
+    // function for new store master data end
+
     public void Delete_tblDsrRegDetails()
 
     {
         db.execSQL("DELETE FROM tblDsrRegDetails");
     }
+
     public void Delete_tblUserRegistarationStatus()
 
     {
         db.execSQL("DELETE FROM tblUserRegistarationStatus");
     }
+
     //tblStockUploadedStatus
     public void Delete_tblStockUploadedStatus()
 
     {
         db.execSQL("DELETE FROM tblStockUploadedStatus");
     }
+
     public int countNumberOFTextFile()  throws IOException
     {
         // int entryCount;sdfsfsf
@@ -1599,7 +798,6 @@ public class PRJDatabase
         close();
     }
 
-
     public void deleteAllSingleCallWebServiceTableWhole()
     {
         open();
@@ -1636,14 +834,6 @@ public class PRJDatabase
         close();
     }
 
-
-	/* private static final String DATABASE_CREATE_TABLE_231 = "create table tblSKUWiseDaySummary (AutoId int not null,ProductId text null," +
-		 		"Product text null,MRP text null,Rate text null,NoofStores text null,OrderQty text null,FreeQty text null," +
-		 		"DiscValue text null,ValBeforeTax text null,TaxValue text null,ValAfterTax text null,Lvl text null," +
-		 		"Category text null,UOM text null);";*/
-
-    // change by sunil for Summary Report
-
     public long savetblSKUWiseDaySummary(int AutoId,String ProductId, String Product, String MRP,
                                          String Rate, String NoofStores, String OrderQty, String FreeQty,String DiscValue,
                                          String ValBeforeTax, String  TaxValue,String ValAfterTax,String Lvl,String Category,String UOM)
@@ -1672,6 +862,15 @@ public class PRJDatabase
 
         return db.insert(DATABASE_TABLE_MAIN231, null, initialValues);
     }
+
+
+	/* private static final String DATABASE_CREATE_TABLE_231 = "create table tblSKUWiseDaySummary (AutoId int not null,ProductId text null," +
+		 		"Product text null,MRP text null,Rate text null,NoofStores text null,OrderQty text null,FreeQty text null," +
+		 		"DiscValue text null,ValBeforeTax text null,TaxValue text null,ValAfterTax text null,Lvl text null," +
+		 		"Category text null,UOM text null);";*/
+
+    // change by sunil for Summary Report
+
     public int checkCountIntblSalesQuotePersonMeetMstr(String  StoreId)
     {
 
@@ -1700,6 +899,7 @@ public class PRJDatabase
         }
 
     }
+
     public long savetbltblUOMMstr(String UOMID,String UOM)
     {
 
@@ -1798,7 +998,6 @@ public class PRJDatabase
         }
     }
 
-
     public void insertMinDelQty(String prdId,String storeId,String qPbT,String QPTaxAmount,int minDlvrQty,String uOMID,String qPaT)
     {
         // "create table tblMinDeliverQntty (PrdId text null,StoreID text null,QPBT text null,QPTaxAmount text null,MinDlvrQty int null,UOMID text null,Sstat text null);";
@@ -1813,6 +1012,7 @@ public class PRJDatabase
 
         db.insert(TABLE_MinDeliverQntty, null, values);
     }
+
     public String  fngettblSalesQuotePersonMeetMstr(String SalesQuoteId)
     {
         String flag="0";
@@ -1839,6 +1039,7 @@ public class PRJDatabase
             return flag;
         }
     }
+
     public long SalesQuoteProductsMstr(String SalesQuoteId,String Row_No,String PrdId,String StandardRate,String StandardRateBeforeTax,String RateOffer,String InclusiveTax,String ValidFrom,String ValidTo,String MinDlvryQty,String UOMID ,String Remarks,String LastTranscRate,String ProductTaxRateBK)
     {
 
@@ -1880,11 +1081,13 @@ public class PRJDatabase
         db.execSQL("DELETE FROM tblManufacturerMstrMain");
 
     }
+
     public void deletetblSalesQuoteProductsMstr(String PrdId,String SalesQuoteId)
     {
 
         db.execSQL("DELETE FROM tblSalesQuoteProductsMstr WHERE PrdId ='" + PrdId +"' and SalesQuoteId='"+SalesQuoteId+"' ");
     }
+
     public void deletetblRateDistribution(String SalesQuoteId,String StoreId)
     {
 
@@ -1918,13 +1121,6 @@ public class PRJDatabase
 
     }
 
-
-
-	/* private static final String DATABASE_CREATE_TABLE_232 = "create table tblStoreWiseDaySummary (AutoId int not null,Store text null," +
-		 		"LinesperBill text null,StockValue text null,DiscValue text null,ValBeforeTax text null,TaxValue text null," +
-		 		"ValAfterTax text null,Lvl text null);";*/
-
-
     public long savetblStoreWiseDaySummary(int AutoId,String Store, String LinesperBill, String StockValue,
                                            String DiscValue, String ValBeforeTax, String TaxValue, String ValAfterTax,String Lvl)
     {
@@ -1945,6 +1141,12 @@ public class PRJDatabase
 
         return db.insert(DATABASE_TABLE_MAIN232, null, initialValues);
     }
+
+
+
+	/* private static final String DATABASE_CREATE_TABLE_232 = "create table tblStoreWiseDaySummary (AutoId int not null,Store text null," +
+		 		"LinesperBill text null,StockValue text null,DiscValue text null,ValBeforeTax text null,TaxValue text null," +
+		 		"ValAfterTax text null,Lvl text null);";*/
 
     public String[] fetchAllDataFromtblStoreWiseDaySummary()
     {
@@ -1971,7 +1173,6 @@ public class PRJDatabase
         }
 
     }
-
 
     /*private static final String DATABASE_CREATE_TABLE_233 = "create table tblStoreSKUWiseDaySummary (AutoId int not null,
 	 * ProductId text null," +
@@ -2077,8 +1278,6 @@ public class PRJDatabase
 
     }
 
-
-
     public LinkedHashMap<String, String> fnGettblSalesQuotePaymentStageMstr()
     {
         LinkedHashMap<String, String> hmapQuestionMstr=new LinkedHashMap<String, String>();
@@ -2106,6 +1305,7 @@ public class PRJDatabase
             close();
         }
     }
+
     public LinkedHashMap<String, String> fnGettblSalesQuoteTypeMstr()
     {
         LinkedHashMap<String, String> hmapQuestionMstr=new LinkedHashMap<String, String>();
@@ -2160,11 +1360,6 @@ public class PRJDatabase
 
     }
 
-
-
-
-
-
     public long savetblAllSummary(int AutoId,String Measures,String TodaysSummary,String MTDSummary)
     {
 
@@ -2178,10 +1373,6 @@ public class PRJDatabase
 
         return db.insert(DATABASE_TABLE_MAIN234, null, initialValues);
     }
-
-
-	/* private static final String DATABASE_CREATE_TABLE_234 = "create table tblAllSummary (AutoId int not null,Measures text null," +
-		 		"TodaysSummary text null,MTDSummary text null);";*/
 
     public String[] fetchAllDataFromtblAllSummary()
     {
@@ -2211,18 +1402,8 @@ public class PRJDatabase
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+	/* private static final String DATABASE_CREATE_TABLE_234 = "create table tblAllSummary (AutoId int not null,Measures text null," +
+		 		"TodaysSummary text null,MTDSummary text null);";*/
 
     public HashMap<String, String> getProductPicInfo(File[] fileImageName,String storeId,String TmpInvoiceCodePDA)
     {
@@ -2247,15 +1428,6 @@ public class PRJDatabase
         return pathForPhotoInfo;
     }
 
-
-
-
-
-
-
-
-
-
     public long insertPhotoDetail(String storeId,String productId,String clickedDate,String photoName,
                                   String reasonForPhotoReturn,String photoValidation,String pdaPhotoPath,int Sstat,String OrderPDAID,String TmpInvoiceCodePDA)
     {
@@ -2278,10 +1450,6 @@ public class PRJDatabase
         close();
         return inserted;
     }
-
-
-/* tblStoreMaterialPhotoDetail (RouteID text null,StoreID text null,MaterialID text null,ClickedDateTime text null,
-		 PhotoName text null,PhotoValidation text null,PDAPhotoPath text null,Sstat integer null)*/
 
     public long insertMaterialPhotoDetail(String storeId,String MaterialID,String clickedDate,String photoName,
                                           String reasonForPhotoReturn,String photoValidation,String pdaPhotoPath,int Sstat)
@@ -2308,12 +1476,8 @@ public class PRJDatabase
     }
 
 
-
-
- /*private static final String DATABASE_CREATE_TABLE_163 = "create table tblStoreMaterialDetail" +
- 		" (RouteID text null,StoreID text null,MaterialID text null,ExistStock integer null,ReturntoDistributor integer null," +
- 		"FreshOrder integer null,DiscardDamage integer null,Sstat integer null);";*/
-
+/* tblStoreMaterialPhotoDetail (RouteID text null,StoreID text null,MaterialID text null,ClickedDateTime text null,
+		 PhotoName text null,PhotoValidation text null,PDAPhotoPath text null,Sstat integer null)*/
 
     public long insertStoreMaterialDetail(String storeId,String MaterialID,int ExistStock,int ReturntoDistributor,
                                           int FreshOrder,int DiscardDamage,int Sstat)
@@ -2342,14 +1506,9 @@ public class PRJDatabase
 
 
 
-
-
-
-
-
-
-
-
+ /*private static final String DATABASE_CREATE_TABLE_163 = "create table tblStoreMaterialDetail" +
+ 		" (RouteID text null,StoreID text null,MaterialID text null,ExistStock integer null,ReturntoDistributor integer null," +
+ 		"FreshOrder integer null,DiscardDamage integer null,Sstat integer null);";*/
 
     public void updatePhotoValidation(String validation,String imageNameToUpdate)
     {
@@ -2362,7 +1521,6 @@ public class PRJDatabase
         close();
 
     }
-
 
     public void updatePhotoValidationMaterial(String validation,String imageNameToUpdate)
     {
@@ -2413,8 +1571,6 @@ public class PRJDatabase
         return imageNameToBeDeleted;
     }
 
-
-
     public long insertPhotoDetail(String storeId,String productId,String clickedDate,String photoName,String photoValidation,String pdaPhotoPath,String outstat)
     {
 
@@ -2431,7 +1587,6 @@ public class PRJDatabase
 
         return db.insert(DATABASE_TABLE_Main212, null, initialValues);
     }
-
 
     public long savetblStoreTypeMstr(int AutoIdStore,int StoreTypeID,String StoreTypeDescr)
     {
@@ -2472,11 +1627,6 @@ public class PRJDatabase
 
 
     }
-
-
-
-
-
 
     public long savetblTradeChannelMstr(int AutoIdStore,int TradeChannelID,String TradeChannelName)
     {
@@ -2556,8 +1706,6 @@ public class PRJDatabase
 
     }
 
-
-
     // Start Fifth Table Working
     public long savetblStoreProductClassificationTypeListMstr(int AutoIdStore,int CategoryNodeID,
                                                               int CategoryNodeType,String Category,int ProductTypeNodeID,int ProductTypeNodeType,String ProductType,int IsCategorySeleted,int IsSubCategorySeleted,String SubCategoryValue)
@@ -2605,14 +1753,10 @@ public class PRJDatabase
         }
     }
 
-
-
     public void funInsertDataStoreCategoryProductWise(String RouteID,String StoreID)
     {
         db.execSQL("INSERT INTO tblTemp (ProductType,RouteID,StoreID,CategoryNodeID,CategoryNodeType,Category,ProductTypeNodeID,ProductTypeNodeType,IsCategorySeleted,IsSubCategorySeleted,SubCategoryValue,Sstat) SELECT DISTINCT ProductType,'"+ RouteID +"','"+StoreID+"',CategoryNodeID,CategoryNodeType,Category,ProductTypeNodeID,ProductTypeNodeType,IsCategorySeleted,IsSubCategorySeleted,ifnull(SubCategoryValue,'0'),1 FROM   tblStoreProductClassificationTypeListMstr where tblStoreProductClassificationTypeListMstr.IsCategorySeleted=1 and tblStoreProductClassificationTypeListMstr.IsSubCategorySeleted=1");
     }
-
-
 
     public void funResetMainTables()
     {
@@ -2620,9 +1764,6 @@ public class PRJDatabase
         db.execSQL("Update tblStoreProductClassificationTypeListMstr Set IsSubCategorySeleted=0");
         db.execSQL("Update tblStoreProductClassificationTypeListMstr Set SubCategoryValue=''");
     }
-
-
-
 
     public void fnCheckUnCheckSubCategoryId(int CatId,int SubCatId,int SelectStatus)
     {
@@ -2637,7 +1778,6 @@ public class PRJDatabase
 		}*/
     }
 
-
     public void fnUpdateSubCategoryValue(int CatId,int SubCatId,String SubCatValue)
     {
 		/*try
@@ -2650,6 +1790,7 @@ public class PRJDatabase
 			Log.e(TAG, ex.toString());
 		}*/
     }
+
     public String[] fnGetAllSubCategoryNames(String CategoryNodeID) {
 
         int LoncolumnIndex = 0;
@@ -2682,8 +1823,6 @@ public class PRJDatabase
         }
 
     }
-
-
 
     public String[] fnGetAllSubCategoryCheckStatus(String CategoryNodeID) {
 
@@ -2719,7 +1858,6 @@ public class PRJDatabase
         }
 
     }
-
 
     public String[] fnGetAllSubCategoryValues(String CategoryNodeID) {
 
@@ -2789,9 +1927,6 @@ public class PRJDatabase
         }
 
     }
-
-
-
 
     public String fetchStoreProductClassificationDescrBasicOfStoreProductClassificationID(int StoreProductClassificationID)
     {
@@ -2873,11 +2008,6 @@ public class PRJDatabase
 
     }
 
-    // End Second Table Working
-
-
-
-
     public String[] fnGetAllRouteDescrNewStore() {
 
         int LoncolumnIndex = 0;
@@ -2911,10 +2041,7 @@ public class PRJDatabase
 
     }
 
-    //tblRouteMstr(AutoIdStore integer null,RouteID integer null, RouteDescr text null);";
-
-
-
+    // End Second Table Working
 
     public String[] fnGetAllRouteIDNewStore()
     {
@@ -2949,6 +2076,8 @@ public class PRJDatabase
         }
 
     }
+
+    //tblRouteMstr(AutoIdStore integer null,RouteID integer null, RouteDescr text null);";
 
     public String[] fnGetAllStoreTypeNames() {
 
@@ -3017,9 +2146,6 @@ public class PRJDatabase
 
     }
 
-
-
-
     public void fnReleaseTableUnReuqiredData()
     {
         try
@@ -3034,9 +2160,6 @@ public class PRJDatabase
         }
 
     }
-
-
-
 
     public long savetblStoreMainAfterCountNUmberOfStore(String RouteID,String StoreID,String StoreName,String RetailerName,String emailID,String TinNo,
                                                         String RetailerContactNo,String StoreAddress,String StorePincode,String City,String KeyAccount,int TradeChannelID, int StoreTypeId,
@@ -3101,6 +2224,16 @@ public class PRJDatabase
         return db.insert(DATABASE_TABLE_MAIN21, null, initialValues);
     }
 
+    public void deletetblstoreMstrOnStoreIDBasis(String StoreID)
+    {
+
+        db.execSQL("DELETE FROM tblStoreList WHERE StoreID ='"+ StoreID +"'");
+        db.execSQL("DELETE FROM tblNewAddedStoreLocationDetails WHERE StoreID ='"+ StoreID +"'");
+        db.execSQL("DELETE FROM tblNewStoreListEntries WHERE StoreID ='"+ StoreID +"'");
+
+
+    }
+
 
 
 
@@ -3112,16 +2245,6 @@ public class PRJDatabase
 		db.execSQL("DELETE FROM tblNewStoreListEntries WHERE StoreID ='"+ StoreID +"'");
 
 	}*/
-
-    public void deletetblstoreMstrOnStoreIDBasis(String StoreID)
-    {
-
-        db.execSQL("DELETE FROM tblStoreList WHERE StoreID ='"+ StoreID +"'");
-        db.execSQL("DELETE FROM tblNewAddedStoreLocationDetails WHERE StoreID ='"+ StoreID +"'");
-        db.execSQL("DELETE FROM tblNewStoreListEntries WHERE StoreID ='"+ StoreID +"'");
-
-
-    }
 
     public void savetblStoreMain(String RouteID,String StoreID,String StoreName,String RetailerName,String emailID,
                                  String TinNo,
@@ -3176,28 +2299,6 @@ public class PRJDatabase
 
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     public int checkRouteIDExistInStoreListTable(int StoreRouteID)
     {
@@ -3265,6 +2366,7 @@ public class PRJDatabase
         }
         return chkI;
     }
+
     public String fnGetVisitDateAndflgOrderFromtblForPDAGetLastVisitDate(String StoreID) {
 
         Cursor cursorE2 = db.rawQuery("SELECT VisitDate,flgOrder FROM tblForPDAGetLastVisitDate WHERE StoreID ='"
@@ -3288,7 +2390,6 @@ public class PRJDatabase
         }
 
     }
-
 
     public long inserttblForPDAGetLastOrderDate(String StoreID,String OrderDate,String flgExecutionSummary)
     {
@@ -3389,7 +2490,6 @@ public class PRJDatabase
         return chkI;
     }
 
-
     public String[] fetchDateFromtblForPDAGetLastVisitDetails(String StoreID)
     {
 
@@ -3423,7 +2523,6 @@ public class PRJDatabase
         }
 
     }
-
 
     public String[] fetchAllDataFromtblForPDAGetLastVisitDetails(String StoreID)
     {
@@ -3487,8 +2586,6 @@ public class PRJDatabase
         close();
         return pathForPhotoInfo;
     }
-
-
 
     public ArrayList<HashMap<String, String>> fetch_matID_ReturnData(String storeId) {
         // System.out.println("Abhinav Raj is 2");
@@ -3585,7 +2682,6 @@ public class PRJDatabase
         return chkI;
     }
 
-
     public String[] fetchOrderDateFromtblForPDAGetLastOrderDetails(String StoreID)
     {
 
@@ -3620,7 +2716,6 @@ public class PRJDatabase
         }
 
     }
-
 
     public String[] fetchAllDataFromtblForPDAGetLastOrderDetails(String StoreID)
     {
@@ -3662,8 +2757,6 @@ public class PRJDatabase
         }
 
     }
-
-
 
     public long inserttblspForPDAGetLastOrderDetails_TotalValues(String StoreID,String OrderValue,String ExecutionValue)
     {
@@ -3737,9 +2830,6 @@ public class PRJDatabase
 
     }
 
-
-
-
     public long inserttblForPDAGetExecutionSummary(String StoreID,String OrderDate,String ProductID,
                                                    String OrderQty,String flgInvStatus,String ProductQty,String PrdName)
     {
@@ -3761,11 +2851,6 @@ public class PRJDatabase
 
         return db.insert(DATABASE_TABLE_MAIN146 , null, initialValues);
     }
-
-	/*SELECT DISTINCT Category, MAX(CreationDate)
-	FROM MonitoringJob
-	GROUP BY Category
-	ORDER BY MAX(CreationDate) DESC, Category*/
 
     public String[] fetchOrderDateFromtblForPDAGetExecutionSummary(String StoreID)
     {
@@ -3803,6 +2888,10 @@ public class PRJDatabase
 
     }
 
+	/*SELECT DISTINCT Category, MAX(CreationDate)
+	FROM MonitoringJob
+	GROUP BY Category
+	ORDER BY MAX(CreationDate) DESC, Category*/
 
     public int fnfetchMinNoOfSKUFromtblCouponMasterNewFormat()
     {
@@ -3835,6 +2924,7 @@ public class PRJDatabase
         return chkI;
 
     }
+
     public Double fnfetchAdditionalAmountFromtblCouponSlabNewFormat()
     {
 
@@ -3901,7 +2991,6 @@ public class PRJDatabase
         return chkI;
     }
 
-
     public long fninsertPDAProductReturnDetails(int AutoReturnIdMstr,
                                                 int AutoReturnIdDetails, String strProductId,
                                                 String strProdReturnQty, Double ProdRate, Double ProdReturnValue,
@@ -3938,7 +3027,6 @@ public class PRJDatabase
         return db.insert(DATABASE_TABLE_MAIN20, null, initialValues);
     }
 
-
     public int fnCheckflgToShowCouponNewFormat()
     {
 
@@ -3970,7 +3058,6 @@ public class PRJDatabase
         return chkI;
 
     }
-
 
     public Double fnfetchMinInvoiceAmountFromtblCouponMasterNewFormat()
     {
@@ -4075,7 +3162,6 @@ public class PRJDatabase
 
     }
 
-
     public String[] fetchAllDataNewFromtbltblForPDAGetExecutionSummary(String StoreID,String OrderDate,String ProductID)
     {
 
@@ -4156,8 +3242,6 @@ public class PRJDatabase
 
     }
 
-
-
     public String fetchNoti_textFromtblNotificationMstr()
     {
 
@@ -4191,6 +3275,7 @@ public class PRJDatabase
             cursor2.close();
         }
     }
+
     public void updatetblNotificationMstr(int MsgServerID,String Noti_text,int Noti_ReadStatus,String Noti_ReadDateTime,int Sstat)
     {
 
@@ -4204,7 +3289,6 @@ public class PRJDatabase
 
         Log.w(TAG, "tblNotificationMstr Updated..");
     }
-
 
     public int countNoRowIntblNotificationMstr()
     {
@@ -4269,7 +3353,6 @@ public class PRJDatabase
         }
     }
 
-
     public void deletetblNotificationMstrOneRow(int SerialNo) {
 
         db.execSQL("DELETE FROM tblNotificationMstr WHERE SerialNo ="+ SerialNo);
@@ -4283,6 +3366,7 @@ public class PRJDatabase
         }
 
     }
+
     public long inserttblNotificationMstr(int SerialNo,String IMEI,String Noti_text,String Noti_DateTime,
                                           int Noti_ReadStatus,int Noti_NewOld,
                                           String Noti_ReadDateTime,int Sstat,int MsgServerID)
@@ -4303,7 +3387,6 @@ public class PRJDatabase
 
         return db.insert(TABLE_tblNotificationMstr_Define , null, initialValues);
     }
-
 
     public void updateInvoiceButtonRecordsSyncd(String flag) {
 
@@ -4332,7 +3415,6 @@ public class PRJDatabase
         }
 
     }
-
 
     public String fnGetPdaDate()
     {
@@ -4391,6 +3473,7 @@ public class PRJDatabase
 
         return db.insert("tblPdaDate", null, initialValues);
     }
+
     public long maintainSplashPDADate()
     {
         db.execSQL("DELETE FROM tblPdaDate");
@@ -4425,6 +3508,7 @@ public class PRJDatabase
             cursor2.close();
         }
     }
+
     public String[] fnGetStoreListForInvoice(String DistID,String RouteID,String ForDate)
     {
          /*  if(DistID.equals("null"))
@@ -4641,8 +3725,6 @@ public class PRJDatabase
 
     }
 
-
-
     public long saveInvoiceButtonStoreTransac(String IMEIno, String TransDate,
                                               String StoreID, String ProdID,String ProductShortName,Double ProductRate,int OrderQty,
                                               int DelQty, int FreeQty,String OrderID,String CatID,String Sstat,int flgCancel,Double DiscountVal,String RutID
@@ -4714,7 +3796,6 @@ public class PRJDatabase
 
     }
 
-
     public int CheckNonSubmitDataIntblInvoiceButtonStoreMstr()
     {
 
@@ -4744,10 +3825,6 @@ public class PRJDatabase
         }
 
     }
-
-	/*private static final String DATABASE_CREATE_TABLE_222 = "create table tblStoreProductClassificationTypeListMstr(AutoIdStore integer null," +
-			"CategoryNodeID integer null,CategoryNodeType integer null, Category text null,ProductTypeNodeID integer null,ProductTypeNodeType integer null,ProductType text null,IsCategorySeleted int null,IsSubCategorySeleted int null,SubCategoryValue text null);";
-*/
 
     public HashMap<String, String> FetchtblStoreProductClassificationType()
     {
@@ -4779,7 +3856,9 @@ public class PRJDatabase
 
     }
 
-
+	/*private static final String DATABASE_CREATE_TABLE_222 = "create table tblStoreProductClassificationTypeListMstr(AutoIdStore integer null," +
+			"CategoryNodeID integer null,CategoryNodeType integer null, Category text null,ProductTypeNodeID integer null,ProductTypeNodeType integer null,ProductType text null,IsCategorySeleted int null,IsSubCategorySeleted int null,SubCategoryValue text null);";
+*/
 
     public String[] ProcessConformStoreReq()
     {
@@ -4814,6 +3893,7 @@ public class PRJDatabase
         }
 
     }
+
     public String[] fnGetDistinctRouteId(String DistId)
     {
         //String[] DistinctDistributorsID;
@@ -4898,7 +3978,6 @@ public class PRJDatabase
 
     }
 
-
     //public void UpdateInvoiceButtonStoreFlag(String sID, int flag2set, String RouteId, String DistId, String Invdate,int flgCancel)
     public void UpdateInvoiceButtonStoreFlag(String sID, int flag2set,int flgCancel,String OrderID)
     {
@@ -4956,7 +4035,6 @@ public class PRJDatabase
 
     }
 
-
     public void deleteInvoiceRelatedTableEtrySavedData(String sID,String OrderID)
     {
 
@@ -4974,6 +4052,7 @@ public class PRJDatabase
         }
 
     }
+
     public void UpdateInvoiceButtonCancelStoreSynFlag(String sID, int flag2set,int flgCancel)
     {
 
@@ -5000,8 +4079,6 @@ public class PRJDatabase
         }
 
     }
-
-
 
     public String FetchPNameInvoice(String ProductId)
     //public String FetchPNameInvoice()
@@ -5108,6 +4185,7 @@ public class PRJDatabase
             cursor.close();
         }
     }
+
     public String[] FetchOrderFreeQtyInvoice(String StoreID,String InvoiceForDate,String OrderID) {
 
         int ScodecolumnIndex = 0;
@@ -5131,6 +4209,7 @@ public class PRJDatabase
             cursor.close();
         }
     }
+
     public String[] FetchRateInvoice(String StoreID,String InvoiceForDate,String OrderID)
     //public String[] FetchRateInvoice()
     {
@@ -5234,7 +4313,6 @@ public class PRJDatabase
         }
     }
 
-
     public String FetchDistNameBasedDistID(String DistId)
     {
 
@@ -5266,10 +4344,6 @@ public class PRJDatabase
         }
     }
 
-
-
-
-
     public long inserttblInvoiceButtonStoreMstr(String StoreID,String StoreName,String RouteID,
                                                 String RouteName,String DistID,String DistName,String InvoiceForDate,String flgSubmit,String IMEIno,String OrderID)
     {
@@ -5297,6 +4371,7 @@ public class PRJDatabase
 
         return db.insert(DATABASE_TABLE_MAIN111 , null, initialValues);
     }
+
     public long inserttblInvoiceButtonProductMstr(String ProductId,String ProductName)
     {
 
@@ -5327,8 +4402,6 @@ public class PRJDatabase
 
         return db.insert(DATABASE_TABLE_MAIN113 , null, initialValues);
     }
-
-
 
     public int getOverAllSampleQty(String sID2Fetch) {
 
@@ -5391,6 +4464,7 @@ public class PRJDatabase
         }
         return chkI;
     }
+
     public long savetblAvailbUpdatedVersion(String VersionID, String VersionSerialNo,String VersionDownloadStatus,String ServerDate)
     {
 
@@ -5402,17 +4476,6 @@ public class PRJDatabase
         initialValues.put("ServerDate", ServerDate.trim());
         return db.insert(TABLE_tblAvailableVersionMstr_Define, null, initialValues);
     }
-	/*public String getVersionNumber() {
-		Cursor cursor = SQLiteDatabase.openOrCreateDatabase(":memory:", null).rawQuery("select sqlite_version() AS sqlite_version", null);
-		String sqliteVersion = "";
-		while(cursor.moveToNext()){
-		   sqliteVersion += cursor.getString(0);
-		}
-		return sqliteVersion;
-
-	}*/
-
-    //imei,startTS,rID,getVersionNumber,DayEndFlg,ChangeRouteFlg
 
     public String FetchInvoiceButtonSstat1(String StoreID,String OrderID)
     //public String[] FetchInvoiceButtonStoreStatus()
@@ -5443,6 +4506,17 @@ public class PRJDatabase
             cursor.close();
         }
     }
+	/*public String getVersionNumber() {
+		Cursor cursor = SQLiteDatabase.openOrCreateDatabase(":memory:", null).rawQuery("select sqlite_version() AS sqlite_version", null);
+		String sqliteVersion = "";
+		while(cursor.moveToNext()){
+		   sqliteVersion += cursor.getString(0);
+		}
+		return sqliteVersion;
+
+	}*/
+
+    //imei,startTS,rID,getVersionNumber,DayEndFlg,ChangeRouteFlg
 
     public String FetchInvoiceButtonSstat(String StoreID,String OrderID)
     //public String[] FetchInvoiceButtonStoreStatus()
@@ -5473,8 +4547,6 @@ public class PRJDatabase
             cursor.close();
         }
     }
-
-
 
     public String[] fngetDistictOrderIdsForSubmission()
     //public String[] FetchInvoiceButtonStoreStatus()
@@ -5561,6 +4633,7 @@ public class PRJDatabase
 
         return db.insert(DATABASE_TABLE_MAIN12, null, initialValues);
     }
+
     public int FetchVersionDownloadStatus()
     {
         int SnamecolumnIndex1 = 0;
@@ -5706,6 +4779,7 @@ public class PRJDatabase
         }
 
     }
+
     public int counttblSecondVisitDetailsOnLastVisitDetailsActivity(String StoreID)
     {
         Cursor cursorE2 = db.rawQuery("SELECT COUNT(*) FROM tblSecondVisitDetailsOnLastVisitDetailsActivity WHERE StoreID ='"
@@ -5726,6 +4800,7 @@ public class PRJDatabase
         }
         return chkI;
     }
+
     public String fnGettblSecondVisitDetailsOnLastVisitDetailsActivity(String StoreID) {
 
         Cursor cursorE2 = db.rawQuery("SELECT Date FROM tblSecondVisitDetailsOnLastVisitDetailsActivity WHERE StoreID ='"
@@ -5794,7 +4869,6 @@ public class PRJDatabase
 
     }
 
-
     public void truncateStoreWiseDataTable()
     {
         db.execSQL("DELETE FROM tblStoreWiseDaySummary");
@@ -5813,15 +4887,12 @@ public class PRJDatabase
 
     }
 
-
-
-
-
     public void reTruncateRouteTbl()
     {
         db.execSQL("DELETE FROM tblRouteMstr");
         //db.execSQL("DELETE FROM tblAvailableVersionMstr");
     }
+
     public void reCreateDB()
     {
         // Log.w(TAG, "DB not present..");
@@ -5936,17 +5007,6 @@ public class PRJDatabase
         Log.w(TAG, "Table re-creation completed..");
     }
 
-    // ---opens the database---
-	/*public PRJDatabase open() throws SQLException {
-		db = DBHelper.getWritableDatabase();
-		return this;
-	}
-*/
-    // ---closes the database---
-	/*public void close() {
-		DBHelper.close();
-	}*/
-
     public void refreshDataFromDB()
     {
         //db.execSQL("DELETE FROM tblProductList");
@@ -5962,6 +5022,17 @@ public class PRJDatabase
         //db.execSQL("DELETE FROM tblSyncSummuryForProductDetails");
 
     }
+
+    // ---opens the database---
+	/*public PRJDatabase open() throws SQLException {
+		db = DBHelper.getWritableDatabase();
+		return this;
+	}
+*/
+    // ---closes the database---
+	/*public void close() {
+		DBHelper.close();
+	}*/
 
     public void Delete_tblProductList_for_refreshData()
     {
@@ -5988,15 +5059,11 @@ public class PRJDatabase
         db.execSQL("DELETE FROM tblStoreList");
     }
 
-
     public void Delete_tblStore_for_refreshDataButNotNewStore()
     {
         db.execSQL("DELETE FROM tblStoreList where ISNewStore<>1");
         db.execSQL("DELETE FROM tblNewAddedStoreLocationDetails where Sstat=4");
     }
-
-
-
 
     public void Delete_tblMaterialAndStoreIDMap()
     {
@@ -6004,9 +5071,6 @@ public class PRJDatabase
 
         db.execSQL("DELETE FROM tblStoreIDAndMaterialIDMap");
     }
-
-
-
 
     public void Delete_tblStoreProductMap_for_refreshData()
     {
@@ -6028,28 +5092,32 @@ public class PRJDatabase
 
         db.execSQL("DELETE FROM tblProductRelatedScheme");
     }
+
     public void Delete_tblSchemeList_for_refreshData()
     {
         db.execSQL("DELETE FROM tblSchemeList");
     }
+
     public void Delete_tblSchemeDetails_for_refreshData()
     {
         db.execSQL("DELETE FROM tblLastTransactionDetails");
     }
+
     public void Delete_tblschemeProductMap_for_refreshData()
     {
         db.execSQL("DELETE FROM tblschemeProductMap");
     }
+
     public void Delete_tblspForPDASchemeApplicableList_for_refreshData()
     {
         db.execSQL("DELETE FROM tblspForPDASchemeApplicableList");
     }
 
-
     public void Delete_tblLastTransactionDetails_for_refreshData()
     {
         db.execSQL("DELETE FROM tblLastTransactionDetails");
     }
+
     public void Delete_tblPDALastTranDateForSecondPage_for_refreshData()
     {
 
@@ -6066,7 +5134,6 @@ public class PRJDatabase
 
         return dbFile.exists();
     }
-
 
     public void dropAvailbUpdatedVersionTBL()
     {
@@ -6086,7 +5153,6 @@ public class PRJDatabase
         }
 
     }
-
 
     public long insertTblDaySummaryNew(int TargetCalls,int ActualCallOnRoute, int ActualCallOffRoute, int ProdCallOnRoute, int ProdCallOffRoute, Double TargetSalesForDay,Double TotalSalesForDay,int CallsRemaining,Double TargetSalesMTD,Double AchievedSalesMTD,int ProdStoresMTD,Double RunRate)
     {
@@ -6202,6 +5268,7 @@ public class PRJDatabase
             cursor2.close();
         }
     }
+
     public int fnGetActualCallOffRouteFromSummaryTable()//If fnChkFlgTodayRoute=1 it will get added to Actual Call On Route Else get Added in Off Route
     {
 
@@ -6230,6 +5297,7 @@ public class PRJDatabase
             cursor2.close();
         }
     }
+
     public int fnGetProductiveCallOnRoute()//If fnChkFlgTodayRoute=1 it will get added to Actual Call On Route Else get Added in Off Route
     {
 
@@ -6258,6 +5326,7 @@ public class PRJDatabase
             cursor2.close();
         }
     }
+
     public int fnGetProductiveCallOffRoute()//If fnChkFlgTodayRoute=1 it will get added to Actual Call On Route Else get Added in Off Route
     {
 
@@ -6286,6 +5355,7 @@ public class PRJDatabase
             cursor2.close();
         }
     }
+
     public int fnGetActualCallOnOffRoute()//If fnChkFlgTodayRoute=1 it will get added to Actual Call On Route Else get Added in Off Route
     {
 
@@ -6314,6 +5384,7 @@ public class PRJDatabase
             cursor2.close();
         }
     }
+
     public int fnGetProductiveCallOnOffRoute()//If fnChkFlgTodayRoute=1 it will get added to Productive Call On Route Else get Added in Off Route
     {
 
@@ -6371,6 +5442,7 @@ public class PRJDatabase
             cursor2.close();
         }
     }
+
     public double fnGetTotalSalesforDay()
     {
 
@@ -6422,6 +5494,7 @@ public class PRJDatabase
             cursor2.close();
         }
     }
+
     public double fnGetTargetSalesMTDforDayRouteFromtblSummaryNew()
     {
         int LoncolumnIndex = 0;
@@ -6449,6 +5522,7 @@ public class PRJDatabase
             cursor2.close();
         }
     }
+
     public double fnGetAchivedSalesMTDforDayRouteFromtblSummaryNew()
     {
         int LoncolumnIndex = 0;
@@ -6479,6 +5553,7 @@ public class PRJDatabase
             cursor2.close();
         }
     }
+
     public double fnGetOverAllAchivedSalesMTD()
     {
 
@@ -6495,6 +5570,7 @@ public class PRJDatabase
         return OverAchivedSalesForDay;
 
     }
+
     public int fnGetProdStoresMTD()
     {
 
@@ -6523,6 +5599,7 @@ public class PRJDatabase
             cursor2.close();
         }
     }
+
     public double fnGetRunRate()
     {
 
@@ -6552,7 +5629,6 @@ public class PRJDatabase
         }
     }
 
-
     public HashMap<String,String> fetchHmapInvoiceOrderIDandStatus()
     {
 
@@ -6578,7 +5654,6 @@ public class PRJDatabase
         }
 
     }
-
 
     public String[] fnGetServerOrdersFlgWith1()
     {
@@ -6607,7 +5682,6 @@ public class PRJDatabase
         }
     }
 
-
     public void fnDeletetblInvoiceButtonProductMstr()
     {
         try
@@ -6620,11 +5694,6 @@ public class PRJDatabase
         }
 
     }
-
-
-
-
-
 
     public void fnAllServerOrdersFlgWith0()
     {
@@ -6641,8 +5710,6 @@ public class PRJDatabase
         }
 
     }
-
-
 
     public void fnDeleteUnWantedSubmitedInvoiceOrders()
     {
@@ -6667,7 +5734,6 @@ public class PRJDatabase
 
     }
 
-
     public void fnDeletetblInvoiceSubmittedRecords(String OrderID)
     {
         try
@@ -6683,7 +5749,6 @@ public class PRJDatabase
 
     }
 
-
     public void reTruncateInvoiceButtonTable()
     {
         db.execSQL("DELETE FROM tblInvoiceButtonStoreMstr");
@@ -6691,6 +5756,7 @@ public class PRJDatabase
         db.execSQL("DELETE FROM tblInvoiceButtonStoreProductwiseOrder");
         db.execSQL("DELETE FROM tblInvoiceButtonTransac");
     }
+
     public int counttblCatagoryMstr()
     {
         Cursor cursorE2 = db.rawQuery("SELECT COUNT(*) FROM tblCatagoryMstr", null);
@@ -6710,10 +5776,6 @@ public class PRJDatabase
         }
         return chkI;
     }
-
-
-
-
 
     /*	public int fnChkStoreIdExistInDaySumaryTbl(String StrID)//On Store Selection VisitStart Activity
 	{
@@ -7115,6 +6177,7 @@ public class PRJDatabase
         ////// System.out.println("autoid :" + autoid);
         return autoid;
     }
+
     public int fnGetMaxAutoIncrementForReturnMstr() {
 
         int LoncolumnIndex = 0;
@@ -7152,10 +6215,6 @@ public class PRJDatabase
 
     }
 
-
-
-
-
     public int fnChkAutoIdMstrForReturnDetails(int ReturnIdMstr,String pdaOrderID,String TmpInvoiceCodePDA) {
 
         int LoncolumnIndex = 0;
@@ -7182,7 +6241,6 @@ public class PRJDatabase
 
     }
 
-
     /*public int fnGetAutoIdStoreOnReturnPAgeMain(String StoreID,
 			String Returndate, Double previousCreditAmt) {
 		int chkValue = fnChkStoreIdExistsInReturnMstr(StoreID);
@@ -7204,7 +6262,6 @@ public class PRJDatabase
                 + autoid);
 
     }
-
 
     public String[] fnGetRecordsReturnDetails(int ReturnIdMstr) {
 
@@ -7258,7 +6315,6 @@ public class PRJDatabase
 
     }
 
-
     public int fnGetAutoIdStoreOnReturnDeatils() {
         int inReturnDetailsAutoIdForInsert = fnGetMaxAutoIncrementForReturnDetails();
         return inReturnDetailsAutoIdForInsert;
@@ -7301,13 +6357,6 @@ public class PRJDatabase
         }
 
     }
-
-
-    // tblPDAProductReturnDetails (AutoReturnDetailsId int null,ReturnIdMstr int null, ProductId text null,
-    //ProdReturnQty text null, ProdRate real null, ProdReturnValue real null, ProdReturnReason text null,
-    //ProdReturnReasonDescr text null, ProdLastOrderDate text null, ProdLastOrderQyt text null, Sstat integer null,
-    //AdjustReturnQty integer null,AdjustReturnValue real null);";
-
 
     public long fninsertPDAProductReturnDetails(int AutoReturnIdMstr,
                                                 int AutoReturnIdDetails, String strProductId,
@@ -7353,6 +6402,12 @@ public class PRJDatabase
         return db.insert(DATABASE_TABLE_MAIN20, null, initialValues);
     }
 
+
+    // tblPDAProductReturnDetails (AutoReturnDetailsId int null,ReturnIdMstr int null, ProductId text null,
+    //ProdReturnQty text null, ProdRate real null, ProdReturnValue real null, ProdReturnReason text null,
+    //ProdReturnReasonDescr text null, ProdLastOrderDate text null, ProdLastOrderQyt text null, Sstat integer null,
+    //AdjustReturnQty integer null,AdjustReturnValue real null);";
+
     public int fnGetAutoIDReturnMstr(String ReturnStoreId) {
 
         int LoncolumnIndex = 0;
@@ -7379,10 +6434,6 @@ public class PRJDatabase
         }
 
     }
-    //tblPDAProductReturnMstr (AutoReturnIdMstr int null,StoreID text null, ReturnDate text null, Comment text null,
-    //TotalReturnQty int null, TotalReturnValue real null, Sstat integer null,TotalAdjustQty integer null,
-    //TotalAdjustValue real null,FinalBalanceAmount real null,LastCreditAmount real null);";
-
 
     public void updatePDAProductReturnMstr(int AutoReturnIdMstr,
                                            String ReturnDate, String Comment, int TotalReturnQty,
@@ -7408,6 +6459,9 @@ public class PRJDatabase
 
         //Log.w(TAG, "UpdateStoreStartVisit Updated..");
     }
+    //tblPDAProductReturnMstr (AutoReturnIdMstr int null,StoreID text null, ReturnDate text null, Comment text null,
+    //TotalReturnQty int null, TotalReturnValue real null, Sstat integer null,TotalAdjustQty integer null,
+    //TotalAdjustValue real null,FinalBalanceAmount real null,LastCreditAmount real null);";
 
     public int fnGetStockAgainstProduct(String StoreID, String Pid) {
 
@@ -7503,28 +6557,6 @@ public class PRJDatabase
 
     }
 
-    //tblDistributionStoreProductWiseDetails (CatId integer not null,ProductID integer not null,StoreID text not null,
-    //Stock text null,ProductMfgDate text null,Sstat integer not null);";
-	/* public int counttblDistributionStoreProductWiseDetails()
-		{
-			int check=0;
-
-			Cursor cursor2 = db.rawQuery("SELECT Count(*) FROM tblDistributionStoreProductWiseDetails", null);
-			try {
-
-				if (cursor2.getCount()>0)
-				{
-
-					check=1;
-
-				}
-				return check;
-			} finally {
-				cursor2.close();
-			}
-		}
-	*/
-
     /*public long insertPDAProductDistributionDetails(int CatId,int ProductID, String Stock, String StoreID)
 	{
 		ContentValues initialValues = new ContentValues();
@@ -7576,6 +6608,28 @@ public class PRJDatabase
         }
 
     }
+
+    //tblDistributionStoreProductWiseDetails (CatId integer not null,ProductID integer not null,StoreID text not null,
+    //Stock text null,ProductMfgDate text null,Sstat integer not null);";
+	/* public int counttblDistributionStoreProductWiseDetails()
+		{
+			int check=0;
+
+			Cursor cursor2 = db.rawQuery("SELECT Count(*) FROM tblDistributionStoreProductWiseDetails", null);
+			try {
+
+				if (cursor2.getCount()>0)
+				{
+
+					check=1;
+
+				}
+				return check;
+			} finally {
+				cursor2.close();
+			}
+		}
+	*/
 
     public String[] FetcReturnProductIdOverAllStock(String StoreID)
     {
@@ -7632,7 +6686,6 @@ public class PRJDatabase
         }
     }
 
-
     public int counttblOutLetInfoOnQuadVolumeCategoryBasis()
     {
         int check=0;
@@ -7671,6 +6724,7 @@ public class PRJDatabase
         ////// System.out.println("jai data  stoe in teable 3");
         return db.insert(DATABASE_TABLE_MAIN91, null, initialValues);
     }
+
     public String[] fetchParticularStoreInfo(String OutID)
     {
 
@@ -7764,7 +6818,6 @@ public class PRJDatabase
         }
     }
 
-
     public void deleteAlertValueProduct(String storeId,String _schmAlrtId,String pdaOrderID,String TmpInvoiceCodePDA)
     {
         open();
@@ -7833,9 +6886,6 @@ public class PRJDatabase
         close();
     }
 
-
-
-
     public void deletetblOutLetInfoOnQuadVolumeCategoryBasis()
     {
         db.execSQL("DELETE FROM tblOutLetInfoOnQuadVolumeCategoryBasis ");
@@ -7850,7 +6900,6 @@ public class PRJDatabase
 
     }
 
-
     public void fnFinaldropRoutesTBL()
     {
         db.execSQL("DROP TABLE IF EXISTS tblRouteMstr");
@@ -7858,6 +6907,7 @@ public class PRJDatabase
         //db.execSQL("DROP TABLE IF EXISTS tblAvailableVersionMstr");
 
     }
+
     public String[] fnGetRouteIdsForDDL()
     {
 
@@ -7882,9 +6932,6 @@ public class PRJDatabase
         }
 
     }
-
-
-
 
     public String[] fnGetRouteInfoForDDL() {
 
@@ -7953,7 +7000,6 @@ public class PRJDatabase
 
     }
 
-
     public String[] fnGetAllSchSlabDescbasedOnSchemeSlabID(String SchemeSlabID)
     {
         open();
@@ -7981,7 +7027,6 @@ public class PRJDatabase
         }
 
     }
-
 
     public String[] fnGetAllBenifitDescrbasedOnSchemeSlabID(String SchemeSlabID)
     {
@@ -8078,11 +7123,6 @@ public class PRJDatabase
             return sb.toString();
         }
     }
-
-
-
-
-
 
     public String[] PrevPDASchemeApplicableSecondPageSpecialScheme(String strStoreID) {
 
@@ -8189,10 +7229,6 @@ public class PRJDatabase
         }
 
     }
-    //tblPDAProductReturnMstr (AutoReturnIdMstr int null,StoreID text null, ReturnDate text null, Comment text null,
-    //TotalReturnQty int null, TotalReturnValue real null, Sstat integer null,TotalAdjustQty integer null,
-    //TotalAdjustValue real null,FinalBalanceAmount real null,LastCreditAmount real null);";
-
 
     public long insertPDAProductReturnMstr(int AutoReturnIdMstr,
                                            String StoreID, String ReturnDate, Double previousCreditAmt) {
@@ -8216,6 +7252,9 @@ public class PRJDatabase
 
         return db.insert(DATABASE_TABLE_MAIN19, null, initialValues);
     }
+    //tblPDAProductReturnMstr (AutoReturnIdMstr int null,StoreID text null, ReturnDate text null, Comment text null,
+    //TotalReturnQty int null, TotalReturnValue real null, Sstat integer null,TotalAdjustQty integer null,
+    //TotalAdjustValue real null,FinalBalanceAmount real null,LastCreditAmount real null);";
 
     public int getExistingPicNos(String StoreID) {
 
@@ -8239,6 +7278,7 @@ public class PRJDatabase
             cursor.close();
         }
     }
+
     public Double fnGetDiscountValueOnRealSlabBasis(String strSchemeID, String SlabFrom) {
         int LoncolumnIndex = 0;
         int LoncolumnIndex1 = 1;
@@ -8348,7 +7388,6 @@ public class PRJDatabase
         }
     }
 
-
     public String fnGetMaxSlabofProductAccordingToOrder(
             String strSchemType, String strSchemeID, int strOrderValue) {
         int LoncolumnIndex = 0;
@@ -8446,12 +7485,6 @@ public class PRJDatabase
         return strProductSabFreeOrDiscount;
     }
 
-
-
-
-
-
-
     // changes by sunil for Summary in Tab
     public int fnCountDataIntblSyncSummuryForProductDetails()
     {
@@ -8510,7 +7543,6 @@ public class PRJDatabase
         return chkI;
 
     }
-
 
     public int fnCountNumberOfSKUForBothServerAndPDATable()
     {
@@ -8577,7 +7609,6 @@ public class PRJDatabase
         return returnvalue;
 
     }
-
 
     public HashMap<String,String> fnAllProductnameForShowingInTable()
     {
@@ -8692,14 +7723,6 @@ public class PRJDatabase
 
     }
 
-
-
-
-
-
-
-
-
     public String fnGetTotalSales(int Sstat)
     {
         int LoncolumnIndex = 0;
@@ -8730,7 +7753,6 @@ public class PRJDatabase
         }
     }
 
-
     public String fnGetTotalDiscount(int Sstat)
     {
         int LoncolumnIndex = 0;
@@ -8759,7 +7781,6 @@ public class PRJDatabase
             cursor2.close();
         }
     }
-
 
     public String fnCalculateKGLitersForTabOne()
     {
@@ -9018,8 +8039,6 @@ public class PRJDatabase
         return FinalReturnValue;
 
     }
-
-
 
     public String[] fnarrUniqueProductsSaleSummry_NewWay(int Sstat)
     {
@@ -9604,10 +8623,6 @@ public class PRJDatabase
         return FullSummryDetailsForSale;
     }
 
-
-
-
-
     public String fnGetFullSummryDetailsForSaleForTabOne()
     {
 
@@ -9650,9 +8665,6 @@ public class PRJDatabase
 
         return FullSummryDetailsForSale;
     }
-
-
-
 
     public String[] fnCalculateProductsSaleSummryForTabOneNew()
     {
@@ -9869,14 +8881,6 @@ public class PRJDatabase
 
     }
 
-
-
-
-
-
-
-
-
     public void deleteAlrtProductWithSlab(String storeId,String _productID,String _schSlabId,String pdaOrderID,String TmpInvoiceCodePDA)
     {
         open();
@@ -9889,11 +8893,6 @@ public class PRJDatabase
         close();
     }
 
-
-
-
-
-
     public void deleteAlertValueSlab(String storeId,String _schSlabId,String pdaOrderID,String TmpInvoiceCodePDA)
     {
         open();
@@ -9905,15 +8904,6 @@ public class PRJDatabase
 
         close();
     }
-
-
-
-
-
-
-
-
-
 
     public String fnGetMinSlabofSchemeID(String strSchemeID) {
         int LoncolumnIndex = 0;
@@ -10148,6 +9138,7 @@ public class PRJDatabase
         }
 
     }
+
     public String fnGetSchemeswithnewlogic(String AllFreeProductgainstSchemeID ) {
 
         Cursor cursor = db.rawQuery("SELECT DISTINCT SchemeID FROM tblSchemeDetails where FreeProductID IN ("+AllFreeProductgainstSchemeID+")", null);
@@ -10185,7 +9176,6 @@ public class PRJDatabase
         }
 
     }
-
 
     public String fnGetFreeProductIDetailswithnewlogic(String SchemeID ) {
 
@@ -10284,7 +9274,6 @@ public class PRJDatabase
         }
 
     }
-
 
     public String[] FetchStoreInvoiceData(String sID2Fetch) {
 
@@ -10651,7 +9640,6 @@ public class PRJDatabase
         return PrevDate;
     }
 
-
     /*public String[] FetchRate() {
 
 		// id = getAllEntries();
@@ -10742,6 +9730,7 @@ public class PRJDatabase
         }
 
     }
+
     public Double fnGetActualValueAdjAmt(String ReturnStoreId) {
 
         int LoncolumnIndex = 0;
@@ -10796,6 +9785,7 @@ public class PRJDatabase
         }
 
     }
+
     public Double fnGetAdjAmtProdReturns(String StoreID) {
         Double TotalAdjAmt = 0.00;
         int chkValue = fnCkhTotalReturnValue(StoreID);
@@ -10849,6 +9839,7 @@ public class PRJDatabase
         return chkI;
 
     }
+
     public int checkStoreIdForNewStore(String ssStoreID){
         int ScodecolumnIndex = 0;
 
@@ -10902,30 +9893,6 @@ public class PRJDatabase
 
     }
 
-	/*public Double[] FetchProdTaxAmt() {
-
-		// id = getAllEntries();
-
-		int ScodecolumnIndex = 0;
-
-		Cursor cursor = db.rawQuery(
-				"SELECT ProductTaxAmount FROM tblProductList", null);
-		try {
-			Double StoreName[] = new Double[cursor.getCount()];
-			;
-			if (cursor.moveToFirst()) {
-
-				for (int i = 0; i <= (cursor.getCount() - 1); i++) {
-					StoreName[i] = (Double) cursor.getDouble(ScodecolumnIndex);
-					cursor.moveToNext();
-				}
-			}
-			return StoreName;
-		} finally {
-			cursor.close();
-		}
-	}*/
-
     public int fnGetStrachIDMinSlabQtyForCalculation(int strSchemeID)
     {
         int LoncolumnIndex = 0;
@@ -10964,6 +9931,30 @@ public class PRJDatabase
         }
         return strProductSabCardStrachIDQty;
     }
+
+	/*public Double[] FetchProdTaxAmt() {
+
+		// id = getAllEntries();
+
+		int ScodecolumnIndex = 0;
+
+		Cursor cursor = db.rawQuery(
+				"SELECT ProductTaxAmount FROM tblProductList", null);
+		try {
+			Double StoreName[] = new Double[cursor.getCount()];
+			;
+			if (cursor.moveToFirst()) {
+
+				for (int i = 0; i <= (cursor.getCount() - 1); i++) {
+					StoreName[i] = (Double) cursor.getDouble(ScodecolumnIndex);
+					cursor.moveToNext();
+				}
+			}
+			return StoreName;
+		} finally {
+			cursor.close();
+		}
+	}*/
 
     public String fnGetStrachIDSlabQtyForCalculation(int Slab, int strSchemeID)
     {
@@ -11066,6 +10057,7 @@ public class PRJDatabase
             cursor.close();
         }
     }
+
     public int fnCheckIsStrachCardApplicableonSlabOrValue(int SchemeID)
     {
 
@@ -11092,6 +10084,7 @@ public class PRJDatabase
         return chkI;
 
     }
+
     public int fnCheckIsStrachCardApplicableonSchemeID(int SchemeID)
     {
 
@@ -11562,6 +10555,7 @@ public class PRJDatabase
         }
         return strProductSabFreeOrDiscount;
     }
+
     public String fnCallSchemeDetailsOfProductOnSchemeTypeSchemeIDBasisForCaculationOverAll(
             String strSchemeType, String strSchemeID, int strOrderValue) {
         String strForCalculation = "";
@@ -11569,34 +10563,6 @@ public class PRJDatabase
                 strSchemeType, strSchemeID, strOrderValue);
         return strForCalculation;
     }
-
-	/*public String[] fnGetOtherProductIdOfCombo(String strSchemID) {
-
-		// id = getAllEntries();
-
-		int ScodecolumnIndex = 0;
-
-
-		Cursor cursor = db.rawQuery(
-				"SELECT ProductId FROM tblSchemeProductMap where SchemeID='"
-						+ strSchemID + "'", null);
-		try {
-			String ProductComboIds[] = new String[cursor.getCount()];
-			;
-			if (cursor.moveToFirst()) {
-
-				for (int i = 0; i <= (cursor.getCount() - 1); i++) {
-					ProductComboIds[i] = (String) cursor.getString(
-							ScodecolumnIndex).toString();
-					cursor.moveToNext();
-					//// System.out.println("fnGetOtherProductIdOfCombo : Product  Id  that Returns"+ ProductComboIds[i].trim());
-				}
-			}
-			return ProductComboIds;
-		} finally {
-			cursor.close();
-		}
-	}*/
 
     public String fnGetSchemTypeOnSchemIDIdBasis(String strSchemID)
     {
@@ -11627,6 +10593,34 @@ public class PRJDatabase
             cursor2.close();
         }
     }
+
+	/*public String[] fnGetOtherProductIdOfCombo(String strSchemID) {
+
+		// id = getAllEntries();
+
+		int ScodecolumnIndex = 0;
+
+
+		Cursor cursor = db.rawQuery(
+				"SELECT ProductId FROM tblSchemeProductMap where SchemeID='"
+						+ strSchemID + "'", null);
+		try {
+			String ProductComboIds[] = new String[cursor.getCount()];
+			;
+			if (cursor.moveToFirst()) {
+
+				for (int i = 0; i <= (cursor.getCount() - 1); i++) {
+					ProductComboIds[i] = (String) cursor.getString(
+							ScodecolumnIndex).toString();
+					cursor.moveToNext();
+					//// System.out.println("fnGetOtherProductIdOfCombo : Product  Id  that Returns"+ ProductComboIds[i].trim());
+				}
+			}
+			return ProductComboIds;
+		} finally {
+			cursor.close();
+		}
+	}*/
 
     public String fnGetProductSchemeIDandComboTypeIdDetails(String strProductId) {
         String strSchemeIDFreePRoductId = "";
@@ -11720,6 +10714,7 @@ public class PRJDatabase
 
         return strProductSabFreeOrDiscount;
     }
+
     public String fnGetSchemeIDOnProductIDIdBasis(String strProductId) {
         int LoncolumnIndex = 0;
         int LoncolumnIndex1 = 1;
@@ -11769,7 +10764,6 @@ public class PRJDatabase
         }
     }
 
-
     public String[] fnGetOtherSchemeIdBasedOnFreeProductId(
             String strFreeProductID) {
 
@@ -11799,12 +10793,6 @@ public class PRJDatabase
             cursor.close();
         }
     }
-    //tblTransac (IMEIno text not null, TransDate string not null, StoreID text not null, ProdID text not null,
-    //Stock integer not null, OrderQty integer not null, OrderVal real not null, FreeQty integer not null,
-    //DisVal real not null, SchemeID text null, AppliedSlab text null, AppliedAbsVal text null, Sstat integer not null,
-    //SampleQuantity int null, ProductShortName text null, ProductPrice real null);";//, DisplayUnit text null
-
-
 
     public long saveStoreTransac(String IMEIno, String TransDate,
                                  String StoreID, String ProdID, int Stock, int OrderQty,
@@ -11846,12 +10834,10 @@ public class PRJDatabase
 
         return db.insert(DATABASE_TABLE_MAIN31, null, initialValues);
     }
-
-    // table tblTmpInvoiceHeader (IMEIno text not null, StoreID text not null, InvoiceDate string not null, TotalBeforeTaxDis real not null, TaxAmt real not null,
-    //TotalDis real not null, InvoiceVal real not null, FreeTotal integer not null, Sstat integer not null, InvAfterDis real not null, AddDis real not null,
-    //AmtPrevDue real null, AmtColl real null, AmtOut real null, NoCoupon int null, TotalCoupunAmount real null);";
-
-
+    //tblTransac (IMEIno text not null, TransDate string not null, StoreID text not null, ProdID text not null,
+    //Stock integer not null, OrderQty integer not null, OrderVal real not null, FreeQty integer not null,
+    //DisVal real not null, SchemeID text null, AppliedSlab text null, AppliedAbsVal text null, Sstat integer not null,
+    //SampleQuantity int null, ProductShortName text null, ProductPrice real null);";//, DisplayUnit text null
 
     public long saveStoreInvoice(String IMEIno, String StoreID,String InvoiceDate, Double TotalBeforeTaxDis, Double TaxAmt,
                                  Double TotalDis, Double InvoiceVal, int FreeTotal,
@@ -11902,6 +10888,10 @@ public class PRJDatabase
         return db.insert(DATABASE_TABLE_MAIN32, null, initialValues);
     }
 
+    // table tblTmpInvoiceHeader (IMEIno text not null, StoreID text not null, InvoiceDate string not null, TotalBeforeTaxDis real not null, TaxAmt real not null,
+    //TotalDis real not null, InvoiceVal real not null, FreeTotal integer not null, Sstat integer not null, InvAfterDis real not null, AddDis real not null,
+    //AmtPrevDue real null, AmtColl real null, AmtOut real null, NoCoupon int null, TotalCoupunAmount real null);";
+
     public void deleteOldStoreTransac(String sID2del) {
         // int entryCount;
         db.execSQL("DELETE FROM tblTransac WHERE StoreID ='" + sID2del + "'");
@@ -11919,9 +10909,6 @@ public class PRJDatabase
 
     }
 
-    //tblStrachOnSchemeDetails (SchID int null, cardStrachID int null, Slab int Null, Qty int null, ProductValueOrSlabBased int null);";
-
-
     public long fninsertSchemeCouponSlab(int SchemeID,int CardSlabID,int Slab,int Qtny, int ProductValueOrSlabBased)
     {
 
@@ -11938,8 +10925,7 @@ public class PRJDatabase
         return db.insert(DATABASE_TABLE_MAIN82, null, initialValues);
     }
 
-    // tblStrachApplicableOnScheme (SchID int null, flgIsStrachApplicable int null);";
-
+    //tblStrachOnSchemeDetails (SchID int null, cardStrachID int null, Slab int Null, Qty int null, ProductValueOrSlabBased int null);";
 
     public long fninsertSchemeCoupon(int SchemeID,int IsCouponApplicable)
     {
@@ -11954,10 +10940,7 @@ public class PRJDatabase
         return db.insert(DATABASE_TABLE_MAIN81, null, initialValues);
     }
 
-
-    //tblSyncSummuryForProductDetails (SkuName text null,OrderQty text null, FreeQty text null, SampleQty text null, TotalOrderKgs text null,
-    //TotalFreeKgs text null, TotalSampleKgs text null, TotalSales text null);";
-
+    // tblStrachApplicableOnScheme (SchID int null, flgIsStrachApplicable int null);";
 
     public long SavetblSyncSummuryForProductDetails(String SkuName, String OrderQty, String FreeQty, String SampleQty,
                                                     String TotalOrderKgs, String TotalFreeKgs, String TotalSampleKgs, String TotalSales,int Lines)
@@ -11983,8 +10966,9 @@ public class PRJDatabase
         return db.insert(DATABASE_TABLE_MAIN72, null, initialValues);
     }
 
-    // tblSyncSummuryDetails (ActualCalls int null,ProductiveCalls int null, TotSalesValue text null, TotKGSales text null, TotFreeQtyKGSales text null,
-    //TotSampleKGSales text null, TotLTSales text null, TotFreeQtyLTSales text null, TotSampleLTSales text null, TotDiscountKGSales text null, TotDiscountLTales text null);";
+
+    //tblSyncSummuryForProductDetails (SkuName text null,OrderQty text null, FreeQty text null, SampleQty text null, TotalOrderKgs text null,
+    //TotalFreeKgs text null, TotalSampleKgs text null, TotalSales text null);";
 
     public long SavetblSyncSummuryDetails(String ActualCalls, String ProductiveCalls, String TotSalesValue, String TotKGSales,
                                           String TotFreeQtyKGSales, String TotSampleKGSales, String TotLTSales,
@@ -12013,7 +10997,8 @@ public class PRJDatabase
         return db.insert(DATABASE_TABLE_MAIN71, null, initialValues);
     }
 
-    //tblPDAIsSchemeApplicable (IsSchemeApplicable int null);";
+    // tblSyncSummuryDetails (ActualCalls int null,ProductiveCalls int null, TotSalesValue text null, TotKGSales text null, TotFreeQtyKGSales text null,
+    //TotSampleKGSales text null, TotLTSales text null, TotFreeQtyLTSales text null, TotSampleLTSales text null, TotDiscountKGSales text null, TotDiscountLTales text null);";
 
     public long SavePDAIsSchemeApplicable(int IsSchemeApplicable) {
         ContentValues initialValues = new ContentValues();
@@ -12025,7 +11010,7 @@ public class PRJDatabase
         return db.insert(DATABASE_TABLE_MAIN56, null, initialValues);
     }
 
-    //private static final String DATABASE_CREATE_TABLE_63 = "create table tblStorTypeMstr(ID string null, Descr string null);";
+    //tblPDAIsSchemeApplicable (IsSchemeApplicable int null);";
 
     public long saveStoreTypeDetails(String SidType, String SidDesc) {
         ContentValues initialValues = new ContentValues();
@@ -12038,8 +11023,7 @@ public class PRJDatabase
         return db.insert(DATABASE_TABLE_MAIN63, null, initialValues);
     }
 
-    //tblspForPDASchemeApplicableList(SchemeID string null, StoreType string null, SchemeDesc string null);";
-
+    //private static final String DATABASE_CREATE_TABLE_63 = "create table tblStorTypeMstr(ID string null, Descr string null);";
 
     public long saveSOAPdataPdaSchAppListForSecondPage(String SchemeID,
                                                        String StoreType, String SchemeDesc,int flgSpecialScheme) {
@@ -12055,9 +11039,7 @@ public class PRJDatabase
         return db.insert(DATABASE_TABLE_MAIN55, null, initialValues);
     }
 
-
-    //tblPDALastTranDateForSecondPage(StoreID text null, LastTransDate string null, RetailerName string null, SKUName string null, Stock string null, OrderQty string null, FreeQty string null);";
-
+    //tblspForPDASchemeApplicableList(SchemeID string null, StoreType string null, SchemeDesc string null);";
 
     public long saveSOAPdataPdaLastTranDateForSecondPage(String StoreID,
                                                          String LastTransDate, String RetailerName, String SKUName,
@@ -12077,8 +11059,7 @@ public class PRJDatabase
     }
 
 
-    //tblschemeProductMap (SchemeID text not null, ProductID text not null, SchemeType int null);";
-
+    //tblPDALastTranDateForSecondPage(StoreID text null, LastTransDate string null, RetailerName string null, SKUName string null, Stock string null, OrderQty string null, FreeQty string null);";
 
     public long saveSOAPdataschemeProductMap(String InSchemeID,
                                              String InProductID, int strSchemeType) {
@@ -12095,7 +11076,7 @@ public class PRJDatabase
     }
 
 
-    //tblschemeStoreTypeMap (SchemeID text not null, StoreTypeID integer not null);";
+    //tblschemeProductMap (SchemeID text not null, ProductID text not null, SchemeType int null);";
 
     public long saveSOAPdataSchemeSchemeStoreTypeMap(String InSchemeID,
                                                      int InStoreTypeID) {
@@ -12110,8 +11091,7 @@ public class PRJDatabase
     }
 
 
-    //tblLastTransactionDetails (StoreID text not null, ProductID text not null, LastTransDate string not null, Quantity integer not null, SampleQuantity int null);";
-
+    //tblschemeStoreTypeMap (SchemeID text not null, StoreTypeID integer not null);";
 
     public long saveSOAPdataLastTransactionDetails(String ltdetSCode,
                                                    String ltdetProdCode, String ltdetLTdate, int ltdetQTY,
@@ -12131,9 +11111,7 @@ public class PRJDatabase
     }
 
 
-//tblSchemeDetails (SchemeDetID text not null, SchemeID text not null, SlabFrom integer not null, SlabTo integer not null, FreeQuantity integer not null,
-    //Discount real not null, FreeProductID text null);";
-
+    //tblLastTransactionDetails (StoreID text not null, ProductID text not null, LastTransDate string not null, Quantity integer not null, SampleQuantity int null);";
 
     public long saveSOAPdataSchemeDetails(String schdetDetCode,
                                           String schdetCode, int schdetSF, int schdetST, int schdetFQ,
@@ -12153,8 +11131,9 @@ public class PRJDatabase
         return db.insert(DATABASE_TABLE_MAIN52, null, initialValues);
     }
 
-    // tblSchemeList (SchemeID text not null, SchemeName string not null, SchemeType string not null, StoreType string null, CombTypeID integer null);";
 
+//tblSchemeDetails (SchemeDetID text not null, SchemeID text not null, SlabFrom integer not null, SlabTo integer not null, FreeQuantity integer not null,
+    //Discount real not null, FreeProductID text null);";
 
     public long saveSOAPdataSchemeList(String schCode, String schName,
                                        String schType, String SchListStoreType, int inCombTypeID,int flgDiscountType) {
@@ -12172,8 +11151,7 @@ public class PRJDatabase
         return db.insert(DATABASE_TABLE_MAIN51, null, initialValues);
     }
 
-    //(StoreID text  null,ProductID text  null, ProductMRP real  null, ProductRLP real  null, ProductTaxAmount real  null, DistributorPrice real null);";
-
+    // tblSchemeList (SchemeID text not null, SchemeName string not null, SchemeType string not null, StoreType string null, CombTypeID integer null);";
 
     public long saveSOAPdataStoreProductMap(String StoreID,String ProductID,
                                             Double ProductMRP, Double ProductRLP, Double ProductTaxAmount, Double DistributorPrice,int CategoryID)
@@ -12202,8 +11180,7 @@ public class PRJDatabase
 
     }
 
-// tblPDATargetQtyForSecondPage (StoreID text null, ProductID text null, SKUShortName text not null, TargetQty text null);";
-
+    //(StoreID text  null,ProductID text  null, ProductMRP real  null, ProductRLP real  null, ProductTaxAmount real  null, DistributorPrice real null);";
 
     public long SavePDATargetQtyForSecondPage(
             String PDATargetQtyForSecondPageStoreID,
@@ -12225,11 +11202,7 @@ public class PRJDatabase
         return db.insert(DATABASE_TABLE_MAIN18, null, initialValues);
     }
 
-// tblPDALastInvoiceDet (StoreID text null, InvoiceID text null, LastTransDate text not null,
-    //BalanceAmount text null,CreditPreviousDue real null);";
-
-    //tblPDALastInvoiceDet (StoreID text null, InvoiceID text null, LastTransDate text not null,
-    //BalanceAmount text null,CreditPreviousDue real null);";
+// tblPDATargetQtyForSecondPage (StoreID text null, ProductID text null, SKUShortName text not null, TargetQty text null);";
 
     public long SavePDALastInvoiceDet(String SID, String invID, String LTDate,
                                       String BalAmt, Double CreditPreviousDue) {
@@ -12244,6 +11217,13 @@ public class PRJDatabase
 
         return db.insert(DATABASE_TABLE_MAIN17, null, initialValues);
     }
+
+// tblPDALastInvoiceDet (StoreID text null, InvoiceID text null, LastTransDate text not null,
+    //BalanceAmount text null,CreditPreviousDue real null);";
+
+    //tblPDALastInvoiceDet (StoreID text null, InvoiceID text null, LastTransDate text not null,
+    //BalanceAmount text null,CreditPreviousDue real null);";
+
     // start Table 10
     public long saveVisibilityDetails(String storeID,String VisibilityID, String VisibilityStock,int Sstat)
     {
@@ -12329,9 +11309,6 @@ public class PRJDatabase
 
     }
 
-
-    // end Table 10
-
     // start Table 9
     public long saveVisibility(String VisibilityID, String VisibilityDescr)
     {
@@ -12344,6 +11321,9 @@ public class PRJDatabase
 
         return db.insert(DATABASE_TABLE_MAIN9, null, initialValues);
     }
+
+
+    // end Table 10
 
     public String[] FetchVisibilityDescr()
     {
@@ -12371,8 +11351,6 @@ public class PRJDatabase
             cursor.close();
         }
     }
-
-
 
     public String FetchRouteType(String ID)
     {
@@ -12466,6 +11444,23 @@ public class PRJDatabase
 
 
     }
+
+    public int fnGetDisType(String schID,String schType) {
+        // int entryCount;
+        Cursor cursorE2 = db.rawQuery(
+                "SELECT flgDiscountType FROM tblSchemeList WHERE SchemeID ='" + schID + "' and SchemeType='" + schType + "'", null);
+        int flgDiscountType = 0;
+        try {
+            if (cursorE2.moveToFirst()) {
+
+                flgDiscountType=Integer.parseInt(cursorE2.getString(0).toString());
+            }
+
+        } finally {
+            cursorE2.close();
+        }
+        return flgDiscountType;
+    }
     //public String[] FetchRate(String CatID)
 	/*public String[] FetchRate()
 	{
@@ -12525,24 +11520,6 @@ public class PRJDatabase
 		}
 	}*/
 
-    public int fnGetDisType(String schID,String schType) {
-        // int entryCount;
-        Cursor cursorE2 = db.rawQuery(
-                "SELECT flgDiscountType FROM tblSchemeList WHERE SchemeID ='" + schID + "' and SchemeType='" + schType + "'", null);
-        int flgDiscountType = 0;
-        try {
-            if (cursorE2.moveToFirst()) {
-
-                flgDiscountType=Integer.parseInt(cursorE2.getString(0).toString());
-            }
-
-        } finally {
-            cursorE2.close();
-        }
-        return flgDiscountType;
-    }
-
-
     public int countIfStoreTransacExists(String sID2del) {
         // int entryCount;
         Cursor cursorE2 = db.rawQuery(
@@ -12564,43 +11541,6 @@ public class PRJDatabase
         }
         return chkI;
     }
-
-	/*public String FetchProductName(String ProductID)
-	{
-
-        int ScodecolumnIndex = 0;
-
-		Cursor cursor = db.rawQuery("SELECT ProductShortName FROM tblProductList WHERE ProductID ='"+ ProductID + "'", null);
-		try
-		{
-
-			String StoreName="NA";
-
-			if (cursor.moveToFirst())
-			{
-
-				for (int i = 0; i <= (cursor.getCount() - 1); i++)
-				{
-					StoreName = (String) cursor.getString(ScodecolumnIndex).toString();
-
-
-					////// System.out.println("fetch Product Name "+StoreName);
-					cursor.moveToNext();
-
-				}
-
-			}
-			////// System.out.println("fetch Product Name Not "+StoreName);
-			return StoreName;
-		}
-		finally
-		{
-			cursor.close();
-		}
-
-
-
-	}*/
 
     public String[] FetchOrderTransactionDetails(String IMEIno,String StoreID)
     {
@@ -12639,6 +11579,43 @@ public class PRJDatabase
         }
 
     }
+
+	/*public String FetchProductName(String ProductID)
+	{
+
+        int ScodecolumnIndex = 0;
+
+		Cursor cursor = db.rawQuery("SELECT ProductShortName FROM tblProductList WHERE ProductID ='"+ ProductID + "'", null);
+		try
+		{
+
+			String StoreName="NA";
+
+			if (cursor.moveToFirst())
+			{
+
+				for (int i = 0; i <= (cursor.getCount() - 1); i++)
+				{
+					StoreName = (String) cursor.getString(ScodecolumnIndex).toString();
+
+
+					////// System.out.println("fetch Product Name "+StoreName);
+					cursor.moveToNext();
+
+				}
+
+			}
+			////// System.out.println("fetch Product Name Not "+StoreName);
+			return StoreName;
+		}
+		finally
+		{
+			cursor.close();
+		}
+
+
+
+	}*/
 
     public String[] FetchOrderInvoiceDetails(String IMEIno,String StoreID)
     {
@@ -12685,11 +11662,13 @@ public class PRJDatabase
         db.execSQL("DELETE FROM tblTransac WHERE StoreID='"+ storeID +"'");
 
     }
+
     public void deleteOrderInvoiceDetails(String storeID) {
         // int entryCount;
         db.execSQL("DELETE FROM tblTmpInvoiceHeader WHERE StoreID='"+ storeID +"'");
 
     }
+
     public long saveOrderTransactionDetails(String IMEIno, String TransDate,String StoreID,String ProdID,
                                             int OrderQty ,Double OrderVal,Double ProductMRP,Double TaxRate)
     {
@@ -12742,6 +11721,66 @@ public class PRJDatabase
         ////// System.out.println("inserting records in table 3..");
 
         return db.insert(DATABASE_TABLE_MAIN15, null, initialValues);
+    }
+
+    /*public int FetchCheckCategoryForStockValues(String selected_Competitor_id,String StoreID)
+	{
+        int columnIndex = 0;
+       // int columnIndex1 = 1;
+        int IdAvailable=0;
+
+        Cursor cursor = db.rawQuery("SELECT CategoryID FROM tblCategoryQuestionInformation where CategoryID='"+selected_Competitor_id+"'",null);
+		try
+		{
+
+			String OrderDetails[] = new String[cursor.getCount()];
+
+			if (cursor.moveToFirst())
+			{
+
+				for (int i = 0; i <= (cursor.getCount() - 1); i++)
+				{
+					OrderDetails[i] = (String) cursor.getString(columnIndex).toString();
+					IdAvailable=1;
+					cursor.moveToNext();
+
+				}
+
+			}
+			return IdAvailable;
+		}
+		finally
+		{
+			cursor.close();
+		}
+
+	}
+	*/
+    public String[] FetchCategoryDesc()
+    {
+        int ScodecolumnIndex = 0;
+
+        Cursor cursor = db.rawQuery("SELECT CategoryDescr FROM tblCatagoryMstr",null);
+        try
+        {
+            String TaxRate[] = new String[cursor.getCount()];
+
+            if (cursor.moveToFirst())
+            {
+                ////// System.out.println("Category Sunil Available");
+                for (int i = 0; i <= (cursor.getCount() - 1); i++)
+                {
+                    TaxRate[i] = (String) cursor.getString(ScodecolumnIndex);
+                    cursor.moveToNext();
+                }
+            }
+            ////// System.out.println("Category Sunil: not");
+            return TaxRate;
+        }
+        finally
+        {
+            cursor.close();
+        }
     }
 
 	/*public long saveCategoryProductINformation(String CompetitionID,String ProductID,String Stock,int Sstat,String storeID )
@@ -12857,58 +11896,25 @@ public class PRJDatabase
 
 	}*/
 
-    /*public int FetchCheckCategoryForStockValues(String selected_Competitor_id,String StoreID)
-	{
-        int columnIndex = 0;
-       // int columnIndex1 = 1;
-        int IdAvailable=0;
-
-        Cursor cursor = db.rawQuery("SELECT CategoryID FROM tblCategoryQuestionInformation where CategoryID='"+selected_Competitor_id+"'",null);
-		try
-		{
-
-			String OrderDetails[] = new String[cursor.getCount()];
-
-			if (cursor.moveToFirst())
-			{
-
-				for (int i = 0; i <= (cursor.getCount() - 1); i++)
-				{
-					OrderDetails[i] = (String) cursor.getString(columnIndex).toString();
-					IdAvailable=1;
-					cursor.moveToNext();
-
-				}
-
-			}
-			return IdAvailable;
-		}
-		finally
-		{
-			cursor.close();
-		}
-
-	}
-	*/
-    public String[] FetchCategoryDesc()
+    public String[] FetchCategoryID()
     {
         int ScodecolumnIndex = 0;
 
-        Cursor cursor = db.rawQuery("SELECT CategoryDescr FROM tblCatagoryMstr",null);
+        Cursor cursor = db.rawQuery("SELECT CategoryID FROM tblCatagoryMstr",null);
         try
         {
             String TaxRate[] = new String[cursor.getCount()];
 
             if (cursor.moveToFirst())
             {
-                ////// System.out.println("Category Sunil Available");
+                ////// System.out.println("CategoryID Sunil Available");
                 for (int i = 0; i <= (cursor.getCount() - 1); i++)
                 {
                     TaxRate[i] = (String) cursor.getString(ScodecolumnIndex);
                     cursor.moveToNext();
                 }
             }
-            ////// System.out.println("Category Sunil: not");
+            ////// System.out.println("CategoryID Sunil: not");
             return TaxRate;
         }
         finally
@@ -12948,35 +11954,31 @@ public class PRJDatabase
 		}
 	}*/
 
+    public boolean GetPrevDateChk() {
 
+        Cursor cursorDateE = db.rawQuery("SELECT ForDate FROM tblStoreList",null);
+        boolean ifApplicableToPassIntent=GetIfApplicableToForward();
 
+        try {
+            if (cursorDateE.getCount() > 0) {
 
-
-    public String[] FetchCategoryID()
-    {
-        int ScodecolumnIndex = 0;
-
-        Cursor cursor = db.rawQuery("SELECT CategoryID FROM tblCatagoryMstr",null);
-        try
-        {
-            String TaxRate[] = new String[cursor.getCount()];
-
-            if (cursor.moveToFirst())
-            {
-                ////// System.out.println("CategoryID Sunil Available");
-                for (int i = 0; i <= (cursor.getCount() - 1); i++)
+                if(ifApplicableToPassIntent)
                 {
-                    TaxRate[i] = (String) cursor.getString(ScodecolumnIndex);
-                    cursor.moveToNext();
+                    return true;
                 }
+                else
+                {
+                    return false;
+                }
+
+            } else {
+                return false;
             }
-            ////// System.out.println("CategoryID Sunil: not");
-            return TaxRate;
+
+        } finally {
+            cursorDateE.close();
         }
-        finally
-        {
-            cursor.close();
-        }
+
     }
 
 
@@ -13047,35 +12049,6 @@ public class PRJDatabase
 		}
 	}
 	*/
-
-
-
-    public boolean GetPrevDateChk() {
-
-        Cursor cursorDateE = db.rawQuery("SELECT ForDate FROM tblStoreList",null);
-        boolean ifApplicableToPassIntent=GetIfApplicableToForward();
-
-        try {
-            if (cursorDateE.getCount() > 0) {
-
-                if(ifApplicableToPassIntent)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-
-            } else {
-                return false;
-            }
-
-        } finally {
-            cursorDateE.close();
-        }
-
-    }
 
     /* public boolean GetIfApplicableToForward() {
 
@@ -13157,8 +12130,6 @@ public class PRJDatabase
         return chkI;
     }
 
-
-
     public boolean PrevLocChk(String passedStoreID,String StoreVisitCode)
     {
         boolean abc = false;
@@ -13196,7 +12167,6 @@ public class PRJDatabase
         return abc;
     }
 
-
     public void UpdateStoreStartVisit(String StoreID, String strVisitStartTS)
     {
 
@@ -13204,6 +12174,7 @@ public class PRJDatabase
 
 
     }
+
     public void UpdateStoreStoreClose(String StoreID, int StoreClose)
     {
 
@@ -13215,6 +12186,7 @@ public class PRJDatabase
         int affected1 = db.update("tblStoreList", values, "StoreID=?",new String[] { StoreID });
 
     }
+
     public void UpdateStoreSstat(String StoreID, int Sstat)
     {
 
@@ -13226,8 +12198,6 @@ public class PRJDatabase
         int affected1 = db.update("tblStoreList", values, "StoreID=?",new String[] { StoreID });
 
     }
-
-
 
     public void deleteStoreTblsRecordsInCaseCancelOrderInOrderBooking(String StoreID,int flag,String pdaOrderID,String TmpInvoiceCodePDA)
     {
@@ -13251,7 +12221,6 @@ public class PRJDatabase
         int affected = db.update("tblStoreReturnDetail", values,"StoreID=?  AND TmpInvoiceCodePDA='"+TmpInvoiceCodePDA+"' and Sstat is not null",new String[] { StoreID });
     }
 
-
     public void UpdateStoreProductAppliedSchemesBenifitsRecords(String StoreID, String Sstat,String pdaOrderID,String TmpInvoiceCodePDA) {
         final ContentValues values = new ContentValues();
         values.put("Sstat", Sstat);
@@ -13264,18 +12233,6 @@ public class PRJDatabase
         values.put("VisitEndTS", strVisitEndTS);
         int affected = db.update("tblStoreList", values,"StoreID=? and VisitStartTS is not null",new String[] { StoreID });*/
     }
-
-/*	public void UpdateStoreCloseNextDay(String StoreID, int outStat) {
-
-		final ContentValues values = new ContentValues();
-		values.put("Sstat", outStat);
-
-		int affected = db.update("tblStoreList", values,"StoreID=? and (StoreClose=1 or  StoreNextDay=1) and Sstat=0",
-				new String[] { StoreID });
-		Log.w(TAG, "affected records: " + affected);
-
-		Log.w(TAG, "UpdateStoreEndVisit Updated..");
-	}*/
 
     public String[] FetchStoreStatus(String rID)
     {
@@ -13306,8 +12263,17 @@ public class PRJDatabase
         }
     }
 
-    //Cursor cursorLocE = db.rawQuery("SELECT ActualLatitude FROM tblStoreList WHERE StoreID ='"+ passedStoreID + "'", null);
+/*	public void UpdateStoreCloseNextDay(String StoreID, int outStat) {
 
+		final ContentValues values = new ContentValues();
+		values.put("Sstat", outStat);
+
+		int affected = db.update("tblStoreList", values,"StoreID=? and (StoreClose=1 or  StoreNextDay=1) and Sstat=0",
+				new String[] { StoreID });
+		Log.w(TAG, "affected records: " + affected);
+
+		Log.w(TAG, "UpdateStoreEndVisit Updated..");
+	}*/
 
     public String[] FetchStoreList(String rID)
     {
@@ -13338,6 +12304,7 @@ public class PRJDatabase
         }
     }
 
+    //Cursor cursorLocE = db.rawQuery("SELECT ActualLatitude FROM tblStoreList WHERE StoreID ='"+ passedStoreID + "'", null);
 
     public String[] ProcessStoreReq()
     {
@@ -13368,8 +12335,6 @@ public class PRJDatabase
 
     }
 
-
-
     public boolean GetLeftStoresChk()
     {
 
@@ -13395,7 +12360,6 @@ public class PRJDatabase
         }
 
     }
-
 
     public long insertTblSelectedStoreIDinChangeRouteCase(String StorID)
     {
@@ -13435,6 +12399,7 @@ public class PRJDatabase
         }
 
     }
+
     public void UpdateStoreFlagAtDayEndOrChangeRoute(String sID, int flag2set)
     {
 
@@ -13558,7 +12523,6 @@ public class PRJDatabase
 
     }
 
-
     public int fnChkAutoIdMstrForReturnDetailsChangeRouteDayEnd(int ReturnIdMstr) {
 
         int LoncolumnIndex = 0;
@@ -13584,6 +12548,7 @@ public class PRJDatabase
         }
 
     }
+
     public int fnChkStoreIdExistsInReturnMstrDayEndChangeRoute(String ReturnStoreId) {
 
         int LoncolumnIndex = 0;
@@ -13609,7 +12574,6 @@ public class PRJDatabase
         }
 
     }
-
 
     public void UpdateStoreFlag(String sID, int flag2set)
     {
@@ -13673,7 +12637,6 @@ public class PRJDatabase
 
     }
 
-
     public void UpdateStoreOtherMainTablesFlag(String sID, int flag2set,String pdaOrderID,String TmpInvoiceCodePDA)
     {
 
@@ -13735,8 +12698,6 @@ public class PRJDatabase
 
     }
 
-
-
     public void UpdateStoreVisitBatt(String StoreID, String vBatt) {
 
       /*  final ContentValues values = new ContentValues();
@@ -13755,6 +12716,18 @@ open();
                 new String[] { StoreID,StoreVisitCode });
         close();
         Log.w(TAG, "affected records: " + affected);
+
+    }
+
+    // ---insert XML data into the database---
+    public void createRouteTBL() {
+        try {
+
+            db.execSQL(TABLE_tblRouteMstr_Definition);
+            //db.execSQL(DATABASE_CREATE_TABLE_2);
+        } catch (Exception e) {
+            Log.e(TAG, "Error: onUpgrade db");
+        }
 
     }
 
@@ -13789,22 +12762,6 @@ open();
     // ---insert sample data into the database---
     //
 
-    // ---insert XML data into the database---
-    public void createRouteTBL() {
-        try {
-
-            db.execSQL(TABLE_tblRouteMstr_Definition);
-            //db.execSQL(DATABASE_CREATE_TABLE_2);
-        } catch (Exception e) {
-            Log.e(TAG, "Error: onUpgrade db");
-        }
-
-    }
-
-
-    // tblRouteMstr(ID string null, Descr string null, Active int null);";
-
-
     public void fnSetAllRouteActiveStatus() {
 
         try {
@@ -13820,6 +12777,10 @@ open();
         }
 
     }
+
+
+    // tblRouteMstr(ID string null, Descr string null, Active int null);";
+
     public void updateActiveRoute(String sID, int flag2set) {
 
         try {
@@ -13864,7 +12825,6 @@ open();
         }
 
     }
-
 
     public String GetRouteDateBasedOnRouteID(String ID) {
 
@@ -13916,8 +12876,6 @@ open();
 
     }
 
-    //StoreID ='"+ StoreID + "'"
-
     public String GetActiveRouteIDForTomorrow(String fDate) {
 
         int LoncolumnIndex = 0;
@@ -13942,6 +12900,8 @@ open();
         }
 
     }
+
+    //StoreID ='"+ StoreID + "'"
 
     public String GetAllActiveRouteDescr()
     {
@@ -13976,7 +12936,6 @@ open();
 
     }
 
-
     public String GetAllActiveRouteID()
     {
         int LoncolumnIndex = 0;
@@ -14009,8 +12968,6 @@ open();
         }
 
     }
-
-
 
     public String GetActiveRouteID()
     {
@@ -14048,6 +13005,7 @@ open();
             return activeRouteID;
         }
     }
+
     public String GetNOActiveRouteIDSunil()
     {
         int LoncolumnIndex = 0;
@@ -14079,7 +13037,6 @@ open();
 
     }
 
-
     public String GetNotActiveRouteID()
     {
         int LoncolumnIndex = 0;
@@ -14105,7 +13062,6 @@ open();
         }
 
     }
-
 
     public String GetActiveRouteIDSunil()
     {
@@ -14188,8 +13144,6 @@ open();
 
     }
 
-
-
     public long savetblPOSMaterialMstr(String POSMaterialID, String POSMaterialDescr)
     {
 
@@ -14216,9 +13170,6 @@ open();
         return db.insert(DATABASE_TABLE_MAIN162, null, initialValues);
     }
 
-
-
-
     public long savetblSchemeStoreMapping(String StoreID, String SchemeID)
     {
 
@@ -14232,7 +13183,6 @@ open();
         return db.insert(DATABASE_TABLE_MAIN201, null, initialValues);
 
     }
-
 
     public long savetblSchemeMstr(String SchemeID, String SchemeName,String SchemeApplicationID,String SchemeAppliedRule)
     {
@@ -14251,7 +13201,6 @@ open();
         return db.insert(DATABASE_TABLE_MAIN202, null, initialValues);
     }
 
-
     public long savetblSchemeSlabDetail(String SchemeID, String SchemeSlabID,String SchemeSlabDesc,String BenifitDescr)
     {
 
@@ -14264,8 +13213,6 @@ open();
         // System.out.println("Ajay Data Save in table 203");
         return db.insert(DATABASE_TABLE_MAIN203, null, initialValues);
     }
-
-
 
     public long savetblSchemeSlabBucketDetails(String RowID, String SchemeID,String SchemeSlabID,
                                                String BucketID,String SubBucketID,String SlabSubBucketType,String SlabSubBucketValue,String SubBucketValType)
@@ -14286,9 +13233,6 @@ open();
         return db.insert(DATABASE_TABLE_MAIN204, null, initialValues);
     }
 
-
-    //tblSchemeSlabBucketProductMapping (RowID text null,ProductID text null);";
-
     public long savetblSchemeSlabBucketProductMapping(String RowID, String ProductID)
     {
 
@@ -14300,11 +13244,8 @@ open();
         return db.insert(DATABASE_TABLE_MAIN205, null, initialValues);
     }
 
-	/* dbengine.savetblSchemeSlabBenefitsBucketDetails(RowID,SchemeID,SchemeSlabID,BucketID,
-     		SubBucketID,BenSubBucketType,BenDiscApplied,CouponCode,BenSubBucketValue);
-     */
 
-
+    //tblSchemeSlabBucketProductMapping (RowID text null,ProductID text null);";
 
     public long savetblSchemeSlabBenefitsBucketDetails(String RowID, String SchemeID,String SchemeSlabID,
                                                        String BucketID,String SubBucketID,String BenSubBucketType,String BenDiscApplied,String CouponCode
@@ -14334,6 +13275,9 @@ open();
         return db.insert(DATABASE_TABLE_MAIN206, null, initialValues);
     }
 
+	/* dbengine.savetblSchemeSlabBenefitsBucketDetails(RowID,SchemeID,SchemeSlabID,BucketID,
+     		SubBucketID,BenSubBucketType,BenDiscApplied,CouponCode,BenSubBucketValue);
+     */
 
     public long savetblSchemeSlabBenefitsProductMappingDetail(String RowID, String ProductID)
     {
@@ -14345,9 +13289,6 @@ open();
         // System.out.println("Ajay Data Save in table 207");
         return db.insert(DATABASE_TABLE_MAIN207, null, initialValues);
     }
-
-    //tblSchemeSlabBenefitsValueDetail (RowID text null,BenValue text null,Remarks text null,Type text null);";
-
 
     public long savetblSchemeSlabBenefitsValueDetail(String RowID, String BenValue,String Remarks,String Type)
     {
@@ -14362,7 +13303,7 @@ open();
         return db.insert(DATABASE_TABLE_MAIN208, null, initialValues);
     }
 
-    //tblProductRelatedScheme (ProductID text null,PrdString text null);";
+    //tblSchemeSlabBenefitsValueDetail (RowID text null,BenValue text null,Remarks text null,Type text null);";
 
     public long savetblProductRelatedScheme(String ProductID, String PrdString)
     {
@@ -14375,7 +13316,7 @@ open();
         return db.insert(DATABASE_TABLE_MAIN209, null, initialValues);
     }
 
-
+    //tblProductRelatedScheme (ProductID text null,PrdString text null);";
 
     public long saveRoutesInfo(String ID,String RouteType, String Descr,int ActiveFlg,int flgTodayRoute,String RouteDate)
     {
@@ -14391,22 +13332,6 @@ open();
 
         return db.insert(TABLE_tblRouteMstr_Define, null, initialValues);
     }
-
-    //(StoreID text not null, StoreType string not null, StoreName string not null, StoreLatitude real not null,
-    //StoreLongitude real not null, LastVisitDate string not null, LastTransactionDate string not null, Sstat integer not null,
-    //ForDate string not null, ActualLatitude text null, ActualLongitude text null, VisitStartTS text null, VisitEndTS text null,
-    //AutoIdStore int null, LocProvider text null, Accuracy text null, BateryLeftStatus text null,StoreClose integer null,
-    //StoreNextDay integer null,chainID integer null);";
-
-
-	/*private static final String DATABASE_CREATE_TABLE_13 = "create table tblStoreList " +
-	(StoreID text not null, StoreType string not null, StoreName string not null, StoreLatitude real not null,
-   StoreLongitude real not null, LastVisitDate string not null, LastTransactionDate string not null,
-   Sstat integer not null, ForDate string not null, ActualLatitude text null, ActualLongitude text null,
-   VisitStartTS text null, VisitEndTS text null, ISNewStore int null, AutoIdStore int null, LocProvider text null,
-   Accuracy text null, BateryLeftStatus text null,StoreRouteID text null);";
-*/
-
 
     public int fncheckStoreIsNewOrOld(String StoreID)
     {
@@ -14432,6 +13357,21 @@ open();
 
     }
 
+    //(StoreID text not null, StoreType string not null, StoreName string not null, StoreLatitude real not null,
+    //StoreLongitude real not null, LastVisitDate string not null, LastTransactionDate string not null, Sstat integer not null,
+    //ForDate string not null, ActualLatitude text null, ActualLongitude text null, VisitStartTS text null, VisitEndTS text null,
+    //AutoIdStore int null, LocProvider text null, Accuracy text null, BateryLeftStatus text null,StoreClose integer null,
+    //StoreNextDay integer null,chainID integer null);";
+
+
+	/*private static final String DATABASE_CREATE_TABLE_13 = "create table tblStoreList " +
+	(StoreID text not null, StoreType string not null, StoreName string not null, StoreLatitude real not null,
+   StoreLongitude real not null, LastVisitDate string not null, LastTransactionDate string not null,
+   Sstat integer not null, ForDate string not null, ActualLatitude text null, ActualLongitude text null,
+   VisitStartTS text null, VisitEndTS text null, ISNewStore int null, AutoIdStore int null, LocProvider text null,
+   Accuracy text null, BateryLeftStatus text null,StoreRouteID text null);";
+*/
+
     public int fncheckStoreIsNewStoreDataCompleteSaved(String StoreID)
     {
         open();
@@ -14455,7 +13395,6 @@ open();
         }
 
     }
-
 
     public long saveSOAPdataStoreList(String StoreID,String  StoreName ,String OwnerName ,String StoreContactNo ,
                                       String StoreAddress ,String StoreCatType
@@ -14540,13 +13479,6 @@ open();
         return db.insert(DATABASE_TABLE_MAIN13, null, initialValues);
     }
 
-    // (CategoryID text  null,ProductID text  null, ProductShortName text  null, DisplayUnit text null, CalculateKilo real  null);";
-
-
-// tblProductList (CategoryID text  null,ProductID text  null, ProductShortName text  null, DisplayUnit text null,
-    //CalculateKilo real  null,ProductMRP real not null, ProductRLP real not null, ProductTaxAmount real not null,
-    //KGLiter string nulll);";
-
     /*public long saveSOAPdataProductList(String CategoryID,String ProductID, String ProductShortName,
 			String DisplayUnit, Double CalculateKilo,Double pMRP, Double pRLP, Double pTA, String KGLiter,
 			Double RetMarginPer, Double VatTax,Double StandardRate,Double StandardRateBeforeTax,
@@ -14584,31 +13516,12 @@ open();
         return db.insert(DATABASE_TABLE_MAIN14, null, initialValues);
     }
 
+    // (CategoryID text  null,ProductID text  null, ProductShortName text  null, DisplayUnit text null, CalculateKilo real  null);";
 
-    //dbengine.saveProductSegementMap(ProductID,ProductMRP, ProductRLP, ProductTaxAmount,RetMarginPer,VatTax,StandardRate,StandardRateBeforeTax,StandardTax,BusinessSegmentId);
-/*	public long saveProductSegementMap(String ProductID,double pMRP,double pRLP,double pTA,double RetMarginPer,double VatTax,double StandardRate,double StandardRateBeforeTax,double StandardTax,int BusinessSegmentId,int flgPriceAva)
-	{
-		ContentValues initialValues = new ContentValues();
 
-		initialValues.put("ProductID", ProductID.trim());
-
-		initialValues.put("ProductMRP", pMRP);
-		initialValues.put("ProductRLP", pRLP);
-		initialValues.put("ProductTaxAmount", pTA);
-
-		initialValues.put("RetMarginPer", RetMarginPer);
-		initialValues.put("VatTax", VatTax);
-		initialValues.put("StandardRate", StandardRate);
-		initialValues.put("StandardRateBeforeTax", StandardRateBeforeTax);
-		initialValues.put("StandardTax", StandardTax);
-		initialValues.put("flgPriceAva", flgPriceAva);
-
-		//flgPriceAva
-		initialValues.put("BusinessSegmentId", BusinessSegmentId);
-
-		return db.insert(DATABASE_TABLE_MAINProductSegementMap, null, initialValues);
-	}
-	*/
+// tblProductList (CategoryID text  null,ProductID text  null, ProductShortName text  null, DisplayUnit text null,
+    //CalculateKilo real  null,ProductMRP real not null, ProductRLP real not null, ProductTaxAmount real not null,
+    //KGLiter string nulll);";
 
     public long saveProductSegementMap(String ProductID,double pMRP,double pRLP,double pTA,double RetMarginPer,double VatTax,double StandardRate,double StandardRateBeforeTax,double StandardTax,int BusinessSegmentId,int flgPriceAva,int flgWholeSellApplicable,double PriceRangeWholeSellApplicable,double StandardRateWholeSale,double StandardRateBeforeTaxWholeSell,double StandardTaxWholeSale)
     {
@@ -14641,6 +13554,32 @@ open();
 
         return db.insert(DATABASE_TABLE_MAINProductSegementMap, null, initialValues);
     }
+
+
+    //dbengine.saveProductSegementMap(ProductID,ProductMRP, ProductRLP, ProductTaxAmount,RetMarginPer,VatTax,StandardRate,StandardRateBeforeTax,StandardTax,BusinessSegmentId);
+/*	public long saveProductSegementMap(String ProductID,double pMRP,double pRLP,double pTA,double RetMarginPer,double VatTax,double StandardRate,double StandardRateBeforeTax,double StandardTax,int BusinessSegmentId,int flgPriceAva)
+	{
+		ContentValues initialValues = new ContentValues();
+
+		initialValues.put("ProductID", ProductID.trim());
+
+		initialValues.put("ProductMRP", pMRP);
+		initialValues.put("ProductRLP", pRLP);
+		initialValues.put("ProductTaxAmount", pTA);
+
+		initialValues.put("RetMarginPer", RetMarginPer);
+		initialValues.put("VatTax", VatTax);
+		initialValues.put("StandardRate", StandardRate);
+		initialValues.put("StandardRateBeforeTax", StandardRateBeforeTax);
+		initialValues.put("StandardTax", StandardTax);
+		initialValues.put("flgPriceAva", flgPriceAva);
+
+		//flgPriceAva
+		initialValues.put("BusinessSegmentId", BusinessSegmentId);
+
+		return db.insert(DATABASE_TABLE_MAINProductSegementMap, null, initialValues);
+	}
+	*/
 
     public int getFwdPgIdonNextBtnClick(String StoreID, String PgId, String ChainId)
     {
@@ -14724,7 +13663,6 @@ open();
             cursor.close();
         }
     }
-
 
     public String[] checkStoreCloseOrNextMethod(String StoreID)
     {
@@ -14881,12 +13819,6 @@ open();
         }
     }
 
-	/*public void deleteCategroyProductINformation(String CategoryId, String storeID) {
-		// int entryCount;
-		db.execSQL("DELETE FROM tblCategoryQuestionInformation WHERE CategoryID ='" + CategoryId + "' and StoreID='"+ storeID +"'");
-
-	}*/
-
     public int getRouteId()
     {
         int LoncolumnIndex = 0;
@@ -14910,6 +13842,12 @@ open();
             cursor2.close();
         }
     }
+
+	/*public void deleteCategroyProductINformation(String CategoryId, String storeID) {
+		// int entryCount;
+		db.execSQL("DELETE FROM tblCategoryQuestionInformation WHERE CategoryID ='" + CategoryId + "' and StoreID='"+ storeID +"'");
+
+	}*/
 
     public String[] fnarrUniqueProductsSaleSummry()
     {
@@ -14980,7 +13918,6 @@ open();
 
         return LineValue;
     }
-
 
     public String[] fnCalculateProductsSaleSummry()
     {
@@ -15288,7 +14225,6 @@ open();
 
     }
 
-
     public String[] fnGettblSyncProductWiseDetailsKGLitersDetails() {
 
         int LoncolumnIndex = 0;
@@ -15400,7 +14336,6 @@ open();
 
         return FullSummryDetailsForSale;
     }
-
 
     public int fnGetActualCall()
     {
@@ -15548,7 +14483,6 @@ open();
         }
 
     }
-
 
     public String fnCalculateKGLiters()
     {
@@ -15804,7 +14738,6 @@ open();
 
     }
 
-
     public String[] fnarrUniqueKgLiters()
     {
         int LoncolumnIndex = 0;
@@ -15903,7 +14836,6 @@ open();
         close();
     }
 
-
     public void updateRecordsSyncStoreProductReturn() {
         try {
             final ContentValues values = new ContentValues();
@@ -15917,6 +14849,7 @@ open();
             Log.e(TAG, ex.toString());
         }
     }
+
     public void updateRecordsSyncd(int Sstat) {
 
         try {
@@ -16003,9 +14936,6 @@ open();
         }
 
     }
-
-
-
 
     public void AddNewStore(String strNewAddedStoreIDFlg, String RetailerName,
                             String OwnerName, String Address, String StoreType,String fDate,String phoneSendValue,String ActualLatitude, String ActualLongitude, String Accuracy,
@@ -16104,7 +15034,6 @@ open();
 
     }
 
-
     public int fnGetCountForNewStore() {
 
         int LoncolumnIndex = 0;
@@ -16178,9 +15107,6 @@ open();
         }
 
     }
-
-
-//	saveSOAPdataStoreList
 
     public long saveSOAPdataStoreListNewStore(String sCode, String sType, String sName,
                                               Double sLat, Double sLon, String LVdate, String LTdate,
@@ -16293,6 +15219,9 @@ open();
         return db.insert(DATABASE_TABLE_MAIN13, null, initialValues);
     }
 
+
+//	saveSOAPdataStoreList
+
     public int CheckTotalStoreCount() throws IOException
     {
 
@@ -16336,8 +15265,6 @@ open();
 
     }
 
-
-
     public long saveSOAPdataStoreListDetailsInNewTable(String StoreID, String StoreCity,
                                                        String StorePinCode, String StoreState,int Sstat)
     {
@@ -16354,7 +15281,6 @@ open();
 
         return db.insert(DATABASE_TABLE_MAIN16, null, initialValues);
     }
-
 
     public String fnGetOptionDescrFromtblOptionMstr(String QuestID,String AnsValue)
     {
@@ -16440,7 +15366,6 @@ open();
         return returnDate;
     }
 
-
     public void AddNewStore(String strNewAddedStoreIDFlg, String RetailerName,
                             String OwnerName, String Address, String StoreType,String fDate,String phoneSendValue,String ActualLatitude, String ActualLongitude, String Accuracy,
                             String LocProvider)
@@ -16504,6 +15429,33 @@ open();
 				}
 			}
 		*/}
+
+    public String[] FetcDistinctProductWhichHaveAnySchemesOrderEntry()
+    {
+        int ScodecolumnIndex = 0;
+        int ScodecolumnIndex1 = 1;
+
+        Cursor cursor = db.rawQuery("SELECT Distinct ProductId FROM tblschemeProductMap", null);
+        try
+        {
+            String DistinctProductIdStock[] = new String[cursor.getCount()];
+            if (cursor.moveToFirst())
+            {
+
+                for (int i = 0; i <= (cursor.getCount() - 1); i++)
+                {
+                    DistinctProductIdStock[i] = (String) cursor.getString(ScodecolumnIndex).toString();
+                    ////// System.out.println("product short name :"+StoreProductIdStock[i]);
+                    cursor.moveToNext();
+                }
+            }
+            return DistinctProductIdStock;
+        }
+        finally
+        {
+            cursor.close();
+        }
+    }
 	/*	public long saveSOAPdataStoreListNewStore(String sCode, String sType, String sName,
 				Double sLat, Double sLon, String LVdate, String LTdate,
 				String sForDate, int AutoIdStore, int newStat, String Accuracy, String LocProvider,String activeRid) {
@@ -16547,33 +15499,6 @@ open();
 
 			return db.insert(DATABASE_TABLE_MAIN2, null, initialValues);
 		}*/
-
-    public String[] FetcDistinctProductWhichHaveAnySchemesOrderEntry()
-    {
-        int ScodecolumnIndex = 0;
-        int ScodecolumnIndex1 = 1;
-
-        Cursor cursor = db.rawQuery("SELECT Distinct ProductId FROM tblschemeProductMap", null);
-        try
-        {
-            String DistinctProductIdStock[] = new String[cursor.getCount()];
-            if (cursor.moveToFirst())
-            {
-
-                for (int i = 0; i <= (cursor.getCount() - 1); i++)
-                {
-                    DistinctProductIdStock[i] = (String) cursor.getString(ScodecolumnIndex).toString();
-                    ////// System.out.println("product short name :"+StoreProductIdStock[i]);
-                    cursor.moveToNext();
-                }
-            }
-            return DistinctProductIdStock;
-        }
-        finally
-        {
-            cursor.close();
-        }
-    }
 
     public String[] fnSchemeIDFreePRodQtyDetails()
     {
@@ -16656,10 +15581,12 @@ open();
         }
 
     }
+
     public void deleteStoreRecordFromtblStoreSchemeFreeProQtyOtherDetailsOnceSubmitted(String storeID)
     {
         db.execSQL("DELETE FROM tblStoreSchemeFreeProQtyOtherDetails WHERE StoreID='"+ storeID +"'");
     }
+
     public String fnGetFreeQtyFromStoreSchemeFreeProQtyOtherDetails(String storeID,String SchID,String SchemeType,String CombTypeID,String FreeProductID)
     {
 
@@ -16729,6 +15656,7 @@ open();
             }
         }
     }
+
     public int fnGetStoreTypeOnStoreID(String StoreID) {
 
         int LoncolumnIndex = 0;
@@ -16753,158 +15681,6 @@ open();
         }
 
     }
-
-	/*	public ArrayList<HashMap<String, String>> fetch_catgry_prdctsData(String storeID,int BusinessSegmentId) {
-
-			open();
-			ArrayList<HashMap<String, String>> totalProductDetail=new ArrayList<HashMap<String, String>>();
-			//hmapCtgryPrdctDetail= key=prdctId,val=CategoryID
-			LinkedHashMap<String, String> hmapCtgryPrdctDetail=new LinkedHashMap<String, String>();
-			//hmapCtgryPrdctDetail= key=prdctId,val=Volume^Rate^TaxAmount
-			HashMap<String, String> hmapPrdctVolRatTax=new HashMap<String, String>();
-			//hmapCtgryPrdctDetail= key=prdctId,val=OrderQty
-			HashMap<String, String> hmapPrdctOdrQty=new HashMap<String, String>();
-			//hmapCtgryPrdctDetail= key=prdctId,val=ProductSample
-			HashMap<String, String> hmapPrdctSmpl=new HashMap<String, String>();
-			//hmapCtgryPrdctDetail= key=prdctId,val=ProductFreeQty
-			HashMap<String, String> hmapPrdctFreeQty=new HashMap<String, String>();
-			//hmapCtgryPrdctDetail= key=prdctId,val=ProductName
-			HashMap<String, String> hmapPrdctIdPrdctName=new HashMap<String, String>();
-			//hmapCtgryPrdctDetail= key=prdctId,val=ProductDiscount
-			HashMap<String, String> hmapPrdctIdPrdctDscnt=new HashMap<String, String>();
-
-			 //hmapProductRetailerMarginPercentage= key =ProductID         value=RetailerMarginPercentage
-			   HashMap<String, String> hmapProductRetailerMarginPercentage=new HashMap<String, String>();
-
-			 //hmapProductVatTaxPerventage= key =ProductID         value=VatTaxPercentage
-			   HashMap<String, String> hmapProductVatTaxPerventage=new HashMap<String, String>();
-
-			 //hmapProductVatTaxPerventage= key =ProductID         value=ProductMRP
-			   HashMap<String, String> hmapProductMRP=new HashMap<String, String>();
-
-			 //hmapProductVatTaxPerventage= key =ProductID         value=DiscountPercentageGivenOnProduct
-			   HashMap<String, String> hmapProductDiscountPercentageGive=new HashMap<String, String>();
-
-			 //hmapProductVolumePer= key =ProductID         value=Per
-			   HashMap<String, String> hmapProductVolumePer=new HashMap<String, String>();
-
-			 //hmapProductVolumePer= key =ProductID         value=TaxValue
-			   HashMap<String, String> hmapProductTaxValue=new HashMap<String, String>();
-
-			 //hmapProductVolumePer= key =ProductID         value=LODQty
-			   HashMap<String, String> hmapProductLODQty=new HashMap<String, String>();
-
-			 //hmapProductVolumePer= key =ProductID         value=LODQty
-			   HashMap<String, String> hmapProductIdOrdrVal=new HashMap<String, String>();
-
-			   //hmapProductStandardRate= key =ProductID         value=StandardRate
-			   HashMap<String, String> hmapProductStandardRate=new HashMap<String, String>();
-
-			   //hmapProductStandardRateBeforeTax= key =ProductID         value=StandardRateBeforeTax
-			   HashMap<String, String> hmapProductStandardRateBeforeTax=new HashMap<String, String>();
-
-			   //hmapProductStandardTax= key =ProductID         value=StandardTax
-			   HashMap<String, String> hmapProductStandardTax=new HashMap<String, String>();
-
-			   //hmapProductStock= key =ProductID         value=Stock
-			   HashMap<String, String> hmapProductStock=new HashMap<String, String>();
-
-			//hmapProductStock= key =ProductID         value=flgPriceAva
-			HashMap<String, String> hmapProductflgPriceAva=new HashMap<String, String>();
-
-
-			 //Cursor cursor = db.rawQuery("SELECT ProductID,CategoryID,ProductShortName,KGLiter ||'^'||ProductRLP||'^'||ProductTaxAmount AS ProductVolumeRateTax,'NA/0' As LODQty,0 AS SampleQty,0 AS ProductFreeQty,0 AS ProductOrderQty,0.00 As PrdctDiscount,RetMarginPer,VatTax,ProductMRP,0.00 AS DiscountPercentageGivenOnProduct,0 AS Per,0.00 AS TaxValue,0.00 AS OrderValue,StandardRate,StandardRateBeforeTax,StandardTax,0 As Stock  FROM tblProductList order by CategoryID,ProductID",null);
-			   Cursor cursor = db.rawQuery("SELECT tblProductList.ProductID,tblProductList.CategoryID,tblProductList.ProductShortName,tblProductList.KGLiter ||'^'||tblProductSegementMap.ProductRLP||'^'||tblProductSegementMap.ProductTaxAmount AS ProductVolumeRateTax,'NA/0' As LODQty,0 AS SampleQty,0 AS ProductFreeQty,0 AS ProductOrderQty,0.00 As PrdctDiscount,tblProductSegementMap.RetMarginPer,tblProductSegementMap.VatTax,tblProductSegementMap.ProductMRP,0.00 AS DiscountPercentageGivenOnProduct,0 AS Per,0.00 AS TaxValue,0.00 AS OrderValue,tblProductSegementMap.StandardRate,tblProductSegementMap.StandardRateBeforeTax,tblProductSegementMap.StandardTax,0 As Stock,tblProductSegementMap.flgPriceAva  FROM tblProductList inner join tblProductSegementMap on tblProductList.ProductID=tblProductSegementMap.ProductID  order by tblProductList.CategoryID,tblProductList.PrdOrdr",null);//Where tblProductSegementMap.BusinessSegmentId="+BusinessSegmentId+"
-
-			   //tblProductList.ProductID------------->0
-			   //tblProductList.CategoryID------------>1
-			   //tblProductList.ProductShortName------>2
-			   //tblProductList.KGLiter ||'^'||tblProductSegementMap.ProductRLP||'^'||tblProductSegementMap.ProductTaxAmount AS ProductVolumeRateTax
-			   //'NA/0' As LODQty---------------------->4
-			   //0 AS SampleQty------------------------>5
-			   //0 AS ProductFreeQty------------------->6
-			   //0 AS ProductOrderQty------------------>7
-			   //0.00 As PrdctDiscount----------------->8
-			   //tblProductSegementMap.RetMarginPer---->9
-			   //tblProductSegementMap.VatTax---------->10
-			   //tblProductSegementMap.ProductMRP-------->11
-			   //0.00 AS DiscountPercentageGivenOnProduct----->12
-			   //0 AS Per------------------------------->13
-			   //0.00 AS TaxValue----------------------->14
-			   //0.00 AS OrderValue--------------------->15
-			   //tblProductSegementMap.StandardRate----->16
-			   //tblProductSegementMap.StandardRateBeforeTax----->17
-			   //tblProductSegementMap.StandardTax------->18
-			   //0 As Stock------------------------------>19
-			   //FROM tblProductList inner join tblProductSegementMap on tblProductList.ProductID=tblProductSegementMap.ProductID Where tblProductSegementMap.BusinessSegmentId="+BusinessSegmentId+"  order by tblProductList.CategoryID,tblProductList.ProductID",null);
-			   try
-			{
-				if(cursor.getCount()>0)
-				{
-					if (cursor.moveToFirst()) {
-
-						for (int i = 0; i < cursor.getCount(); i++)
-						{
-							hmapCtgryPrdctDetail.put(cursor.getString(0), cursor.getString(1));
-							hmapPrdctVolRatTax.put(cursor.getString(0), cursor.getString(3));
-							hmapPrdctOdrQty.put(cursor.getString(0), cursor.getString(7));
-							hmapPrdctSmpl.put(cursor.getString(0), cursor.getString(5));
-							hmapPrdctFreeQty.put(cursor.getString(0), cursor.getString(6));
-							hmapPrdctIdPrdctName.put(cursor.getString(0), cursor.getString(2));
-							hmapPrdctIdPrdctDscnt.put(cursor.getString(0), cursor.getString(8));
-							hmapProductRetailerMarginPercentage.put(cursor.getString(0), cursor.getString(9));
-							hmapProductVatTaxPerventage.put(cursor.getString(0), cursor.getString(10));
-							hmapProductMRP.put(cursor.getString(0), cursor.getString(11));
-							hmapProductDiscountPercentageGive.put(cursor.getString(0), cursor.getString(12));
-							hmapProductVolumePer.put(cursor.getString(0), cursor.getString(13));
-							hmapProductTaxValue.put(cursor.getString(0), cursor.getString(14));
-							hmapProductLODQty.put(cursor.getString(0), cursor.getString(4));
-							hmapProductIdOrdrVal.put(cursor.getString(0), cursor.getString(15));
-
-							hmapProductStandardRate.put(cursor.getString(0), cursor.getString(16));
-
-							hmapProductStandardRateBeforeTax.put(cursor.getString(0), cursor.getString(17));
-
-							hmapProductStandardTax.put(cursor.getString(0), cursor.getString(18));
-							hmapProductStock.put(cursor.getString(0), cursor.getString(19));
-							hmapProductflgPriceAva.put(cursor.getString(0), cursor.getString(20));
-							cursor.moveToNext();
-							// cursor.close();
-						}
-						totalProductDetail.add(hmapCtgryPrdctDetail);
-						totalProductDetail.add(hmapPrdctVolRatTax);
-						totalProductDetail.add(hmapPrdctOdrQty);
-						totalProductDetail.add(hmapPrdctSmpl);
-						totalProductDetail.add(hmapPrdctFreeQty);
-						totalProductDetail.add(hmapPrdctIdPrdctName);
-						totalProductDetail.add(hmapPrdctIdPrdctDscnt);
-						totalProductDetail.add(hmapProductRetailerMarginPercentage);
-						totalProductDetail.add(hmapProductVatTaxPerventage);
-						totalProductDetail.add(hmapProductMRP);
-						totalProductDetail.add(hmapProductDiscountPercentageGive);
-						totalProductDetail.add(hmapProductVolumePer);
-						totalProductDetail.add(hmapProductTaxValue);
-						totalProductDetail.add(hmapProductLODQty);
-						totalProductDetail.add(hmapProductIdOrdrVal);
-						totalProductDetail.add(hmapProductStandardRate);
-						totalProductDetail.add(hmapProductStandardRateBeforeTax);
-						totalProductDetail.add(hmapProductStandardTax);
-						totalProductDetail.add(hmapProductStock);
-						totalProductDetail.add(hmapProductflgPriceAva);
-					}
-				}
-
-
-				return totalProductDetail;
-			} finally {
-				cursor.close();
-
-				close();
-			}
-
-
-		}
-	*/
 
     public ArrayList<HashMap<String, String>> fetch_catgry_prdctsData(String storeID,int BusinessSegmentId) {
 
@@ -17100,6 +15876,157 @@ open();
 
     }
 
+	/*	public ArrayList<HashMap<String, String>> fetch_catgry_prdctsData(String storeID,int BusinessSegmentId) {
+
+			open();
+			ArrayList<HashMap<String, String>> totalProductDetail=new ArrayList<HashMap<String, String>>();
+			//hmapCtgryPrdctDetail= key=prdctId,val=CategoryID
+			LinkedHashMap<String, String> hmapCtgryPrdctDetail=new LinkedHashMap<String, String>();
+			//hmapCtgryPrdctDetail= key=prdctId,val=Volume^Rate^TaxAmount
+			HashMap<String, String> hmapPrdctVolRatTax=new HashMap<String, String>();
+			//hmapCtgryPrdctDetail= key=prdctId,val=OrderQty
+			HashMap<String, String> hmapPrdctOdrQty=new HashMap<String, String>();
+			//hmapCtgryPrdctDetail= key=prdctId,val=ProductSample
+			HashMap<String, String> hmapPrdctSmpl=new HashMap<String, String>();
+			//hmapCtgryPrdctDetail= key=prdctId,val=ProductFreeQty
+			HashMap<String, String> hmapPrdctFreeQty=new HashMap<String, String>();
+			//hmapCtgryPrdctDetail= key=prdctId,val=ProductName
+			HashMap<String, String> hmapPrdctIdPrdctName=new HashMap<String, String>();
+			//hmapCtgryPrdctDetail= key=prdctId,val=ProductDiscount
+			HashMap<String, String> hmapPrdctIdPrdctDscnt=new HashMap<String, String>();
+
+			 //hmapProductRetailerMarginPercentage= key =ProductID         value=RetailerMarginPercentage
+			   HashMap<String, String> hmapProductRetailerMarginPercentage=new HashMap<String, String>();
+
+			 //hmapProductVatTaxPerventage= key =ProductID         value=VatTaxPercentage
+			   HashMap<String, String> hmapProductVatTaxPerventage=new HashMap<String, String>();
+
+			 //hmapProductVatTaxPerventage= key =ProductID         value=ProductMRP
+			   HashMap<String, String> hmapProductMRP=new HashMap<String, String>();
+
+			 //hmapProductVatTaxPerventage= key =ProductID         value=DiscountPercentageGivenOnProduct
+			   HashMap<String, String> hmapProductDiscountPercentageGive=new HashMap<String, String>();
+
+			 //hmapProductVolumePer= key =ProductID         value=Per
+			   HashMap<String, String> hmapProductVolumePer=new HashMap<String, String>();
+
+			 //hmapProductVolumePer= key =ProductID         value=TaxValue
+			   HashMap<String, String> hmapProductTaxValue=new HashMap<String, String>();
+
+			 //hmapProductVolumePer= key =ProductID         value=LODQty
+			   HashMap<String, String> hmapProductLODQty=new HashMap<String, String>();
+
+			 //hmapProductVolumePer= key =ProductID         value=LODQty
+			   HashMap<String, String> hmapProductIdOrdrVal=new HashMap<String, String>();
+
+			   //hmapProductStandardRate= key =ProductID         value=StandardRate
+			   HashMap<String, String> hmapProductStandardRate=new HashMap<String, String>();
+
+			   //hmapProductStandardRateBeforeTax= key =ProductID         value=StandardRateBeforeTax
+			   HashMap<String, String> hmapProductStandardRateBeforeTax=new HashMap<String, String>();
+
+			   //hmapProductStandardTax= key =ProductID         value=StandardTax
+			   HashMap<String, String> hmapProductStandardTax=new HashMap<String, String>();
+
+			   //hmapProductStock= key =ProductID         value=Stock
+			   HashMap<String, String> hmapProductStock=new HashMap<String, String>();
+
+			//hmapProductStock= key =ProductID         value=flgPriceAva
+			HashMap<String, String> hmapProductflgPriceAva=new HashMap<String, String>();
+
+
+			 //Cursor cursor = db.rawQuery("SELECT ProductID,CategoryID,ProductShortName,KGLiter ||'^'||ProductRLP||'^'||ProductTaxAmount AS ProductVolumeRateTax,'NA/0' As LODQty,0 AS SampleQty,0 AS ProductFreeQty,0 AS ProductOrderQty,0.00 As PrdctDiscount,RetMarginPer,VatTax,ProductMRP,0.00 AS DiscountPercentageGivenOnProduct,0 AS Per,0.00 AS TaxValue,0.00 AS OrderValue,StandardRate,StandardRateBeforeTax,StandardTax,0 As Stock  FROM tblProductList order by CategoryID,ProductID",null);
+			   Cursor cursor = db.rawQuery("SELECT tblProductList.ProductID,tblProductList.CategoryID,tblProductList.ProductShortName,tblProductList.KGLiter ||'^'||tblProductSegementMap.ProductRLP||'^'||tblProductSegementMap.ProductTaxAmount AS ProductVolumeRateTax,'NA/0' As LODQty,0 AS SampleQty,0 AS ProductFreeQty,0 AS ProductOrderQty,0.00 As PrdctDiscount,tblProductSegementMap.RetMarginPer,tblProductSegementMap.VatTax,tblProductSegementMap.ProductMRP,0.00 AS DiscountPercentageGivenOnProduct,0 AS Per,0.00 AS TaxValue,0.00 AS OrderValue,tblProductSegementMap.StandardRate,tblProductSegementMap.StandardRateBeforeTax,tblProductSegementMap.StandardTax,0 As Stock,tblProductSegementMap.flgPriceAva  FROM tblProductList inner join tblProductSegementMap on tblProductList.ProductID=tblProductSegementMap.ProductID  order by tblProductList.CategoryID,tblProductList.PrdOrdr",null);//Where tblProductSegementMap.BusinessSegmentId="+BusinessSegmentId+"
+
+			   //tblProductList.ProductID------------->0
+			   //tblProductList.CategoryID------------>1
+			   //tblProductList.ProductShortName------>2
+			   //tblProductList.KGLiter ||'^'||tblProductSegementMap.ProductRLP||'^'||tblProductSegementMap.ProductTaxAmount AS ProductVolumeRateTax
+			   //'NA/0' As LODQty---------------------->4
+			   //0 AS SampleQty------------------------>5
+			   //0 AS ProductFreeQty------------------->6
+			   //0 AS ProductOrderQty------------------>7
+			   //0.00 As PrdctDiscount----------------->8
+			   //tblProductSegementMap.RetMarginPer---->9
+			   //tblProductSegementMap.VatTax---------->10
+			   //tblProductSegementMap.ProductMRP-------->11
+			   //0.00 AS DiscountPercentageGivenOnProduct----->12
+			   //0 AS Per------------------------------->13
+			   //0.00 AS TaxValue----------------------->14
+			   //0.00 AS OrderValue--------------------->15
+			   //tblProductSegementMap.StandardRate----->16
+			   //tblProductSegementMap.StandardRateBeforeTax----->17
+			   //tblProductSegementMap.StandardTax------->18
+			   //0 As Stock------------------------------>19
+			   //FROM tblProductList inner join tblProductSegementMap on tblProductList.ProductID=tblProductSegementMap.ProductID Where tblProductSegementMap.BusinessSegmentId="+BusinessSegmentId+"  order by tblProductList.CategoryID,tblProductList.ProductID",null);
+			   try
+			{
+				if(cursor.getCount()>0)
+				{
+					if (cursor.moveToFirst()) {
+
+						for (int i = 0; i < cursor.getCount(); i++)
+						{
+							hmapCtgryPrdctDetail.put(cursor.getString(0), cursor.getString(1));
+							hmapPrdctVolRatTax.put(cursor.getString(0), cursor.getString(3));
+							hmapPrdctOdrQty.put(cursor.getString(0), cursor.getString(7));
+							hmapPrdctSmpl.put(cursor.getString(0), cursor.getString(5));
+							hmapPrdctFreeQty.put(cursor.getString(0), cursor.getString(6));
+							hmapPrdctIdPrdctName.put(cursor.getString(0), cursor.getString(2));
+							hmapPrdctIdPrdctDscnt.put(cursor.getString(0), cursor.getString(8));
+							hmapProductRetailerMarginPercentage.put(cursor.getString(0), cursor.getString(9));
+							hmapProductVatTaxPerventage.put(cursor.getString(0), cursor.getString(10));
+							hmapProductMRP.put(cursor.getString(0), cursor.getString(11));
+							hmapProductDiscountPercentageGive.put(cursor.getString(0), cursor.getString(12));
+							hmapProductVolumePer.put(cursor.getString(0), cursor.getString(13));
+							hmapProductTaxValue.put(cursor.getString(0), cursor.getString(14));
+							hmapProductLODQty.put(cursor.getString(0), cursor.getString(4));
+							hmapProductIdOrdrVal.put(cursor.getString(0), cursor.getString(15));
+
+							hmapProductStandardRate.put(cursor.getString(0), cursor.getString(16));
+
+							hmapProductStandardRateBeforeTax.put(cursor.getString(0), cursor.getString(17));
+
+							hmapProductStandardTax.put(cursor.getString(0), cursor.getString(18));
+							hmapProductStock.put(cursor.getString(0), cursor.getString(19));
+							hmapProductflgPriceAva.put(cursor.getString(0), cursor.getString(20));
+							cursor.moveToNext();
+							// cursor.close();
+						}
+						totalProductDetail.add(hmapCtgryPrdctDetail);
+						totalProductDetail.add(hmapPrdctVolRatTax);
+						totalProductDetail.add(hmapPrdctOdrQty);
+						totalProductDetail.add(hmapPrdctSmpl);
+						totalProductDetail.add(hmapPrdctFreeQty);
+						totalProductDetail.add(hmapPrdctIdPrdctName);
+						totalProductDetail.add(hmapPrdctIdPrdctDscnt);
+						totalProductDetail.add(hmapProductRetailerMarginPercentage);
+						totalProductDetail.add(hmapProductVatTaxPerventage);
+						totalProductDetail.add(hmapProductMRP);
+						totalProductDetail.add(hmapProductDiscountPercentageGive);
+						totalProductDetail.add(hmapProductVolumePer);
+						totalProductDetail.add(hmapProductTaxValue);
+						totalProductDetail.add(hmapProductLODQty);
+						totalProductDetail.add(hmapProductIdOrdrVal);
+						totalProductDetail.add(hmapProductStandardRate);
+						totalProductDetail.add(hmapProductStandardRateBeforeTax);
+						totalProductDetail.add(hmapProductStandardTax);
+						totalProductDetail.add(hmapProductStock);
+						totalProductDetail.add(hmapProductflgPriceAva);
+					}
+				}
+
+
+				return totalProductDetail;
+			} finally {
+				cursor.close();
+
+				close();
+			}
+
+
+		}
+	*/
 
     public long savetblPriceApplyType(int DiscountLevelType,double cutoffvalue)
     {
@@ -17128,6 +16055,7 @@ open();
         initialValues.put("AmtOverdue", AmtOverdue);
         return db.insert(DATABASE_TABLE_tblInvoiceLastVisitDetails, null, initialValues);
     }
+
     public int fnGettblPriceApplyDiscountLevelType(String storeID)
     {
         open();
@@ -17147,7 +16075,6 @@ open();
         close();
         return PriceApplyDiscountLevelType;
     }
-
 
     public LinkedHashMap<String, String> fetch_Category_List_Return(String StoreID)
     {
@@ -17188,6 +16115,7 @@ open();
             close();
         }
     }
+
     public LinkedHashMap<String, String> fetch_Category_List()
     {
         open();
@@ -17221,15 +16149,6 @@ open();
             close();
         }
     }
-
-
-
-
-
-
-
-
-
 
     public LinkedHashMap<String, String> fetch_MaterialMstr_List(String storeID)
     {
@@ -17265,8 +16184,6 @@ open();
             close();
         }
     }
-
-
 
     //tblSchemeSlabBucketProductMapping
     public HashMap<String, HashMap<String, HashMap<String, String>>> fnProductWiseAppliedScehmeSlabDetails(String StorID)
@@ -17351,6 +16268,7 @@ open();
         close();
         return hmapPrdctIdScheme;
     }
+
     public String[] fnUniqueProdSchemeList()
     {
 
@@ -17491,6 +16409,7 @@ open();
         }
 
     }
+
     public HashMap<String, String> fectProductIDMappedInSchSlbSubBukBenifits(int BenifitRowID)
     {	 open();
         Cursor cursor = db.rawQuery("SELECT tblSchemeSlabBenefitsProductMappingDetail.ProductID,tblProductList.ProductShortName FROM tblSchemeSlabBenefitsProductMappingDetail inner join tblProductList on tblSchemeSlabBenefitsProductMappingDetail.ProductID=tblProductList.ProductID  WHERE RowID ="+ BenifitRowID , null);
@@ -17511,6 +16430,7 @@ open();
             close();
         }
     }
+
     public String[] fectStatusIfBeniftRowIdExistsInSchemeSlabBenefitsValueDetail(int BenifitRowID,int toMultiply,Double defaultValue,int BenSubBucketType)
     {
 
@@ -17555,6 +16475,7 @@ open();
         //////////// System.out.println("fnCheckflgToShowStrachRowOrNot : " +chkI);
         return chkI;
     }
+
     public String[] fnGetEarlierFreeProductIDandQtyonSchemeSlabBuckIDTypeBasis(String StoreID,int productID,int schId,int schSlabId,int schSlbBuckId,int BenifitRowID)
     {
         Cursor cursor = db.rawQuery("SELECT FreeProductID,BenifitAssignedValue From tblFreeProductIDandQtyonSchemeSlabBuckIDTypeBasis where StoreID='"+StoreID+"' and ProductID="+productID+" and schId="+schId+" and schSlabId="+schSlabId+" and schSlbBuckId="+schSlbBuckId+" and BenifitRowID="+BenifitRowID , null);
@@ -17574,6 +16495,7 @@ open();
             cursor.close();
         }
     }
+
     public String fectStatusIfBeniftRowIdExistsInSchemeSlabBenefitsPercentageDetail(int BenifitRowID)
     {
 
@@ -17602,6 +16524,7 @@ open();
         //////////// System.out.println("fnCheckflgToShowStrachRowOrNot : " +chkI);
         return chkI;
     }
+
     public String fectStatusIfBeniftRowIdExistsInSchemeSlabBenefitsFlatAmtDetail(int BenifitRowID)
     {
 
@@ -17681,8 +16604,6 @@ open();
         }
     }
 
-
-
     public String fngetOrderIDAganistStore(String StoreID,String TmpInvoiceCodePDA)
     {
         // System.out.println("Abhinav Nitish Ankit New While Fetching Records Store Id:"+StoreID);
@@ -17706,7 +16627,6 @@ open();
         }
         return chkI;
     }
-
 
     public int fnCheckIfStoreExistInStoreProdcutPurchaseDetails(String StoreID,String TmpInvoiceCodePDA)
     {
@@ -17733,7 +16653,6 @@ open();
         }
         return chkI;
     }
-
 
     public int fnCheckIfStoreExistInStoreProdcutInvoiceDetails(String StoreID,String TmpInvoiceCodePDA)
     {
@@ -17859,6 +16778,7 @@ open();
         }
         return chkI;
     }
+
     public void fnDeleteRecordsAllRecordsForClickedProdoductId(String StoreID,String ProductIdOnClicked,String pdaOrderID,String TmpInvoiceCodePDA)
     {
         open();
@@ -17885,53 +16805,6 @@ open();
         }
 
     }
-
-		/* public long fnsaveStoreProdcutPurchaseDetails(String IMEIno,String StoreID,String CatID,String ProdID, String TransDate,
-			      int Stock, int OrderQty,
-			    Double OrderVal, int FreeQty, Double DisVal,
-			    int selProdIDForSampleQty, String ProductShortName, Double ProductRate,int Outstat,Double TaxRate,Double TaxValue, int StoreCatNodeId,String OrderIDPDA,int flgIsQuoteRateApplied,String distibutorID) {//String DisplayUnit
-
-			   String activeRid;
-			   activeRid = GetActiveRouteID();
-
-
-			   ContentValues initialValues = new ContentValues();
-
-			   initialValues.put("IMEIno", IMEIno.trim());
-			   initialValues.put("TransDate", TransDate.trim());
-			   initialValues.put("StoreID", StoreID.trim());
-			   initialValues.put("ProdID", ProdID.trim());
-			   initialValues.put("Stock", Stock);
-			   initialValues.put("OrderQty", OrderQty);
-			   initialValues.put("OrderVal", OrderVal);
-			   initialValues.put("FreeQty", FreeQty);
-			   initialValues.put("DisVal", DisVal);
-
-			   initialValues.put("Sstat", Outstat);
-
-			   initialValues.put("SampleQuantity", selProdIDForSampleQty);
-
-			   initialValues.put("ProductShortName", ProductShortName);
-
-			   initialValues.put("ProductPrice", ProductRate);
-			   initialValues.put("RouteID", Integer.parseInt(activeRid));
-			   initialValues.put("CatID", CatID.trim());
-			   initialValues.put("TaxRate", TaxRate);
-			   initialValues.put("TaxValue", TaxValue);
-			   initialValues.put("StoreCatNodeId", StoreCatNodeId);
-			   initialValues.put("OrderIDPDA", OrderIDPDA);
-			   initialValues.put("flgIsQuoteRateApplied", flgIsQuoteRateApplied);
-			 initialValues.put("distibutorID", distibutorID);
-
-			   //initialValues.put(Key_DisplayUnit, DisplayUnit);
-
-			   ////// System.out.println("inserting saveStoreTransac records..");
-				// System.out.println("Abhinav Nitish Ankit New Printing Insert Store Id :"+StoreID);
-				// System.out.println("Abhinav Nitish Ankit New Printing Insert ProdID Id :"+ProdID);
-				// System.out.println("Abhinav Nitish Ankit New Printing Insert OrderQty :"+OrderQty);*//*
-			   return db.insert(DATABASE_TABLE_MAIN210, null, initialValues);
-			  }*/
-
 
     public long fnsaveStoreProdcutPurchaseDetails(String IMEIno,String StoreID,String CatID,String ProdID, String TransDate,
                                                   int Stock, int OrderQty,
@@ -17981,14 +16854,59 @@ open();
     // System.out.println("Abhinav Nitish Ankit New Printing Insert OrderQty :"+OrderQty);*/
         return db.insert(DATABASE_TABLE_MAIN210, null, initialValues);
     }
+
+		/* public long fnsaveStoreProdcutPurchaseDetails(String IMEIno,String StoreID,String CatID,String ProdID, String TransDate,
+			      int Stock, int OrderQty,
+			    Double OrderVal, int FreeQty, Double DisVal,
+			    int selProdIDForSampleQty, String ProductShortName, Double ProductRate,int Outstat,Double TaxRate,Double TaxValue, int StoreCatNodeId,String OrderIDPDA,int flgIsQuoteRateApplied,String distibutorID) {//String DisplayUnit
+
+			   String activeRid;
+			   activeRid = GetActiveRouteID();
+
+
+			   ContentValues initialValues = new ContentValues();
+
+			   initialValues.put("IMEIno", IMEIno.trim());
+			   initialValues.put("TransDate", TransDate.trim());
+			   initialValues.put("StoreID", StoreID.trim());
+			   initialValues.put("ProdID", ProdID.trim());
+			   initialValues.put("Stock", Stock);
+			   initialValues.put("OrderQty", OrderQty);
+			   initialValues.put("OrderVal", OrderVal);
+			   initialValues.put("FreeQty", FreeQty);
+			   initialValues.put("DisVal", DisVal);
+
+			   initialValues.put("Sstat", Outstat);
+
+			   initialValues.put("SampleQuantity", selProdIDForSampleQty);
+
+			   initialValues.put("ProductShortName", ProductShortName);
+
+			   initialValues.put("ProductPrice", ProductRate);
+			   initialValues.put("RouteID", Integer.parseInt(activeRid));
+			   initialValues.put("CatID", CatID.trim());
+			   initialValues.put("TaxRate", TaxRate);
+			   initialValues.put("TaxValue", TaxValue);
+			   initialValues.put("StoreCatNodeId", StoreCatNodeId);
+			   initialValues.put("OrderIDPDA", OrderIDPDA);
+			   initialValues.put("flgIsQuoteRateApplied", flgIsQuoteRateApplied);
+			 initialValues.put("distibutorID", distibutorID);
+
+			   //initialValues.put(Key_DisplayUnit, DisplayUnit);
+
+			   ////// System.out.println("inserting saveStoreTransac records..");
+				// System.out.println("Abhinav Nitish Ankit New Printing Insert Store Id :"+StoreID);
+				// System.out.println("Abhinav Nitish Ankit New Printing Insert ProdID Id :"+ProdID);
+				// System.out.println("Abhinav Nitish Ankit New Printing Insert OrderQty :"+OrderQty);*//*
+			   return db.insert(DATABASE_TABLE_MAIN210, null, initialValues);
+			  }*/
+
     public void deleteStoreRecordFromtblStorePurchaseDetailsFromProductTrsaction(String storeID,String pdaOrderID,String TmpInvoiceCodePDA)
     {
         open();
         db.execSQL("DELETE FROM tblTmpInvoiceDetails WHERE StoreID='"+ storeID +"'  and TmpInvoiceCodePDA='"+TmpInvoiceCodePDA+"'");
         close();
     }
-
-
 
     public void deleteStoreRecordFromtblStorePurchaseDetailsFromProductTrsactionSingleProduct(String storeID,String pdaOrderID,String getPIdToremove,String TmpInvoiceCodePDA)
     {
@@ -18049,8 +16967,6 @@ open();
         return xyx;
     }
 
-
-
     public String fnctnGetMaxAssignedBen8DscntApld1(String storeId,String pdaOrderID,String TmpInvoiceCodePDA)
     {
         String discountValOnBen8apld1="";
@@ -18083,6 +16999,7 @@ open();
         }
         return discountValOnBen8apld1;
     }
+
     public String fnctnGetMaxAssignedBen8DscntApld2(String storeId,String pdaOrderID,String TmpInvoiceCodePDA)
     {
         String discountValOnBen8apld1="";
@@ -18117,6 +17034,7 @@ open();
         }
         return discountValOnBen8apld1;
     }
+
     public String fnctnGetMaxAssignedBen9DscntApld1(String storeId,String pdaOrderID,String TmpInvoiceCodePDA)
     {
         String discountValOnBen8apld1="";
@@ -18149,6 +17067,7 @@ open();
         }
         return discountValOnBen8apld1;
     }
+
     public String fnctnGetMaxAssignedBen9DscntApld2(String storeId,String pdaOrderID,String TmpInvoiceCodePDA)
     {
         String discountValOnBen8apld1="";
@@ -18208,6 +17127,7 @@ open();
         }
         return highestDiscount;
     }
+
     public HashMap<String, String> fnctnSchemeStoreID(String storeID)
     {
         open();
@@ -18268,6 +17188,7 @@ open();
         close();
         return arrayListSchemeSlabDteail;
     }
+
     public String fnctnGetHighestDiscountPercentge(String freeProductId,String storeId,String TmpInvoiceCodePDA)
     {
         open();
@@ -18298,7 +17219,6 @@ open();
 
         return highestDiscount;
     }
-
 
     public String[] fnGetAllSchSlabbasedOnSchemeID(String SchemeID)
     {
@@ -18542,6 +17462,7 @@ open();
         }
 
     }
+
     public String[] fnGetProductsSchIds(String StoreID,int schID,String pdaOrderID,String TmpInvoiceCodePDA)
     {//tblSchemeSlabBenefitsProductMappingDetail (RowID text null,ProductID text null)
         open();//schIdsd
@@ -18571,6 +17492,7 @@ open();
         }
 
     }
+
     public void fnDeleteOldSchemeRowIdRecords(String StoreID,int RowID,String pdaOrderID,String TmpInvoiceCodePDA)
     {
         open();
@@ -18749,7 +17671,6 @@ open();
         close();
     }
 
-
     public int fectRowIdBasedOnSchIDSlabID(int SchID,int SchemeSlabID)
     {
         open();
@@ -18795,6 +17716,7 @@ open();
         }
 
     }
+
     public int fnGetStatValueagainstStore(String StoreID)
     {
         open();
@@ -18818,9 +17740,6 @@ open();
         }
 
     }
-
-
-
 
     public void updateReturnData(HashMap<String, String> hmapReturnData,String OrderPDAID,HashMap<String, String> hmapRemark,String TmpInvoiceCodePDA)
     {
@@ -19080,15 +17999,6 @@ open();
 
     }
 
-
-
-
-
-    // change by Abhnav Sir
-
-
-
-
     public int fnCountToDisplayDailySummaryDetailsSKUWise(int DraftorNonSubmitted,int flgReportFromTmpOrPermanent)//DraftorNonSubmitted=3:-Submited But Not Synced,DraftorNonSubmitted=1:-Saved as Draft
     {
         int CountToDisplayDailySummaryDetailsSKUWise=0;
@@ -19116,6 +18026,12 @@ open();
         }
 
     }
+
+
+
+
+
+    // change by Abhnav Sir
 
     @SuppressWarnings("unchecked")
     public LinkedHashMap<String, String> fnGetDailySummaryDetailsSKUWiseCategoryLevel(int DraftorNonSubmitted,int flgReportFromTmpOrPermanent)//DraftorNonSubmitted=3:-Submited But Not Synced,DraftorNonSubmitted=1:-Saved as Draft
@@ -19238,12 +18154,6 @@ open();
 
     }
 
-
-
-
-
-
-
     public LinkedHashMap<String, String> fnGetTabelEntry()//DraftorNonSubmitted=3:-Submited But Not Synced,DraftorNonSubmitted=1:-Saved as Draft
     {
         LinkedHashMap<String, String> hmapPrdRowDetails=new LinkedHashMap<String, String>();
@@ -19284,7 +18194,6 @@ open();
 
     }
 
-
     public LinkedHashMap<String, String> fnGetTabelEntryProduct()//DraftorNonSubmitted=3:-Submited But Not Synced,DraftorNonSubmitted=1:-Saved as Draft
     {
         LinkedHashMap<String, String> hmapPrdRowDetails=new LinkedHashMap<String, String>();
@@ -19323,6 +18232,7 @@ open();
         }
 
     }
+
     public ArrayList<Object> fnGetDailySummaryDetailsSKUWiseProductLevel(int CategoryId,int DraftorNonSubmitted,int flgReportFromTmpOrPermanent)//DraftorNonSubmitted=3:-Submited But Not Synced,DraftorNonSubmitted=1:-Saved as Draft
     {
         ArrayList<Object> totalProductCategoryWiseResult=new ArrayList<Object>(8);
@@ -19465,7 +18375,6 @@ open();
 
     }
 
-
     public int fnGetCountDailySummaryDetailsSKUWiseGrandTotal(int DraftorNonSubmitted,int flgReportFromTmpOrPermanent)//DraftorNonSubmitted=3:-Submited But Not Synced,DraftorNonSubmitted=1:-Saved as Draft
     {
         //open();
@@ -19495,10 +18404,6 @@ open();
 
     }
 
-
-    //	 DATABASE_CREATE_TABLE_215 =tblProductMappedWithSchemeSlabApplied (StoreId,ProductID,schSlabId,schmIdMapped
-    // changes by nitish
-
     public void insertProductMappedWithSchemApplied(String storeId,String productId,String _schSlabId,String _schmId,String pdaOrderID,String TmpInvoiceCodePDA)
     {
         open();
@@ -19523,6 +18428,10 @@ open();
         close();
 
     }
+
+
+    //	 DATABASE_CREATE_TABLE_215 =tblProductMappedWithSchemeSlabApplied (StoreId,ProductID,schSlabId,schmIdMapped
+    // changes by nitish
 
     public void insertSchemeAlrtVal(String storeId,String productId,String spinnerVal,String product,String SpinnerPosition,String _schSlabId,String _schmAlrtId,String pdaOrderID,String TmpInvoiceCodePDA)
     {
@@ -19616,9 +18525,6 @@ open();
         return alrtValues;
 
     }
-
-
-    // StoreWise Summary Function given by Abhinav Sir
 
     public  LinkedHashMap<String, String> fnGetDailySummaryDetailsStoreWise(int DraftorNonSubmitted,int flgReportFromTmpOrPermanent)//DraftorNonSubmitted=3:-Submited But Not Synced,DraftorNonSubmitted=1:-Saved as Draft
     {
@@ -19716,6 +18622,9 @@ open();
 
     }
 
+
+    // StoreWise Summary Function given by Abhinav Sir
+
     public int fnCountToDisplayDailySummaryDetailsStoreWiseLines(int DraftorNonSubmitted,int flgReportFromTmpOrPermanent)//DraftorNonSubmitted=3:-Submited But Not Synced,DraftorNonSubmitted=1:-Saved as Draft
     {
         int CountToDisplayDailySummaryDetailsSKUWise=0;
@@ -19746,7 +18655,6 @@ open();
 
     }
 
-
     public int fnCountToDisplayDailySummaryDetailsStoreSKUWise(int DraftorNonSubmitted,int flgReportFromTmpOrPermanent)//DraftorNonSubmitted=3:-Submited But Not Synced,DraftorNonSubmitted=1:-Saved as Draft
     {
         int CountToDisplayDailySummaryDetailsSKUWise=0;
@@ -19776,8 +18684,6 @@ open();
         }
 
     }
-
-
 
     @SuppressWarnings("unchecked")
 
@@ -19886,7 +18792,6 @@ open();
         //Getting Category Details Ends Here
     }
 
-
     @SuppressWarnings("unchecked")
 
     public ArrayList<Object> fnGetDailySummaryDetailsStoreSKUWiseProductLevel(String StoreID,int DraftorNonSubmitted,int StoreCatNodeId,int flgReportFromTmpOrPermanent)//DraftorNonSubmitted=3:-Submited But Not Synced,DraftorNonSubmitted=1:-Saved as Draft
@@ -19969,10 +18874,6 @@ open();
         }
 
     }
-
-
-
-
 
     public String[] getOrderedproductsOfBenSubBckt10(String storeId)
     {
@@ -20059,6 +18960,7 @@ open();
         }
 
     }
+
     public long savetblUserAuthenticationMstr(String flgUserAuthenticated,String PersonName,
                                               String FlgRegistered,String PersonNodeID,String PersonNodeType)
     {
@@ -20077,6 +18979,7 @@ open();
 
         return db.insert(TABLE_tblUserAuthenticationMstr_Define, null, initialValues);
     }
+
     public long savetblBloodGroup(String BloddGroups)
     {
 
@@ -20088,6 +18991,7 @@ open();
 
         return db.insert(TABLE_tblBloodGroup_Define, null, initialValues);
     }
+
     public long savetblUserRegistarationStatus(String Flag,String MsgToDisplay)
     {
 
@@ -20100,7 +19004,6 @@ open();
 
         return db.insert(TABLE_tblUserRegistarationStatus, null, initialValues);
     }
-
 
     public LinkedHashMap<String, String> fnGettblBloodGroup()
     {
@@ -20132,7 +19035,6 @@ open();
             return hmapQuestionMstr;
         }
     }
-
 
     public String fnGetPersonNameAndFlgRegistered()
     {
@@ -20166,6 +19068,7 @@ open();
             return PersonNameAndFlgRegistered;
         }
     }
+
     public String fnGettblUserRegistarationStatus()
     {
         String PersonNameAndFlgRegistered="0";
@@ -20203,7 +19106,6 @@ open();
         }
     }
 
-
     public long savetblEducationQuali(String Qualification)
     {
 
@@ -20240,6 +19142,7 @@ open();
 
         return db.insert(TABLE_tblDsrRegDetails, null, initialValues);
     }
+
     public int fngetcounttblDsrRegDetails()
     {
         int flgCheck=0;
@@ -20270,6 +19173,7 @@ open();
             return flgCheck;
         }
     }
+
     public LinkedHashMap<String, String> fnGettblDsrRegDetails()
     {
         LinkedHashMap<String, String> hmapQuestionMstr=new LinkedHashMap<String, String>();
@@ -20301,7 +19205,6 @@ open();
         }
     }
 
-
     public LinkedHashMap<String, String> fnGettblEducationQuali()
     {
         LinkedHashMap<String, String> hmapQuestionMstr=new LinkedHashMap<String, String>();
@@ -20332,6 +19235,7 @@ open();
             return hmapQuestionMstr;
         }
     }
+
     public int FetchflgUserAuthenticated()
     {
         int SnamecolumnIndex1 = 0;
@@ -20358,7 +19262,6 @@ open();
         }
 
     }
-
 
     public boolean isFreeProductIdExist(int freeProductId)
     {
@@ -20389,6 +19292,7 @@ open();
 
 
     }
+
     public String getFreeProductIdAgainstFreeProductId(int freeProductId)
     {
 
@@ -20512,7 +19416,6 @@ open();
 
     }
 
-
     public void deleteAlreadyStoreIdExist(String CustomStoreID)
     {
 
@@ -20532,20 +19435,15 @@ open();
         db.execSQL("DELETE FROM tblTradeChannelMstr");
     }
 
-
     public void deletetblNoVisitReasonMaster()
     {
         db.execSQL("DELETE FROM tblNoVisitReasonMaster");
     }
 
-
-
-
     public void deletetblStoreProductClassificationTypeListMstr()
     {
         db.execSQL("DELETE FROM tblStoreProductClassificationTypeListMstr");
     }
-
 
     public void updatetblAvailableVersionMstr(String ServerDate)
     {
@@ -20576,7 +19474,6 @@ open();
         }
 
     }
-
 
     public long savetblQuestionMstr(String QuestID,String QuestCode,String QuestDesc,String QuestType,String AnsControlType,String AnsControlInputTypeID,String AnsControlInputTypeMaxLength,String AnsMustRequiredFlg,String QuestBundleFlg,String ApplicationTypeID,String Sequence,String AnsControlInputTypeMinLength,String answerHint,int flgQuestIDForOutChannel,String QuestDescHindi)
     {
@@ -20631,7 +19528,6 @@ open();
         return db.insert(TABLE_QuestionDependentMstr, null, initialValues);
     }
 
-
     public long savetblOptionMstr(String OptID,String QuestID,String OptionNo,String OptionDescr,String Sequence)
     {
 
@@ -20649,10 +19545,6 @@ open();
 
         return db.insert(TABLE_OptionMstr, null, initialValues);
     }
-
-
-
-
 
     public StringBuilder fnQuestionIdOnBasisOfDependentQuestionIDdpndntId(String dpndntQuesId,String optionId)
     {
@@ -20692,9 +19584,6 @@ open();
         }
     }
 
-
-
-
     public String[] fnQuestionIdDpndnt()
     {
 
@@ -20728,8 +19617,6 @@ open();
         }
     }
 
-
-
     public int fnGetAnsValFromOptionID(int optionID)
     {
         open();
@@ -20751,37 +19638,6 @@ open();
             close();
         }
     }
-
-
-		  	/*public long savetblQuestionMstr(String QuestID,String QuestCode,String QuestDesc,String QuestType,String AnsControlType,String AnsControlInputTypeID,String AnsControlInputTypeMaxLength,String AnsMustRequiredFlg,String QuestBundleFlg,String ApplicationTypeID,String Sequence,String AnsControlInputTypeMinLength,int flgQuestIDForOutChannel)
-		    {
-
-		         ContentValues initialValues = new ContentValues();
-
-		         initialValues.put("QuestCode", Integer.parseInt(QuestCode));
-		         initialValues.put("QuestID", Integer.parseInt(QuestID));
-
-		         initialValues.put("QuestDesc", QuestDesc.trim());
-		         initialValues.put("QuestType", Integer.parseInt(QuestType));
-		         initialValues.put("AnsControlType", Integer.parseInt(AnsControlType));
-		         initialValues.put("AnsControlInputTypeID", Integer.parseInt(AnsControlInputTypeID));
-		         initialValues.put("AnsControlInputTypeMaxLength", Integer.parseInt(AnsControlInputTypeMaxLength));
-		         initialValues.put("AnsMustRequiredFlg", Integer.parseInt(AnsMustRequiredFlg));
-		         initialValues.put("QuestBundleFlg", Integer.parseInt(QuestBundleFlg));
-		         initialValues.put("ApplicationTypeID", Integer.parseInt(ApplicationTypeID));
-		         initialValues.put("Sequence", Integer.parseInt(Sequence));//AnsControlInputTypeMinLength
-		         initialValues.put("flgQuestIDForOutChannel", flgQuestIDForOutChannel);
-		        // initialValues.put("AnsControlInputTypeMinLength", Integer.parseInt(AnsControlInputTypeMinLength));
-
-
-		      return db.insert(TABLE_QuestionMstr, null, initialValues);
-		    }*/
-
-
-
-
-
-
 
     public void saveOutletQuestAnsMstr(ArrayList<ArrayList<String>> outletQuestAnsVal)
     {
@@ -20831,6 +19687,31 @@ open();
 
     }
 
+
+		  	/*public long savetblQuestionMstr(String QuestID,String QuestCode,String QuestDesc,String QuestType,String AnsControlType,String AnsControlInputTypeID,String AnsControlInputTypeMaxLength,String AnsMustRequiredFlg,String QuestBundleFlg,String ApplicationTypeID,String Sequence,String AnsControlInputTypeMinLength,int flgQuestIDForOutChannel)
+		    {
+
+		         ContentValues initialValues = new ContentValues();
+
+		         initialValues.put("QuestCode", Integer.parseInt(QuestCode));
+		         initialValues.put("QuestID", Integer.parseInt(QuestID));
+
+		         initialValues.put("QuestDesc", QuestDesc.trim());
+		         initialValues.put("QuestType", Integer.parseInt(QuestType));
+		         initialValues.put("AnsControlType", Integer.parseInt(AnsControlType));
+		         initialValues.put("AnsControlInputTypeID", Integer.parseInt(AnsControlInputTypeID));
+		         initialValues.put("AnsControlInputTypeMaxLength", Integer.parseInt(AnsControlInputTypeMaxLength));
+		         initialValues.put("AnsMustRequiredFlg", Integer.parseInt(AnsMustRequiredFlg));
+		         initialValues.put("QuestBundleFlg", Integer.parseInt(QuestBundleFlg));
+		         initialValues.put("ApplicationTypeID", Integer.parseInt(ApplicationTypeID));
+		         initialValues.put("Sequence", Integer.parseInt(Sequence));//AnsControlInputTypeMinLength
+		         initialValues.put("flgQuestIDForOutChannel", flgQuestIDForOutChannel);
+		        // initialValues.put("AnsControlInputTypeMinLength", Integer.parseInt(AnsControlInputTypeMinLength));
+
+
+		      return db.insert(TABLE_QuestionMstr, null, initialValues);
+		    }*/
+
     public void saveViewOutletQuestAnsMstr(ArrayList<ArrayList<String>> outletQuestAnsVal)
     {
 
@@ -20875,9 +19756,6 @@ open();
         close();
 
     }
-
-
-
 
     public void saveViewOutletNameAndId(String outletId,String outletName)
     {
@@ -20934,7 +19812,6 @@ open();
         return lnkdHmapAllNewAddedStore;
     }
 
-
     public LinkedHashMap<String, String> getAllQuesSavedForOutlet(String outletId)
     {
         LinkedHashMap<String, String> lnkdHmapAllQuesSavedForOutlet=new LinkedHashMap<String, String>();
@@ -20957,10 +19834,6 @@ open();
         close();
         return lnkdHmapAllQuesSavedForOutlet;
     }
-
-
-    //
-
 
     public long savedataStoreList(String StoreID,String VisitDateTime,String ActualLatitude,String ActualLongitude,String LocProvider,String Accuracy,String BateryLeftStatus,String StoreName,int ISNewStore,
                                   int Sstat)
@@ -20986,10 +19859,7 @@ open();
     }
 
 
-
-
-
-
+    //
 
     public String[] getStoreIDTblSelectedStoreIDinChangeRouteCaseStoreMapping() {
 
@@ -21067,6 +19937,26 @@ open();
 
     }
 
+    public void updatexmlSyncdData()
+    {
+        try
+        {
+
+            final ContentValues values = new ContentValues();
+            values.put("Sstat", "4");
+            int affected = db.update("tblOutletMstr", values, "Sstat=?",
+                    new String[] { "3" });
+            int affected2 = db.update("tblOutletQuestAnsMstr", values, "Sstat=?",
+                    new String[] { "3" });
+
+        }
+        catch (Exception ex)
+        {
+
+        }
+
+    }
+
 
 			/* public void updateRecordsSyncd()
 				{
@@ -21090,27 +19980,6 @@ open();
 
 				}*/
 
-
-    public void updatexmlSyncdData()
-    {
-        try
-        {
-
-            final ContentValues values = new ContentValues();
-            values.put("Sstat", "4");
-            int affected = db.update("tblOutletMstr", values, "Sstat=?",
-                    new String[] { "3" });
-            int affected2 = db.update("tblOutletQuestAnsMstr", values, "Sstat=?",
-                    new String[] { "3" });
-
-        }
-        catch (Exception ex)
-        {
-
-        }
-
-    }
-
     public void updatePhotoSyncdData()
     {
         try
@@ -21129,10 +19998,6 @@ open();
 
     }
 
-
-
-
-
     public void deletetblOutletPhotoDetailBasedOutletID(String OutletID)
     {
         open();
@@ -21144,14 +20009,6 @@ open();
 
         close();
     }
-
-
-
-			/* private static final String DATABASE_CREATE_TABLE_tblOutletMstr = "create table tblOutletMstr" +
-			 		" (OutletID text not null,VisitDateTime string not null,Sstat integer not null,ActualLatitude text null," +
-			 		" ActualLongitude text null, ISNewStore int null, LocProvider text null, Accuracy text null," +
-			 		" BateryLeftStatus text null,String StoreName);";
-			 */
 
     public long savetblOutletMstr(String OutletID,String VisitDateTime,String ActualLatitude,
                                   String ActualLongitude,String LocProvider,String Accuracy,String BateryLeftStatus,String StoreName,
@@ -21177,11 +20034,12 @@ open();
     }
 
 
-				/*private static final String DATABASE_CREATE_TABLE_OutletPhotoDetail = "create table tblOutletPhotoDetail" +
-						"(OutletID text null,ClickedDateTime text null,PhotoName text null,PhotoComment text null," +
-						"PDAPhotoPath text null,Sstat integer null);";*/
 
-
+			/* private static final String DATABASE_CREATE_TABLE_tblOutletMstr = "create table tblOutletMstr" +
+			 		" (OutletID text not null,VisitDateTime string not null,Sstat integer not null,ActualLatitude text null," +
+			 		" ActualLongitude text null, ISNewStore int null, LocProvider text null, Accuracy text null," +
+			 		" BateryLeftStatus text null,String StoreName);";
+			 */
 
     public long insertPhotoDetail(String OutletID,String ClickedDateTime,String PhotoName,
                                   String PhotoComment,String PDAPhotoPath,int Sstat)
@@ -21203,6 +20061,10 @@ open();
         return inserted;
     }
 
+
+				/*private static final String DATABASE_CREATE_TABLE_OutletPhotoDetail = "create table tblOutletPhotoDetail" +
+						"(OutletID text null,ClickedDateTime text null,PhotoName text null,PhotoComment text null," +
+						"PDAPhotoPath text null,Sstat integer null);";*/
 
     public String[] deletFromSDcCardPhotoValidationBasedSstat(String Sstat) {
 
@@ -21239,7 +20101,6 @@ open();
         return imageNameToBeDeleted;
     }
 
-
     public String[] deletFromtableImageBasedSstat(String Sstat) {
 
         String[] imageNameToBeDeleted = null;
@@ -21274,7 +20135,6 @@ open();
 
         return imageNameToBeDeleted;
     }
-
 
     public String[] deletFromSDcCardPhotoValidationNewStore(String OutletID) {
 
@@ -21311,12 +20171,6 @@ open();
         return imageNameToBeDeleted;
     }
 
-
-				 /*private static final String DATABASE_CREATE_TABLE_tblOutletMstr = "create table tblOutletMstr " +
-				 		"(OutletID text not null,VisitDateTime string not null,Sstat integer not null,ActualLatitude text null, " +
-				 		"ActualLongitude text null, ISNewStore int null, LocProvider text null, Accuracy text null," +
-				 		" BateryLeftStatus text null,String StoreName);";*/
-
     public long inserttblOutletMstr(String OutletID,String VisitStartTS,String ActualLatitude,
                                     String ActualLongitude,String Accuracy,String LocProvider,String BateryLeftStatus,String StoreName,
                                     String imei,int ISNewStore,int Sstat,int AppVersion)
@@ -21350,6 +20204,11 @@ open();
     }
 
 
+				 /*private static final String DATABASE_CREATE_TABLE_tblOutletMstr = "create table tblOutletMstr " +
+				 		"(OutletID text not null,VisitDateTime string not null,Sstat integer not null,ActualLatitude text null, " +
+				 		"ActualLongitude text null, ISNewStore int null, LocProvider text null, Accuracy text null," +
+				 		" BateryLeftStatus text null,String StoreName);";*/
+
     public void UpdateStoreEndVisitNewStore(String OutletID, String VisitEndTS)
     { open();
         final ContentValues values = new ContentValues();
@@ -21361,10 +20220,6 @@ open();
         close();
 
     }
-
-
-    // static final String DATABASE_CREATE_TABLE_tblOutletMstr = "create table tblOutletMstr (OutletID text not null,VisitDateTime text not null,ActualLatitude text null, ActualLongitude text null, LocProvider text null, Accuracy text null, BateryLeftStatus text null,StoreName text null,imei text null, ISNewStore int null,Sstat integer not null);";
-
 
     public int counttblContainNotSyncData(int Sstat)
     {
@@ -21387,6 +20242,8 @@ open();
         return chkI;
     }
 
+
+    // static final String DATABASE_CREATE_TABLE_tblOutletMstr = "create table tblOutletMstr (OutletID text not null,VisitDateTime text not null,ActualLatitude text null, ActualLongitude text null, LocProvider text null, Accuracy text null, BateryLeftStatus text null,StoreName text null,imei text null, ISNewStore int null,Sstat integer not null);";
 
     public int fetch_Store_invoiceCount()
     {
@@ -21419,7 +20276,6 @@ open();
             close();
         }
     }
-
 
     public LinkedHashMap<String, String> fetch_StoreInvoiceWiseData_List()
     {
@@ -21461,7 +20317,6 @@ open();
         }
     }
 
-
     public long savetblMessageTextFileContainer(String FileName,int FileFlag)
     {
         ContentValues initialValues = new ContentValues();
@@ -21473,18 +20328,6 @@ open();
 
         return db.insert(DATABASE_TABLE_MAIN251, null, initialValues);
     }
-
-
-
-
-					/*private static final String DATABASE_CREATE_TABLE_253 = "create table tblNoVisitStoreDetails " +
-							"(IMEI text null,CurDate text null,ReasonId text null,ReasonDescr text null,flgHasVisit " +
-							"integer null,Sstat integer null);";*/
-
-					/* private static final String DATABASE_CREATE_TABLE_253 = "create table tblNoVisitStoreDetails(IMEI text null,CurDate text null," +
-					 		"ReasonId text null,ReasonDescr text null,flgHasVisit integer null,Sstat integer null);";*/
-
-
 
     public long savetblNoVisitStoreDetails(String IMEI,String CurDate,String ReasonId,String ReasonDescr,int flgHasVisit,int Sstat)
     {
@@ -21505,11 +20348,20 @@ open();
         return inserted;
     }
 
+
+
+
+					/*private static final String DATABASE_CREATE_TABLE_253 = "create table tblNoVisitStoreDetails " +
+							"(IMEI text null,CurDate text null,ReasonId text null,ReasonDescr text null,flgHasVisit " +
+							"integer null,Sstat integer null);";*/
+
+					/* private static final String DATABASE_CREATE_TABLE_253 = "create table tblNoVisitStoreDetails(IMEI text null,CurDate text null," +
+					 		"ReasonId text null,ReasonDescr text null,flgHasVisit integer null,Sstat integer null);";*/
+
     public void deletetblNoVisitStoreDetails()
     {
         db.execSQL("DELETE FROM tblNoVisitStoreDetails");
     }
-
 
     public void updateCurDatetblNoVisitStoreDetails(String CurDate)
     {
@@ -21616,7 +20468,6 @@ open();
 
     }
 
-
     public int fetchflgHasVisitFromtblNoVisitStoreDetails(String Sstat) {
 
         int flag=0;
@@ -21667,7 +20518,6 @@ open();
         }
         return chkI;
     }
-
 
     public String[] fnGetALLDataInfo()
     {
@@ -21721,11 +20571,6 @@ open();
         return chkI;
     }
 
-
-
-					/* private static final String DATABASE_CREATE_TABLE_252 = "create table tblNoVisitReasonMaster " +
-					 		"(ReasonId text null,ReasonDescr text null,FlgToShowTextBox integer null);";*/
-
     public long savetblNoVisitReasonMaster(int AutoIdStore,String ReasonId,String ReasonDescr,int FlgToShowTextBox)
     {
 
@@ -21739,13 +20584,10 @@ open();
         return db.insert(TABLE_tblNoVisitReasonMaster_Define, null, initialValues);
     }
 
-					/* initialValues.put("AutoIdStore", AutoIdStore);
-						initialValues.put("ReasonId", ReasonId);
-						initialValues.put("ReasonDescr", ReasonDescr.trim());
-						initialValues.put("FlgToShowTextBox", FlgToShowTextBox);
 
-						 private static final String DATABASE_CREATE_TABLE_252 = "create table tblNoVisitReasonMaster (ReasonId text null,ReasonDescr text null,FlgToShowTextBox integer null);";
-					*/
+
+					/* private static final String DATABASE_CREATE_TABLE_252 = "create table tblNoVisitReasonMaster " +
+					 		"(ReasonId text null,ReasonDescr text null,FlgToShowTextBox integer null);";*/
 
     public LinkedHashMap<String, String> fetch_Reason_List()
     {
@@ -21781,6 +20623,14 @@ open();
         }
     }
 
+					/* initialValues.put("AutoIdStore", AutoIdStore);
+						initialValues.put("ReasonId", ReasonId);
+						initialValues.put("ReasonDescr", ReasonDescr.trim());
+						initialValues.put("FlgToShowTextBox", FlgToShowTextBox);
+
+						 private static final String DATABASE_CREATE_TABLE_252 = "create table tblNoVisitReasonMaster (ReasonId text null,ReasonDescr text null,FlgToShowTextBox integer null);";
+					*/
+
     public int fetchFlgToShowTextBox(String ReasonDescr) {
 
         int FlgToShowTextBox=0;
@@ -21809,7 +20659,6 @@ open();
 
         return FlgToShowTextBox;
     }
-
 
     public String fetchReasonIdBasedOnReasonDescr(String ReasonDescr) {
 
@@ -21840,7 +20689,6 @@ open();
         return ReasonId;
     }
 
-
     public String fetchReasonDescr() {
 
         String ReasonId="0";
@@ -21869,7 +20717,6 @@ open();
 
         return ReasonId;
     }
-
 
     public String[] fetchDateFromtblStorePOSLastVisitDateDetail(String StoreID)
     {
@@ -21902,10 +20749,6 @@ open();
 
     }
 
-    //  private static final String DATABASE_CREATE_TABLE_165 = "create table
-    //tblStorePOSLastVisitDateDetail (StoreID text null,LastVisitDate text null);";
-
-
     public long savetblStorePOSLastVisitDateDetail(String StoreID, String LastVisitDate)
     {
 
@@ -21918,12 +20761,8 @@ open();
 
     }
 
-
-					/* private static final String DATABASE_CREATE_TABLE_166 = "create table " +
-					 		"tblStorePOSLastVisitALLMaterialDetails (StoreID text null,POSMaterialID text null," +
-					 		"POSMaterialDescr text null,CurrentStockQty text null,NewOrderQty text null," +
-					 		"ReturnQty text null,DamageQty text null);";*/
-
+    //  private static final String DATABASE_CREATE_TABLE_165 = "create table
+    //tblStorePOSLastVisitDateDetail (StoreID text null,LastVisitDate text null);";
 
     public long savetblStorePOSLastVisitALLMaterialDetails(String StoreID, String POSMaterialID,String POSMaterialDescr
             ,String CurrentStockQty,String NewOrderQty,String ReturnQty,String DamageQty)
@@ -21943,6 +20782,12 @@ open();
 
     }
 
+
+					/* private static final String DATABASE_CREATE_TABLE_166 = "create table " +
+					 		"tblStorePOSLastVisitALLMaterialDetails (StoreID text null,POSMaterialID text null," +
+					 		"POSMaterialDescr text null,CurrentStockQty text null,NewOrderQty text null," +
+					 		"ReturnQty text null,DamageQty text null);";*/
+
     public void Delete_tblLastVisitDetailsForPOS()
     {
         db.execSQL("DELETE FROM tblStorePOSLastVisitDateDetail");
@@ -21951,7 +20796,6 @@ open();
 
 
     }
-
 
     public int counttblStorePOSLastVisitDateDetail(String StoreID)
     {
@@ -21996,14 +20840,6 @@ open();
         }
         return chkI;
     }
-
-
-
-					/* private static final String DATABASE_CREATE_TABLE_166 = "create table " +
-					 		"tblStorePOSLastVisitALLMaterialDetails (StoreID text null,POSMaterialID text null," +
-					 		"POSMaterialDescr text null,CurrentStockQty text null,NewOrderQty text null," +
-					 		"ReturnQty text null" +
-					 		",DamageQty text null);";*/
 
     public ArrayList<LinkedHashMap<String, String>> fetch_tblStorePOSLastVisitALLMaterialDetails(String StoreID) {
         open();
@@ -22062,14 +20898,12 @@ open();
     }
 
 
-					/*	private static final String DATABASE_CREATE_TABLE_13 = "create table tblStoreList (StoreID text not " +
-								"null, StoreType string not null, StoreName string not null, StoreLatitude real not null," +
-								" StoreLongitude real not null, LastVisitDate string not null, LastTransactionDate string not " +
-								"null, Sstat integer not null, ForDate string not null, ActualLatitude text null, " +
-								"ActualLongitude text null, VisitStartTS text null, VisitEndTS text null,AutoIdStore int null," +
-								" LocProvider text null, Accuracy text null, BateryLeftStatus text null,StoreClose integer null" +
-								",StoreNextDay integer null,chainID integer null,ISNewStore int null,StoreRouteID int null);";
-						*/
+
+					/* private static final String DATABASE_CREATE_TABLE_166 = "create table " +
+					 		"tblStorePOSLastVisitALLMaterialDetails (StoreID text null,POSMaterialID text null," +
+					 		"POSMaterialDescr text null,CurrentStockQty text null,NewOrderQty text null," +
+					 		"ReturnQty text null" +
+					 		",DamageQty text null);";*/
 
     public int checkAnyDataSubmitORNot(int Sstat)
     {
@@ -22104,10 +20938,14 @@ open();
     }
 
 
-						/* private static final String DATABASE_CREATE_TABLE_163 = "create table tblStoreMaterialDetail " +
-						 		"(RouteID text null,StoreID text null,MaterialID text null,ExistStock integer null," +
-						 		"ReturntoDistributor integer null,FreshOrder integer null,DiscardDamage integer null," +
-						 		"Sstat integer null);"; */
+					/*	private static final String DATABASE_CREATE_TABLE_13 = "create table tblStoreList (StoreID text not " +
+								"null, StoreType string not null, StoreName string not null, StoreLatitude real not null," +
+								" StoreLongitude real not null, LastVisitDate string not null, LastTransactionDate string not " +
+								"null, Sstat integer not null, ForDate string not null, ActualLatitude text null, " +
+								"ActualLongitude text null, VisitStartTS text null, VisitEndTS text null,AutoIdStore int null," +
+								" LocProvider text null, Accuracy text null, BateryLeftStatus text null,StoreClose integer null" +
+								",StoreNextDay integer null,chainID integer null,ISNewStore int null,StoreRouteID int null);";
+						*/
 
     public void deleteOldtblStoreMaterialDetail(String StoreID)
     {
@@ -22128,7 +20966,10 @@ open();
     }
 
 
-    // New Sync way
+						/* private static final String DATABASE_CREATE_TABLE_163 = "create table tblStoreMaterialDetail " +
+						 		"(RouteID text null,StoreID text null,MaterialID text null,ExistStock integer null," +
+						 		"ReturntoDistributor integer null,FreshOrder integer null,DiscardDamage integer null," +
+						 		"Sstat integer null);"; */
 
     public String[] getAllStoreIDIntblStoreReturnPhotoDetail()
     {
@@ -22159,6 +21000,9 @@ open();
         }
 
     }
+
+
+    // New Sync way
 
     public int getExistingPicNosForReturn(String StoreID)
     {
@@ -22267,8 +21111,6 @@ open();
 
     }
 
-
-
     public void deleteAllXmlDataTable(String Sstat)
     {
 
@@ -22313,6 +21155,7 @@ open();
         }
 
     }
+
     public String[] getAllStoreIDIntblStoreMaterialPhotoDetail()
     {
 
@@ -22504,7 +21347,6 @@ open();
         }
     }
 
-
     public LinkedHashMap<String, String> getFileredOrderReviewProductListMap(String StoreId,String TmpInvoiceCodePDA)
     {
         //tblProductList (CategoryID text  null,ProductID text  null, ProductShortName text  null, DisplayUnit text null, CalculateKilo real  null,ProductMRP real not null, ProductRLP real not null, ProductTaxAmount real not null, KGLiter string null,RetMarginPer real null,VatTax real null,StandardRate real null,StandardRateBeforeTax real null,StandardTax real null,CatOrdr int null,PrdOrdr int null,StoreCatNodeId int null);";
@@ -22573,8 +21415,6 @@ open();
         }
     }
 
-
-
     public LinkedHashMap<String, String> getSalesQuotePrcsMstr()
     {
         //tblProductList (CategoryID text  null,ProductID text  null, ProductShortName text  null, DisplayUnit text null, CalculateKilo real  null,ProductMRP real not null, ProductRLP real not null, ProductTaxAmount real not null, KGLiter string null,RetMarginPer real null,VatTax real null,StandardRate real null,StandardRateBeforeTax real null,StandardTax real null,CatOrdr int null,PrdOrdr int null,StoreCatNodeId int null);";
@@ -22606,7 +21446,6 @@ open();
             return hmapSalesQuoteMstr;
         }
     }
-
 
     public LinkedHashMap<String, String> fngetDistinctSalesQuotePersonMeetMstr(String StoreId)
     {
@@ -22640,8 +21479,6 @@ open();
         }
     }
 
-
-
     public LinkedHashMap<String, String> fngetDistinctSalesQuotePersonMeetMstrForSstatUpdate(String StoreId)
     {
         //tblProductList (CategoryID text  null,ProductID text  null, ProductShortName text  null, DisplayUnit text null, CalculateKilo real  null,ProductMRP real not null, ProductRLP real not null, ProductTaxAmount real not null, KGLiter string null,RetMarginPer real null,VatTax real null,StandardRate real null,StandardRateBeforeTax real null,StandardTax real null,CatOrdr int null,PrdOrdr int null,StoreCatNodeId int null);";
@@ -22673,6 +21510,7 @@ open();
             return hmapDistinctSalesQuotePersonMeetMstr;
         }
     }
+
     public int fncheckIfSalesQuotePersonMeetMstrExistsinTable(String SalesQuoteId)
     {
         open();
@@ -22696,6 +21534,7 @@ open();
             close();
         }
     }
+
     public String[] fngetQutePersonMeetTabOneData(String SalesQuoteId)
     {
         open();
@@ -22724,8 +21563,6 @@ open();
             close();
         }
     }
-
-
 
     public LinkedHashMap<String, String> getFileredProductListQuotationMap(String _searchString,String SalesQuoteId,int BusinessSegmentId,String ManufacturerID)
     {
@@ -22862,7 +21699,6 @@ open();
             close();
         }
     }
-
 
     public LinkedHashMap<String, String> getDefaultProductListQuotationMap(String SalesQuoteId,int BusinessSegmentId)
     {
@@ -23005,7 +21841,6 @@ open();
 
     }
 
-
     public void UpdateQuotePrcsAgainstQuotationId(String SalesQuoteId,String SalesQuotePrcsId,String SalesQuotePrcs)
     {
 
@@ -23042,7 +21877,6 @@ open();
         System.out.println("TABLE_QuestGrpMappingMstr ="+inserted);
         return inserted;
     }
-
 
     public LinkedHashMap<String, String> fnGetDistinctSenction()
     {
@@ -23120,8 +21954,6 @@ open();
         return db.insert(TABLE_QuestionDependentMstr, null, initialValues);
     }
 
-
-
     public LinkedHashMap<String, ArrayList<String>> fnGetGroupIDMapWithQuestionID()
     {
         LinkedHashMap<String, ArrayList<String>> hmapQuestionMstr=new LinkedHashMap<String, ArrayList<String>>();
@@ -23176,8 +22008,6 @@ open();
         }
     }
 
-
-
     public LinkedHashMap<String, String> fnGetGroupIDWithGroupDescr()
     {
         {
@@ -23202,7 +22032,6 @@ open();
             return hmapGroupIDWithGroupDescr;
         }
     }
-
 
     public int getsectionCount()
     {
@@ -23230,6 +22059,7 @@ open();
             return sectionCount;
         }
     }
+
     public LinkedHashMap<String,ArrayList<String>> fnGetSectionIDMapWithGroupID()
     {
         LinkedHashMap<String, ArrayList<String>> hmapQuestionMstr=new LinkedHashMap<String, ArrayList<String>>();
@@ -23297,12 +22127,6 @@ open();
         }
     }
 
-
-
-
-
-
-
     public LinkedHashMap<String, String> fnGetOptionId_OptionValue()
     {
         LinkedHashMap<String, String> hmapOptionId_OptionValue=new LinkedHashMap<String, String>();
@@ -23331,6 +22155,7 @@ open();
             close();
         }
     }
+
     public int getSectionCount()
     {
         int sectionNo=0;
@@ -23460,22 +22285,10 @@ open();
         }
     }
 
-
-
-
-
-
-
-
-
     public void fnDeletesaveOutletQuestAnsMstrSctionWise(String OutletID,int sectionID)
     {
         db.execSQL("DELETE FROM tblOutletQuestAnsMstr WHERE OutletID ='"+ OutletID + "'");// and sectionID="+sectionID
     }
-
-
-    //Add New Store Section wise Code Ends Here
-
 
     public void fnInsertTBLReturnRsn(String stockStatusId,String stockStatus)
     {
@@ -23485,6 +22298,10 @@ open();
         content.put("StockStatus", stockStatus);
         db.insertOrThrow(TABLE_RETURN_REASON, null, content);
     }
+
+
+    //Add New Store Section wise Code Ends Here
+
     public LinkedHashMap<String, String> getReasonReturn()
     {
         ////tblReturnReason(StockStatusId text not null,StockStatus text not null);";
@@ -23545,7 +22362,6 @@ open();
         }
     }
 
-
     public void updateflgFromWhereSubmitStatusAgainstStore(String sID, int flag2set,String StoreVisitCode)
     {
         try
@@ -23560,13 +22376,6 @@ open();
             Log.e(TAG, ex.toString());
         }
     }
-
-
-
-
-
-
-
 
     public int checkCountIntblNewStoreSalesQuotePaymentDetails(String  StoreId)
     {
@@ -23601,20 +22410,6 @@ open();
         return check;
     }
 
-
-
-
-
-
-
-
-
-
-    //Code For Order Payment and Bill Starts Here
-
-
-
-
     public long saveSOAPdataStoreListAddressMap(String StoreID,int OutAddTypeID,String Address,String AddressDet,int OutAddID)
     {
 
@@ -23628,6 +22423,17 @@ open();
 
         return db.insert(DATABASE_TABLE_StoreAddressMapDetailsMstr, null, initialValues);
     }
+
+
+
+
+
+
+
+
+
+
+    //Code For Order Payment and Bill Starts Here
 
     public ArrayList<LinkedHashMap<String, String>> fngetStoreBillToAddressAndDiliverToAddress(String StoreID)
     {
@@ -23667,7 +22473,6 @@ open();
         return totalProductDetail;
     }
 
-
     public long fnsaveStoreSalesOrderPaymentDetails(String StoreId,String OrderID,String PaymentStageId,String Sstat,String TmpInvoiceCodePDA)
     {
 
@@ -23683,7 +22488,6 @@ open();
         return db.insert(DATABASE_TABLE_StoreSalesOrderPaymentDetails, null, initialValues);
     }
 
-
     public void fndeleteStoreSalesOrderPaymentDetails(String StoreID,String OrderID,String TmpInvoiceCodePDA)
     {
 
@@ -23695,7 +22499,6 @@ open();
 
         db.execSQL("DELETE FROM tblStoreAddressMapDetailsMstr");
     }
-//tblStoreAddressMapDetailsMstr
 
     public int checkCountIntblStoreSalesOrderPaymentDetails(String  StoreId,String OrderID,String TmpInvoiceCodePDA)
     {
@@ -23729,10 +22532,7 @@ open();
         }
         return check;
     }
-
-
-
-
+//tblStoreAddressMapDetailsMstr
 
     public String fngettblStoreSalesOrderPaymentDetails(String StoreID,String OrderID,String TmpInvoiceCodePDA)
 
@@ -23775,10 +22575,6 @@ open();
         }
     }
 
-
-
-
-
     public int checkPaymentStageintStoreMstrTabel(String  StoreId)
     {
         open();
@@ -23810,7 +22606,6 @@ open();
         }
         return check;
     }
-
 
     public int checkStoreOrderBillAddressDetails(String  StoreId,String OrderID)
     {
@@ -23844,7 +22639,6 @@ open();
         return check;
     }
 
-
     public void fndeleteStoreOrderBillAddressDetails(String StoreID,String OrderID)
     {
         open();
@@ -23871,7 +22665,6 @@ open();
 
         return db.insert("tblStoreOrderBillAddressDetails", null, initialValues);
     }
-
 
     public int checkIfCurrentStoreIsNewInOrderBill(String StoreID)
     {
@@ -23901,6 +22694,7 @@ open();
             close();
         }
     }
+
     public String fetchBillAddress(String OutletID)
     {
         open();
@@ -23992,6 +22786,7 @@ open();
         }
         return DDlStringCity;
     }
+
     public String fetchDeliverAddress(String OutletID)
     {
         open();
@@ -24155,7 +22950,6 @@ open();
         }
     }
 
-
     // "create table tblMinDeliverQntty (PrdId text null,StoreID text null,QPBT text null,QPTaxAmount text null,MinDlvrQty int null,UOMID text null,Sstat text null);";
     public LinkedHashMap<String, String> getMinDlvryQnttyQPBT(String storeId)
     {
@@ -24214,6 +23008,7 @@ open();
             return hmapMinDlvrQtyQPAT;
         }
     }
+
     // "create table tblMinDeliverQntty (PrdId text null,StoreID text null,QPBT text null,QPTaxAmount text null,MinDlvrQty int null,UOMID text null,Sstat text null);";
     public LinkedHashMap<String, String> getMinDlvryQnttyQPTaxAmount(String storeId)
     {
@@ -24282,7 +23077,6 @@ open();
         close();
     }
 
-
     public int fnchkIfStoreAllowQuotation(String  StoreId)
     {
         open();
@@ -24313,7 +23107,6 @@ open();
         }
         return check;
     }
-
 
     public void UpdateStoreFlagQoutation(String sID, int flag2set)
     {
@@ -24361,7 +23154,6 @@ open();
 
     }
 
-
     public void updateStoreQuoteSubmitFlgInStoreMstr(String StoreID,int flgSubmitFromQuotation,String StoreVisitCode)
     {
         open();
@@ -24373,7 +23165,6 @@ open();
 
         close();
     }
-
 
     public int fnchkIfStoreHasInvoiceEntry(String  StoreId)
     {
@@ -24413,7 +23204,6 @@ open();
         int affected = db.update("tblStoreList", values, "StoreID=?",new String[] { StoreID });
     }
 
-
     public String[] FetchStoreStatusflgSubmitFromQuotation()
     {
         int ScodecolumnIndex = 0;
@@ -24437,8 +23227,6 @@ open();
         }
     }
 
-
-
     public LinkedHashMap<String, String> fnGetListQuoteISOfUnmappedWithProducts(String StoreID)
     {
         open();
@@ -24460,6 +23248,7 @@ open();
             close();
         }
     }
+
     public void fndeleteQuoteISOfUnmappedWithProducts(String SalesQuoteId)
     {
         open();
@@ -24497,6 +23286,7 @@ open();
             close();
         }
     }
+
     public int fnGetAnsValID(int optionId)
     {
 //tblOptionMstr(OptID int null,QuestID int null,OptionNo int null,OptionDescr text null,Sequence int null );";
@@ -24525,7 +23315,6 @@ open();
             close();
         }
     }
-
 
     public String fnGetQuestIDForOutChannelFromQuestionMstr()
     {//tblPDAQuestGrpMappingMstr(GrpQuestID int null,QuestID int null,GrpID int null,GrpNodeID int null,GrpDesc text null,SectionNo int null,GrpCopyID int null,QuestCopyID int null);";
@@ -24557,6 +23346,7 @@ open();
             close();
         }
     }
+
     public long saveTblSalesQuoteSponsorMstr(String SalesQuoteSponsorID,String SponsorDescr,String Ordr)
     {
 
@@ -24568,6 +23358,7 @@ open();
 
         return db.insert(TABLE_tblSalesQuoteSponsorMstr, null, initialValues);
     }
+
     public long saveTblManufacturerMstrMain(String ManufacturerID,String ManufacturerName,String NodeType)
     {
 
@@ -24579,6 +23370,7 @@ open();
 
         return db.insert(TABLE_tblManufacturerMstrMain, null, initialValues);
     }
+
     public long saveTblRateDistribution(String SalesQuoteId,String StoreId,String SalesQuoteSponsorID,String ManufacturerID,String Percentage,String SponsorDescr,String ManufacturerName,String Sstat)
     {
 
@@ -24668,7 +23460,6 @@ open();
         }
     }
 
-
     public LinkedHashMap<String, String> fnGettblSalesQuoteSponsorMstr()
     {
         LinkedHashMap<String, String> hmapQuestionMstr=new LinkedHashMap<String, String>();
@@ -24702,7 +23493,6 @@ open();
             return hmapQuestionMstr;
         }
     }
-
 
     public LinkedHashMap<String, String> fnProductManufractureIDList()
     {
@@ -25066,8 +23856,6 @@ open();
         }
         return chkI;
     }
-    //private static final String DATABASE_CREATE_TABLE_OPTIONMstr = "create table tblOptionMstr" +
-    //"(OptID int null,QuestID int null,OptionNo int null,OptionDescr text null,Sequence int null );";
 
     public  LinkedHashMap<String,String> fngetAllOptionForQuestionID(int QuestID)
     {
@@ -25098,10 +23886,8 @@ open();
 
 
     }
-
-
-    // New Added Store Fun Start
-
+    //private static final String DATABASE_CREATE_TABLE_OPTIONMstr = "create table tblOptionMstr" +
+    //"(OptID int null,QuestID int null,OptionNo int null,OptionDescr text null,Sequence int null );";
 
     public String[] getAllOptValueDpndntQuest()
     {
@@ -25133,6 +23919,10 @@ open();
         }
 
     }
+
+
+    // New Added Store Fun Start
+
     public String[] fnGetDependentParentQuesIdr()
     {
 
@@ -25251,6 +24041,7 @@ open();
             return hmapQuestDependVisible;
         }
     }
+
     public LinkedHashMap<String, String> getAllQstGrpIdAgainstGrp()
     {
         //tblPDAQuestGrpMappingMstr(GrpQuestID int null,QuestID int null,GrpID int null,GrpNodeID int null,GrpDesc text null,SectionNo int null);";
@@ -25271,6 +24062,7 @@ open();
         close();
         return hmapData;
     }
+
     public LinkedHashMap<String, String> getQuestGrpIdLnkWdQstId()
     {
         //tblPDAQuestGrpMappingMstr(GrpQuestID int null,QuestID int null,GrpID int null,GrpNodeID int null,GrpDesc text null,SectionNo int null);";
@@ -25318,6 +24110,7 @@ open();
             return grpQstIdOptIdForChannel;
         }
     }
+
     public LinkedHashMap<String, String> getQuestAnswer(String tempId)
     {
         open();
@@ -25355,6 +24148,36 @@ open();
             return hmapRtrvQuestAns;
         }
     }
+
+    public LinkedHashMap<String, String> getPDAUserPreviousQuestionAnswerMasterServer(String tempId)
+    {
+        open();
+        LinkedHashMap<String, String> hmapPreviousVisitServerQuestionSavedAns=new LinkedHashMap<String, String>();
+        try {
+//tblPreAddedStoresDataDetails (StoreIDDB text null,GrpQuestID text null,QstId text null,AnsControlTypeID text null,AnsTextVal text null,flgPrvVal text null);";
+            //tblPDAUserPreviousQuestionAnswerMaster(NodeID text null, NodeType text null,QstID text null,AnsControlTypeID text null,Answers text null,temID text null,flgPrvValue text null);";
+            Cursor cursor=db.rawQuery("Select * from tblPreAddedStoresDataDetails where StoreIDDB='"+tempId+"'", null);
+
+            if(cursor.getCount()>0)
+            {
+                if(cursor.moveToFirst())
+                {
+                    for(int i=0;i<cursor.getCount();i++)
+                    {
+                        hmapPreviousVisitServerQuestionSavedAns.put(cursor.getString(2)+"^"+cursor.getString(3)+"^"+cursor.getString(1), cursor.getString(4));
+                        cursor.moveToNext();
+                    }
+                }
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        finally
+        {
+            close();
+            return hmapPreviousVisitServerQuestionSavedAns;
+        }
+    }
 /*	public LinkedHashMap<String, String> fnGetQuestionIdFlgPrvValue(String TempID)
 	{
 	LinkedHashMap<String, String> hmapQuestionflgPrvValue=new LinkedHashMap<String, String>();
@@ -25387,35 +24210,6 @@ open();
 	}
 }*/
 
-    public LinkedHashMap<String, String> getPDAUserPreviousQuestionAnswerMasterServer(String tempId)
-    {
-        open();
-        LinkedHashMap<String, String> hmapPreviousVisitServerQuestionSavedAns=new LinkedHashMap<String, String>();
-        try {
-//tblPreAddedStoresDataDetails (StoreIDDB text null,GrpQuestID text null,QstId text null,AnsControlTypeID text null,AnsTextVal text null,flgPrvVal text null);";
-            //tblPDAUserPreviousQuestionAnswerMaster(NodeID text null, NodeType text null,QstID text null,AnsControlTypeID text null,Answers text null,temID text null,flgPrvValue text null);";
-            Cursor cursor=db.rawQuery("Select * from tblPreAddedStoresDataDetails where StoreIDDB='"+tempId+"'", null);
-
-            if(cursor.getCount()>0)
-            {
-                if(cursor.moveToFirst())
-                {
-                    for(int i=0;i<cursor.getCount();i++)
-                    {
-                        hmapPreviousVisitServerQuestionSavedAns.put(cursor.getString(2)+"^"+cursor.getString(3)+"^"+cursor.getString(1), cursor.getString(4));
-                        cursor.moveToNext();
-                    }
-                }
-            }
-        } catch (Exception e) {
-            // TODO: handle exception
-        }
-        finally
-        {
-            close();
-            return hmapPreviousVisitServerQuestionSavedAns;
-        }
-    }
     public LinkedHashMap<String, String> getGroupIdCopyAsAbove()
     {
         LinkedHashMap<String, String> hmapGroupIdCopyAsAbove=new LinkedHashMap<String, String>();
@@ -25435,6 +24229,7 @@ open();
         close();
         return hmapGroupIdCopyAsAbove;
     }
+
     public String getChannelGroupId()
     {
         String grpQstIdForChannel="";
@@ -25460,6 +24255,7 @@ open();
             return grpQstIdForChannel;
         }
     }
+
     public LinkedHashMap<String,String> getNameQstGrpId_QstId()
     {
         LinkedHashMap<String,String> grpQstId_qstIdForName=new LinkedHashMap<>();
@@ -25583,6 +24379,7 @@ open();
             return keyForChannel;
         }
     }
+
     public void fnsaveOutletQuestAnsMstrSectionWise(LinkedHashMap<String, String> hmapQuesAnsVal,int CurrentsectionID,String CurrentOutletID)
     {
 
@@ -25641,7 +24438,6 @@ open();
         close();
 
     }
-
 
     public String fngettblNewStoreSalesQuotePaymentDetails(String StoreID)
 
@@ -25703,6 +24499,7 @@ open();
         }
 
     }
+
     public LinkedHashMap<String, String> fnGettblSalesQuotePaymentModeMstrAllValues()
     {
         LinkedHashMap<String, String> hmapQuestionMstr=new LinkedHashMap<String, String>();
@@ -25730,6 +24527,7 @@ open();
             close();
         }
     }
+
     public LinkedHashMap<String, String> fnGettblSalesQuotePaymentModeMstr(String PaymentStageID)
     {
 
@@ -26040,6 +24838,7 @@ open();
             Log.e(TAG, ex.toString());
         }
     }
+
     public void UpdateNewAddedStorephotoFlag(String sID, int flag2set)
     {
         try
@@ -26053,6 +24852,7 @@ open();
             Log.e(TAG, ex.toString());
         }
     }
+
     public void UpdateStoreClosephotoWithOutFlag(String sID, int flag2set)
     {
         try
@@ -26115,6 +24915,7 @@ open();
             return StoresData;
         }
     }
+
     public void fnDeletesaveNewOutletFromOutletMstr(String OutletID)
     {
         open();
@@ -26127,35 +24928,6 @@ open();
         db.execSQL("DELETE FROM tblStoreCountDetails");
 
     }
-
-	/*public long saveTblStoreCountDetails(String TotStoreAdded,String TodayStoreAdded)
-	{
-
-		ContentValues initialValues = new ContentValues();
-
-		initialValues.put("TotStoreAdded", Integer.parseInt(TotStoreAdded.toString().trim()));
-		initialValues.put("TodayStoreAdded", Integer.parseInt(TodayStoreAdded.toString().trim()));
-
-		return db.insert(DATABASE_TABLE_tblStoreCountDetails, null, initialValues);
-	}*/
-
-	/*public long saveTblPreAddedStores(String StoreID,String StoreName,String LatCode,String LongCode,String DateAdded,int flgOldNewStore,int flgReMap,int Sstat)
-	{
-		ContentValues initialValues = new ContentValues();
-
-		initialValues.put("StoreID", StoreID);
-		initialValues.put("StoreName", StoreName);
-		initialValues.put("LatCode", LatCode);
-		initialValues.put("LongCode", LongCode);
-		initialValues.put("DateAdded", DateAdded);
-		initialValues.put("DistanceNear", 1000);
-		initialValues.put("flgOldNewStore", flgOldNewStore);
-		initialValues.put("flgReMap", flgReMap);
-		initialValues.put("Sstat", Sstat);
-
-
-		return db.insert(DATABASE_TABLE_tblPreAddedStores, null, initialValues);
-	}*/
 
     public int checkCountIntblNewStoreMainTable(String  StoreId)
     {
@@ -26189,11 +24961,41 @@ open();
         return check;
     }
 
+	/*public long saveTblStoreCountDetails(String TotStoreAdded,String TodayStoreAdded)
+	{
+
+		ContentValues initialValues = new ContentValues();
+
+		initialValues.put("TotStoreAdded", Integer.parseInt(TotStoreAdded.toString().trim()));
+		initialValues.put("TodayStoreAdded", Integer.parseInt(TodayStoreAdded.toString().trim()));
+
+		return db.insert(DATABASE_TABLE_tblStoreCountDetails, null, initialValues);
+	}*/
+
+	/*public long saveTblPreAddedStores(String StoreID,String StoreName,String LatCode,String LongCode,String DateAdded,int flgOldNewStore,int flgReMap,int Sstat)
+	{
+		ContentValues initialValues = new ContentValues();
+
+		initialValues.put("StoreID", StoreID);
+		initialValues.put("StoreName", StoreName);
+		initialValues.put("LatCode", LatCode);
+		initialValues.put("LongCode", LongCode);
+		initialValues.put("DateAdded", DateAdded);
+		initialValues.put("DistanceNear", 1000);
+		initialValues.put("flgOldNewStore", flgOldNewStore);
+		initialValues.put("flgReMap", flgReMap);
+		initialValues.put("Sstat", Sstat);
+
+
+		return db.insert(DATABASE_TABLE_tblPreAddedStores, null, initialValues);
+	}*/
+
     public void fndeleteNewStoreSalesQuotePaymentDetails(String StoreID)
     {
 
         db.execSQL("DELETE FROM tblNewStoreSalesQuotePaymentDetails WHERE StoreId ='" + StoreID + "'");
     }
+
     public long fnsaveNewStoreSalesQuotePaymentDetails(String StoreId,String PaymentStageId) {
 
         ContentValues initialValues = new ContentValues();
@@ -26309,10 +25111,6 @@ open();
         return 0;
     }
 
-    //private static final String DATABASE_CREATE_TABLE_4 = "create table tblDistributorListMaster " +
-    //	"(DBRNodeID int null,DistributorNodeType int null,Distributor text null);";
-
-
     public LinkedHashMap<String, String> fetch_DSRCoverage_List()
     {
         open();
@@ -26348,6 +25146,9 @@ open();
         }
     }
 
+    //private static final String DATABASE_CREATE_TABLE_4 = "create table tblDistributorListMaster " +
+    //	"(DBRNodeID int null,DistributorNodeType int null,Distributor text null);";
+
     public String[] getDistributorDataMstr()
     {
         String strStoreTypeNamesDetais[] =null;
@@ -26380,6 +25181,7 @@ open();
 
         }
     }
+
     public void Delete_tblDistributorMapping(int DistribtrId,int DistributorNodeType)
     {
         try
@@ -26396,7 +25198,6 @@ open();
 
         }
     }
-
 
     public long savetblDistributorMappingData(String DistribtrUniqueId,String  DistribtrId ,String DistributorNodeType ,
                                               String flgGSTCapture,String flgGSTCompliance ,String GSTNumber, String Address,
@@ -26597,6 +25398,7 @@ open();
             close();
         }
     }
+
     public LinkedHashMap<String, String> getGroupDescription()
     {
         open();
@@ -26618,6 +25420,7 @@ open();
         close();
         return hmapGroupDescrptn;
     }
+
     public LinkedHashMap<String, ArrayList<String>> fnGetGroupIdMpdWdSectionId()
     {
         LinkedHashMap<String, ArrayList<String>> hmapQuestionMstr=new LinkedHashMap<String, ArrayList<String>>();
@@ -26684,6 +25487,7 @@ open();
             close();
         }
     }
+
     public LinkedHashMap<String, String> fnGetDependentQuestionMstr()
     {
 
@@ -26724,6 +25528,7 @@ open();
         }
 
     }
+
     public LinkedHashMap<String, ArrayList<String>> fnGetSection_Key()
     {
         LinkedHashMap<String, ArrayList<String>> hmapQuestionMstr=new LinkedHashMap<String, ArrayList<String>>();
@@ -26783,6 +25588,7 @@ open();
         db.execSQL("DELETE FROM tblLocationDetails");
 
     }
+
     public long saveTblLocationDetails(String Lattitude, String Longitude, String Accuracy, String Address, String City, String Pincode, String State, String fnAccurateProvider, String GpsLat, String GpsLong, String GpsAccuracy, String NetwLat, String NetwLong, String NetwAccuracy, String FusedLat, String FusedLong, String FusedAccuracy, String AllProvidersLocation, String GpsAddress, String NetwAddress, String FusedAddress, String FusedLocationLatitudeWithFirstAttempt, String FusedLocationLongitudeWithFirstAttempt, String FusedLocationAccuracyWithFirstAttempt)
     {
         ContentValues initialValues = new ContentValues();
@@ -26818,8 +25624,6 @@ open();
 
         return db.insert(DATABASE_TABLE_tblLocationDetails, null, initialValues);
     }
-
-
 
     public int fncheckCountNearByStoreExistsOrNot(int DistanceRange)
     {
@@ -26888,7 +25692,6 @@ open();
         return flgCheck;
     }
 
-
     public LinkedHashMap<String, String> fnGeStoreList(int DistanceRange)
     {
         LinkedHashMap<String, String> hmapQuestionMstr=new LinkedHashMap<String, String>();
@@ -26929,7 +25732,6 @@ open();
             return hmapQuestionMstr;
         }
     }
-
 
     public void fnGeNewlyAddedStoreList(LinkedHashMap<String, String> hmapQuestionMstr)
     {
@@ -27005,7 +25807,6 @@ String fetchdate=fnGetDateTimeString();
         }
     }
 
-
     public void UpdateStoreDistanceNear(String OutletID, int DistanceNear)
     {
         try
@@ -27025,8 +25826,6 @@ String fetchdate=fnGetDateTimeString();
         }
 
     }
-
-
 
     public long savetblManagerMstr(String PersonID, String PersonType, String  PersonName, String ManagerID, String ManagerType,String ManagerName)
     {
@@ -27088,6 +25887,7 @@ String fetchdate=fnGetDateTimeString();
 
         close();
     }
+
     public int counttblSelectedManagerDetails()
     {
         Cursor cursorE2 = db.rawQuery("SELECT COUNT(*) FROM tblSelectedManagerDetails", null);
@@ -27159,6 +25959,7 @@ String fetchdate=fnGetDateTimeString();
 
 
     }
+
     public long savetblSelectedManagerDetails(String IMEI,String CurDate,String PersonID,
                                               String PersonType, String  PersonName, String ManagerID, String ManagerType,
                                               String ManagerName,String OtherName)
@@ -27230,6 +26031,7 @@ String fetchdate=fnGetDateTimeString();
         }
 
     }
+
     public void Delete_tblRouteMasterAndDistributorMstr()
     {
         db.execSQL("DELETE FROM tblRouteMstr");
@@ -27241,7 +26043,6 @@ String fetchdate=fnGetDateTimeString();
         //db.execSQL("DELETE FROM tblManagerMstr");
         //db.execSQL("DELETE FROM tblSelectedManagerDetails");
     }
-
 
     public long savetblDistributorListMaster(int DBRNodeID,int DistributorNodeType, String Distributor)
     {
@@ -27379,7 +26180,6 @@ String fetchdate=fnGetDateTimeString();
         }
     }
 
-
     public int countDataIntblDistributorSavedData(int DistribtrId,int DistributorNodeType,int Sstat)
     {
         open();
@@ -27435,6 +26235,7 @@ String fetchdate=fnGetDateTimeString();
         }
         return chkI;
     }
+
     public void deleteDistributorStockTbles()
     {
         try
@@ -27503,6 +26304,7 @@ String fetchdate=fnGetDateTimeString();
         }
 
     }
+
     public LinkedHashMap<String,String> fetchtblDistribtrReport(int DistributorNodeID,int DistributorNodeType)
     {
         int ScodecolumnIndex = 0;
@@ -27565,6 +26367,7 @@ String fetchdate=fnGetDateTimeString();
             cursor.close();
         }
     }
+
     public void Delete_tblDistributorSavedData(int DistribtrId,int DistributorNodeType)
     {
         try
@@ -27604,7 +26407,6 @@ String fetchdate=fnGetDateTimeString();
         return db.insert(TABLE_tblDistributorSavedData, null, initialValues);
     }
 
-
     public LinkedHashMap<String, String> fetchtblDistribtrMnthDates(int DistributorNodeID,int DistributorNodeType)
     {
         open();
@@ -27638,7 +26440,6 @@ String fetchdate=fnGetDateTimeString();
             close();
         }
     }
-
 
     public String[] getDistinctProdctName(int DistributorNodeID,int DistributorNodeType)
     {
@@ -27690,7 +26491,6 @@ String fetchdate=fnGetDateTimeString();
         }
     }
 
-
     public LinkedHashMap<String,String> fetchtblDistribtrOldStockData(int DistribtrId,int DistribtrNodeType)
     {
         open();
@@ -27720,6 +26520,7 @@ String fetchdate=fnGetDateTimeString();
             close();
         }
     }
+
     public LinkedHashMap<String,String> fetchtblDistribtrSavedData(int DistribtrId,int DistribtrNodeType)
     {
         open();
@@ -27752,6 +26553,7 @@ String fetchdate=fnGetDateTimeString();
 
 
     }
+
     public int fnGetDistributorStockPcsCaseType(int DistribtrId,int DistributorNodeType)
     {
 
@@ -27828,6 +26630,7 @@ String fetchdate=fnGetDateTimeString();
 
         return db.insert(TABLE_tblDistributorDayReportColumnsDesc, null, initialValues);
     }
+
     public long savetblDistributorDayReport(String ProductNodeID,String ProductNodeType,String SKUName,String FlvShortName,String StockDate,int CustomerNodeID,int CustomerNodeType)
     {
         ContentValues initialValues = new ContentValues();
@@ -27876,7 +26679,6 @@ String fetchdate=fnGetDateTimeString();
         }
     }
 
-
     public long savetblTargetVsAchievedNote(String msgToDisplay)
     {
         //DATABASE_TABLE_MAIN236 = "create table tblTargetVsAchievedNote (MsgToDisplay text null);";
@@ -27887,6 +26689,7 @@ String fetchdate=fnGetDateTimeString();
 
         return db.insert(DATABASE_TABLE_MAIN236, null, initialValues);
     }
+
     public String fetchNoteFromtblTargetVsAchievedNote()
     {
         open();
@@ -27984,10 +26787,12 @@ String fetchdate=fnGetDateTimeString();
         }
 
     }
+
     public void Delete_tblStoreWiseTarget()
     {
         db.execSQL("DELETE FROM tblStoreWiseTarget");
     }
+
     public String fetchtblStoreWiseTarget(String StoreID)
     {
 
@@ -28357,14 +27162,12 @@ String fetchdate=fnGetDateTimeString();
         return val;
     }
 
-
-
-
     public void truncatetblTargetVsAchievedSummary()
     {
         db.execSQL("DELETE FROM tblTargetVsAchievedSummary");
 
     }
+
     public String[] fetchAllDataFromtblTargetVsAchievedSummary()
     {
         int ScodecolumnIndex = 0;
@@ -28395,6 +27198,7 @@ String fetchdate=fnGetDateTimeString();
         }
 
     }
+
     public long savetblIncentiveMaster(int IncId,int OutputType,String IncentiveName,String flgAcheived,String Earning)
     {
         ContentValues initialValues = new ContentValues();
@@ -28407,6 +27211,7 @@ String fetchdate=fnGetDateTimeString();
 
         return db.insert(TABLE_tblIncentiveMaster, null, initialValues);
     }
+
     public void CreateDynamicTables(String Table_Name, String TableColumn[])
     {
         db.execSQL("DROP TABLE IF EXISTS " + Table_Name);
@@ -28511,10 +27316,6 @@ String fetchdate=fnGetDateTimeString();
         {
         }
     }
-
-
-
-
 
     public void insertRestartStoreInfo(String prvsStoreID, String CrntStoreID, String isSavedOrSubmittedStore, String MsgToRestartPopUpShown, String isRestartDoneByDSR, int Sstat, String ActionTime)
     {
@@ -28626,6 +27427,7 @@ String fetchdate=fnGetDateTimeString();
         }
 
     }
+
     public void updateisRestartDoneByDSR(String prvsStoreId)
     {
         open();
@@ -28634,6 +27436,7 @@ String fetchdate=fnGetDateTimeString();
         db.update(DATABASE_TABLE_tblSameLocationForStoreRestartDone,values,"prvsStoreID=?",new String[]{prvsStoreId});
         close();
     }
+
     public void updateCurrentStoreId(String crntStoreID, String prvsStoreId)
     {
         open();
@@ -28642,6 +27445,7 @@ String fetchdate=fnGetDateTimeString();
         db.update(DATABASE_TABLE_tblSameLocationForStoreRestartDone,values,"prvsStoreID=?",new String[]{prvsStoreId});
         close();
     }
+
     public String getPreviousStoreId()
     {
         String prvsStoreId="";
@@ -28692,8 +27496,6 @@ String fetchdate=fnGetDateTimeString();
 
     }
 
-
-
     public void fnDeleteFlgStoreUnusedPrvs(String MsgToRestartPopUpShown) {
         try {
             db.execSQL("DELETE FROM tblsameLocationForStoreRestartDone WHERE isMsgToRestartPopUpShown='"+ MsgToRestartPopUpShown + "'");// and sectionID="+sectionID
@@ -28705,7 +27507,6 @@ String fetchdate=fnGetDateTimeString();
 
 
     }
-
 
     public String[] getAllStoreIDIntblNewAddedStorePhotoDetail()
     {
@@ -28842,9 +27643,6 @@ String fetchdate=fnGetDateTimeString();
 
     }
 
-
-//nitika
-
     public LinkedHashMap<String, String> fetch_Summary_Detail_DayData(String TableNo)
     {
 //		open();
@@ -28875,6 +27673,10 @@ String fetchdate=fnGetDateTimeString();
 //			close();
         }
     }
+
+
+//nitika
+
     //nitika
     public long savetblAllSummaryDayAndMTD(int AutoId,String Measures,String TodaysSummary,String MTDSummary, String TableNo,String ColorCode)
     {
@@ -29001,6 +27803,7 @@ String fetchdate=fnGetDateTimeString();
             return retVal;
         }
     }
+
     public int fetchtblVanCycleId()
     {
         open();
@@ -29031,6 +27834,7 @@ String fetchdate=fnGetDateTimeString();
             return retVal;
         }
     }
+
     public String fetchtblVanCycleTime()
     {
         open();
@@ -29062,10 +27866,6 @@ String fetchdate=fnGetDateTimeString();
         }
     }
 
-
-
-
-
     public void insertDistributorStock(String prdctId,String stockQntty,String distributorNodeIdNodeType,String SKUName,String OpeningStock,String TodaysAddedStock,String CycleAddedStock,String NetStockQty,String TodaysUnloadStk,String CycleUnloadStk,String CategoryID)
     {
         //open();
@@ -29096,8 +27896,6 @@ String fetchdate=fnGetDateTimeString();
 //DATABASE_TABLE_DISTRIBUTOR_STOCK
         // close();
     }
-
-
 
     public void updateOriginalStock(HashMap<String,Integer> hmapProductStock,String distId)
     {
@@ -29190,6 +27988,7 @@ String fetchdate=fnGetDateTimeString();
         }
 
     }
+
     public void insertDistributorPDAOrderId(String distributorNodeIdNodeType,String orderId,String productId,String orderQntty,int Sstat)
     {
         //tblDistributorOrderPdaId(DistributorNodeIdNodeType text null,OrderPDAID text null,ProductId text null,OrderQntty text null,Sstat integer not null);";
@@ -29254,7 +28053,6 @@ String fetchdate=fnGetDateTimeString();
         return hmapPrdctStock;
     }
 
-
     public void deleteCompleteDataDistStock()
     {
 
@@ -29273,7 +28071,6 @@ String fetchdate=fnGetDateTimeString();
 
 
     }
-
 
     public String fngetSalesPersonMstrData()
     {
@@ -29445,6 +28242,7 @@ String fetchdate=fnGetDateTimeString();
 
 
     }
+
     public int getLeftProductToAddBasedOnInvoiceNumberQantity(int NetStockQty,String distId,String PrdctId)
     {
         int netStock=0;
@@ -29494,6 +28292,7 @@ String fetchdate=fnGetDateTimeString();
 
 
     }
+
     public int getLeftProductQantity(int stockCount,String distId,String PrdctId)
     {
         int netStock=0;
@@ -29594,7 +28393,6 @@ String fetchdate=fnGetDateTimeString();
         }
     }
 
-
     public void updateRtlrCrdtBal(String storeId)
     {
         ContentValues values=new ContentValues();
@@ -29608,7 +28406,6 @@ String fetchdate=fnGetDateTimeString();
 
     }
 
-
     public void deleteOrderId(String orderId)
     {
         //"Select DistributorNodeIdNodeType from tblDistributorOrderPddb.insert(DATABASE_TABLE_DISTRIBUTOR_ORDERPDAID,null,values);
@@ -29618,6 +28415,7 @@ String fetchdate=fnGetDateTimeString();
             db.delete(DATABASE_TABLE_DISTRIBUTOR_ORDERPDAID,"OrderPDAID=?",new String[]{orderId});
         }
     }
+
     public String[] getAllDSRSignatureAndSelfi()
     {
 
@@ -29650,8 +28448,6 @@ String fetchdate=fnGetDateTimeString();
         }
 
     }
-
-
 
     public int getExistingPicNosForSignatureAndSelfi()
     {
@@ -29720,8 +28516,6 @@ String fetchdate=fnGetDateTimeString();
 
     }
 
-
-
     public void updateImageRecordsSyncdForDSRRegistrationAndSelfi()
     {
 
@@ -29759,8 +28553,6 @@ String fetchdate=fnGetDateTimeString();
 
     }
 
-
-
     public String fngetDIdAndDType(String DistribtrUniqueId)
     {
 
@@ -29797,7 +28589,6 @@ String fetchdate=fnGetDateTimeString();
         close();
 
     }
-
 
     public void Delete_tblDistributorMstr()
     {
@@ -29896,7 +28687,6 @@ String fetchdate=fnGetDateTimeString();
             close();
         }
     }
-    //Cursor cursor2 = db.rawQuery("SELECT StoreID, StoreName FROM tblStoreList WHERE Sstat = 1 ",null);
 
     public int checkDSRCheckIntblDistributorMapping()
     {
@@ -29926,6 +28716,7 @@ String fetchdate=fnGetDateTimeString();
         }
         return chkI;
     }
+    //Cursor cursor2 = db.rawQuery("SELECT StoreID, StoreName FROM tblStoreList WHERE Sstat = 1 ",null);
 
     public int checkDSRCheckIntblDistributorSavedData()
     {
@@ -30045,7 +28836,6 @@ String fetchdate=fnGetDateTimeString();
 
     }
 
-
     public boolean checkDistributorLocatioExists(String DistribtrId) {
         // int entryCount;
         open();
@@ -30070,11 +28860,11 @@ String fetchdate=fnGetDateTimeString();
         return chkI;
     }
 
-
     public  void deleteStorecloseLocationTable()
     {
         db.execSQL("DELETE FROM tblStoreCloseLocationDetails");
     }
+
     public  void deleteStorecloseLocationTableBasedOnStoreID(String StoreID,String StoreVisitCode)
     {
         db.execSQL("DELETE FROM tblStoreCloseLocationDetails where StoreID='"+StoreID+"' AND StoreVisitCode='"+StoreVisitCode+"'");
@@ -30298,6 +29088,7 @@ String fetchdate=fnGetDateTimeString();
             return isRoute;
         }
     }
+
     public String getOtherReason(String StoreID,String StoreVisitCode)
     {
         open();
@@ -30415,7 +29206,6 @@ String fetchdate=fnGetDateTimeString();
         }
     }
 
-
     public int counttblDistribtorMstr()//If fnChkFlgTodayRoute=1 it will get added to Actual Call On Route Else get Added in Off Route
     {
 
@@ -30475,8 +29265,6 @@ String fetchdate=fnGetDateTimeString();
         }
     }
 
-
-
     public LinkedHashMap<String, String> fnGetBankIdData()
     {
         LinkedHashMap<String, String> hmapQuestionMstr=new LinkedHashMap<String, String>();
@@ -30506,7 +29294,6 @@ String fetchdate=fnGetDateTimeString();
         }
     }
 
-
     public LinkedHashMap<String, String> fnGettblBankMaster()
     {
         LinkedHashMap<String, String> hmapQuestionMstr=new LinkedHashMap<String, String>();
@@ -30535,7 +29322,6 @@ String fetchdate=fnGetDateTimeString();
             close();
         }
     }
-
 
     public void deleteWhereStoreId(String StoreID,String OrderPDAID,String TmpInvoiceCodePDA )
     {
@@ -30579,7 +29365,6 @@ String fetchdate=fnGetDateTimeString();
         return db.insert(DATABASE_TABLE_tblAllCollectionData, null, initialValues);
     }
 
-
     public String  fnRetrieveCollectionDataBasedOnStoreID(String StoreVisitCode,String StoreID,String OrderPDAID,String TmpInvoiceCodePDA)
     {
         String flag="0";
@@ -30616,8 +29401,6 @@ String fetchdate=fnGetDateTimeString();
         }
     }
 
-    //Activity Amount Collection Functions
-
     public void deleteAllCollectionTables()
     {
 
@@ -30627,6 +29410,8 @@ String fetchdate=fnGetDateTimeString();
 
 
     }
+
+    //Activity Amount Collection Functions
 
     public long savetblInstrumentMaster(String InstrumentModeId, String InstrumentMode, String InstrumentType)
     {
@@ -30639,7 +29424,6 @@ String fetchdate=fnGetDateTimeString();
 
         return db.insert(DATABASE_TABLE_tblInstrumentMaster, null, initialValues);
     }
-
 
     public long savetblBankMaster(String BankId, String BankName, String LoginIdIns, String TimeStampIns, String LoginIdUpd, String TimeStampUpd)
     {
@@ -30656,8 +29440,6 @@ String fetchdate=fnGetDateTimeString();
 
         return db.insert(DATABASE_TABLE_tblBankMaster, null, initialValues);
     }
-
-
 
     public String  fnCheckNewOrUpdateAndRetrieveCollectionData(String StoreID)
     {
@@ -30693,8 +29475,6 @@ String fetchdate=fnGetDateTimeString();
         }
     }
 
-
-
     public int fetchTblStockOut()
     {
         open();
@@ -30724,6 +29504,7 @@ String fetchdate=fnGetDateTimeString();
             return retVal;
         }
     }
+
     public void inserttblStockUploadedStatus(int flgStockTrans,int VanLoadUnLoadCycID,String CycleTime,int statusId)
     {
 
@@ -30740,6 +29521,7 @@ String fetchdate=fnGetDateTimeString();
 
 
     }
+
     public int fetchtblStockUploadedStatus()
     {
         open();
@@ -30770,7 +29552,6 @@ String fetchdate=fnGetDateTimeString();
         }
     }
 
-
     public String[] getAllStoreClosePhotoDetail()
     {
 
@@ -30800,7 +29581,6 @@ String fetchdate=fnGetDateTimeString();
         }
 
     }
-
 
     public int getExistingPicNosForStoreClose(String StoreID)
     {
@@ -30853,6 +29633,7 @@ String fetchdate=fnGetDateTimeString();
         }
 
     }
+
     public void updateImageRecordsSyncdForStoreClose(String PhotoName)
     {
 
@@ -30891,9 +29672,6 @@ String fetchdate=fnGetDateTimeString();
         }
     }
 
-
-
-
     public LinkedHashMap<String,String> getPrdctIdAndSkuWrehouse()
     {
         //private static final String CREATE_TABLE_tblDistributorDayReport="
@@ -30929,6 +29707,7 @@ String fetchdate=fnGetDateTimeString();
         db.execSQL("Delete from tblStockConfirm");
         close();
     }
+
     public void insertConfirmWArehouse(String UserId,String confirmFlg)
     {
 
@@ -30956,7 +29735,6 @@ String fetchdate=fnGetDateTimeString();
 
     }
 
-
     public int flgConfirmedWareHouse()
     {
         int flgConfirm=0;
@@ -30979,7 +29757,6 @@ String fetchdate=fnGetDateTimeString();
             return flgConfirm;
         }
     }
-
 
     public double fnGettblPriceApplycutoffvalue(String storeID)
     {
@@ -31046,8 +29823,6 @@ String fetchdate=fnGetDateTimeString();
             close();
         }
     }
-
-
 
     public Double fetch_Store_MaxCollectionAmount(String StoreID,String TmpInvoiceCodePDA)
     {
@@ -31126,6 +29901,7 @@ String fetchdate=fnGetDateTimeString();
             close();
         }
     }
+
     public double fnGetStoretblLastOutstanding(String storeID)
     {
         open();
@@ -31145,8 +29921,6 @@ String fetchdate=fnGetDateTimeString();
         close();
         return LastOutstanding;
     }
-
-
 
     public Double  fnTotCollectionAmtAgainstStore(String StoreID,String TmpInvoiceCodePDA,String StoreVisitCode)
     {
@@ -31175,7 +29949,6 @@ String fetchdate=fnGetDateTimeString();
         }
         return TotCollectionAmt;
     }
-
 
     public String[] fetch_Store_tblInvoiceLastVisitDetails(String StoreID)
     {
@@ -31208,6 +29981,7 @@ String fetchdate=fnGetDateTimeString();
             close();
         }
     }
+
     public long savetblInvoiceCaption(String INVPrefix,int VanIntialInvoiceIds,String INVSuffix)
     {
         ContentValues initialValues = new ContentValues();
@@ -31221,6 +29995,27 @@ String fetchdate=fnGetDateTimeString();
     {
         db.execSQL("DELETE FROM tblInvoiceCaption");
 
+    }
+
+    public int fnCheckForNewInvoiceOrPreviousValue(String StoreID,String StoreVisitCode)
+    {
+        open();
+        Cursor cursorE2 = db.rawQuery("SELECT * FROM tblTmpInvoiceHeader WHERE StoreID='" + StoreID + "' AND StoreVisitCode='"+StoreVisitCode+"' AND Sstat=1", null);
+        int chkI = 0;
+        try {
+            if(cursorE2.getCount()>0)
+            {
+                if (cursorE2.moveToFirst()) {
+                    chkI = 1;
+                }
+            }
+        } finally {
+            if(cursorE2!=null) {
+                cursorE2.close();
+            }
+            close();
+        }
+        return chkI;
     }
 
   /*  public String fnGettblInvoiceCaption(String StoreID)
@@ -31284,32 +30079,6 @@ String fetchdate=fnGetDateTimeString();
         close();
     }*/
 
-
-
-
-    public int fnCheckForNewInvoiceOrPreviousValue(String StoreID,String StoreVisitCode)
-    {
-        open();
-        Cursor cursorE2 = db.rawQuery("SELECT * FROM tblTmpInvoiceHeader WHERE StoreID='" + StoreID + "' AND StoreVisitCode='"+StoreVisitCode+"' AND Sstat=1", null);
-        int chkI = 0;
-        try {
-            if(cursorE2.getCount()>0)
-            {
-                if (cursorE2.moveToFirst()) {
-                    chkI = 1;
-                }
-            }
-        } finally {
-            if(cursorE2!=null) {
-                cursorE2.close();
-            }
-            close();
-        }
-        return chkI;
-    }
-
-
-
   /*  public int fnCheckForNewInvoiceOrPreviousValue(String StoreID)
     {
         open();
@@ -31350,6 +30119,7 @@ String fetchdate=fnGetDateTimeString();
         }
         return TmpInvoiceCodePDA;
     }
+
     public void updateOutstandingOfStore(String StoreID,Double OutStandingAmt)
     {
 
@@ -31381,7 +30151,6 @@ String fetchdate=fnGetDateTimeString();
 
 
     }
-
 
     public HashMap<String, String> checkForStoreIdVisitStatus()
     {
@@ -31415,7 +30184,6 @@ String fetchdate=fnGetDateTimeString();
         close();
     }
 
-
     public int fnStoreCountWithVisitTypeStatus()
     {
         open();
@@ -31437,7 +30205,6 @@ String fetchdate=fnGetDateTimeString();
         return chkI;
     }
 
-
     public int fnStoreCountWithsStatStatus()
     {
         open();
@@ -31458,15 +30225,6 @@ String fetchdate=fnGetDateTimeString();
         }
         return chkI;
     }
-
-
-
-
-
-
-
-
-
 
     public void UpdateStoreFlagAtDayEndOrChangeRouteWithOnlyVistOrCollection(String sID, int flag2set)
     {
@@ -31570,6 +30328,7 @@ String fetchdate=fnGetDateTimeString();
         }
 
     }
+
     public LinkedHashMap<String,String> fnGetStoreListToProcessWithoutAlret()
     {
         open();
@@ -31604,9 +30363,6 @@ String fetchdate=fnGetDateTimeString();
 
     }
 
-
-
-
     public int fnCounttblDistributorProductLeft()
     {
         open();
@@ -31632,6 +30388,7 @@ String fetchdate=fnGetDateTimeString();
         }
         return chkI;
     }
+
     public String fnGetRouteIDWhilePurshase()
     {
         int LoncolumnIndex = 0;
@@ -31664,7 +30421,6 @@ String fetchdate=fnGetDateTimeString();
         }
 
     }
-
 
     public LinkedHashMap<String, String> fetch_Category_ForWarehouseCheckIn()
     {
@@ -31767,8 +30523,6 @@ String fetchdate=fnGetDateTimeString();
         return VanInvoiceIds;
     }
 
-
-
   /*  public String fnGetFinalAllotedInvoiceIdsAgainstInvoiceTable(String StoreID)
     {
         open();
@@ -31836,10 +30590,6 @@ String fetchdate=fnGetDateTimeString();
         return StoreVisitCode;
     }
 
-
-
-
-
     public void fnInsertOrUpdate_tblStoreVisitMstr(String StoreVisitCode,String StoreID,int Sstat,String ForDate,String ActualLatitude,String ActualLongitude,String VisitTimeOutSideStore,String VisitTimeInSideStore,String VisitTimeCheckStore,String VisitEndTS,String LocProvider,String Accuracy,String BateryLeftStatus,int StoreClose,int StoreNextDay,int ISNewStore,int IsNewStoreDataCompleteSaved,int flgFromWhereSubmitStatus,int flgSubmitFromQuotation,int flgLocationServicesOnOff,int flgGPSOnOff,int flgNetworkOnOff,int flgFusedOnOff,int flgInternetOnOffWhileLocationTracking,int flgStoreOrder,int flgRetailerCreditBalnce,int VisitTypeStatus)
     {
 
@@ -31891,6 +30641,7 @@ String fetchdate=fnGetDateTimeString();
             close();
         }
     }
+
     public LinkedHashMap<String, String> fngetStoreBasicDetails(String StoreID)
     {
         LinkedHashMap<String, String> hmapStoreBasicDetails=new LinkedHashMap<String, String>();//=null;
@@ -31931,9 +30682,6 @@ String fetchdate=fnGetDateTimeString();
         return hmapStoreBasicDetails;
     }
 
-
-    // function given by Abhianv Sir Start
-
     public String fnGetInvoiceCodePDA (String StoreID,String StoreVisitCode)
     {
         open();
@@ -31954,6 +30702,9 @@ String fetchdate=fnGetDateTimeString();
         }
         return InvoiceCodePDA;
     }
+
+
+    // function given by Abhianv Sir Start
 
     public long saveStoreTempInvoice(String StoreVisitCode,String TmpInvoiceCodePDA,String storeID,String pickerDate,Double TBtaxDis,Double TAmt,Double Dis,Double INval,
                                      int Ftotal,Double InvAfterDis,Double AddDis,int  NoOfCouponValue,Double TotalCoupunAmount,String pickerDateWithTime,int flgTransType,
@@ -31987,6 +30738,7 @@ String fetchdate=fnGetDateTimeString();
 
         return db.insert(DATABASE_TABLE_MAIN32, null, initialValues);
     }
+
     public long fnsaveStoreFinalInvoiceSummaryEntry(String StoreVisitCode,String TmpInvoiceCodePDA,String storeID,String pickerDate,Double TBtaxDis,Double TAmt,Double Dis,Double INval,
                                                     int Ftotal,Double InvAfterDis,Double AddDis,int  NoOfCouponValue,Double TotalCoupunAmount,String pickerDateWithTime,int flgTransType,
                                                     int flgWholeSellApplicable,int flgRuleTaxVal,int Outstat,String FinalInvoiceNumberGenerated)// , Double CreditAmt, Double
@@ -32064,6 +30816,7 @@ String fetchdate=fnGetDateTimeString();
 
         return StampEndsTime;
     }
+
     public void UpdateStoreActualLatLongi(String StoreID,
                                           String ActualLatitude, String ActualLongitude, String Accuracy,
                                           String LocProvider, int flgLocationServicesOnOff, int flgGPSOnOff, int flgNetworkOnOff, int flgFusedOnOff, int flgInternetOnOffWhileLocationTracking, int flgRestart, int flgStoreOrder,String StoreVisitCode,String VisitTimeInSideStore)
@@ -32092,7 +30845,6 @@ String fetchdate=fnGetDateTimeString();
 
         Log.w(TAG, "UpdateStoreActualLatLongi added..");
     }
-
 
     public long fnsaveStoreTempOrderEntryDetails(String TmpInvoiceCodePDA,String storeID,String PCateId,String ProductID,Double PRate,Double TaxRate,int flgRuleTaxVal,int OrderQTY,int SelectedUOMId,Double LineValBfrTxAftrDscnt,Double LineValAftrTxAftrDscnt,
                                                  int OrderFreeQty,Double OrderDisVal,int SampleQTY,String PName,Double TaxValue,String strGlobalOrderID,int flgIsQuoteRateApplied,int PriceApplyDiscountLevelType,String distID,int Outstat)
@@ -32155,13 +30907,6 @@ String fetchdate=fnGetDateTimeString();
         return hmapFinalInvoiceQtyProductWise;
     }
 
-    // function given by Abhianv Sir End
-
-
-
-
-
-
     public void UpdateStoreVisitWiseTables(String sID, int flag2set,String StoreVisitCode,String TmpInvoiceCodePDA)
     {
 
@@ -32195,6 +30940,9 @@ open();
         }
 close();
     }
+
+    // function given by Abhianv Sir End
+
     public void UpdateStoreVisitMStrTable(String sID, int flag2set,String StoreVisitCode)
     {
         open();
@@ -32221,7 +30969,6 @@ close();
         }
 
     }
-
 
     public String fetchtblVanCycStartTime()
     {
@@ -32253,6 +31000,7 @@ close();
             return CycStartTime;
         }
     }
+
     public String fetchtblStatusCycleTime() {
         open();
         String CycStartTime = "0";
@@ -32274,6 +31022,7 @@ close();
             return CycStartTime;
         }
     }
+
     public String fnGetInvoiceCodePDAWhileSync (String StoreID,String StoreVisitCode)
     {
         open();
@@ -32294,6 +31043,7 @@ close();
         }
         return InvoiceCodePDA;
     }
+
     public void UpdateStoreClose(String sID, int flag2set)
     {
 
@@ -32315,9 +31065,6 @@ close();
         }
 
     }
-
-
-
 
     public void fnInsert_tblNewAddedStoreLocationDetails(String StoreID,int Sstat,String ActualLatitude,String ActualLongitude,String VisitEndTS,String LocProvider,String Accuracy,String BateryLeftStatus,int flgLocationServicesOnOff,int flgGPSOnOff,int flgNetworkOnOff,int flgFusedOnOff,int flgInternetOnOffWhileLocationTracking)
     {
@@ -32357,7 +31104,6 @@ close();
 
     }
 
-
     public void inserttblDayCheckIn(int confirmFlg)
     {
 
@@ -32396,7 +31142,6 @@ close();
         return flgCkechDayStart;
     }
 
-
     public int confirmedStock()
     {
         int statusId=0;
@@ -32424,7 +31169,6 @@ close();
         }
 
     }
-
 
     public int CheckStoreListPresentOrNot()
     {
@@ -32460,8 +31204,6 @@ close();
         return chkI;
     }
 
-    // function by Sunil
-
     public int fnCheckForPendingImages()
     {
         open();
@@ -32493,6 +31235,8 @@ close();
         }
         return check;
     }
+
+    // function by Sunil
 
     public ArrayList<String> getImageDetails(int sStat)
     {
@@ -32579,7 +31323,6 @@ close();
         return check;
     }
 
-
     public void fnUpdateProcessedInvoiceflg(String InvoiceNumber, int flag2set)
     {
 
@@ -32601,6 +31344,7 @@ close();
         }
 
     }
+
     public String[] deletFromSDcCardPhotoNewStoreValidationBasedSstat(String Sstat) {
 
         String[] imageNameToBeDeleted = null;
@@ -32635,6 +31379,7 @@ close();
 
         return imageNameToBeDeleted;
     }
+
     public int fetchtblVanCycleIdForInvoiceHeader()
     {
 
@@ -32706,6 +31451,7 @@ close();
             return retVal;
         }
     }
+
     public int fetchtblInvoiceReviewCount(String sID,String TmpInvoiceCodePDA)
     {
         open();
@@ -32746,7 +31492,6 @@ close();
     {
         //tblInvoiceHeader (StoreVisitCode text not null,InvoiceNumber text not null,TmpInvoiceCodePDA text null, StoreID text not null, InvoiceDate string not null, TotalBeforeTaxDis real not null, TaxAmt real not null, TotalDis real not null, InvoiceVal real not null, FreeTotal integer not null, Sstat integer not null, InvAfterDis real not null, AddDis real not null,  NoCoupon int null, TotalCoupunAmount real null,TransDate string not null,FlgInvoiceType text not null,flgWholeSellApplicable int null,flgProcessedInvoice int not null,CycleID  int not null);";
     }
-
 
     public void UpdateStoreVisitWiseTablesAfterSync(int flag2set)
     {
@@ -32813,7 +31558,6 @@ open();
 
     }
 
-
     public void fnTransferDataFromTempToPermanent(String storeID,String StoreVisitCode,String TmpInvoiceCodePDA)
     {
         open();
@@ -32839,6 +31583,7 @@ open();
     }
 
     }
+
 public void fnUpdateflgTransferStatusInInvoiceHeader(String storeID,String StoreVisitCode,String TmpInvoiceCodePDA,int flgTransferStatus)
 {
             final ContentValues values = new ContentValues();
@@ -32862,6 +31607,7 @@ public void fnUpdateflgTransferStatusInInvoiceHeader(String storeID,String Store
             }
             return  InNumber;
         }
+
         public int fnCheckForPrevoiusInvoiceNumberIfAnyGenerated()
 {
     int flCheckPrevoiusInvoiceNumberIfAnyGenerated=0;
@@ -32891,8 +31637,6 @@ public void fnUpdateflgTransferStatusInInvoiceHeader(String storeID,String Store
 
 }
 
-
-
     public int fnGetMaxInvoiceNumberIfAnyGenerated()
     {
         int MaxInvoiceNumberGenerated=0;
@@ -32921,6 +31665,7 @@ public void fnUpdateflgTransferStatusInInvoiceHeader(String storeID,String Store
 
 
     }
+
     public LinkedHashMap<String,String> fetch_InvoiceCaptionPrefixAndSuffix()
     {
 
@@ -32954,7 +31699,6 @@ public void fnUpdateflgTransferStatusInInvoiceHeader(String storeID,String Store
         }
     }
 
-
     public ArrayList<String> getImageNameToDel(String StoreID)
     {
         open();
@@ -32986,8 +31730,6 @@ public void fnUpdateflgTransferStatusInInvoiceHeader(String storeID,String Store
         }
     }
 
-
-
     public void deleteImageDataCanceled(String storeId)
     {
         //tableImage(tempId text null,QstIdAnsCntrlTyp text null,imageName text null,imagePath text null,Sstat integer null);";
@@ -33003,7 +31745,6 @@ public void fnUpdateflgTransferStatusInInvoiceHeader(String storeID,String Store
         }
         close();
     }
-
 
     public int fnCheckflgTransferStatus(String storeID,String StoreVisitCode,String TmpInvoiceCodePDA)
     {
@@ -33036,6 +31777,7 @@ close();
 
 
     }
+
     public  void deleteMasterTblFromParmanentInvoiceTables(String StoreID,String TmpInvoiceCodePDA)
     {
         open();
@@ -33077,6 +31819,508 @@ close();
             return hmapPerUnitName;
         }
 
+    }
+
+    public LinkedHashMap<String,String> getPerBaseQty()
+    {
+        LinkedHashMap<String,String> hmapPerBaseQty=new LinkedHashMap<>();
+        open();
+        //tblProductList(ProductID text  null,RptUnitName text null,PerbaseUnit text null);";
+        Cursor cur=null;
+        try {
+            cur=db.rawQuery("Select ProductID,PerbaseUnit from tblProductList",null);
+            if(cur.getCount()>0)
+            {
+                if(cur.moveToFirst())
+                {
+                    for(int i=0;i<cur.getCount();i++)
+                    {
+                        hmapPerBaseQty.put(cur.getString(0),cur.getString(1));
+                        cur.moveToNext();
+                    }
+                }
+            }
+        }catch(Exception excptn)
+        {
+            System.out.println("Error getPerUnitName= "+excptn.toString());
+        }
+        finally
+        {
+            if(cur!=null)
+            {
+                cur.close();
+            }
+            close();
+            return hmapPerBaseQty;
+        }
+
+    }
+
+    private static class DatabaseHelper extends SQLiteOpenHelper
+    {
+        DatabaseHelper(Context context)
+        {
+            super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        }
+
+        @Override
+        public void onCreate(SQLiteDatabase db)
+        {
+
+            try
+            {
+                //
+                db.execSQL(DATABASE_CREATE_TABLE_DayCheckIn);
+                db.execSQL(DATABASE_CREATE_TABLE_TEMP_DISTRIBUTOR_STOCK);
+                db.execSQL(DATABASE_CREATE_TABLE_CYCLEID);
+
+                db.execSQL(DATABASE_CREATE_TABLE_INVOICE_HEADER);
+                db.execSQL(DATABASE_CREATE_TABLE_INVOICE_DETAILS);
+
+
+                db.execSQL(DATABASE_CREATE_TABLE_STOREVISIT);
+                db.execSQL(DATABASE_CREATE_TABLE_tblPriceApplyType);
+
+                db.execSQL(DATABASE_CREATE_TABLE_tblInvoiceCaption);
+                db.execSQL(DATABASE_CREATE_TABLE_tblLastOutstanding);
+                db.execSQL(DATABASE_CREATE_TABLE_tblInvoiceLastVisitDetails);
+
+                db.execSQL(DATABASE_CREATE_TABLE_tblStockConfirm);
+                db.execSQL(DATABASE_CREATE_TABLE_tblStockUploadedStatus);
+                //stock out flg
+                db.execSQL(DATABASE_CREATE_TABLE_tblStockOut);
+
+
+                //Amount Collection
+                db.execSQL(DATABASE_CREATE_TABLE_tblBankMaster);
+                db.execSQL(DATABASE_CREATE_TABLE_tblInstrumentMaster);
+                db.execSQL(DATABASE_CREATE_TABLE_tblAllCollectionData);
+
+                //store close info
+
+
+
+                db.execSQL(DATABASE_CREATE_TABLE_tblIsDBRStockSubmitted);
+                db.execSQL(DATABASE_CREATE_TABLE_tblStoreCloseLocationDetails);
+                db.execSQL(DATABASE_CREATE_TABLE_tblStoreClosedPhotoDetail);
+                db.execSQL(DATABASE_CREATE_TABLE_tblStoreCloseReasonMaster );
+                db.execSQL(DATABASE_CREATE_TABLE_tblStoreCloseReasonSaving );
+
+                // Splash Screen Tables
+                db.execSQL(DATABASE_CREATE_TABLE_tblDistribtorMstr);
+
+                db.execSQL(DATABASE_CREATE_TABLE_tblDistributorMapping);
+
+                db.execSQL(DATABASE_CREATE_TABLE_DISTRIBUTOR_ORDERPDAID);
+                db.execSQL(DATABASE_CREATE_TABLE_DISTRIBUTOR_LEFTPRODUCT);
+                db.execSQL(DATABASE_CREATE_TABLE_DISTRIBUTOR_STOCK);
+
+                db.execSQL(DATABASE_CREATE_TABLE_tblSameLocationForStoreRestartDone);
+                db.execSQL(DATABASE_CREATE_TABLE_23);
+
+                db.execSQL(DATABASE_CREATE_TABLE_DayAndSummary);
+
+                db.execSQL(DATABASE_CREATE_TABLE_235);
+                db.execSQL(DATABASE_CREATE_TABLE_236);
+                db.execSQL(DATABASE_CREATE_TABLE_4);
+
+                db.execSQL(DATABASE_CREATE_TABLE_271);
+
+                db.execSQL(CREATE_TABLE_tblDistributorDayReport);
+                db.execSQL(CREATE_TABLE_tblDistributorDayReportColumnsDesc);
+                db.execSQL(CREATE_TABLE_tblDistributorSavedData);
+                db.execSQL(CREATE_TABLE_tblDistributorOldStockData);
+
+                db.execSQL(CREATE_tblIncentiveMsgToDisplay_Definition);
+                db.execSQL(CREATE_TABLE_tblIncentiveMaster);
+                //db.execSQL(CREATE_TABLE_tblIncentiveDetailsData);
+                db.execSQL(CREATE_TABLE_tblIncentiveDetailsColumnsDesc);
+                db.execSQL(CREATE_TABLE_tblTotalEarning);
+                db.execSQL(CREATE_TABLE_tblIncentivePastDetailsColumnsDesc);
+
+
+
+
+                db.execSQL(TABLE_tblUserAuthenticationMstr_Definition);
+                db.execSQL(DATABASE_CREATE_TABLE_tblBloodGroup);
+                db.execSQL(DATABASE_CREATE_TABLE_tblEducationQuali);
+                db.execSQL(DATABASE_CREATE_TABLE_tblDsrRegDetails);
+                db.execSQL(DATABASE_CREATE_TABLE_tblUserRegistarationStatus);
+
+
+                db.execSQL(TABLE_tblAvailableVersionMstr_Definition);
+                db.execSQL(TABLE_tblRouteMstr_Definition);
+                db.execSQL(TABLE_tblNotificationMstr_Definition);
+                db.execSQL(TABLE_tblNoVisitReasonMaster_Definition);
+                db.execSQL(TABLE_tblNoVisitStoreDetails_Definition);
+
+                db.execSQL(DATABASE_CREATE_TABLE_QSTOUTCHANNEL);
+                db.execSQL(DATABASE_CREATE_TABLE_QST_NAME);
+                db.execSQL(DATABASE_CREATE_TABLE_QUESTIONMstr);
+                db.execSQL(DATABASE_CREATE_TABLE_QuestGrpMappingMstr);
+                db.execSQL(DATABASE_CREATE_TABLE_QUESTION_OPTION_DEPENDENTMstr);
+                db.execSQL(DATABASE_CREATE_TABLE_QUESTION_OPTION_VAL_DEPENDENTMstr);
+
+                db.execSQL(DATABASE_CREATE_TABLE_Image);
+                db.execSQL(DATABASE_CREATE_TABLE_tblLocationDetails);
+
+
+
+
+                db.execSQL(DATABASE_NewStoreSalesQuotePaymentDetails);
+                db.execSQL(DATABASE_StoreSalesOrderPaymentDetails);
+                db.execSQL(DATABASE_StoreAddressMapDetailsMstr);
+                db.execSQL(DATABASE_StoreOrderBillAddressDetails);
+
+                db.execSQL(DATABASE_MinDeliverQntty);
+
+                db.execSQL(DATABASE_CREATE_TABLE_RETURNREASON);
+
+                //db.execSQL(DATABASE_CREATE_TABLE_QuestGrpMappingMstr);
+                db.execSQL(DATABASE_CREATE_TABLE_XMLfiles);
+                db.execSQL(DATABASE_CREATE_TABLE_13);
+
+                db.execSQL(DATABASE_CREATE_TABLE_NewAddedStoreLocationDetails);
+
+
+                db.execSQL(DATABASE_CREATE_TABLE_OutletPhotoDetail);
+                // db.execSQL(DATABASE_CREATE_TABLE_QUESTIONMstr);
+                db.execSQL(DATABASE_CREATE_TABLE_OutletChannelBusinessSegmentMasterr);
+                db.execSQL(DATABASE_CREATE_TABLE_OPTIONMstr);
+                db.execSQL(DATABASE_CREATE_TABLE_tblOutletMstr);
+                db.execSQL(DATABASE_CREATE_TABLE_tblOutletQuestAnsMstr);
+                db.execSQL( DATABASE_CREATE_TABLE_tblViewOutletQuestAnsMstr);
+
+                db.execSQL(  DATABASE_CREATE_TABLE_ViewOutletNameAndId);
+
+
+                db.execSQL(DATABASE_CREATE_TABLE_QUESTION_DEPENDENTMstr);
+
+
+
+
+                db.execSQL(DATABASE_CREATE_TABLE_11);
+                db.execSQL(DATABASE_CREATE_TABLE_12);
+
+                db.execSQL(DATABASE_CREATE_TABLE_14);
+                db.execSQL(DATABASE_CREATE_TABLE_ProductSegementMap);
+                db.execSQL(DATABASE_CREATE_TABLE_15);
+
+                db.execSQL(DATABASE_CREATE_TABLE_UOMMstr);
+                db.execSQL(DATABASE_CREATE_TABLE_SalesQuotePrcsMstr);
+                db.execSQL(DATABASE_SalesQuotePersonMeetMstr);
+                db.execSQL(DATABASE_CREATE_SalesQuoteProductsMstr);
+                db.execSQL(DATABASE_CREATE_TABLE_tblSalesQuotePaymentModeMstr);
+                db.execSQL(DATABASE_CREATE_TABLE_tblSalesQuotePaymentStageMstr);
+                db.execSQL(DATABASE_CREATE_TABLE_tblSalesQuoteTypeMstr);
+                db.execSQL(DATABASE_CREATE_TABLE_tblSalesQuotePaymentStageModeMapMstr);
+                //db.execSQL(DATABASE_CREATE_TABLE_5);
+                //db.execSQL(DATABASE_CREATE_TABLE_7);
+                db.execSQL(DATABASE_CREATE_TABLE_9);
+                db.execSQL(DATABASE_CREATE_TABLE_10);
+                db.execSQL(DATABASE_CREATE_TABLE_16);
+                db.execSQL(DATABASE_CREATE_TABLE_17);
+                db.execSQL(DATABASE_CREATE_TABLE_18);
+                db.execSQL(DATABASE_CREATE_TABLE_19);
+                db.execSQL(DATABASE_CREATE_TABLE_20);
+                db.execSQL(DATABASE_CREATE_TABLE_31);
+                db.execSQL(DATABASE_CREATE_TABLE_32);
+
+                db.execSQL(DATABASE_CREATE_TABLE_StoreProductMap);
+                db.execSQL(DATABASE_CREATE_TABLE_51);
+                db.execSQL(DATABASE_CREATE_TABLE_52);
+                db.execSQL(DATABASE_CREATE_TABLE_53);
+                db.execSQL(DATABASE_CREATE_TABLE_54);
+                db.execSQL(DATABASE_CREATE_TABLE_55);
+                db.execSQL(DATABASE_CREATE_TABLE_56);
+                db.execSQL(DATABASE_CREATE_TABLE_61);
+                db.execSQL(DATABASE_CREATE_TABLE_62);
+                db.execSQL(DATABASE_CREATE_TABLE_63);
+                db.execSQL(DATABASE_CREATE_TABLE_71);
+                db.execSQL(DATABASE_CREATE_TABLE_72);
+                db.execSQL(DATABASE_CREATE_TABLE_81);
+                db.execSQL(DATABASE_CREATE_TABLE_82);
+                db.execSQL(DATABASE_CREATE_TABLE_91);
+                db.execSQL(DATABASE_CREATE_TABLE_92);
+
+                db.execSQL(DATABASE_CREATE_TABLE_94);
+
+                db.execSQL(DATABASE_CREATE_tblDaySummaryNew);
+
+
+                db.execSQL(DATABASE_CREATE_TABLE_101);
+                db.execSQL(DATABASE_CREATE_TABLE_102);
+                db.execSQL(DATABASE_CREATE_TABLE_103);
+
+
+                db.execSQL(DATABASE_CREATE_TABLE_111);
+                db.execSQL(DATABASE_CREATE_TABLE_112);
+                db.execSQL(DATABASE_CREATE_TABLE_113);
+                db.execSQL(DATABASE_CREATE_TABLE_114);
+
+
+                db.execSQL(DATABASE_CREATE_TABLE_141);
+                db.execSQL(DATABASE_CREATE_TABLE_142);
+                db.execSQL(DATABASE_CREATE_TABLE_143);
+                db.execSQL(DATABASE_CREATE_TABLE_144);
+                db.execSQL(DATABASE_CREATE_TABLE_145);
+                db.execSQL(DATABASE_CREATE_TABLE_146);
+                db.execSQL(DATABASE_CREATE_TABLE_147);
+
+                db.execSQL(DATABASE_CREATE_TABLE_151);
+
+                db.execSQL(DATABASE_CREATE_TABLE_161);
+                db.execSQL(DATABASE_CREATE_TABLE_162);
+                db.execSQL(DATABASE_CREATE_TABLE_163);
+                db.execSQL(DATABASE_CREATE_TABLE_164);
+
+                db.execSQL(DATABASE_CREATE_TABLE_165);
+                db.execSQL(DATABASE_CREATE_TABLE_166);
+
+
+                db.execSQL(DATABASE_CREATE_TABLE_201);
+                db.execSQL(DATABASE_CREATE_TABLE_202);
+                db.execSQL(DATABASE_CREATE_TABLE_203);
+                db.execSQL(DATABASE_CREATE_TABLE_204);
+                db.execSQL(DATABASE_CREATE_TABLE_205);
+                db.execSQL(DATABASE_CREATE_TABLE_206);
+                db.execSQL(DATABASE_CREATE_TABLE_207);
+                db.execSQL(DATABASE_CREATE_TABLE_208);
+                db.execSQL(DATABASE_CREATE_TABLE_209);
+                db.execSQL(DATABASE_CREATE_TABLE_210);
+                db.execSQL(DATABASE_CREATE_TABLE_211);
+
+                db.execSQL(DATABASE_CREATE_TABLE_221);
+                db.execSQL(DATABASE_CREATE_TABLE_222);
+                db.execSQL(DATABASE_CREATE_TABLE_223);
+
+                db.execSQL(DATABASE_CREATE_TABLE_231);
+                db.execSQL(DATABASE_CREATE_TABLE_232);
+                db.execSQL(DATABASE_CREATE_TABLE_233);
+                db.execSQL(DATABASE_CREATE_TABLE_234);
+
+                db.execSQL(DATABASE_CREATE_TABLE_251);
+
+
+
+
+                db.execSQL(DATABASE_CREATE_TABLE_21);
+                db.execSQL(DATABASE_CREATE_TABLE_22);
+
+                db.execSQL(DATABASE_CREATE_TABLE_212);
+
+                db.execSQL(DATABASE_CREATE_TABLE_213);
+
+                db.execSQL(DATABASE_CREATE_TABLE_214);
+                db.execSQL(DATABASE_CREATE_TABLE_215);
+
+                db.execSQL(DATABASE_CREATE_TABLE_tblSalesQuoteSponsorMstr);
+                db.execSQL(DATABASE_CREATE_TABLE_tblManufacturerMstrMain);
+                db.execSQL(DATABASE_CREATE_TABLE_tblRateDistribution);
+
+
+                db.execSQL(DATABASE_CREATE_TABLE_261);
+                db.execSQL(DATABASE_CREATE_TABLE_262);
+
+            } catch (Exception e) {
+                Log.e(TAG, "Error: onCreate db");
+            }
+        }
+
+        @Override
+        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+            try
+            {
+                db.execSQL("DROP TABLE IF EXISTS tblDayCheckIn");
+                db.execSQL("DROP TABLE IF EXISTS tblTmpDistributorStock");
+                db.execSQL("DROP TABLE IF EXISTS tblCycleID");
+                db.execSQL("DROP TABLE IF EXISTS tblTmpInvoiceHeader");
+                db.execSQL("DROP TABLE IF EXISTS tblStoreVisitMstr");
+
+                db.execSQL("DROP TABLE IF EXISTS tblPriceApplyType");
+                db.execSQL("DROP TABLE IF EXISTS tblInvoiceCaption");
+
+                db.execSQL("DROP TABLE IF EXISTS tblLastOutstanding");
+
+                db.execSQL("DROP TABLE IF EXISTS tblInvoiceLastVisitDetails");
+
+
+                db.execSQL("DROP TABLE IF EXISTS tblStockConfirm");
+                db.execSQL("DROP TABLE IF EXISTS tblStockUploadedStatus");
+                //stock out flg
+                db.execSQL("DROP TABLE IF EXISTS dtDistributorStockOutFlg");
+
+                //Amount Collection
+                db.execSQL("DROP TABLE IF EXISTS tblBankMaster");
+                db.execSQL("DROP TABLE IF EXISTS tblInstrumentMaster");
+                db.execSQL("DROP TABLE IF EXISTS tblAllCollectionData");
+
+
+
+                //store close info
+                db.execSQL("DROP TABLE IF EXISTS tblIsDBRStockSubmitted");
+                db.execSQL("DROP TABLE IF EXISTS tblStoreCloseLocationDetails");
+                db.execSQL("DROP TABLE IF EXISTS tblStoreClosedPhotoDetail");
+                db.execSQL("DROP TABLE IF EXISTS tblStoreCloseReasonMaster");
+                db.execSQL("DROP TABLE IF EXISTS tblStoreCloseReasonSaving");
+
+                db.execSQL("DROP TABLE IF EXISTS tblDistribtorMstr");
+
+                db.execSQL("DROP TABLE IF EXISTS tblDistributorOrderPdaId");
+                db.execSQL("DROP TABLE IF EXISTS tblDistributorStock");
+                db.execSQL("DROP TABLE IF EXISTS tblDistributorProductLeft");
+
+                db.execSQL("DROP TABLE IF EXISTS tblsameLocationForStoreRestartDone");
+                db.execSQL("DROP TABLE IF EXISTS tblLatLongDetails");
+                db.execSQL("DROP TABLE IF EXISTS tblTargetVsAchievedNote");
+                db.execSQL("DROP TABLE IF EXISTS tblDistributorOldStockData");
+                db.execSQL("DROP TABLE IF EXISTS tblDistributorListMaster");
+                db.execSQL("DROP TABLE IF EXISTS tblDistributorDayReport");
+                db.execSQL("DROP TABLE IF EXISTS tblDistributorDayReportColumnsDesc");
+                db.execSQL("DROP TABLE IF EXISTS tblDistributorSavedData");
+
+
+                db.execSQL("DROP TABLE IF EXISTS tblNoVisitReasonMaster");
+
+                db.execSQL("DROP TABLE IF EXISTS tblNoVisitStoreDetails");
+
+                db.execSQL("DROP TABLE IF EXISTS tblManagerMstr");
+                db.execSQL("DROP TABLE IF EXISTS tblSelectedManagerDetails");
+                db.execSQL("DROP TABLE IF EXISTS tblTargetVsAchievedSummary");
+
+                db.execSQL("DROP TABLE IF EXISTS tblStoreWiseTarget");
+
+
+
+                db.execSQL("DROP TABLE IF EXISTS tblMinDeliverQntty");
+
+
+                db.execSQL("DROP TABLE IF EXISTS tblNewStoreSalesQuotePaymentDetails");
+                db.execSQL("DROP TABLE IF EXISTS tblStoreSalesOrderPaymentDetails");
+                db.execSQL("DROP TABLE IF EXISTS tblStoreAddressMapDetailsMstr");
+                db.execSQL("DROP TABLE IF EXISTS tblStoreOrderBillAddressDetails");
+
+
+                db.execSQL("DROP TABLE IF EXISTS tblReturnReason");
+                db.execSQL("DROP TABLE IF EXISTS tbl_XMLfiles");
+                db.execSQL("DROP TABLE IF EXISTS tblUserAuthenticationMstr");
+                db.execSQL("DROP TABLE IF EXISTS tblBloodGroup");
+                db.execSQL("DROP TABLE IF EXISTS tblEducationQuali");
+                db.execSQL("DROP TABLE IF EXISTS tblDsrRegDetails");
+                db.execSQL("DROP TABLE IF EXISTS tblUserRegistarationStatus");
+
+                db.execSQL("DROP TABLE IF EXISTS tblAvailableVersionMstr");
+                db.execSQL("DROP TABLE IF EXISTS tblRouteMstr");
+                db.execSQL("DROP TABLE IF EXISTS tblNotificationMstr");
+                //surbhi
+                db.execSQL("DROP TABLE IF EXISTS tblUOMMstr");
+                db.execSQL("DROP TABLE IF EXISTS tblSalesQuotePrcsMstr");
+                db.execSQL("DROP TABLE IF EXISTS tblSalesQuotePersonMeetMstr");
+                db.execSQL("DROP TABLE IF EXISTS tblSalesQuoteProductsMstr");
+                db.execSQL("DROP TABLE IF EXISTS tblSalesQuotePaymentModeMstr");
+                db.execSQL("DROP TABLE IF EXISTS tblSalesQuotePaymentStageMstr");
+                db.execSQL("DROP TABLE IF EXISTS tblSalesQuoteTypeMstr");
+                db.execSQL("DROP TABLE IF EXISTS tblSalesQuotePaymentStageModeMapMstr");
+
+
+
+                db.execSQL("DROP TABLE IF EXISTS tblPDAQuestGrpMappingMstr");
+
+
+                db.execSQL("DROP TABLE IF EXISTS tblStoreList");
+                db.execSQL("DROP TABLE IF EXISTS tblNewAddedStoreLocationDetails");
+                db.execSQL("DROP TABLE IF EXISTS tblProductList");
+                db.execSQL("DROP TABLE IF EXISTS tblProductSegementMap");
+                db.execSQL("DROP TABLE IF EXISTS tblCatagoryMstr");
+                //db.execSQL("DROP TABLE IF EXISTS tblCategoryQuestionInformation");
+                db.execSQL("DROP TABLE IF EXISTS tblVisibilityMstr");
+                db.execSQL("DROP TABLE IF EXISTS tblVisibilityDetails");
+                db.execSQL("DROP TABLE IF EXISTS tblTransac");
+                db.execSQL("DROP TABLE IF EXISTS tblInvoiceHeader");
+                db.execSQL("DROP TABLE IF EXISTS tblPDALastInvoiceDet");
+                db.execSQL("DROP TABLE IF EXISTS tblStoreProductMap");
+                db.execSQL("DROP TABLE IF EXISTS tblSelectedStoreIDinChangeRouteCase");
+                db.execSQL("DROP TABLE IF EXISTS tblDayStartEndDetails");
+                db.execSQL("DROP TABLE IF EXISTS tblSysVisitID");
+                db.execSQL("DROP TABLE IF EXISTS tblDaySummaryNew");
+
+                db.execSQL("DROP TABLE IF EXISTS tblFirstOrderDetailsOnLastVisitDetailsActivity");
+                db.execSQL("DROP TABLE IF EXISTS tblSecondVisitDetailsOnLastVisitDetailsActivity");
+                db.execSQL("DROP TABLE IF EXISTS tblLODOnLastSalesSummary");
+
+
+                db.execSQL("DROP TABLE IF EXISTS tblInvoiceButtonStoreMstr");
+                db.execSQL("DROP TABLE IF EXISTS tblInvoiceButtonProductMstr");
+                db.execSQL("DROP TABLE IF EXISTS tblInvoiceButtonStoreProductwiseOrder");
+                db.execSQL("DROP TABLE IF EXISTS tblInvoiceButtonTransac");
+                db.execSQL("DROP TABLE IF EXISTS tblPdaDate");
+                //db.execSQL("DROP TABLE IF EXISTS tblNotificationMstr");
+
+                db.execSQL("DROP TABLE IF EXISTS tblForPDAGetLastVisitDate");
+                db.execSQL("DROP TABLE IF EXISTS tblForPDAGetLastOrderDate");
+                db.execSQL("DROP TABLE IF EXISTS tblForPDAGetLastVisitDetails");
+                db.execSQL("DROP TABLE IF EXISTS tblForPDAGetLastOrderDetails");
+                db.execSQL("DROP TABLE IF EXISTS tblspForPDAGetLastOrderDetailsTotalValues");
+                db.execSQL("DROP TABLE IF EXISTS tblForPDAGetExecutionSummary");
+                db.execSQL("DROP TABLE IF EXISTS tblStoreSchemeFreeProQtyOtherDetails");
+
+                db.execSQL("DROP TABLE IF EXISTS tblProductListForAvailableStock");
+                db.execSQL("DROP TABLE IF EXISTS tblCatagoryMstrForDailyTarget");
+
+                db.execSQL("DROP TABLE IF EXISTS tblSchemeStoreMapping");
+                db.execSQL("DROP TABLE IF EXISTS tblSchemeMstr");
+                db.execSQL("DROP TABLE IF EXISTS tblSchemeSlabDetail");
+                db.execSQL("DROP TABLE IF EXISTS tblSchemeSlabBucketDetails");
+                db.execSQL("DROP TABLE IF EXISTS tblSchemeSlabBucketProductMapping");
+                db.execSQL("DROP TABLE IF EXISTS tblSchemeSlabBenefitsBucketDetails");
+                db.execSQL("DROP TABLE IF EXISTS tblSchemeSlabBenefitsProductMappingDetail");
+                db.execSQL("DROP TABLE IF EXISTS tblSchemeSlabBenefitsValueDetail");
+                db.execSQL("DROP TABLE IF EXISTS tblProductRelatedScheme");
+                db.execSQL("DROP TABLE IF EXISTS tblTmpInvoiceDetails");
+                db.execSQL("DROP TABLE IF EXISTS tblInvoiceDetails");
+                db.execSQL("DROP TABLE IF EXISTS tblStoreProductAppliedSchemesBenifitsRecords");
+
+                db.execSQL("DROP TABLE IF EXISTS tblStoreReturnDetail");
+
+                db.execSQL("DROP TABLE IF EXISTS tblStoreTypeMstr");
+                db.execSQL("DROP TABLE IF EXISTS tblStoreProductClassificationTypeListMstr");
+                db.execSQL("DROP TABLE IF EXISTS tblTradeChannelMstr");
+
+                db.execSQL("DROP TABLE IF EXISTS tblNewStoreEntries");
+                db.execSQL("DROP TABLE IF EXISTS tblTemp");
+
+
+                db.execSQL("DROP TABLE IF EXISTS tblStoreProductPhotoDetail");
+
+
+
+                db.execSQL("DROP TABLE IF EXISTS tblSKUWiseDaySummary");
+                db.execSQL("DROP TABLE IF EXISTS tblStoreWiseDaySummary");
+                db.execSQL("DROP TABLE IF EXISTS tblStoreSKUWiseDaySummary");
+
+                db.execSQL("DROP TABLE IF EXISTS tblProductMappedWithSchemeSlabApplied");
+                db.execSQL("DROP TABLE IF EXISTS tblAlrtVal");
+                db.execSQL("DROP TABLE IF EXISTS tblAllSummary");
+
+
+                db.execSQL("DROP TABLE IF EXISTS tblPOSMaterialMstr");
+                db.execSQL("DROP TABLE IF EXISTS tblStoreIDAndMaterialIDMap");
+                db.execSQL("DROP TABLE IF EXISTS tblStoreMaterialDetail");
+                db.execSQL("DROP TABLE IF EXISTS tblStoreMaterialPhotoDetail");
+
+                db.execSQL("DROP TABLE IF EXISTS tblNoVisitReasonMaster");
+                //
+                db.execSQL("DROP TABLE IF EXISTS tblNoVisitStoreDetails");
+                db.execSQL("DROP TABLE IF EXISTS tblSalesQuoteSponsorMstr");
+                db.execSQL("DROP TABLE IF EXISTS tblManufacturerMstrMain");
+                db.execSQL("DROP TABLE IF EXISTS tblRateDistribution");
+
+                onCreate(db);
+
+            } catch (Exception e) {
+                Log.e(TAG, "Error: onUpgrade db");
+            }
+        }
     }
 }
 

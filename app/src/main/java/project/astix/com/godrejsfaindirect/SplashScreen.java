@@ -61,33 +61,84 @@ import java.util.zip.ZipOutputStream;
 
 public class SplashScreen extends BaseActivity implements  TaskListner
 {
-    SyncXMLfileData task2;
+    public static final String REG_ID = "regId";
+    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     public String[] xmlForWeb = new String[1];
-    DatabaseAssistantDistributorEntry DA = new DatabaseAssistantDistributorEntry(this);
     public String newfullFileName;
-    int serverResponseCode = 0;
     public int syncFLAG = 0;
     public ProgressDialog pDialogGetStores;
-    String serverDateForSPref;
-    SharedPreferences sPref;
     public int flgTodaySalesTargetToShow=0;
-
-    PRJDatabase dbengine = new PRJDatabase(this);
-    ServiceWorker newservice = new ServiceWorker();
     public String imei;
     public SimpleDateFormat sdf;
     public String fDate;
     public int chkFlgForErrorToCloseApp=0;
-
-
+    public String RegistrationID="NotGettingFromServer";
+    SyncXMLfileData task2;
+    DatabaseAssistantDistributorEntry DA = new DatabaseAssistantDistributorEntry(this);
+    int serverResponseCode = 0;
+    String serverDateForSPref;
+    SharedPreferences sPref;
+    PRJDatabase dbengine = new PRJDatabase(this);
+    ServiceWorker newservice = new ServiceWorker();
     RequestParams params = new RequestParams();
     GoogleCloudMessaging gcmObj;
     String regId = "";
-
-    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     AsyncTask<Void, Void, String> createRegIdTask;
-    public static final String REG_ID = "regId";
-    public String RegistrationID="NotGettingFromServer";
+
+    public static void zip(String[] files, String zipFile) throws IOException
+    {
+        BufferedInputStream origin = null;
+        final int BUFFER_SIZE = 2048;
+
+        ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(zipFile)));
+        try
+        {
+            byte data[] = new byte[BUFFER_SIZE];
+
+            for (int i = 0; i < files.length; i++)
+            {
+                FileInputStream fi = new FileInputStream(files[i]);
+                origin = new BufferedInputStream(fi, BUFFER_SIZE);
+                try
+                {
+                    ZipEntry entry = new ZipEntry(files[i].substring(files[i].lastIndexOf("/") + 1));
+                    out.putNextEntry(entry);
+                    int count;
+                    while ((count = origin.read(data, 0, BUFFER_SIZE)) != -1)
+                    {
+                        out.write(data, 0, count);
+                    }
+                }
+                finally
+                {
+                    origin.close();
+                }
+            }
+        }
+        finally
+        {
+            out.close();
+        }
+    }
+
+    public static String[] checkNumberOfFiles(File dir)
+    {
+        int NoOfFiles=0;
+        String [] Totalfiles = null;
+
+        if (dir.isDirectory())
+        {
+            String[] children = dir.list();
+            NoOfFiles=children.length;
+            Totalfiles=new String[children.length];
+
+            for (int i=0; i<children.length; i++)
+            {
+                Totalfiles[i]=children[i];
+            }
+        }
+        return Totalfiles;
+    }
 
     @Override
     public void onTaskFinish(boolean serviceException,int returnFrom)
@@ -168,7 +219,6 @@ public class SplashScreen extends BaseActivity implements  TaskListner
         return super.onKeyDown(keyCode, event);
     }
 
-
     public int checkImagesInFolder()
     {
         int totalFiles=0;
@@ -196,7 +246,6 @@ public class SplashScreen extends BaseActivity implements  TaskListner
         }
         return totalFiles;
     }
-
 
     public void getPrevioisDateData()
     {
@@ -278,7 +327,7 @@ public class SplashScreen extends BaseActivity implements  TaskListner
 
     //   imei="354010084603910";
 
-       // imei="356808071063941";
+        imei="356808071063941";
 
        // imei="911577250038101";
 
@@ -420,6 +469,7 @@ public class SplashScreen extends BaseActivity implements  TaskListner
             onCreateFunctionalityAllcode();
         }
     }
+
     public void loadLocale()
     {
         String langPref = "Language";
@@ -427,6 +477,7 @@ public class SplashScreen extends BaseActivity implements  TaskListner
         String language = prefs.getString("Language", "");
         changeLang(language);
     }
+
     public void changeLang(String lang)
     {
         if (lang.equalsIgnoreCase(""))
@@ -439,6 +490,7 @@ public class SplashScreen extends BaseActivity implements  TaskListner
         getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
         // updateTexts();
     }
+
     public void saveLocale(String lang)
     {
         SharedPreferences prefs = getSharedPreferences("LanguagePref", Activity.MODE_PRIVATE);
@@ -575,6 +627,472 @@ public class SplashScreen extends BaseActivity implements  TaskListner
             }
 
 
+    }
+
+    private void funGetRegistrationID(final String emailID)
+    {
+        new AsyncTask<Void, Void, String>()
+        {
+            @Override
+            protected String doInBackground(Void... params)
+            {
+                String msg = "";
+                try
+                {
+                    if (gcmObj == null)
+                    {
+                        gcmObj = GoogleCloudMessaging.getInstance(getApplicationContext());
+                    }
+                    regId = gcmObj.register(ApplicationConstants.GOOGLE_PROJ_ID);
+                    msg = regId;
+                }
+                catch(IOException ex)
+                {
+                    msg = getResources().getString(R.string.errorTxt) + ex.getMessage();
+                }
+                return msg;
+            }
+
+            @Override
+            protected void onPostExecute(String msg)
+            {
+
+                RegistrationID=msg;
+                // System.out.println("Sunil Reg id msg SplashScreen:"+RegistrationID);
+                try
+                {
+                    new GetRouteInfo().execute();
+
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+
+
+            }
+        }.execute(null, null, null);
+    }
+
+    private boolean checkPlayServices()
+    {
+        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS)
+        {
+            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode))
+            {
+                GooglePlayServicesUtil.getErrorDialog(resultCode, this,PLAY_SERVICES_RESOLUTION_REQUEST).show();
+            }
+            else
+            {
+                Toast.makeText(getApplicationContext(),getResources().getString(R.string.errorPlayServices),Toast.LENGTH_LONG).show();
+                finish();
+            }
+            return false;
+        }
+        else
+        {
+            //Toast.makeText(applicationContext,"This device supports Play services, App will work normally",Toast.LENGTH_LONG).show();
+        }
+        return true;
+    }
+
+    public void showAlertBox(String msg)
+    {
+        AlertDialog.Builder alertDialogNoConn = new AlertDialog.Builder(SplashScreen.this);
+        alertDialogNoConn.setTitle(R.string.AlertDialogHeaderMsg);
+        alertDialogNoConn.setMessage(msg);
+        alertDialogNoConn.setCancelable(false);
+
+        alertDialogNoConn.setNeutralButton(R.string.AlertDialogOkButton,new DialogInterface.OnClickListener()
+        {
+            public void onClick(DialogInterface dialog, int which)
+            {
+                dialog.dismiss();
+                dbengine.open();
+                dbengine.reTruncateRouteMstrTbl();
+                dbengine.close();
+                finish();
+
+            }
+        });
+        alertDialogNoConn.setIcon(R.drawable.info_ico);
+        AlertDialog alert = alertDialogNoConn.create();
+        alert.show();
+
+    }
+
+    public void showAlertForEveryOne(String msg)
+    {
+        // AlertDialog.Builder alertDialogNoConn = new AlertDialog.Builder(new ContextThemeWrapper(SplashScreen.this, R.style.Dialog));
+        AlertDialog.Builder alertDialogNoConn = new AlertDialog.Builder(SplashScreen.this);
+
+        alertDialogNoConn.setTitle(R.string.AlertDialogHeaderMsg);
+        alertDialogNoConn.setMessage(msg);
+        alertDialogNoConn.setCancelable(false);
+        alertDialogNoConn.setNeutralButton(R.string.AlertDialogOkButton,new DialogInterface.OnClickListener()
+        {
+            public void onClick(DialogInterface dialog, int which)
+            {
+                dialog.dismiss();
+                finish();
+            }
+        });
+        //alertDialogNoConn.setIcon(R.drawable.info_ico);
+        AlertDialog alert = alertDialogNoConn.create();
+        alert.show();
+    }
+
+    public void showNoConnAlert()
+    {
+        //AlertDialog.Builder alertDialogNoConn = new AlertDialog.Builder(new ContextThemeWrapper(SplashScreen.this, R.style.Dialog));
+        AlertDialog.Builder alertDialogNoConn = new AlertDialog.Builder(SplashScreen.this);
+
+        alertDialogNoConn.setTitle(R.string.AlertDialogHeaderMsg);
+        alertDialogNoConn.setMessage(R.string.NoDataConnectionFullMsg);
+        alertDialogNoConn.setNeutralButton(R.string.AlertDialogOkButton,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        dialog.dismiss();
+                        dbengine.open();
+                        int cntRoute=dbengine.counttblCountRoute();
+                        dbengine.close();
+                        if(cntRoute==0)
+                        {
+                            finish();
+                        }
+                        else
+                        {
+                            dbengine.open();
+                            serverDateForSPref=	dbengine.fnGetServerDate();
+                            dbengine.close();
+
+                            if(sPref.contains("DatePref"))
+                            {
+
+                                if(sPref.getString("DatePref", "").equals(serverDateForSPref))
+                                {
+                                    Intent intent = new Intent(SplashScreen.this, AllButtonActivity.class);
+                                    intent.putExtra("imei", imei);
+                                    SplashScreen.this.startActivity(intent);
+                                    finish();
+
+                                }
+                                else
+                                {
+                                    SharedPreferences.Editor editor=sPref.edit();
+                                    editor.clear();
+                                    editor.commit();
+                                    sPref.edit().putString("DatePref", serverDateForSPref).commit();
+                                    fnShowAlertBeforeRedirectingToLauncher();
+                                }
+                            }
+                            else
+                            {
+                                sPref.edit().putString("DatePref", serverDateForSPref).commit();
+                                fnShowAlertBeforeRedirectingToLauncher();
+                            }
+                        }
+
+                    }
+                });
+        // alertDialogNoConn.setIcon(R.drawable.error_ico);
+        AlertDialog alert = alertDialogNoConn.create();
+        alert.show();
+    }
+
+    public void showNewVersionAvailableAlert()
+    {
+        Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        final Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+        r.play();
+        AlertDialog.Builder alertDialogNoConn = new AlertDialog.Builder(new ContextThemeWrapper(SplashScreen.this, R.style.Dialog));
+        alertDialogNoConn.setTitle(R.string.AlertDialogHeaderMsg);
+        alertDialogNoConn.setCancelable(false);
+        alertDialogNoConn.setMessage(getText(R.string.NewVersionMsg));
+        alertDialogNoConn.setNeutralButton(R.string.AlertDialogOkButton,new DialogInterface.OnClickListener()
+        {
+            public void onClick(DialogInterface dialog, int which)
+            {
+                GetUpdateInfo task = new GetUpdateInfo(SplashScreen.this);
+                task.execute();
+                dialog.dismiss();
+            }
+        });
+
+        // alertDialogNoConn.setIcon(R.drawable.info_ico);
+        AlertDialog alert = alertDialogNoConn.create();
+        alert.show();
+
+    }
+
+    private void downloadapk()
+    {
+        try
+        {
+
+            //ParagIndirectTest
+            // URL url = new URL("http://115.124.126.184/downloads/ParagIndirect.apk");
+            //  URL url = new URL("http://115.124.126.184/downloads/ParagIndirectTest.apk");
+            URL url = new URL(CommonInfo.VersionDownloadPath.trim()+CommonInfo.VersionDownloadAPKName);
+            URLConnection connection = url.openConnection();
+            HttpURLConnection urlConnection = (HttpURLConnection) connection;
+            //urlConnection.setRequestProperty("Accept-Charset", "UTF-8");
+            urlConnection.setRequestMethod("GET");
+            urlConnection.setDoInput(true);
+            //urlConnection.setDoOutput(false);
+            // urlConnection.setInstanceFollowRedirects(false);
+            urlConnection.connect();
+
+            //if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK)
+            // {
+            File sdcard = Environment.getExternalStorageDirectory();
+
+            //  //System.out.println("sunil downloadapk sdcard :" +sdcard);
+            //File file = new File(sdcard, "neo.apk");
+
+            String PATH = Environment.getExternalStorageDirectory() + "/download/";
+            // File file2 = new File(PATH+"ParagIndirect.apk");
+            File file2 = new File(PATH+CommonInfo.VersionDownloadAPKName);
+            if(file2.exists())
+            {
+                file2.delete();
+            }
+
+            File file1 = new File(PATH);
+            file1.mkdirs();
+
+
+            File file = new File(file1, CommonInfo.VersionDownloadAPKName);
+
+            int size = connection.getContentLength();
+
+
+            FileOutputStream fileOutput = new FileOutputStream(file);
+
+            InputStream inputStream = urlConnection.getInputStream();
+
+            byte[] buffer = new byte[10240];
+            int bufferLength = 0;
+            int current = 0;
+            while ( (bufferLength = inputStream.read(buffer)) != -1 )
+            {
+                fileOutput.write(buffer, 0, bufferLength);
+            }
+
+            fileOutput.close();
+
+
+
+
+        } catch (MalformedURLException e)
+        {
+
+        } catch (IOException e)
+        {
+
+        }
+    }
+
+   /* private void installApk()
+    {
+        this.deleteDatabase(PRJDatabase.DATABASE_NAME);
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        Uri uri = Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/download/" + CommonInfo.VersionDownloadAPKName));
+        intent.setDataAndType(uri, "application/vnd.android.package-archive");
+        startActivity(intent);
+        finish();
+
+
+    }
+*/
+   private void installApk()
+   {
+       this.deleteDatabase(PRJDatabase.DATABASE_NAME);
+       File file = new File(Environment.getExternalStorageDirectory() + "/download/" + CommonInfo.VersionDownloadAPKName);
+       Intent intent = new Intent(Intent.ACTION_VIEW);
+       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+           intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+           Uri contentUri = FileProvider.getUriForFile(getBaseContext(), getApplicationContext().getPackageName() + ".provider", file);
+           //  Uri contentUri = FileProvider.getUriForFile(getApplicationContext(),"project.astix.com.godrejsfaindirect.fileprovider" , );
+           // Uri uri = Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/download/" + CommonInfo.VersionDownloadAPKName));
+
+           intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
+       } else {
+           Uri uri = Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/download/" + CommonInfo.VersionDownloadAPKName));
+           intent.setDataAndType(uri, "application/vnd.android.package-archive");
+       }
+
+       startActivity(intent);
+       finish();
+
+
+   }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
+    {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if((grantResults[0]== PackageManager.PERMISSION_GRANTED) && (grantResults[1]== PackageManager.PERMISSION_GRANTED) && (grantResults[2]== PackageManager.PERMISSION_GRANTED) && (grantResults[3]== PackageManager.PERMISSION_GRANTED)&& (grantResults[4]== PackageManager.PERMISSION_GRANTED))
+        {
+            onCreateFunctionality();
+        }
+        else
+        {
+            finish();
+
+        }
+    }
+
+    public  int upLoad2ServerXmlFiles(String sourceFileUri,String fileUri)
+    {
+
+        fileUri=fileUri.replace(".xml", "");
+
+        String fileName = fileUri;
+        String zipFileName=fileUri;
+
+        String newzipfile = Environment.getExternalStorageDirectory() + "/"+CommonInfo.DistributorStockXMLFolder+"/" + fileName + ".zip";
+        ///storage/sdcard0/PrabhatDirectSFAXml/359648069495987.2.21.04.2016.12.44.02.zip
+
+        sourceFileUri=newzipfile;
+
+        xmlForWeb[0] = Environment.getExternalStorageDirectory() + "/"+CommonInfo.DistributorStockXMLFolder+"/" + fileName + ".xml";
+        //[/storage/sdcard0/PrabhatDirectSFAXml/359648069495987.2.21.04.2016.12.44.02.xml]
+
+        try
+        {
+            zip(xmlForWeb,newzipfile);
+        }
+        catch (Exception e1)
+        {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+            //java.io.FileNotFoundException: /359648069495987.2.21.04.2016.12.44.02: open failed: EROFS (Read-only file system)
+        }
+
+
+        HttpURLConnection conn = null;
+        DataOutputStream dos = null;
+        String lineEnd = "\r\n";
+        String twoHyphens = "--";
+        String boundary = "*****";
+        int bytesRead, bytesAvailable, bufferSize;
+        byte[] buffer;
+        int maxBufferSize = 1 * 1024 * 1024;
+
+
+        File file2send = new File(newzipfile);
+
+        String urlString = CommonInfo.DistributorSyncPath.trim()+"?CLIENTFILENAME=" + zipFileName;
+
+        try {
+
+            // open a URL connection to the Servlet
+            FileInputStream fileInputStream = new FileInputStream(file2send);
+            URL url = new URL(urlString);
+
+            // Open a HTTP  connection to  the URL
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setDoInput(true); // Allow Inputs
+            conn.setDoOutput(true); // Allow Outputs
+            conn.setUseCaches(false); // Don't use a Cached Copy
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Connection", "Keep-Alive");
+            conn.setRequestProperty("ENCTYPE", "multipart/form-data");
+            conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
+            conn.setRequestProperty("zipFileName", zipFileName);
+
+            dos = new DataOutputStream(conn.getOutputStream());
+
+            dos.writeBytes(twoHyphens + boundary + lineEnd);
+            dos.writeBytes("Content-Disposition: form-data; name=\"uploaded_file\";filename=\""
+                    + zipFileName + "\"" + lineEnd);
+
+            dos.writeBytes(lineEnd);
+
+            // create a buffer of  maximum size
+            bytesAvailable = fileInputStream.available();
+
+            bufferSize = Math.min(bytesAvailable, maxBufferSize);
+            buffer = new byte[bufferSize];
+
+            // read file and write it into form...
+            bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+
+            while (bytesRead > 0)
+            {
+                dos.write(buffer, 0, bufferSize);
+                bytesAvailable = fileInputStream.available();
+                bufferSize = Math.min(bytesAvailable, maxBufferSize);
+                bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+            }
+
+            // send multipart form data necesssary after file data...
+            dos.writeBytes(lineEnd);
+            dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
+
+            // Responses from the server (code and message)
+            serverResponseCode = conn.getResponseCode();
+            String serverResponseMessage = conn.getResponseMessage();
+
+            Log.i("uploadFile", "HTTP Response is : " + serverResponseMessage + ": " + serverResponseCode);
+
+            if(serverResponseCode == 200)
+            {
+							  /* dbengine.open();
+							   dbengine.upDateXMLFileFlag(fileUri, 4);
+							   dbengine.close();*/
+
+                //new File(dir, fileUri).delete();
+                syncFLAG=1;
+
+                SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+                SharedPreferences.Editor editor = pref.edit();
+                // editor.remove(xmlForWeb[0]);
+                editor.putString(fileUri, ""+4);
+                editor.commit();
+
+                String FileSyncFlag=pref.getString(fileUri, ""+1);
+
+                delXML(xmlForWeb[0].toString());
+							   		/*dbengine.open();
+						            dbengine.deleteXMLFileRow(fileUri);
+						            dbengine.close();*/
+
+            }
+            else
+            {
+                syncFLAG=0;
+            }
+
+            //close the streams //
+            fileInputStream.close();
+            dos.flush();
+            dos.close();
+
+        } catch (MalformedURLException ex)
+        {
+            ex.printStackTrace();
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+
+
+
+        return serverResponseCode;
+
+    }
+
+    public void delXML(String delPath)
+    {
+        File file = new File(delPath);
+        file.delete();
+        File file1 = new File(delPath.toString().replace(".xml", ".zip"));
+        file1.delete();
     }
 
     private class CheckUpdateVersion extends AsyncTask<Void, Void, Void>
@@ -761,205 +1279,6 @@ public class SplashScreen extends BaseActivity implements  TaskListner
         }
     }
 
-    private void funGetRegistrationID(final String emailID)
-    {
-        new AsyncTask<Void, Void, String>()
-        {
-            @Override
-            protected String doInBackground(Void... params)
-            {
-                String msg = "";
-                try
-                {
-                    if (gcmObj == null)
-                    {
-                        gcmObj = GoogleCloudMessaging.getInstance(getApplicationContext());
-                    }
-                    regId = gcmObj.register(ApplicationConstants.GOOGLE_PROJ_ID);
-                    msg = regId;
-                }
-                catch(IOException ex)
-                {
-                    msg = getResources().getString(R.string.errorTxt) + ex.getMessage();
-                }
-                return msg;
-            }
-
-            @Override
-            protected void onPostExecute(String msg)
-            {
-
-                RegistrationID=msg;
-                // System.out.println("Sunil Reg id msg SplashScreen:"+RegistrationID);
-                try
-                {
-                    new GetRouteInfo().execute();
-
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-
-
-            }
-        }.execute(null, null, null);
-    }
-
-    private boolean checkPlayServices()
-    {
-        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
-        if (resultCode != ConnectionResult.SUCCESS)
-        {
-            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode))
-            {
-                GooglePlayServicesUtil.getErrorDialog(resultCode, this,PLAY_SERVICES_RESOLUTION_REQUEST).show();
-            }
-            else
-            {
-                Toast.makeText(getApplicationContext(),getResources().getString(R.string.errorPlayServices),Toast.LENGTH_LONG).show();
-                finish();
-            }
-            return false;
-        }
-        else
-        {
-            //Toast.makeText(applicationContext,"This device supports Play services, App will work normally",Toast.LENGTH_LONG).show();
-        }
-        return true;
-    }
-
-    public void showAlertBox(String msg)
-    {
-        AlertDialog.Builder alertDialogNoConn = new AlertDialog.Builder(SplashScreen.this);
-        alertDialogNoConn.setTitle(R.string.AlertDialogHeaderMsg);
-        alertDialogNoConn.setMessage(msg);
-        alertDialogNoConn.setCancelable(false);
-
-        alertDialogNoConn.setNeutralButton(R.string.AlertDialogOkButton,new DialogInterface.OnClickListener()
-        {
-            public void onClick(DialogInterface dialog, int which)
-            {
-                dialog.dismiss();
-                dbengine.open();
-                dbengine.reTruncateRouteMstrTbl();
-                dbengine.close();
-                finish();
-
-            }
-        });
-        alertDialogNoConn.setIcon(R.drawable.info_ico);
-        AlertDialog alert = alertDialogNoConn.create();
-        alert.show();
-
-    }
-
-
-
-    public void showAlertForEveryOne(String msg)
-    {
-        // AlertDialog.Builder alertDialogNoConn = new AlertDialog.Builder(new ContextThemeWrapper(SplashScreen.this, R.style.Dialog));
-        AlertDialog.Builder alertDialogNoConn = new AlertDialog.Builder(SplashScreen.this);
-
-        alertDialogNoConn.setTitle(R.string.AlertDialogHeaderMsg);
-        alertDialogNoConn.setMessage(msg);
-        alertDialogNoConn.setCancelable(false);
-        alertDialogNoConn.setNeutralButton(R.string.AlertDialogOkButton,new DialogInterface.OnClickListener()
-        {
-            public void onClick(DialogInterface dialog, int which)
-            {
-                dialog.dismiss();
-                finish();
-            }
-        });
-        //alertDialogNoConn.setIcon(R.drawable.info_ico);
-        AlertDialog alert = alertDialogNoConn.create();
-        alert.show();
-    }
-
-    public void showNoConnAlert()
-    {
-        //AlertDialog.Builder alertDialogNoConn = new AlertDialog.Builder(new ContextThemeWrapper(SplashScreen.this, R.style.Dialog));
-        AlertDialog.Builder alertDialogNoConn = new AlertDialog.Builder(SplashScreen.this);
-
-        alertDialogNoConn.setTitle(R.string.AlertDialogHeaderMsg);
-        alertDialogNoConn.setMessage(R.string.NoDataConnectionFullMsg);
-        alertDialogNoConn.setNeutralButton(R.string.AlertDialogOkButton,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which)
-                    {
-                        dialog.dismiss();
-                        dbengine.open();
-                        int cntRoute=dbengine.counttblCountRoute();
-                        dbengine.close();
-                        if(cntRoute==0)
-                        {
-                            finish();
-                        }
-                        else
-                        {
-                            dbengine.open();
-                            serverDateForSPref=	dbengine.fnGetServerDate();
-                            dbengine.close();
-
-                            if(sPref.contains("DatePref"))
-                            {
-
-                                if(sPref.getString("DatePref", "").equals(serverDateForSPref))
-                                {
-                                    Intent intent = new Intent(SplashScreen.this, AllButtonActivity.class);
-                                    intent.putExtra("imei", imei);
-                                    SplashScreen.this.startActivity(intent);
-                                    finish();
-
-                                }
-                                else
-                                {
-                                    SharedPreferences.Editor editor=sPref.edit();
-                                    editor.clear();
-                                    editor.commit();
-                                    sPref.edit().putString("DatePref", serverDateForSPref).commit();
-                                    fnShowAlertBeforeRedirectingToLauncher();
-                                }
-                            }
-                            else
-                            {
-                                sPref.edit().putString("DatePref", serverDateForSPref).commit();
-                                fnShowAlertBeforeRedirectingToLauncher();
-                            }
-                        }
-
-                    }
-                });
-        // alertDialogNoConn.setIcon(R.drawable.error_ico);
-        AlertDialog alert = alertDialogNoConn.create();
-        alert.show();
-    }
-
-    public void showNewVersionAvailableAlert()
-    {
-        Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        final Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
-        r.play();
-        AlertDialog.Builder alertDialogNoConn = new AlertDialog.Builder(new ContextThemeWrapper(SplashScreen.this, R.style.Dialog));
-        alertDialogNoConn.setTitle(R.string.AlertDialogHeaderMsg);
-        alertDialogNoConn.setCancelable(false);
-        alertDialogNoConn.setMessage(getText(R.string.NewVersionMsg));
-        alertDialogNoConn.setNeutralButton(R.string.AlertDialogOkButton,new DialogInterface.OnClickListener()
-        {
-            public void onClick(DialogInterface dialog, int which)
-            {
-                GetUpdateInfo task = new GetUpdateInfo(SplashScreen.this);
-                task.execute();
-                dialog.dismiss();
-            }
-        });
-
-        // alertDialogNoConn.setIcon(R.drawable.info_ico);
-        AlertDialog alert = alertDialogNoConn.create();
-        alert.show();
-
-    }
     private class GetUpdateInfo extends AsyncTask<Void, Void, Void>
     {
 
@@ -1014,110 +1333,6 @@ public class SplashScreen extends BaseActivity implements  TaskListner
             installApk();
         }
     }
-
-    private void downloadapk()
-    {
-        try
-        {
-
-            //ParagIndirectTest
-            // URL url = new URL("http://115.124.126.184/downloads/ParagIndirect.apk");
-            //  URL url = new URL("http://115.124.126.184/downloads/ParagIndirectTest.apk");
-            URL url = new URL(CommonInfo.VersionDownloadPath.trim()+CommonInfo.VersionDownloadAPKName);
-            URLConnection connection = url.openConnection();
-            HttpURLConnection urlConnection = (HttpURLConnection) connection;
-            //urlConnection.setRequestProperty("Accept-Charset", "UTF-8");
-            urlConnection.setRequestMethod("GET");
-            urlConnection.setDoInput(true);
-            //urlConnection.setDoOutput(false);
-            // urlConnection.setInstanceFollowRedirects(false);
-            urlConnection.connect();
-
-            //if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK)
-            // {
-            File sdcard = Environment.getExternalStorageDirectory();
-
-            //  //System.out.println("sunil downloadapk sdcard :" +sdcard);
-            //File file = new File(sdcard, "neo.apk");
-
-            String PATH = Environment.getExternalStorageDirectory() + "/download/";
-            // File file2 = new File(PATH+"ParagIndirect.apk");
-            File file2 = new File(PATH+CommonInfo.VersionDownloadAPKName);
-            if(file2.exists())
-            {
-                file2.delete();
-            }
-
-            File file1 = new File(PATH);
-            file1.mkdirs();
-
-
-            File file = new File(file1, CommonInfo.VersionDownloadAPKName);
-
-            int size = connection.getContentLength();
-
-
-            FileOutputStream fileOutput = new FileOutputStream(file);
-
-            InputStream inputStream = urlConnection.getInputStream();
-
-            byte[] buffer = new byte[10240];
-            int bufferLength = 0;
-            int current = 0;
-            while ( (bufferLength = inputStream.read(buffer)) != -1 )
-            {
-                fileOutput.write(buffer, 0, bufferLength);
-            }
-
-            fileOutput.close();
-
-
-
-
-        } catch (MalformedURLException e)
-        {
-
-        } catch (IOException e)
-        {
-
-        }
-    }
-
-   /* private void installApk()
-    {
-        this.deleteDatabase(PRJDatabase.DATABASE_NAME);
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        Uri uri = Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/download/" + CommonInfo.VersionDownloadAPKName));
-        intent.setDataAndType(uri, "application/vnd.android.package-archive");
-        startActivity(intent);
-        finish();
-
-
-    }
-*/
-   private void installApk()
-   {
-       this.deleteDatabase(PRJDatabase.DATABASE_NAME);
-       File file = new File(Environment.getExternalStorageDirectory() + "/download/" + CommonInfo.VersionDownloadAPKName);
-       Intent intent = new Intent(Intent.ACTION_VIEW);
-       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-           intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-           Uri contentUri = FileProvider.getUriForFile(getBaseContext(), getApplicationContext().getPackageName() + ".provider", file);
-           //  Uri contentUri = FileProvider.getUriForFile(getApplicationContext(),"project.astix.com.godrejsfaindirect.fileprovider" , );
-           // Uri uri = Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/download/" + CommonInfo.VersionDownloadAPKName));
-
-           intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
-       } else {
-           Uri uri = Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/download/" + CommonInfo.VersionDownloadAPKName));
-           intent.setDataAndType(uri, "application/vnd.android.package-archive");
-       }
-
-       startActivity(intent);
-       finish();
-
-
-   }
-
 
     private class GetRouteInfo extends AsyncTask<Void, Void, Void>
     {
@@ -1364,21 +1579,6 @@ public class SplashScreen extends BaseActivity implements  TaskListner
 
         }
     }
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
-    {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if((grantResults[0]== PackageManager.PERMISSION_GRANTED) && (grantResults[1]== PackageManager.PERMISSION_GRANTED) && (grantResults[2]== PackageManager.PERMISSION_GRANTED) && (grantResults[3]== PackageManager.PERMISSION_GRANTED)&& (grantResults[4]== PackageManager.PERMISSION_GRANTED))
-        {
-            onCreateFunctionality();
-        }
-        else
-        {
-            finish();
-
-        }
-    }
-
 
     private class FullSyncDataNow extends AsyncTask<Void, Void, Void>
     {
@@ -1494,9 +1694,6 @@ public class SplashScreen extends BaseActivity implements  TaskListner
 
         }
     }
-
-
-
 
     private class SyncXMLfileData extends AsyncTask<Void, Void, Integer>
     {
@@ -1638,212 +1835,5 @@ public class SplashScreen extends BaseActivity implements  TaskListner
 
 
 
-    }
-
-
-
-    public  int upLoad2ServerXmlFiles(String sourceFileUri,String fileUri)
-    {
-
-        fileUri=fileUri.replace(".xml", "");
-
-        String fileName = fileUri;
-        String zipFileName=fileUri;
-
-        String newzipfile = Environment.getExternalStorageDirectory() + "/"+CommonInfo.DistributorStockXMLFolder+"/" + fileName + ".zip";
-        ///storage/sdcard0/PrabhatDirectSFAXml/359648069495987.2.21.04.2016.12.44.02.zip
-
-        sourceFileUri=newzipfile;
-
-        xmlForWeb[0] = Environment.getExternalStorageDirectory() + "/"+CommonInfo.DistributorStockXMLFolder+"/" + fileName + ".xml";
-        //[/storage/sdcard0/PrabhatDirectSFAXml/359648069495987.2.21.04.2016.12.44.02.xml]
-
-        try
-        {
-            zip(xmlForWeb,newzipfile);
-        }
-        catch (Exception e1)
-        {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-            //java.io.FileNotFoundException: /359648069495987.2.21.04.2016.12.44.02: open failed: EROFS (Read-only file system)
-        }
-
-
-        HttpURLConnection conn = null;
-        DataOutputStream dos = null;
-        String lineEnd = "\r\n";
-        String twoHyphens = "--";
-        String boundary = "*****";
-        int bytesRead, bytesAvailable, bufferSize;
-        byte[] buffer;
-        int maxBufferSize = 1 * 1024 * 1024;
-
-
-        File file2send = new File(newzipfile);
-
-        String urlString = CommonInfo.DistributorSyncPath.trim()+"?CLIENTFILENAME=" + zipFileName;
-
-        try {
-
-            // open a URL connection to the Servlet
-            FileInputStream fileInputStream = new FileInputStream(file2send);
-            URL url = new URL(urlString);
-
-            // Open a HTTP  connection to  the URL
-            conn = (HttpURLConnection) url.openConnection();
-            conn.setDoInput(true); // Allow Inputs
-            conn.setDoOutput(true); // Allow Outputs
-            conn.setUseCaches(false); // Don't use a Cached Copy
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("Connection", "Keep-Alive");
-            conn.setRequestProperty("ENCTYPE", "multipart/form-data");
-            conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
-            conn.setRequestProperty("zipFileName", zipFileName);
-
-            dos = new DataOutputStream(conn.getOutputStream());
-
-            dos.writeBytes(twoHyphens + boundary + lineEnd);
-            dos.writeBytes("Content-Disposition: form-data; name=\"uploaded_file\";filename=\""
-                    + zipFileName + "\"" + lineEnd);
-
-            dos.writeBytes(lineEnd);
-
-            // create a buffer of  maximum size
-            bytesAvailable = fileInputStream.available();
-
-            bufferSize = Math.min(bytesAvailable, maxBufferSize);
-            buffer = new byte[bufferSize];
-
-            // read file and write it into form...
-            bytesRead = fileInputStream.read(buffer, 0, bufferSize);
-
-            while (bytesRead > 0)
-            {
-                dos.write(buffer, 0, bufferSize);
-                bytesAvailable = fileInputStream.available();
-                bufferSize = Math.min(bytesAvailable, maxBufferSize);
-                bytesRead = fileInputStream.read(buffer, 0, bufferSize);
-            }
-
-            // send multipart form data necesssary after file data...
-            dos.writeBytes(lineEnd);
-            dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
-
-            // Responses from the server (code and message)
-            serverResponseCode = conn.getResponseCode();
-            String serverResponseMessage = conn.getResponseMessage();
-
-            Log.i("uploadFile", "HTTP Response is : " + serverResponseMessage + ": " + serverResponseCode);
-
-            if(serverResponseCode == 200)
-            {
-							  /* dbengine.open();
-							   dbengine.upDateXMLFileFlag(fileUri, 4);
-							   dbengine.close();*/
-
-                //new File(dir, fileUri).delete();
-                syncFLAG=1;
-
-                SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
-                SharedPreferences.Editor editor = pref.edit();
-                // editor.remove(xmlForWeb[0]);
-                editor.putString(fileUri, ""+4);
-                editor.commit();
-
-                String FileSyncFlag=pref.getString(fileUri, ""+1);
-
-                delXML(xmlForWeb[0].toString());
-							   		/*dbengine.open();
-						            dbengine.deleteXMLFileRow(fileUri);
-						            dbengine.close();*/
-
-            }
-            else
-            {
-                syncFLAG=0;
-            }
-
-            //close the streams //
-            fileInputStream.close();
-            dos.flush();
-            dos.close();
-
-        } catch (MalformedURLException ex)
-        {
-            ex.printStackTrace();
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-
-
-
-
-        return serverResponseCode;
-
-    }
-
-    public void delXML(String delPath)
-    {
-        File file = new File(delPath);
-        file.delete();
-        File file1 = new File(delPath.toString().replace(".xml", ".zip"));
-        file1.delete();
-    }
-
-    public static void zip(String[] files, String zipFile) throws IOException
-    {
-        BufferedInputStream origin = null;
-        final int BUFFER_SIZE = 2048;
-
-        ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(zipFile)));
-        try
-        {
-            byte data[] = new byte[BUFFER_SIZE];
-
-            for (int i = 0; i < files.length; i++)
-            {
-                FileInputStream fi = new FileInputStream(files[i]);
-                origin = new BufferedInputStream(fi, BUFFER_SIZE);
-                try
-                {
-                    ZipEntry entry = new ZipEntry(files[i].substring(files[i].lastIndexOf("/") + 1));
-                    out.putNextEntry(entry);
-                    int count;
-                    while ((count = origin.read(data, 0, BUFFER_SIZE)) != -1)
-                    {
-                        out.write(data, 0, count);
-                    }
-                }
-                finally
-                {
-                    origin.close();
-                }
-            }
-        }
-        finally
-        {
-            out.close();
-        }
-    }
-
-    public static String[] checkNumberOfFiles(File dir)
-    {
-        int NoOfFiles=0;
-        String [] Totalfiles = null;
-
-        if (dir.isDirectory())
-        {
-            String[] children = dir.list();
-            NoOfFiles=children.length;
-            Totalfiles=new String[children.length];
-
-            for (int i=0; i<children.length; i++)
-            {
-                Totalfiles[i]=children[i];
-            }
-        }
-        return Totalfiles;
     }
 }

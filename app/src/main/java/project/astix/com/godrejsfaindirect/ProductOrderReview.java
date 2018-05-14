@@ -89,28 +89,16 @@ import java.util.regex.Pattern;
 
 public class ProductOrderReview extends BaseActivity implements OnItemSelectedListener, OnClickListener, OnFocusChangeListener, LocationListener,GoogleApiClient.ConnectionCallbacks,
 GoogleApiClient.OnConnectionFailedListener{
+	    private static final String TAG = "LocationActivity";
+	    private static final long INTERVAL = 1000 * 10;
+	    private static final long FASTEST_INTERVAL = 1000 * 5;
+		  private static final long MIN_TIME_BW_UPDATES = 1000  * 1; //1 second
+	    private final long startTime = 30000;
+	    private final long interval = 200;
 	public int flgTransferStatus=0;
-	TextView txt_TotalLineCount_Value,txt_TotalInvoiceCount_Value;
 	public String VisitTimeInSideStore="NA";
 	public String StoreVisitCode="NA";
-	//hmapProductStock= key =ProductID         value=ProductSelectedUOMId
-	HashMap<String, String> hmapProductSelectedUOMId=new HashMap<String, String>();
-
-	//hmapProductStock= key =ProductID         value=LineValBfrTxAftrDscnt
-	HashMap<String, String> hmapLineValBfrTxAftrDscnt=new HashMap<String, String>();
-
-	//hmapProductStock= key =ProductID         value=LineValAftrTxAftrDscnt
-	HashMap<String, String> hmapLineValAftrTxAftrDscnt=new HashMap<String, String>();
-
-
 	public TextView tvRateHeading;
-
-	//nitika
-	CustomKeyboard mCustomKeyboardNum,mCustomKeyboardNumWithoutDecimal;
-
-	HashMap<String,Integer> hmapDistPrdctStockCount =new HashMap<String,Integer>();
-	HashMap<String,String> hmapPrdctIdOutofStock=new HashMap<String,String> ();
-
 	public String VisitTypeStatus="1";
 	public int PriceApplyDiscountLevelType=0;
 	public Double cutoffvalue=0.0;
@@ -118,7 +106,6 @@ GoogleApiClient.OnConnectionFailedListener{
 	public String strFinalAllotedInvoiceIds="NA";
 	public int chkflgInvoiceAlreadyGenerated=0;
 	public boolean flgAllTotalOrderValueCrossesCutOff=false;
-
 	public  int flgLocationServicesOnOffOrderReview=0;
 	public  int flgGPSOnOffOrderReview=0;
 	public  int flgNetworkOnOffOrderReview=0;
@@ -126,38 +113,106 @@ GoogleApiClient.OnConnectionFailedListener{
 	public  int flgInternetOnOffWhileLocationTrackingOrderReview=0;
 	public  int flgRestartOrderReview=0;
 	public  int flgStoreOrderOrderReview=0;
-	String distID="";
 	public int powerCheck=0;
-
 	public  PowerManager.WakeLock wl;
-
-	ArrayList<String> productFullFilledSlabGlobal=new ArrayList<String>();
-	int countSubmitClicked=0;
-	LocationRequest mLocationRequest;
 		public int StoreCurrentStoreType=0;
 		public String Noti_text="Null";
 		public int MsgServerID=0;
-		
-		String defaultValForAlert;
 		public  String[] arrSchId;
 		public String SchemeDesc="NA";
-		
 		public TextView spinner_product;
-		boolean disValClkdOpenAlert=false;
 		public String ProductIdOnClickedEdit;
 		public String CtaegoryIddOfClickedView;
 		public String condtnOddEven;
 		public String storeID;
 		public String imei;
-		String progressTitle;
 		public String date;
 		public String pickerDate;
 		public String SN;
-		 boolean alertOpens=false;
-		 int flagClkdButton=0;
-		 
 		//public ProgressDialog pDialogSync;
 		 public String productID;
+		public String strGlobalOrderID="0";
+		public LinearLayout ll_prdct_detal;
+		//Invoice TextView
+		public TextView tv_NetInvValue;
+		public TextView tvTAmt;
+		public TextView tvDis;
+		public TextView tv_GrossInvVal;
+		public TextView tvFtotal;
+		public TextView tvAddDisc;
+		public TextView tv_NetInvAfterDiscount;
+		public TextView tvPreAmtOutstandingVALNew;
+		public TextView tvAmtPrevDueVAL;
+		public EditText etAmtCollVAL;
+		public TextView tvAmtOutstandingVAL;
+		public TextView tvCredAmtVAL;
+	public TextView tvTotalAmtCollected;
+		public TextView tvINafterCredVAL;
+		public TextView textView1_CredAmtVAL_new;
+		public TextView tvNoOfCouponValue;
+		public TextView txttvCouponAmountValue;
+		public String lastKnownLocLatitude="";
+		public String lastKnownLocLongitude="";
+		public String accuracy="0";
+		public String locationProvider="Default";
+		public double glbNetOrderLevelPercentDiscount=0.00;
+		public double glbNetOderLevelFlatDiscount=0.00;
+		public double glbGrossOrderLevelPercentDiscount=0.00;
+		public double glbGrossOrderLevelFlatDiscount=0.00;
+		public String newfullFileName;
+		public int butClickForGPS=0;
+		public String FusedLocationLatitude="0";
+	    public String FusedLocationLongitude="0";
+	    public String FusedLocationProvider="";
+	    public String FusedLocationAccuracy="0";
+	    public String GPSLocationLatitude="0";
+	    public String GPSLocationLongitude="0";
+	    public String GPSLocationProvider="";
+	    public String GPSLocationAccuracy="0";
+	    public String NetworkLocationLatitude="0";
+	    public String NetworkLocationLongitude="0";
+	    public String NetworkLocationProvider="";
+	    public String NetworkLocationAccuracy="0";
+	    public AppLocationService appLocationService;
+	    public CoundownClass2 countDownTimer2;
+	    public String fnAccurateProvider="";
+	    public String fnLati="0";
+	    public String fnLongi="0";
+	    public Double fnAccuracy=0.0;
+	 public EditText   ed_search;
+		public ImageView  btn_go;
+	public String[] prductId;
+		 public int flgApplyFreeProductSelection=0;
+		 public int isbtnExceptionVisible=0;
+		 public LocationManager locationManager;
+		  public Location location;
+		 // PowerManager.WakeLock wl;
+		  public ProgressDialog pDialog2STANDBY;
+		 public int flgProDataCalculation=1;
+		 public int StoreCatNodeId=0;
+		 public ListView lvProduct;
+		 public EditText inputSearch;
+	TextView txt_TotalLineCount_Value,txt_TotalInvoiceCount_Value;
+	//hmapProductStock= key =ProductID         value=ProductSelectedUOMId
+	HashMap<String, String> hmapProductSelectedUOMId=new HashMap<String, String>();
+	//hmapProductStock= key =ProductID         value=LineValBfrTxAftrDscnt
+	HashMap<String, String> hmapLineValBfrTxAftrDscnt=new HashMap<String, String>();
+	//hmapProductStock= key =ProductID         value=LineValAftrTxAftrDscnt
+	HashMap<String, String> hmapLineValAftrTxAftrDscnt=new HashMap<String, String>();
+	LinkedHashMap<String,String> hmapPerBaseQty;
+	//nitika
+	CustomKeyboard mCustomKeyboardNum,mCustomKeyboardNumWithoutDecimal;
+	HashMap<String,Integer> hmapDistPrdctStockCount =new HashMap<String,Integer>();
+	HashMap<String,String> hmapPrdctIdOutofStock=new HashMap<String,String> ();
+	String distID="";
+	ArrayList<String> productFullFilledSlabGlobal=new ArrayList<String>();
+	int countSubmitClicked=0;
+	LocationRequest mLocationRequest;
+		String defaultValForAlert;
+		boolean disValClkdOpenAlert=false;
+		String progressTitle;
+		 boolean alertOpens=false;
+		 int flagClkdButton=0;
 		 String spinnerCategorySelected;
 		 String spinnerCategoryIdSelected;
 		 Location lastKnownLoc;
@@ -166,7 +221,6 @@ GoogleApiClient.OnConnectionFailedListener{
 		 String alrtPrdctId;
 		 String productIdOnLastEditTextVal="0";
 		 String alrtValueSpnr;
-		private boolean alrtStopResult = false;
 		int alrtObjectTypeFlag=1; //1=spinner,edittext=0;
 		// Decimal Format
 		Locale locale  = new Locale("en", "UK");
@@ -174,11 +228,8 @@ GoogleApiClient.OnConnectionFailedListener{
 		DecimalFormat decimalFormat = (DecimalFormat)NumberFormat.getNumberInstance(locale);
 		int CheckIfStoreExistInStoreProdcutPurchaseDetails=0;
 		int CheckIfStoreExistInStoreProdcutInvoiceDetails=0;
-		public String strGlobalOrderID="0";
 		ProgressDialog mProgressDialog;
-		 
-		 
-	//****************************************************************	 
+	//****************************************************************
 		//Field
 		String fusedData;
 		 String mLastUpdateTime;
@@ -192,103 +243,19 @@ GoogleApiClient.OnConnectionFailedListener{
 		 Spinner alrtPrvsSpnrSlctd;
 		Spinner spinner_category;
 		ImageView btn_bck;
-		public LinearLayout ll_prdct_detal;
 		TextView txtVwRate;
 		TextView textViewFreeQty,textViewRate,textViewDiscount;
-		//Invoice TextView
-		public TextView tv_NetInvValue;
-		public TextView tvTAmt;
-		public TextView tvDis;
-		public TextView tv_GrossInvVal;
-		public TextView tvFtotal;
-		public TextView tvAddDisc;
-		public TextView tv_NetInvAfterDiscount;
-		public TextView tvPreAmtOutstandingVALNew;
-		public TextView tvAmtPrevDueVAL;
-		public EditText etAmtCollVAL;
-		public TextView tvAmtOutstandingVAL;
 		LinearLayout ll_scheme_detail;
-		public TextView tvCredAmtVAL;
-	public TextView tvTotalAmtCollected;
-		public TextView tvINafterCredVAL;
-		public TextView textView1_CredAmtVAL_new;
-		
-		public TextView tvNoOfCouponValue;
-		
-		public TextView txttvCouponAmountValue;
-		
-		public String lastKnownLocLatitude="";
-		public String lastKnownLocLongitude="";
-		public String accuracy="0";
-		public String locationProvider="Default";
-		
-		public double glbNetOrderLevelPercentDiscount=0.00;
-		public double glbNetOderLevelFlatDiscount=0.00;
-		
-		public double glbGrossOrderLevelPercentDiscount=0.00;
-		public double glbGrossOrderLevelFlatDiscount=0.00;
-		
-		
-		public String newfullFileName;
 		int isReturnClkd=0;
-		
-		public int butClickForGPS=0;
-		
-		
-		
-		public String FusedLocationLatitude="0";
-	    public String FusedLocationLongitude="0";
-	    public String FusedLocationProvider="";
-	    public String FusedLocationAccuracy="0";
-	    
-	    public String GPSLocationLatitude="0";
-	    public String GPSLocationLongitude="0";
-	    public String GPSLocationProvider="";
-	    public String GPSLocationAccuracy="0";
-	    
-	    public String NetworkLocationLatitude="0";
-	    public String NetworkLocationLongitude="0";
-	    public String NetworkLocationProvider="";
-	    public String NetworkLocationAccuracy="0";
-	    
-	    public AppLocationService appLocationService;
-
-	    
-	    public CoundownClass2 countDownTimer2;
-	    private final long startTime = 30000;
-	    private final long interval = 200;
-	    
-	    private static final String TAG = "LocationActivity";
-	    private static final long INTERVAL = 1000 * 10;
-	    private static final long FASTEST_INTERVAL = 1000 * 5;
-	   
-	    
-	    public String fnAccurateProvider="";
-	    public String fnLati="0";
-	    public String fnLongi="0";
-	    public Double fnAccuracy=0.0;
-	   
-	    
-	 public EditText   ed_search;
-		public ImageView  btn_go;
-		
-		  
-		
-	//****************************************************************	 
+	//****************************************************************
 		//Arrays, HashMap
 		View[] hide_View;
 		 String[] categoryNames;
-	public String[] prductId;
 		LinkedHashMap<String, String> hmapctgry_details=new LinkedHashMap<String, String>();
-		
 		HashMap<String, String> hmapProductToBeFree=new HashMap<String, String>();    //Not is use
-		
 		ArrayList<HashMap<String, String>> arrLstHmapPrdct=new ArrayList<HashMap<String,String>>();
-		
 		//hmapSchemeIDandDescr= key=SchId,val=SchDescr
 		HashMap<String, String> hmapSchemeIDandDescr=new HashMap<String, String>();
-		
-		
 		//hmapCtgryPrdctDetail= key=prdctId,val=CategoryID
 		HashMap<String, String> hmapCtgryPrdctDetail=new HashMap<String, String>();
 		//hmapCtgryPrdctDetail= key=prdctId,val=Volume^Rate^TaxAmount
@@ -301,38 +268,26 @@ GoogleApiClient.OnConnectionFailedListener{
 		HashMap<String, String> hmapPrdctFreeQty=new HashMap<String, String>();
 		//hmapCtgryPrdctDetail= key=prdctId,val=ProductName
 		HashMap<String, String> hmapPrdctIdPrdctName=new HashMap<String, String>();
-		
 		HashMap<String, String> hmapPrdctIdPrdctNameVisible=new HashMap<String, String>();
 		//hmapCtgryPrdctDetail= key=prdctId,val=ProductDiscount
 		HashMap<String, String> hmapPrdctIdPrdctDscnt=new HashMap<String, String>();
-		
 		//hmapCtgryPrdctDetail= key=prdctId,val=PrdString Applied Schemes,Slabs and other details
 		HashMap<String, String> hmapProductRelatedSchemesList=new HashMap<String, String>();
-		
-		
 		 // hmapSchemeIdStoreID= key=SchemeId value StoreId
 		 HashMap<String, String> hmapSchemeIdStoreID=new HashMap<String, String>();
-		 
 		 // hmapSchmSlabIdSchmID key=SchemeSlabId value = SchemeID
 		 HashMap<String, String> hmapSchmSlabIdSchmID=new HashMap<String, String>();
-		 
+		   //HashMap<String, String> hmapSchemeStoreID=new HashMap<String, String>();
 		 // hmaSchemeSlabIdSlabDes key=SchemeSlabId value=SchemeSlab Description
 		 HashMap<String, String> hmapSchemeSlabIdSlabDes=new HashMap<String, String>();
-		 
 		 // hmapSchemeSlabIdBenifitDes key=SchemeSlabId value = BenifitDescription
 		 HashMap<String, String> hmapSchemeSlabIdBenifitDes=new HashMap<String, String>();
-		 
 		 // hmapProductIdOrdrVal key=Product Id value=ProductOrderVal
 		 HashMap<String, String> hmapProductIdOrdrVal =new HashMap<String, String>();
-		 
 		 // hmapProductIdStock key = ProductID value= Stock
 		 HashMap<String, String> hmapProductIdStock=new HashMap<String, String>();
-
-
 	// hmapProductIdStock key = ProductID value= flgPriceAva
 	HashMap<String, String> hmapProductflgPriceAva=new HashMap<String, String>();
-
-
 		 ArrayList<HashMap<String, String>> arrayListSchemeSlabDteail=new ArrayList<HashMap<String,String>>();
 		 //hmapSchmeSlabIdSchemeId= key =SchemeSlabId         value=SchemeID
 		   HashMap<String, String> hmapSchmeSlabIdSchemeId=new HashMap<String, String>();
@@ -340,127 +295,74 @@ GoogleApiClient.OnConnectionFailedListener{
 		   HashMap<String, String> hmapSchmeSlabIdSlabDes=new HashMap<String, String>();
 		   //hmapSchmeSlabIdBenifitDes= key = SchemeSlabId        value=BenifitDescription
 		   HashMap<String, String> hmapSchmeSlabIdBenifitDes=new HashMap<String, String>();
-		   //HashMap<String, String> hmapSchemeStoreID=new HashMap<String, String>();
-		
 		 //hmapProductRetailerMarginPercentage= key =ProductID         value=RetailerMarginPercentage
 		   HashMap<String, String> hmapProductRetailerMarginPercentage=new HashMap<String, String>();
-		   
 		 //hmapProductVatTaxPerventage= key =ProductID         value=VatTaxPercentage
 		   HashMap<String, String> hmapProductVatTaxPerventage=new HashMap<String, String>();
-		   
 		 //hmapProductVatTaxPerventage= key =ProductID         value=ProductMRP
 		   HashMap<String, String> hmapProductMRP=new HashMap<String, String>();
-		   
 		 //hmapProductVolumePer= key =ProductID         value=Per
 		   HashMap<String, String> hmapProductVolumePer=new HashMap<String, String>();
-		   
 		   //hmapProductDiscountPercentageGive= key =ProductID         value=DiscountPercentageGivenOnProduct
 		   HashMap<String, String> hmapProductDiscountPercentageGive=new HashMap<String, String>();
-		   
 		 //hmapProductVolumePer= key =ProductID         value=TaxValue
 		   HashMap<String, String> hmapProductTaxValue=new HashMap<String, String>();
-		   
 		   //hmapProductVolumePer= key =ProductID         value=TaxValue
 		   HashMap<String, String> hmapProductViewTag=new HashMap<String, String>();
-		   
 		 //hmapProductVolumePer= key =ProductID         value=LODQty
 		   HashMap<String, String> hmapProductLODQty=new HashMap<String, String>();
-		   
-		   
 			 //hmapProductStandardRate= key =ProductID         value=StandardRate
 		   HashMap<String, String> hmapProductStandardRate=new HashMap<String, String>();
-		   
 		   //hmapProductStandardRateBeforeTax= key =ProductID         value=StandardRateBeforeTax
 		   HashMap<String, String> hmapProductStandardRateBeforeTax=new HashMap<String, String>();
-		   
 		   //hmapProductStandardTax= key =ProductID         value=StandardTax
 		   HashMap<String, String> hmapProductStandardTax=new HashMap<String, String>();
-		   
 		   LinkedHashMap<String, String> hmapFilterProductList=new LinkedHashMap<String, String>();
-		   
 		HashMap<String, HashMap<String, HashMap<String, String>>> hmapPrdtAppliedSchIdsAppliedSlabIdsDefination;
-		
-		
 		  //hmapMinDlvrQty= key =ProductID         value=MinQty
 		   LinkedHashMap<String, Integer> hmapMinDlvrQty=new LinkedHashMap<String, Integer>();
 		   //hmapMinDlvrQty= key =ProductID         value=QPBT
 		   LinkedHashMap<String, String> hmapMinDlvrQtyQPBT=new LinkedHashMap<String, String>();
-		 
 		   LinkedHashMap<String, String> hmapMinDlvrQtyQPAT=new LinkedHashMap<String, String>();
-
 	LinkedHashMap<String,String> hmapPerUnitName;
+		 
+		//Database
 		   //
 		   //hmapMinDlvrQty= key =ProductID         value=QPTaxAmount
 		   LinkedHashMap<String, String> hmapMinDlvrQtyQPTaxAmount=new LinkedHashMap<String, String>();
-
-
 	//hmapProductStock= key =ProductID         value=flgWholeSellApplicable
 	HashMap<String, String> hmapflgWholeSellApplicable=new HashMap<String, String>();
-
-	//hmapProductStock= key =ProductID         value=flgPriceRangeWholeSellApplicable
-	HashMap<String, String> hmapPriceRangeWholeSellApplicable=new HashMap<String, String>();
-
-
-	//hmapProductStock= key =ProductID         value=StandardRateWholeSale
-	HashMap<String, String> hmapStandardRateWholeSale=new HashMap<String, String>();
-
-
-	//hmapProductStock= key =ProductID         value=StandardRateBeforeTaxWholeSell
-	HashMap<String, String> hmapStandardRateBeforeTaxWholeSell=new HashMap<String, String>();
-
-	//hmapProductStock= key =ProductID         value=StandardTaxWholeSale
-	HashMap<String, String> hmapStandardTaxWholeSale=new HashMap<String, String>();
-
-	//hmapMinDlvrQty= key =ProductID         value=ProductListOnWhichWholePriceNeedsToApplyIfRequired
-	LinkedHashMap<String, String> hmapProductListOnWhichWholePriceNeedsToApplyIfRequired=new LinkedHashMap<String, String>();
-		 
-		 public int flgApplyFreeProductSelection=0;
-		
-		 ArrayList<String> arredtboc_OderQuantityFinalSchemesToApply;
-		 
-		//Database
-		 
-		PRJDatabase dbengine = new PRJDatabase(this);
-		DatabaseAssistant DA = new DatabaseAssistant(this);
 		 
 		 //Common Controls Box
-		 
+	//hmapProductStock= key =ProductID         value=flgPriceRangeWholeSellApplicable
+	HashMap<String, String> hmapPriceRangeWholeSellApplicable=new HashMap<String, String>();
+	//hmapProductStock= key =ProductID         value=StandardRateWholeSale
+	HashMap<String, String> hmapStandardRateWholeSale=new HashMap<String, String>();
+	//hmapProductStock= key =ProductID         value=StandardRateBeforeTaxWholeSell
+	HashMap<String, String> hmapStandardRateBeforeTaxWholeSell=new HashMap<String, String>();
+	//hmapProductStock= key =ProductID         value=StandardTaxWholeSale
+	HashMap<String, String> hmapStandardTaxWholeSale=new HashMap<String, String>();
+	//hmapMinDlvrQty= key =ProductID         value=ProductListOnWhichWholePriceNeedsToApplyIfRequired
+	LinkedHashMap<String, String> hmapProductListOnWhichWholePriceNeedsToApplyIfRequired=new LinkedHashMap<String, String>();
+		 ArrayList<String> arredtboc_OderQuantityFinalSchemesToApply;
+		PRJDatabase dbengine = new PRJDatabase(this);
+		DatabaseAssistant DA = new DatabaseAssistant(this);
 		 EditText edtBox;
 		 TextView viewBox;
 		 String viewCurrentBoxValue="";
-		 public int isbtnExceptionVisible=0;
 		 ImageView img_return;
-		 
-		 
-		 public LocationManager locationManager;
-		 
 		  boolean isGPSEnabled = false;
 		  boolean isNetworkEnabled = false;
-		  public Location location;
-
 		  PowerManager pm;
-		 // PowerManager.WakeLock wl;
-		  public ProgressDialog pDialog2STANDBY;
-		  
 		  LocationListener locationListener;
 		  double latitude;
 		  double longitude;
-
-		  private static final long MIN_TIME_BW_UPDATES = 1000  * 1; //1 second
-		  
-		 public int flgProDataCalculation=1;
-		 
-		 public int StoreCatNodeId=0;
-		  
 		 View convertView;
-		 
-		 public ListView lvProduct;
-		  
-		 public EditText inputSearch;
 		 ArrayAdapter<String> adapter;
 		 AlertDialog ad;
-		 
 		 String[] products;
+		private boolean alrtStopResult = false;
+
 		 public void showSettingsAlert()
 		 {
 			  AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
@@ -2444,6 +2346,18 @@ public void loadPurchaseProductDefault()
 				et_ProductMDQ.setText(hmapPerUnitName.get(productIdDynamic));
 			}
 		}
+
+
+		TextView et_ProductUnitQty=(TextView) viewProduct.findViewById(R.id.tv_UnitQty);
+		et_ProductUnitQty.setTag("etProductUnitQty"+"_"+productIdDynamic);
+			/*if(hmapPerBaseQty!=null && hmapPerBaseQty.size()>0)
+			{
+				if(hmapPerBaseQty.containsKey(productIdDynamic))
+				{
+					et_ProductUnitQty.setText(hmapPerBaseQty.get(productIdDynamic));
+				}
+			}*/
+
 		/*if(hmapMinDlvrQty!=null && hmapMinDlvrQty.size()>0)
 		{
 			if(hmapMinDlvrQty.containsKey(productIdDynamic))
@@ -4361,6 +4275,8 @@ public void loadPurchaseProductDefault()
 
 			if(hmapPrdctOdrQty.containsKey(ProductID))
 			{
+
+
 				flgWholeSellApplicable=Integer.parseInt(hmapflgWholeSellApplicable.get(ProductID));
 				PriceRangeWholeSellApplicable=Double.parseDouble(hmapPriceRangeWholeSellApplicable.get(ProductID));
 
@@ -4369,8 +4285,13 @@ public void loadPurchaseProductDefault()
 				hmapProductTaxValue.put(ProductID, "0.00");
 				hmapMinDlvrQtyQPTaxAmount.put(ProductID, "0.00");
 				((TextView)(vRow).findViewById(R.id.tv_Orderval)).setText("0.00");
+				((TextView)(vRow).findViewById(R.id.tv_UnitQty)).setText("0.00");
 				if(Integer.parseInt(hmapPrdctOdrQty.get(ProductID))>0)
 				{
+					Double OverAllPerBaseQty=Double.parseDouble (hmapPrdctOdrQty.get(ProductID))/Double.parseDouble (hmapPerBaseQty.get(ProductID));
+					OverAllPerBaseQty=Double.parseDouble(new DecimalFormat("##.##").format(OverAllPerBaseQty));
+					((TextView)(vRow).findViewById(R.id.tv_UnitQty)).setText(""+OverAllPerBaseQty);
+
 						/*StandardRate=Double.parseDouble(hmapProductMRP.get(ProductID))/((1+(Double.parseDouble(hmapProductRetailerMarginPercentage.get(ProductID))/100)));
 						StandardRateBeforeTax=StandardRate/(1+(Double.parseDouble(hmapProductVatTaxPerventage.get(ProductID))/100));
 						StandardTax=StandardRateBeforeTax*(Double.parseDouble(hmapProductVatTaxPerventage.get(ProductID))/100);*/
@@ -5635,254 +5556,41 @@ public void loadPurchaseProductDefault()
 		 	
 	}
 
-
-	private class FullSyncDataNow extends AsyncTask<Void, Void, Void> {
-		
-
-		ProgressDialog pDialogGetStores;
-		public FullSyncDataNow(ProductOrderReview activity)
-		{
-			pDialogGetStores = new ProgressDialog(activity);
-		}
-		
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-			
-			
-			pDialogGetStores.setTitle(getText(R.string.genTermPleaseWaitNew));
-			pDialogGetStores.setMessage(ProductOrderReview.this.getResources().getString(R.string.SubmittingOrderDetails));
-			pDialogGetStores.setIndeterminate(false);
-			pDialogGetStores.setCancelable(false);
-			pDialogGetStores.setCanceledOnTouchOutside(false);
-			pDialogGetStores.show();
-		   
-		  
-		}
-
-		@Override
-		
-		protected Void doInBackground(Void... params) {
-
-			int Outstat=1;
-			flgTransferStatus=1;
-			InvoiceTableDataDeleteAndSaving(Outstat,flgTransferStatus);
-				TransactionTableDataDeleteAndSaving(Outstat);
-			Double cntInvoceValue=dbengine.fetch_Store_InvValAmount(storeID,TmpInvoiceCodePDA);
-			cntInvoceValue=Double.parseDouble(new DecimalFormat("##.##").format(cntInvoceValue));
-
-			 Outstat=3;
-
-
-			if(Outstat==3) {
-				if (cntInvoceValue > 0.0) {
-					if(strFinalAllotedInvoiceIds.equals("NA"))
-					{
-
-						/*strFinalAllotedInvoiceIds=dbengine.fnGetFinalAllotedInvoiceIds(storeID);
-						dbengine.updateFinalAllotedInvoiceIdstblInvoiceCaption();
-
-						fnVisitFinalInvoiceHeaderSaving(Outstat,strFinalAllotedInvoiceIds);
-						fnVisitFinalInvoiceDetailsSaving(Outstat,strFinalAllotedInvoiceIds);
-						dbengine.UpdateStoreVisitMStrTable(storeID,3,StoreVisitCode);
-
-
-						dbengine.UpdateStoreVisitWiseTables(storeID, 3,StoreVisitCode,TmpInvoiceCodePDA);
-
-						dbengine.deleteOldStoreInvoice(storeID,strGlobalOrderID,TmpInvoiceCodePDA);
-						dbengine.deleteStoreRecordFromtblStorePurchaseDetailsFromProductTrsaction(storeID,strGlobalOrderID,TmpInvoiceCodePDA);*/
-						dbengine.fnTransferDataFromTempToPermanent(storeID,StoreVisitCode,TmpInvoiceCodePDA);
-
-						int chkflgTransferStatus=dbengine.fnCheckflgTransferStatus(storeID,StoreVisitCode,TmpInvoiceCodePDA);
-						if(chkflgTransferStatus==2)
-						{
-							dbengine.deleteOldStoreInvoice(storeID,strGlobalOrderID,TmpInvoiceCodePDA);
-							dbengine.deleteStoreRecordFromtblStorePurchaseDetailsFromProductTrsaction(storeID,strGlobalOrderID,TmpInvoiceCodePDA);
-							dbengine.UpdateStoreVisitMStrTable(storeID,3,StoreVisitCode);
-
-
-							dbengine.UpdateStoreVisitWiseTables(storeID, 3,StoreVisitCode,TmpInvoiceCodePDA);
-						}
-						else
-						{
-							dbengine.deleteMasterTblFromParmanentInvoiceTables(storeID,TmpInvoiceCodePDA);
-						}
-
-					}
-
-				}
-			}
-			 
-			    long  syncTIMESTAMP = System.currentTimeMillis();
-				Date dateobj = new Date(syncTIMESTAMP);
-				SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss",Locale.ENGLISH);
-				String StampEndsTime = df.format(dateobj);
-				
-				
-				dbengine.open();
-				dbengine.UpdateStoreEndVisit(storeID, StampEndsTime);
-				dbengine.UpdateStoreProductAppliedSchemesBenifitsRecords(storeID.trim(),"3",strGlobalOrderID,TmpInvoiceCodePDA);
-				dbengine.UpdateStoreStoreReturnDetail(storeID.trim(),"3",strGlobalOrderID,TmpInvoiceCodePDA);
-				dbengine.UpdateStoreFlag(storeID.trim(), 3);
-				dbengine.UpdateStoreOtherMainTablesFlag(storeID.trim(), 3,strGlobalOrderID,TmpInvoiceCodePDA);
-
-
-
-				
-				//dbengine.UpdateStoreReturnphotoFlag(storeID.trim(), 5);
-				
-				dbengine.close();
-
-			Double outstandingvalue=dbengine.fnGetStoretblLastOutstanding(storeID);
-			outstandingvalue=Double.parseDouble(new DecimalFormat("##.##").format(outstandingvalue));
-			dbengine.updateOutstandingOfStore(storeID,0.0);
-
-			Double CollectionAmtAgainstStore=dbengine.fnTotCollectionAmtAgainstStore(storeID.trim(),TmpInvoiceCodePDA,StoreVisitCode);
-
-				dbengine.updateStoreQuoteSubmitFlgInStoreMstr(storeID.trim(),0,StoreVisitCode);
-				if(dbengine.checkCountIntblStoreSalesOrderPaymentDetails(storeID,strGlobalOrderID,TmpInvoiceCodePDA)==0)
-				{
-					String strDefaultPaymentStageForStore=dbengine.fnGetDefaultStoreOrderPAymentDetails(storeID);
-					if(!strDefaultPaymentStageForStore.equals(""))
-					{
-						dbengine.open();
-						dbengine. fnsaveStoreSalesOrderPaymentDetails(storeID,strGlobalOrderID,strDefaultPaymentStageForStore,"3",TmpInvoiceCodePDA);
-						dbengine.close();
-					}
-				}
-
-			dbengine.open();
-			String presentRoute=dbengine.GetActiveRouteID();
-			dbengine.close();
-			
-			
-			/*long syncTIMESTAMP = System.currentTimeMillis();
-			Date dateobj = new Date(syncTIMESTAMP);*/
-			SimpleDateFormat df1 = new SimpleDateFormat(imei+"."+presentRoute+"."+ "dd.MM.yyyy.HH.mm.ss",Locale.ENGLISH);
-			
-			newfullFileName=df1.format(dateobj);
-			
-			
-			 
-			
-			try {
-				
-				
-				 File OrderXMLFolder = new File(Environment.getExternalStorageDirectory(), CommonInfo.OrderXMLFolder);
-					
-				 if (!OrderXMLFolder.exists())
-					{
-						OrderXMLFolder.mkdirs();
-						 
-					} 
-				 String routeID=dbengine.GetActiveRouteIDSunil();
-			
-				DA.open();
-				DA.export(CommonInfo.DATABASE_NAME, newfullFileName,routeID);
-				DA.close();
-
-				dbengine.savetbl_XMLfiles(newfullFileName, "3","1");
-				dbengine.open();
-				dbengine.UpdateStoreFlag(storeID.trim(), 5);
-
-				dbengine.UpdateStoreOtherMainTablesFlag(storeID.trim(), 5,strGlobalOrderID,TmpInvoiceCodePDA);
-				dbengine.UpdateStoreMaterialphotoFlag(storeID.trim(), 5);
-				dbengine.UpdateStoreReturnphotoFlag(storeID.trim(), 5);
-				dbengine.UpdateNewAddedStorephotoFlag(storeID.trim(), 5);
-
-
-
-				dbengine.close();
-				dbengine.UpdateStoreVisitMStrTable(storeID,3,StoreVisitCode);
-				dbengine.UpdateStoreVisitWiseTables(storeID.trim(), 5,StoreVisitCode,TmpInvoiceCodePDA);
-				VisitTypeStatus="0";
-				dbengine.updateVisitTypeStatusOfStore(storeID,VisitTypeStatus,StoreVisitCode);
-				if(dbengine.checkCountIntblStoreSalesOrderPaymentDetails(storeID,strGlobalOrderID,TmpInvoiceCodePDA)==0)
-				{
-					String strDefaultPaymentStageForStore=dbengine.fnGetDefaultStoreOrderPAymentDetails(storeID);
-					if(!strDefaultPaymentStageForStore.equals(""))
-					{
-						dbengine.open();
-						dbengine. fnsaveStoreSalesOrderPaymentDetails(storeID,strGlobalOrderID,strDefaultPaymentStageForStore,"4",TmpInvoiceCodePDA);
-						dbengine.close();
-					}
-				}
-			} catch (Exception e) {
-			
-				e.printStackTrace();
-				if(pDialogGetStores.isShowing()) 
-			      {
-			    	   pDialogGetStores.dismiss();
-				  }
-			}
-			return null;
-		}
-		@Override
-		protected void onCancelled() {
-			
-		}
-
-		@Override
-		protected void onPostExecute(Void result) {
-			super.onPostExecute(result);
-			if(pDialogGetStores.isShowing()) 
-		      {
-		    	   pDialogGetStores.dismiss();
-			  }
-			try
-			{
-				StoreSelection.flgChangeRouteOrDayEnd=0;
-				Intent syncIntent = new Intent(ProductOrderReview.this, SyncMaster.class);
-				//syncIntent.putExtra("xmlPathForSync", Environment.getExternalStorageDirectory() + "/RSPLSFAXml/" + newfullFileName + ".xml");
-				syncIntent.putExtra("xmlPathForSync", Environment.getExternalStorageDirectory() + "/" + CommonInfo.OrderXMLFolder + "/" + newfullFileName + ".xml");
-				syncIntent.putExtra("OrigZipFileName", newfullFileName);
-				syncIntent.putExtra("whereTo", "Regular");
-				startActivity(syncIntent);
-				finish();
-			} catch (Exception e) {
-			
-				e.printStackTrace();
-			}
-			
-		}
-	}
-
-
 	public void SyncNow()
 	{
-		
+
 		dbengine.open();
 		String presentRoute=dbengine.GetActiveRouteID();
 		dbengine.close();
-		
-		
+
+
 		long syncTIMESTAMP = System.currentTimeMillis();
 		Date dateobj = new Date(syncTIMESTAMP);
 		SimpleDateFormat df = new SimpleDateFormat(imei+"."+presentRoute+"."+ "dd.MM.yyyy.HH.mm.ss",Locale.ENGLISH);
-		
+
 		String newfullFileName=df.format(dateobj);
-		
-		
-		 
-		
-		try 
+
+
+
+
+		try
 		{
-			
+
 			 File OrderXMLFolder = new File(Environment.getExternalStorageDirectory(), CommonInfo.OrderXMLFolder);
-				
+
 			 if (!OrderXMLFolder.exists())
 				{
 					OrderXMLFolder.mkdirs();
-					 
-				} 
-			 
+
+				}
+
 			 String routeID=dbengine.GetActiveRouteIDSunil();
-			
+
 			DA.open();
 			DA.export(CommonInfo.DATABASE_NAME, newfullFileName,routeID);
 			DA.close();
-			
-			
+
+
 
 			Intent syncIntent = new Intent(ProductOrderReview.this, SyncMaster.class);
 			//syncIntent.putExtra("xmlPathForSync", Environment.getExternalStorageDirectory() + "/RSPLSFAXml/" + newfullFileName + ".xml");
@@ -5891,15 +5599,14 @@ public void loadPurchaseProductDefault()
 			syncIntent.putExtra("OrigZipFileName", newfullFileName);
 			syncIntent.putExtra("whereTo", "Regular");
 			startActivity(syncIntent);
-			
+
 
 		} catch (IOException e) {
-		
+
 			e.printStackTrace();
 		}
-		
-	}
 
+	}
 
 		public void saveFreeProductDataWithSchemeToDatabase(HashMap<String, ArrayList<String>> hashMapSelectionFreeQty,String savProductIdOnClicked)
 		{
@@ -5911,83 +5618,83 @@ public void loadPurchaseProductDefault()
 			}*/
 			String freeProductID;
 			ArrayList<String> listFreeProdctQtyScheme;
-			
-			
-			for (Entry<String, ArrayList<String>> entry : hashMapSelectionFreeQty.entrySet()) 
+
+
+			for (Entry<String, ArrayList<String>> entry : hashMapSelectionFreeQty.entrySet())
 			{
 				freeProductID=entry.getKey();
 				listFreeProdctQtyScheme=entry.getValue();
-				
+
 				for(String strFreeProdctQtyScheme: listFreeProdctQtyScheme)
 				{
 					//[10.0, 41, 60, 1, 500.0, 0, 4, 2, 6, 0, 10.0, 0, 0, 0, 0, 0, 0.0, 0.0, 2]
-					
+
 					String[] arrayAllValues=strFreeProdctQtyScheme.split(Pattern.quote("~"));
-					
+
 					int schemeId=Integer.parseInt(arrayAllValues[1]);
-					
+
 					int schemeSlabId=Integer.parseInt(arrayAllValues[2]);
-					
+
 					int schemeSlabBcktId=Integer.parseInt((arrayAllValues[3]));
-					
+
 					Double schemeSlabSubBcktVal=Double.parseDouble(arrayAllValues[4]);
-					
+
 					int schemeSubBucktValType=Integer.parseInt(arrayAllValues[5]);
 					//[10.0, 41, 60, 1, 500.0, 0, 4, 2, 6, 0, 10.0, 0, 0, 0, 0, 0, 0.0, 0.0, 2]
 					int schemeSlabSubBucktType=Integer.parseInt(arrayAllValues[6]);
-					
+
 					int benifitRowId=Integer.parseInt(arrayAllValues[7]);
-					
+
 					int benSubBucketType=Integer.parseInt(arrayAllValues[8]);
-					
+
 					int freeProductId=Integer.parseInt(freeProductID);
-					
+
 					Double benifitSubBucketValue=Double.parseDouble(arrayAllValues[10]);
-					
+
 					Double benifitMaxValue=Double.parseDouble(arrayAllValues[11]);
-					
+
 					Double benifitAssignedVal=Double.parseDouble(arrayAllValues[0]);
-					
+
 					Double benifitAssignedValueType=Double.parseDouble(arrayAllValues[13]);
-					
+
 					int benifitDiscountApplied=Integer.parseInt(arrayAllValues[14]);
-					
+
 					String benifitCoupnCode=arrayAllValues[15];
-					
+
 					Double per=Double.parseDouble(arrayAllValues[16]);
-					
+
 					Double UOM=Double.parseDouble(arrayAllValues[17]);
 					int schSlbRowId=Integer.parseInt(arrayAllValues[18]);
 					int SchTypeId=Integer.parseInt(arrayAllValues[19]);
-					
+
 					int WhatFinallyApplied=1;
-					
+
 					if(benSubBucketType==1 || benSubBucketType==5)//Free Different Product  / Free Same Product
 					{
-						
+
 						hmapPrdctFreeQty.put(""+freeProductId,""+benifitAssignedVal.intValue());
 						//hmapPrdctFreeQty.put(String.valueOf(freeProductId),((TextView)ll_prdct_detal.findViewWithTag("tvFreeQty_"+freeProductId)).getText().toString());
 						WhatFinallyApplied=1;
 					}
-					
+
 					if(benSubBucketType==2 || benSubBucketType==6)//Discount in Percentage with other product  / Discount in Percentage with same product
 					{
-						
+
 						hmapProductDiscountPercentageGive.put(""+freeProductId,""+benifitAssignedVal.intValue());
 						//hmapPrdctFreeQty.put(String.valueOf(freeProductId),((TextView)ll_prdct_detal.findViewWithTag("tvFreeQty_"+freeProductId)).getText().toString());
 						WhatFinallyApplied=1;
 					}
 						//((TextView)ll_prdct_detal.findViewWithTag("tvDiscountVal_"+AllProductInSchSlab[mm])).setText("0.00");
-					
+
 					if(benSubBucketType==10)
 					{
 						WhatFinallyApplied=1;
 						//benifitAssignedVal=benifitSubBucketValue;
 						hmapProductVolumePer.put(""+freeProductId, ""+per);
 					}
-					
+
 					//BenSubBucketType
-					//1. Free Other Product 
+					//1. Free Other Product
 					//2. Discount in Percentage with other product
 					//3. Discount in Amount with other product
 					//4. Coupons
@@ -5997,18 +5704,18 @@ public void loadPurchaseProductDefault()
 					//8. Percentage On Invoice
 					//9.  Amount On Invoice
 					//10. Volume Based Per KG
-					
+
 					dbengine.fnsavetblStoreProductAppliedSchemesBenifitsRecords(storeID,Integer.parseInt(savProductIdOnClicked), schemeId, schemeSlabId,schemeSlabBcktId, schemeSlabSubBcktVal,schemeSubBucktValType,
 							schemeSlabSubBucktType,  benifitRowId,  benSubBucketType,
 							freeProductId,  benifitSubBucketValue,  benifitMaxValue,  benifitAssignedVal,  benifitAssignedValueType,  benifitDiscountApplied,  benifitCoupnCode,per,UOM,WhatFinallyApplied,schSlbRowId,SchTypeId,strGlobalOrderID,TmpInvoiceCodePDA);
 				}
 
-					
-				
+
+
 			}
-			
+
 			//orderBookingTotalCalc();
-			
+
 			if(alertOpens)
 			{
 				 if(flagClkdButton==1)
@@ -6017,27 +5724,27 @@ public void loadPurchaseProductDefault()
 					 progressTitle=ProductOrderReview.this.getResources().getString(R.string.genTermPleaseWaitNew);
 		         new SaveData().execute("1~3");
 			     }
-			     
+
 			     else if(flagClkdButton==4)
 			     {
 			    	 flagClkdButton=0;
 			    	  progressTitle=ProductOrderReview.this.getResources().getString(R.string.WhileWeSave);
-					   new SaveData().execute("1~2"); 
+					   new SaveData().execute("1~2");
 			     }
-				 
+
 			     else if(flagClkdButton==2)
 			     {
 			    	 flagClkdButton=0;
 			    	   progressTitle=ProductOrderReview.this.getResources().getString(R.string.WhileWeSaveExit);
 					   new SaveData().execute("2");
 			     }
-				 
+
 			     else if(flagClkdButton==3)
 			     {
 			    	 flagClkdButton=0;
 			    	 fnSaveFilledDataToDatabase(3);
 			     }
-				 
+
 			     else if(flagClkdButton==5)
 			     {
 			    	 flagClkdButton=0;
@@ -6045,12 +5752,11 @@ public void loadPurchaseProductDefault()
 
 					 new SaveData().execute("1");
 			     }
-				 
-				
+
+
 			}
 		}
-		
-		
+
 		 public String genOutOrderID()
 			{
 				//store ID generation <x>
@@ -6063,207 +5769,57 @@ public void loadPurchaseProductDefault()
 						/*cxz.split("^([^-]*,[^-]*,[^-]*,[^-]*),(.*)$");*/
 						//System.out.println("cxz (BEFORE split): "+cxz);
 						StringTokenizer tokens = new StringTokenizer(String.valueOf(cxz), "-");
-						
+
 						String val1 = tokens.nextToken().trim();
 						String val2 = tokens.nextToken().trim();
 						String val3 = tokens.nextToken().trim();
 						String val4 = tokens.nextToken().trim();
 						cxz = tokens.nextToken().trim();
-						
+
 						//System.out.println("cxz (AFTER split): "+cxz);
-						
+
 						/*TelephonyManager tManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 						String imei = tManager.getDeviceId();*/
 						String IMEIid =  CommonInfo.imei.substring(9);
 						//cxz = IMEIid +"-"+cxz;
 						cxz = "OrdID" + "-" +IMEIid +"-"+cxz+"-"+VisitStartTS.replace(" ", "").replace(":", "").trim();
 						//System.out.println("cxz: "+cxz);
-						
+
 						return cxz;
 						//-_
 			}
+		
+		 public void callBroadCast() {
+		        if (Build.VERSION.SDK_INT >= 14) {
+		            Log.e("-->", " >= 14");
+		            MediaScannerConnection.scanFile(this, new String[]{Environment.getExternalStorageDirectory().toString()}, null, new MediaScannerConnection.OnScanCompletedListener() {
+
+		                public void onScanCompleted(String path, Uri uri) {
+
+		                }
+		            });
+		        } else {
+		            Log.e("-->", " < 14");
+		            sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED,
+		                    Uri.parse("file://" + Environment.getExternalStorageDirectory())));
+		        }
+		    }
 		 
-		public class GetData extends AsyncTask<Void, Void, Void>
-		 {
-
-		   @Override
-		         protected void onPreExecute() {
-		             super.onPreExecute();
-		             
-		             mProgressDialog = new ProgressDialog(ProductOrderReview.this);
-		             mProgressDialog.setTitle(ProductOrderReview.this.getResources().getString(R.string.genTermPleaseWaitNew));
-		             mProgressDialog.setMessage(ProductOrderReview.this.getResources().getString(R.string.Loading));
-		             mProgressDialog.setIndeterminate(true);
-		             mProgressDialog.setCancelable(false);
-		            mProgressDialog.show();
-		         }
-		   
-		  @Override
-		  protected Void doInBackground(Void... params)
-		  {
-		   hmapProductRelatedSchemesList=dbengine.fnProductRelatedSchemesList();
-
-
-
-			  chkflgInvoiceAlreadyGenerated=dbengine.fnCheckForNewInvoiceOrPreviousValue(storeID,StoreVisitCode);//0=Need to Generate Invoice Number,1=No Need of Generating Invoice Number
-			  if(chkflgInvoiceAlreadyGenerated==1)
-			  {
-				  TmpInvoiceCodePDA=dbengine.fnGetInvoiceCodePDA(storeID,StoreVisitCode);
-			  }
-			  else
-			  {
-				  TmpInvoiceCodePDA=genTempInvoiceCodePDA();
-			  }
-			  CheckIfStoreExistInStoreProdcutPurchaseDetails=dbengine.fnCheckIfStoreExistInStoreProdcutPurchaseDetails(storeID,TmpInvoiceCodePDA);
-			  CheckIfStoreExistInStoreProdcutInvoiceDetails=dbengine.fnCheckIfStoreExistInStoreProdcutInvoiceDetails(storeID,TmpInvoiceCodePDA);
-			  strGlobalOrderID=TmpInvoiceCodePDA;
-			 /* if(CheckIfStoreExistInStoreProdcutPurchaseDetails==1 || CheckIfStoreExistInStoreProdcutInvoiceDetails==1)
-			  {
-				  strGlobalOrderID=dbengine.fngetOrderIDAganistStore(storeID,TmpInvoiceCodePDA);
-			  }
-			  else
-			  {
-				  strGlobalOrderID= genOutOrderID();
-			  }*/
-		   getCategoryDetail();
-		   
-		   getProductData();
-
-			  getCutOffDetailsForProduct();
-
-			  distID=dbengine.getDisId(storeID);
-			  hmapDistPrdctStockCount=dbengine.fnGetFinalInvoiceQtyProductWise();
-			  hmapPerUnitName=dbengine.getPerUnitName();
-		   return null;
-		  }
-		   @Override
-		         protected void onPostExecute(Void args) {
-			   loadPurchaseProductDefault();
-		       mProgressDialog.dismiss();
-		     
-		  }
-		  
-		 }
+		@Override
+		public void onConnectionFailed(ConnectionResult arg0)
+		{
+			// TODO Auto-generated method stub
+			LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, appLocationService);
+		}
 		
+		@Override
+		public void onConnected(Bundle arg0)
+		{
+			// TODO Auto-generated method stub
+			LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, appLocationService);
 
-		public class SaveData extends AsyncTask<String, String, Void>
-		 {
-
-		   @Override
-		         protected void onPreExecute() {
-		             super.onPreExecute();
-		             //Text need to e changed according to btn Click
-		             
-		             
-		             if(mProgressDialog.isShowing()==false)
-		             {
-		             mProgressDialog = new ProgressDialog(ProductOrderReview.this);
-		             mProgressDialog.setTitle(ProductOrderReview.this.getResources().getString(R.string.genTermPleaseWaitNew));
-		             mProgressDialog.setMessage(progressTitle);
-		             mProgressDialog.setIndeterminate(true);
-		             mProgressDialog.setCancelable(false);
-		            mProgressDialog.show();
-		             }
-		         }
-		   
-		  @Override
-		  protected Void doInBackground(String... params)
-		  {
-			  String executedData=params[0];
-			  
-			  int btnClkd;
-			  if(executedData.contains("~"))
-			  {
-				  btnClkd=Integer.parseInt(executedData.split(Pattern.quote("~"))[0]);
-				  isReturnClkd=Integer.parseInt(executedData.split(Pattern.quote("~"))[1]);
-			  }
-			  
-			  else
-			  {
-				  btnClkd=Integer.parseInt(executedData);
-			  }
-			
-			  
-			  fnSaveFilledDataToDatabase(btnClkd);
-		   return null;
-		  }
-		   @Override
-		         protected void onPostExecute(Void args) {
-		   if(mProgressDialog!=null) {
-			   if (mProgressDialog.isShowing() == true) {
-				   mProgressDialog.dismiss();
-			   }
-		   }
-			   long syncTIMESTAMP = System.currentTimeMillis();
-				Date dateobj = new Date(syncTIMESTAMP);
-				SimpleDateFormat df = new SimpleDateFormat(
-						"dd-MM-yyyy HH:mm:ss",Locale.ENGLISH);
-				String startTS = df.format(dateobj);
-				dbengine.open();
-				dbengine.UpdateStoreEndVisit(storeID,startTS);
-				dbengine.close();
-		     if(isReturnClkd==3)
-		     {
-		    	   Intent fireBackDetPg=new Intent(ProductOrderReview.this,ReturnActivity.class);
-		           fireBackDetPg.putExtra("storeID", storeID);
-		           fireBackDetPg.putExtra("SN", SN);
-		           fireBackDetPg.putExtra("bck", 1);
-		           fireBackDetPg.putExtra("imei", imei);
-		           fireBackDetPg.putExtra("userdate", date);
-		           fireBackDetPg.putExtra("pickerDate", pickerDate);
-		           fireBackDetPg.putExtra("OrderPDAID", strGlobalOrderID);
-		           fireBackDetPg.putExtra("flgPageToRedirect", "2");
-		          // fireBackDetPg.putExtra("rID", routeID);
-		         
-		           startActivity(fireBackDetPg);
-		           finish(); 
-		     }
-		     
-		     else if(isReturnClkd==2)
-		     {
-		    	 //Intent fireBackDetPg=new Intent(ProductOrderSearch.this,POSMaterialActivity.class);
-		    	Intent fireBackDetPg=new Intent(ProductOrderReview.this,ProductOrderEntry.class);
-			    fireBackDetPg.putExtra("storeID", storeID);
-			    fireBackDetPg.putExtra("SN", SN);
-			    fireBackDetPg.putExtra("bck", 1);
-			    fireBackDetPg.putExtra("imei", imei);
-			    fireBackDetPg.putExtra("userdate", date);
-			    fireBackDetPg.putExtra("pickerDate", pickerDate);
-			    //fireBackDetPg.putExtra("rID", routeID);
-			    startActivity(fireBackDetPg);
-			    finish();
-		     }
-			 else if(isReturnClkd==5)
-			 {
-				 Intent AmtCollectIntent = new Intent(ProductOrderReview.this, CollectionActivityNew.class);
-				 AmtCollectIntent.putExtra("storeID", storeID);
-				 AmtCollectIntent.putExtra("imei", imei);
-				 AmtCollectIntent.putExtra("userdate", date);
-				 AmtCollectIntent.putExtra("pickerDate", pickerDate);
-				 AmtCollectIntent.putExtra("SN", SN);
-				 AmtCollectIntent.putExtra("OrderPDAID", strGlobalOrderID);
-
-				// AmtCollectIntent.putExtra("flgOrderType",flgOrderType);
-				 startActivity(AmtCollectIntent);
-				 finish();
-			 }
-			 else if(isReturnClkd==6)
-			 {
-				 Intent AmtCollectIntent = new Intent(ProductOrderReview.this, Delivery_Details_Activity.class);   //
-				 AmtCollectIntent.putExtra("storeID", storeID);
-				 AmtCollectIntent.putExtra("imei", imei);
-				 AmtCollectIntent.putExtra("userdate", date);
-				 AmtCollectIntent.putExtra("pickerDate", pickerDate);
-				 AmtCollectIntent.putExtra("SN", SN);
-				 AmtCollectIntent.putExtra("OrderPDAID", strGlobalOrderID);
-				// AmtCollectIntent.putExtra("flgOrderType",flgOrderType);
-				 startActivity(AmtCollectIntent);
-				 finish();
-			 }
-		   }
-
-		
-		 }
+			startLocationUpdates();
+		}
 		
 	/*	public void hideSoftKeyboard(View view){
 			  InputMethodManager imm =(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -6278,324 +5834,32 @@ public void loadPurchaseProductDefault()
 		    
 		}*/
 		
-		 public class standBYtask extends AsyncTask<Void, Void, Void> 
-			{
-
-				@Override
-				protected Void doInBackground(Void... params) 
-				{
-					// TODO Auto-generated method stub
-
-					// Thread ttt = new Thread();
-					return null;
-				}
-
-				@Override
-				protected void onPostExecute(Void result) 
-				{
-					// TODO Auto-generated method stub
-					super.onPostExecute(result);
-				}
-
-				@Override
-				protected void onPreExecute() 
-				{
-					// TODO Auto-generated method stub
-					super.onPreExecute();
-				}
-
-			}
-		
-
-
-		 public void callBroadCast() {
-		        if (Build.VERSION.SDK_INT >= 14) {
-		            Log.e("-->", " >= 14");
-		            MediaScannerConnection.scanFile(this, new String[]{Environment.getExternalStorageDirectory().toString()}, null, new MediaScannerConnection.OnScanCompletedListener() {
-		              
-		                public void onScanCompleted(String path, Uri uri) {
-		                
-		                }
-		            });
-		        } else {
-		            Log.e("-->", " < 14");
-		            sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED,
-		                    Uri.parse("file://" + Environment.getExternalStorageDirectory())));
-		        }
-		    }
-		@Override
-		public void onConnectionFailed(ConnectionResult arg0) 
-		{
-			// TODO Auto-generated method stub
-			LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, appLocationService);
-		}
-		@Override
-		public void onConnected(Bundle arg0)
-		{
-			// TODO Auto-generated method stub
-			LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, appLocationService);
-			
-			startLocationUpdates();
-		}
 		protected void startLocationUpdates()
 		{
 		   PendingResult<Status> pendingResult = LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-		    
+
 		}
+		
 		@Override
-		public void onConnectionSuspended(int arg0) 
+		public void onConnectionSuspended(int arg0)
 		{
 			// TODO Auto-generated method stub
 			LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, appLocationService);
-			
+
 		}
-		public class CoundownClass2 extends CountDownTimer{
 
-			public CoundownClass2(long startTime, long interval) {
-				super(startTime, interval);
-				// TODO Auto-generated constructor stub
-			}
-
-			@Override
-			public void onTick(long millisUntilFinished) {
-			
-			}
-
-			@Override
-			public void onFinish() {
-
-				isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-				String GpsLat="0";
-				String GpsLong="0";
-				String GpsAccuracy="0";
-				String GpsAddress="0";
-				if(isGPSEnabled)
-				{
-
-					Location nwLocation=appLocationService.getLocation(locationManager,LocationManager.GPS_PROVIDER,location);
-					if(nwLocation!=null){
-						double lattitude=nwLocation.getLatitude();
-						double longitude=nwLocation.getLongitude();
-						double accuracy= nwLocation.getAccuracy();
-						GpsLat=""+lattitude;
-						GpsLong=""+longitude;
-						GpsAccuracy=""+accuracy;
-
-						GPSLocationLatitude=""+lattitude;
-						GPSLocationLongitude=""+longitude;
-						GPSLocationProvider="GPS";
-						GPSLocationAccuracy=""+accuracy;
-						System.out.println("LOCATION(GPS)  LATTITUDE: " +lattitude + "LONGITUDE:" + longitude+ "accuracy:" + accuracy);
-						//text2.setText(" LOCATION(GPS) \n LATTITUDE: " +lattitude + "\nLONGITUDE:" + longitude+ "\naccuracy:" + accuracy);
-						//Toast.makeText(getApplicationContext(), " LOCATION(NW) \n LATTITUDE: " +lattitude + "\nLONGITUDE:" + longitude+ "\naccuracy:" + accuracy, Toast.LENGTH_LONG).show();
-					}
-				}
-
-				Location gpsLocation=appLocationService.getLocation(locationManager,LocationManager.NETWORK_PROVIDER,location);
-				String NetwLat="0";
-				String NetwLong="0";
-				String NetwAccuracy="0";
-				String NetwAddress="0";
-				if(gpsLocation!=null){
-					double lattitude1=gpsLocation.getLatitude();
-					double longitude1=gpsLocation.getLongitude();
-					double accuracy1= gpsLocation.getAccuracy();
-					NetwLat=""+lattitude1;
-					NetwLong=""+longitude1;
-					NetwAccuracy=""+accuracy1;
-
-					NetworkLocationLatitude=""+lattitude1;
-					NetworkLocationLongitude=""+longitude1;
-					NetworkLocationProvider="Network";
-					NetworkLocationAccuracy=""+accuracy1;
-					System.out.println("LOCATION(N/W)  LATTITUDE: " +lattitude1 + "LONGITUDE:" + longitude1+ "accuracy:" + accuracy1);
-					// Toast.makeText(this, " LOCATION(NW) \n LATTITUDE: " +lattitude + "\nLONGITUDE:" + longitude, Toast.LENGTH_LONG).show();
-					//text1.setText(" LOCATION(N/W) \n LATTITUDE: " +lattitude1 + "\nLONGITUDE:" + longitude1+ "\naccuracy:" + accuracy1);
-
-				}
-					 /* TextView accurcy=(TextView) findViewById(R.id.Acuracy);
-					  accurcy.setText("GPS:"+GPSLocationAccuracy+"\n"+"NETWORK"+NetworkLocationAccuracy+"\n"+"FUSED"+fusedData);*/
-
-				System.out.println("LOCATION Fused"+fusedData);
-				String FusedLat="0";
-				String FusedLong="0";
-				String FusedAccuracy="0";
-				String FusedAddress="0";
-
-				if(!FusedLocationProvider.equals(""))
-				{
-					fnAccurateProvider="Fused";
-					fnLati=FusedLocationLatitude;
-					fnLongi=FusedLocationLongitude;
-					fnAccuracy= Double.parseDouble(FusedLocationAccuracy);
-
-					FusedLat=FusedLocationLatitude;
-					FusedLong=FusedLocationLongitude;
-					FusedAccuracy=FusedLocationAccuracy;
-				}
-
-
-
-
-				appLocationService.KillServiceLoc(appLocationService,locationManager);
-				try {
-					if(mGoogleApiClient!=null && mGoogleApiClient.isConnected())
-					{
-						stopLocationUpdates();
-						mGoogleApiClient.disconnect();
-					}
-				}
-				catch (Exception e){
-
-				}
-
-
-
-
-				fnAccurateProvider="";
-				fnLati="0";
-				fnLongi="0";
-				fnAccuracy=0.0;
-
-				if(!FusedLocationProvider.equals(""))
-				{
-					fnAccurateProvider="Fused";
-					fnLati=FusedLocationLatitude;
-					fnLongi=FusedLocationLongitude;
-					fnAccuracy= Double.parseDouble(FusedLocationAccuracy);
-				}
-
-				if(!fnAccurateProvider.equals(""))
-				{
-					if(!GPSLocationProvider.equals(""))
-					{
-						if(Double.parseDouble(GPSLocationAccuracy)<=fnAccuracy)
-						{
-							fnAccurateProvider="Gps";
-							fnLati=GPSLocationLatitude;
-							fnLongi=GPSLocationLongitude;
-							fnAccuracy= Double.parseDouble(GPSLocationAccuracy);
-						}
-					}
-				}
-				else
-				{
-					if(!GPSLocationProvider.equals(""))
-					{
-						fnAccurateProvider="Gps";
-						fnLati=GPSLocationLatitude;
-						fnLongi=GPSLocationLongitude;
-						fnAccuracy= Double.parseDouble(GPSLocationAccuracy);
-					}
-				}
-
-				if(!fnAccurateProvider.equals(""))
-				{
-					if(!NetworkLocationProvider.equals(""))
-					{
-						if(Double.parseDouble(NetworkLocationAccuracy)<=fnAccuracy)
-						{
-							fnAccurateProvider="Network";
-							fnLati=NetworkLocationLatitude;
-							fnLongi=NetworkLocationLongitude;
-							fnAccuracy= Double.parseDouble(NetworkLocationAccuracy);
-						}
-					}
-				}
-				else
-				{
-					if(!NetworkLocationProvider.equals(""))
-					{
-						fnAccurateProvider="Network";
-						fnLati=NetworkLocationLatitude;
-						fnLongi=NetworkLocationLongitude;
-						fnAccuracy= Double.parseDouble(NetworkLocationAccuracy);
-					}
-				}
-				// fnAccurateProvider="";
-				if(fnAccurateProvider.equals(""))
-				{
-					if(pDialog2STANDBY.isShowing())
-					{
-						pDialog2STANDBY.dismiss();
-					}
-					//alert ... try again nothing found // return back
-
-					// Toast.makeText(getApplicationContext(), "Please try again, No Fused,GPS or Network found.", Toast.LENGTH_LONG).show();
-
-					showAlertForEveryOne(ProductOrderReview.this.getResources().getString(R.string.AlertTryAgain));
-				}
-				else
-				{
-
-
-					if(pDialog2STANDBY.isShowing())
-					{
-						pDialog2STANDBY.dismiss();
-					}
-					if(!GpsLat.equals("0") )
-					{
-						fnCreateLastKnownGPSLoction(GpsLat,GpsLong,GpsAccuracy);
-					}
-
-					if(!checkLastFinalLoctionIsRepeated(String.valueOf(fnLati), String.valueOf(fnLongi), String.valueOf(fnAccuracy)))
-					{
-
-						fnCreateLastKnownFinalLocation(String.valueOf(fnLati), String.valueOf(fnLongi), String.valueOf(fnAccuracy));
-						UpdateLocationAndProductAllData();
-					}
-					else
-					{countSubmitClicked++;
-						if(countSubmitClicked==1)
-						{
-							AlertDialog.Builder alertDialog = new AlertDialog.Builder(ProductOrderReview.this);
-
-							// Setting Dialog Title
-							alertDialog.setTitle(getText(R.string.genTermNoDataConnection));
-							alertDialog.setIcon(R.drawable.error_info_ico);
-							alertDialog.setCancelable(false);
-							// Setting Dialog Message
-							alertDialog.setMessage(ProductOrderReview.this.getResources().getString(R.string.AlertSameLoc));
-
-							// On pressing Settings button
-							alertDialog.setPositiveButton(ProductOrderReview.this.getResources().getString(R.string.AlertDialogOkButton), new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog, int which) {
-									countSubmitClicked++;
-									Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-									startActivity(intent);
-								}
-							});
-
-							// Showing Alert Message
-							alertDialog.show();
-
-
-
-						}
-						else
-						{
-							UpdateLocationAndProductAllData();
-						}
-
-
-					}
-
-				}
-
-			}
-			
-		}
 		 protected void stopLocationUpdates() {
 		        LocationServices.FusedLocationApi.removeLocationUpdates(
 		                mGoogleApiClient, this);
-		      
+
 		    }
+
 		private void updateUI() {
 			 Location loc =mCurrentLocation;
 			        if (null != mCurrentLocation) {
 			            String lat = String.valueOf(mCurrentLocation.getLatitude());
 			            String lng = String.valueOf(mCurrentLocation.getLongitude());
-			            
+
 			            FusedLocationLatitude=lat;
 					     FusedLocationLongitude=lng;
 					     FusedLocationProvider=mCurrentLocation.getProvider();
@@ -6605,20 +5869,13 @@ public void loadPurchaseProductDefault()
 				                    "Longitude: " + lng  +
 				                    "Accuracy: " + mCurrentLocation.getAccuracy() +
 				                    "Provider: " + mCurrentLocation.getProvider();
-			         
+
 			        } else {
-			         
+
 			        }
 			    }
-		
-		
-		
-		
-		
-		
-		
-		
-		public void showAlertForEveryOne(String msg) 
+
+		public void showAlertForEveryOne(String msg)
 		{
 				AlertDialog.Builder alertDialogNoConn = new AlertDialog.Builder(ProductOrderReview.this);
 				alertDialogNoConn.setTitle(getText(R.string.genTermNoDataConnection));
@@ -6626,7 +5883,7 @@ public void loadPurchaseProductDefault()
 				alertDialogNoConn.setCancelable(false);
 				alertDialogNoConn.setNeutralButton(ProductOrderReview.this.getResources().getString(R.string.AlertDialogOkButton),new DialogInterface.OnClickListener()
 				       {
-							public void onClick(DialogInterface dialog, int which) 
+							public void onClick(DialogInterface dialog, int which)
 							 {
 		                      dialog.dismiss();
 								 FusedLocationLatitude="0";
@@ -6727,16 +5984,18 @@ public void loadPurchaseProductDefault()
 				AlertDialog alert = alertDialogNoConn.create();
 				alert.show();
 		}
+
 		@Override
 		public void onLocationChanged(Location args0) {
 			// TODO Auto-generated method stub
 			 mCurrentLocation = args0;
 	         mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
 	         updateUI();
-			
+
 		}
+
 		 public SpannableStringBuilder textWithMandatory(String text_Value)
-		 	
+
 		 	{
 		 		String simple = text_Value;
 		 		String colored = "**";
@@ -6747,15 +6006,14 @@ public void loadPurchaseProductDefault()
 		 		builder.append(colored);
 		 		int end = builder.length();
 
-		 		builder.setSpan(new ForegroundColorSpan(Color.RED), start, end, 
+		 		builder.setSpan(new ForegroundColorSpan(Color.RED), start, end,
 		 		                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
 		 		//text.setText(builder);
-		 		
+
 		 		return builder;
 
-		 	}    
-		 
+		 	}
 
 	     public Double getAccAsignValue(int schSlabSubBucketType,int chkflgProDataCalculation,double BenSubBucketValue,double schSlabSubBucketValue,int totalProductQty,int totalProductLine,double totalProductValue,double totalProductVol,double totalInvoice,double per,String productIdForFree,boolean isLastPrdct)
 	     {
@@ -6765,20 +6023,20 @@ public void loadPurchaseProductDefault()
 				//2. Invoice Value
 				//3. Product Lines
 				//4. Product Value
-	    	 
+
 	    	 //Product Quantity
 				if(schSlabSubBucketType==1)
 				{
 					if(chkflgProDataCalculation==1)
 					{
-						
+
 						if(isLastPrdct)
 						{
 							accAsignVal=BenSubBucketValue*(totalProductQty/schSlabSubBucketValue);
 							accAsignVal=  Double.valueOf(Math.abs(accAsignVal.intValue())) ;
 						}
 						//accAsignVal=Double.valueOf(Double.valueOf(hmapPrdctOdrQty.get(productIdForFree))*accAsignVal/totalProductQty);
-						
+
 					}
 					else
 					{
@@ -6786,9 +6044,9 @@ public void loadPurchaseProductDefault()
 						{
 							accAsignVal=BenSubBucketValue;
 						}
-						
+
 					}
-					
+
 				}
 				//Invoice Value
 				else if(schSlabSubBucketType==2)
@@ -6797,7 +6055,7 @@ public void loadPurchaseProductDefault()
 					if(chkflgProDataCalculation==1)
 					{
 						accAsignVal=BenSubBucketValue*(totalInvoice/schSlabSubBucketValue);
-						
+
 					}
 					else
 					{
@@ -6823,35 +6081,35 @@ public void loadPurchaseProductDefault()
 					if(chkflgProDataCalculation==1)
 					{
 						accAsignVal=BenSubBucketValue*(totalProductValue/schSlabSubBucketValue);
-					
+
 						//product value
-						
+
 						Double prodRate= Double.parseDouble(hmapPrdctVolRatTax.get(productIdForFree).split(Pattern.quote("^"))[1]);
 						Double oderRateOfCurrentMapedProduct=prodRate *Double.valueOf(hmapPrdctOdrQty.get(productIdForFree)) ;
 						//oderRateOnProduct=oderRateOnProduct + oderRateOfCurrentMapedProduct;
 						double singleProductVal=oderRateOfCurrentMapedProduct;
-						
+
 						if(per>0.0)
 						{
 							singleProductVal=singleProductVal/per;
 						}
 						accAsignVal=Double.valueOf(Double.valueOf(singleProductVal)*(accAsignVal/totalProductValue));
-						
-						
+
+
 					}
 					else
 					{
-						
+
 						accAsignVal=BenSubBucketValue;
 					}
-					
+
 				}
 				// Product Volume
 				else if(schSlabSubBucketType==5)
 				{
 					if(chkflgProDataCalculation==1)
 					{
-						
+
 						accAsignVal=BenSubBucketValue*(totalProductVol/(schSlabSubBucketValue*1000));
 						// product volume
 						Double prodVolume= Double.parseDouble(hmapPrdctVolRatTax.get(productIdForFree).split(Pattern.quote("^"))[0]);
@@ -6862,7 +6120,7 @@ public void loadPurchaseProductDefault()
 							singleProductVol=singleProductVol/per;
 						}
 						accAsignVal=Double.valueOf(Double.valueOf(singleProductVol)*accAsignVal/totalProductVol);
-						
+
 					}
 					else
 					{
@@ -6871,6 +6129,7 @@ public void loadPurchaseProductDefault()
 				}
 				 return accAsignVal;
 	     }
+
 	public boolean checkLastFinalLoctionIsRepeated(String currentLat,String currentLong,String currentAccuracy){
 		boolean repeatedLoction=false;
 
@@ -6940,7 +6199,7 @@ public void loadPurchaseProductDefault()
 		return repeatedLoction;
 
 	}
-
+		
 	public void fnCreateLastKnownFinalLocation(String chekLastGPSLat,String chekLastGPSLong,String chekLastGpsAccuracy)
 	{
 
@@ -7006,6 +6265,7 @@ public void loadPurchaseProductDefault()
 
 		}
 	}
+
 	public void fnCreateLastKnownGPSLoction(String chekLastGPSLat,String chekLastGPSLong,String chekLastGpsAccuracy)
 	{
 
@@ -7071,6 +6331,7 @@ public void loadPurchaseProductDefault()
 
 		}
 	}
+
 	public void UpdateLocationAndProductAllData()
 	{
 		checkHighAccuracyLocationMode(ProductOrderReview.this);
@@ -7142,8 +6403,7 @@ public void loadPurchaseProductDefault()
 
 
 	}
-
-
+		 
 	public void checkHighAccuracyLocationMode(Context context) {
 		int locationMode = 0;
 		String locationProviders;
@@ -7281,7 +6541,6 @@ public void loadPurchaseProductDefault()
 
 
 	}
-
 
 	public void alertForRetailerCreditLimit(final int btnClkd)
 	{
@@ -7840,7 +7099,6 @@ public void loadPurchaseProductDefault()
 		//-_
 	}
 
-
 	public void fnVisitFinalInvoiceDetailsSaving(int Outstat,String FinalInvoiceNumberGenerated)
 	{
 
@@ -7974,8 +7232,6 @@ public void loadPurchaseProductDefault()
 		}
 		flgAllTotalOrderValueCrossesCutOff=false;
 	}
-
-
 
 	public void fnVisitFinalInvoiceHeaderSaving(int Outstat,String FinalInvoiceNumberGenerated)
 	{
@@ -8116,5 +7372,663 @@ public void loadPurchaseProductDefault()
 
 
 	}
+
+	private class FullSyncDataNow extends AsyncTask<Void, Void, Void> {
+
+
+		ProgressDialog pDialogGetStores;
+		public FullSyncDataNow(ProductOrderReview activity)
+		{
+			pDialogGetStores = new ProgressDialog(activity);
+		}
+
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+
+
+			pDialogGetStores.setTitle(getText(R.string.genTermPleaseWaitNew));
+			pDialogGetStores.setMessage(ProductOrderReview.this.getResources().getString(R.string.SubmittingOrderDetails));
+			pDialogGetStores.setIndeterminate(false);
+			pDialogGetStores.setCancelable(false);
+			pDialogGetStores.setCanceledOnTouchOutside(false);
+			pDialogGetStores.show();
+
+
+		}
+
+		@Override
+
+		protected Void doInBackground(Void... params) {
+
+			int Outstat=1;
+			flgTransferStatus=1;
+			InvoiceTableDataDeleteAndSaving(Outstat,flgTransferStatus);
+				TransactionTableDataDeleteAndSaving(Outstat);
+			Double cntInvoceValue=dbengine.fetch_Store_InvValAmount(storeID,TmpInvoiceCodePDA);
+			cntInvoceValue=Double.parseDouble(new DecimalFormat("##.##").format(cntInvoceValue));
+
+			 Outstat=3;
+
+
+			if(Outstat==3) {
+				if (cntInvoceValue > 0.0) {
+					if(strFinalAllotedInvoiceIds.equals("NA"))
+					{
+
+						/*strFinalAllotedInvoiceIds=dbengine.fnGetFinalAllotedInvoiceIds(storeID);
+						dbengine.updateFinalAllotedInvoiceIdstblInvoiceCaption();
+
+						fnVisitFinalInvoiceHeaderSaving(Outstat,strFinalAllotedInvoiceIds);
+						fnVisitFinalInvoiceDetailsSaving(Outstat,strFinalAllotedInvoiceIds);
+						dbengine.UpdateStoreVisitMStrTable(storeID,3,StoreVisitCode);
+
+
+						dbengine.UpdateStoreVisitWiseTables(storeID, 3,StoreVisitCode,TmpInvoiceCodePDA);
+
+						dbengine.deleteOldStoreInvoice(storeID,strGlobalOrderID,TmpInvoiceCodePDA);
+						dbengine.deleteStoreRecordFromtblStorePurchaseDetailsFromProductTrsaction(storeID,strGlobalOrderID,TmpInvoiceCodePDA);*/
+						dbengine.fnTransferDataFromTempToPermanent(storeID,StoreVisitCode,TmpInvoiceCodePDA);
+
+						int chkflgTransferStatus=dbengine.fnCheckflgTransferStatus(storeID,StoreVisitCode,TmpInvoiceCodePDA);
+						if(chkflgTransferStatus==2)
+						{
+							dbengine.deleteOldStoreInvoice(storeID,strGlobalOrderID,TmpInvoiceCodePDA);
+							dbengine.deleteStoreRecordFromtblStorePurchaseDetailsFromProductTrsaction(storeID,strGlobalOrderID,TmpInvoiceCodePDA);
+							dbengine.UpdateStoreVisitMStrTable(storeID,3,StoreVisitCode);
+
+
+							dbengine.UpdateStoreVisitWiseTables(storeID, 3,StoreVisitCode,TmpInvoiceCodePDA);
+						}
+						else
+						{
+							dbengine.deleteMasterTblFromParmanentInvoiceTables(storeID,TmpInvoiceCodePDA);
+						}
+
+					}
+
+				}
+			}
+
+			    long  syncTIMESTAMP = System.currentTimeMillis();
+				Date dateobj = new Date(syncTIMESTAMP);
+				SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss",Locale.ENGLISH);
+				String StampEndsTime = df.format(dateobj);
+
+
+				dbengine.open();
+				dbengine.UpdateStoreEndVisit(storeID, StampEndsTime);
+				dbengine.UpdateStoreProductAppliedSchemesBenifitsRecords(storeID.trim(),"3",strGlobalOrderID,TmpInvoiceCodePDA);
+				dbengine.UpdateStoreStoreReturnDetail(storeID.trim(),"3",strGlobalOrderID,TmpInvoiceCodePDA);
+				dbengine.UpdateStoreFlag(storeID.trim(), 3);
+				dbengine.UpdateStoreOtherMainTablesFlag(storeID.trim(), 3,strGlobalOrderID,TmpInvoiceCodePDA);
+
+
+
+
+				//dbengine.UpdateStoreReturnphotoFlag(storeID.trim(), 5);
+
+				dbengine.close();
+
+			Double outstandingvalue=dbengine.fnGetStoretblLastOutstanding(storeID);
+			outstandingvalue=Double.parseDouble(new DecimalFormat("##.##").format(outstandingvalue));
+			dbengine.updateOutstandingOfStore(storeID,0.0);
+
+			Double CollectionAmtAgainstStore=dbengine.fnTotCollectionAmtAgainstStore(storeID.trim(),TmpInvoiceCodePDA,StoreVisitCode);
+
+				dbengine.updateStoreQuoteSubmitFlgInStoreMstr(storeID.trim(),0,StoreVisitCode);
+				if(dbengine.checkCountIntblStoreSalesOrderPaymentDetails(storeID,strGlobalOrderID,TmpInvoiceCodePDA)==0)
+				{
+					String strDefaultPaymentStageForStore=dbengine.fnGetDefaultStoreOrderPAymentDetails(storeID);
+					if(!strDefaultPaymentStageForStore.equals(""))
+					{
+						dbengine.open();
+						dbengine. fnsaveStoreSalesOrderPaymentDetails(storeID,strGlobalOrderID,strDefaultPaymentStageForStore,"3",TmpInvoiceCodePDA);
+						dbengine.close();
+					}
+				}
+
+			dbengine.open();
+			String presentRoute=dbengine.GetActiveRouteID();
+			dbengine.close();
+
+
+			/*long syncTIMESTAMP = System.currentTimeMillis();
+			Date dateobj = new Date(syncTIMESTAMP);*/
+			SimpleDateFormat df1 = new SimpleDateFormat(imei+"."+presentRoute+"."+ "dd.MM.yyyy.HH.mm.ss",Locale.ENGLISH);
+
+			newfullFileName=df1.format(dateobj);
+
+
+
+
+			try {
+
+
+				 File OrderXMLFolder = new File(Environment.getExternalStorageDirectory(), CommonInfo.OrderXMLFolder);
+
+				 if (!OrderXMLFolder.exists())
+					{
+						OrderXMLFolder.mkdirs();
+
+					}
+				 String routeID=dbengine.GetActiveRouteIDSunil();
+
+				DA.open();
+				DA.export(CommonInfo.DATABASE_NAME, newfullFileName,routeID);
+				DA.close();
+
+				dbengine.savetbl_XMLfiles(newfullFileName, "3","1");
+				dbengine.open();
+				dbengine.UpdateStoreFlag(storeID.trim(), 5);
+
+				dbengine.UpdateStoreOtherMainTablesFlag(storeID.trim(), 5,strGlobalOrderID,TmpInvoiceCodePDA);
+				dbengine.UpdateStoreMaterialphotoFlag(storeID.trim(), 5);
+				dbengine.UpdateStoreReturnphotoFlag(storeID.trim(), 5);
+				dbengine.UpdateNewAddedStorephotoFlag(storeID.trim(), 5);
+
+
+
+				dbengine.close();
+				dbengine.UpdateStoreVisitMStrTable(storeID,3,StoreVisitCode);
+				dbengine.UpdateStoreVisitWiseTables(storeID.trim(), 5,StoreVisitCode,TmpInvoiceCodePDA);
+				VisitTypeStatus="0";
+				dbengine.updateVisitTypeStatusOfStore(storeID,VisitTypeStatus,StoreVisitCode);
+				if(dbengine.checkCountIntblStoreSalesOrderPaymentDetails(storeID,strGlobalOrderID,TmpInvoiceCodePDA)==0)
+				{
+					String strDefaultPaymentStageForStore=dbengine.fnGetDefaultStoreOrderPAymentDetails(storeID);
+					if(!strDefaultPaymentStageForStore.equals(""))
+					{
+						dbengine.open();
+						dbengine. fnsaveStoreSalesOrderPaymentDetails(storeID,strGlobalOrderID,strDefaultPaymentStageForStore,"4",TmpInvoiceCodePDA);
+						dbengine.close();
+					}
+				}
+			} catch (Exception e) {
+
+				e.printStackTrace();
+				if(pDialogGetStores.isShowing())
+			      {
+			    	   pDialogGetStores.dismiss();
+				  }
+			}
+			return null;
+		}
+		@Override
+		protected void onCancelled() {
+
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			super.onPostExecute(result);
+			if(pDialogGetStores.isShowing())
+		      {
+		    	   pDialogGetStores.dismiss();
+			  }
+			try
+			{
+				StoreSelection.flgChangeRouteOrDayEnd=0;
+				Intent syncIntent = new Intent(ProductOrderReview.this, SyncMaster.class);
+				//syncIntent.putExtra("xmlPathForSync", Environment.getExternalStorageDirectory() + "/RSPLSFAXml/" + newfullFileName + ".xml");
+				syncIntent.putExtra("xmlPathForSync", Environment.getExternalStorageDirectory() + "/" + CommonInfo.OrderXMLFolder + "/" + newfullFileName + ".xml");
+				syncIntent.putExtra("OrigZipFileName", newfullFileName);
+				syncIntent.putExtra("whereTo", "Regular");
+				startActivity(syncIntent);
+				finish();
+			} catch (Exception e) {
+
+				e.printStackTrace();
+			}
+
+		}
+	}
+
+		public class GetData extends AsyncTask<Void, Void, Void>
+		 {
+
+		   @Override
+		         protected void onPreExecute() {
+		             super.onPreExecute();
+
+		             mProgressDialog = new ProgressDialog(ProductOrderReview.this);
+		             mProgressDialog.setTitle(ProductOrderReview.this.getResources().getString(R.string.genTermPleaseWaitNew));
+		             mProgressDialog.setMessage(ProductOrderReview.this.getResources().getString(R.string.Loading));
+		             mProgressDialog.setIndeterminate(true);
+		             mProgressDialog.setCancelable(false);
+		            mProgressDialog.show();
+		         }
+
+		  @Override
+		  protected Void doInBackground(Void... params)
+		  {
+		   hmapProductRelatedSchemesList=dbengine.fnProductRelatedSchemesList();
+
+
+
+			  chkflgInvoiceAlreadyGenerated=dbengine.fnCheckForNewInvoiceOrPreviousValue(storeID,StoreVisitCode);//0=Need to Generate Invoice Number,1=No Need of Generating Invoice Number
+			  if(chkflgInvoiceAlreadyGenerated==1)
+			  {
+				  TmpInvoiceCodePDA=dbengine.fnGetInvoiceCodePDA(storeID,StoreVisitCode);
+			  }
+			  else
+			  {
+				  TmpInvoiceCodePDA=genTempInvoiceCodePDA();
+			  }
+			  CheckIfStoreExistInStoreProdcutPurchaseDetails=dbengine.fnCheckIfStoreExistInStoreProdcutPurchaseDetails(storeID,TmpInvoiceCodePDA);
+			  CheckIfStoreExistInStoreProdcutInvoiceDetails=dbengine.fnCheckIfStoreExistInStoreProdcutInvoiceDetails(storeID,TmpInvoiceCodePDA);
+			  strGlobalOrderID=TmpInvoiceCodePDA;
+			 /* if(CheckIfStoreExistInStoreProdcutPurchaseDetails==1 || CheckIfStoreExistInStoreProdcutInvoiceDetails==1)
+			  {
+				  strGlobalOrderID=dbengine.fngetOrderIDAganistStore(storeID,TmpInvoiceCodePDA);
+			  }
+			  else
+			  {
+				  strGlobalOrderID= genOutOrderID();
+			  }*/
+		   getCategoryDetail();
+
+		   getProductData();
+
+			  getCutOffDetailsForProduct();
+
+			  distID=dbengine.getDisId(storeID);
+			  hmapDistPrdctStockCount=dbengine.fnGetFinalInvoiceQtyProductWise();
+			  hmapPerUnitName=dbengine.getPerUnitName();
+			  hmapPerBaseQty=dbengine.getPerBaseQty();
+		   return null;
+		  }
+		   @Override
+		         protected void onPostExecute(Void args) {
+			   loadPurchaseProductDefault();
+		       mProgressDialog.dismiss();
+
+		  }
+
+		 }
+
+		public class SaveData extends AsyncTask<String, String, Void>
+		 {
+
+		   @Override
+		         protected void onPreExecute() {
+		             super.onPreExecute();
+		             //Text need to e changed according to btn Click
+
+
+		             if(mProgressDialog.isShowing()==false)
+		             {
+		             mProgressDialog = new ProgressDialog(ProductOrderReview.this);
+		             mProgressDialog.setTitle(ProductOrderReview.this.getResources().getString(R.string.genTermPleaseWaitNew));
+		             mProgressDialog.setMessage(progressTitle);
+		             mProgressDialog.setIndeterminate(true);
+		             mProgressDialog.setCancelable(false);
+		            mProgressDialog.show();
+		             }
+		         }
+
+		  @Override
+		  protected Void doInBackground(String... params)
+		  {
+			  String executedData=params[0];
+
+			  int btnClkd;
+			  if(executedData.contains("~"))
+			  {
+				  btnClkd=Integer.parseInt(executedData.split(Pattern.quote("~"))[0]);
+				  isReturnClkd=Integer.parseInt(executedData.split(Pattern.quote("~"))[1]);
+			  }
+
+			  else
+			  {
+				  btnClkd=Integer.parseInt(executedData);
+			  }
+
+
+			  fnSaveFilledDataToDatabase(btnClkd);
+		   return null;
+		  }
+		   @Override
+		         protected void onPostExecute(Void args) {
+		   if(mProgressDialog!=null) {
+			   if (mProgressDialog.isShowing() == true) {
+				   mProgressDialog.dismiss();
+			   }
+		   }
+			   long syncTIMESTAMP = System.currentTimeMillis();
+				Date dateobj = new Date(syncTIMESTAMP);
+				SimpleDateFormat df = new SimpleDateFormat(
+						"dd-MM-yyyy HH:mm:ss",Locale.ENGLISH);
+				String startTS = df.format(dateobj);
+				dbengine.open();
+				dbengine.UpdateStoreEndVisit(storeID,startTS);
+				dbengine.close();
+		     if(isReturnClkd==3)
+		     {
+		    	   Intent fireBackDetPg=new Intent(ProductOrderReview.this,ReturnActivity.class);
+		           fireBackDetPg.putExtra("storeID", storeID);
+		           fireBackDetPg.putExtra("SN", SN);
+		           fireBackDetPg.putExtra("bck", 1);
+		           fireBackDetPg.putExtra("imei", imei);
+		           fireBackDetPg.putExtra("userdate", date);
+		           fireBackDetPg.putExtra("pickerDate", pickerDate);
+		           fireBackDetPg.putExtra("OrderPDAID", strGlobalOrderID);
+		           fireBackDetPg.putExtra("flgPageToRedirect", "2");
+		          // fireBackDetPg.putExtra("rID", routeID);
+
+		           startActivity(fireBackDetPg);
+		           finish();
+		     }
+
+		     else if(isReturnClkd==2)
+		     {
+		    	 //Intent fireBackDetPg=new Intent(ProductOrderSearch.this,POSMaterialActivity.class);
+		    	Intent fireBackDetPg=new Intent(ProductOrderReview.this,ProductOrderEntry.class);
+			    fireBackDetPg.putExtra("storeID", storeID);
+			    fireBackDetPg.putExtra("SN", SN);
+			    fireBackDetPg.putExtra("bck", 1);
+			    fireBackDetPg.putExtra("imei", imei);
+			    fireBackDetPg.putExtra("userdate", date);
+			    fireBackDetPg.putExtra("pickerDate", pickerDate);
+			    //fireBackDetPg.putExtra("rID", routeID);
+			    startActivity(fireBackDetPg);
+			    finish();
+		     }
+			 else if(isReturnClkd==5)
+			 {
+				 Intent AmtCollectIntent = new Intent(ProductOrderReview.this, CollectionActivityNew.class);
+				 AmtCollectIntent.putExtra("storeID", storeID);
+				 AmtCollectIntent.putExtra("imei", imei);
+				 AmtCollectIntent.putExtra("userdate", date);
+				 AmtCollectIntent.putExtra("pickerDate", pickerDate);
+				 AmtCollectIntent.putExtra("SN", SN);
+				 AmtCollectIntent.putExtra("OrderPDAID", strGlobalOrderID);
+
+				// AmtCollectIntent.putExtra("flgOrderType",flgOrderType);
+				 startActivity(AmtCollectIntent);
+				 finish();
+			 }
+			 else if(isReturnClkd==6)
+			 {
+				 Intent AmtCollectIntent = new Intent(ProductOrderReview.this, Delivery_Details_Activity.class);   //
+				 AmtCollectIntent.putExtra("storeID", storeID);
+				 AmtCollectIntent.putExtra("imei", imei);
+				 AmtCollectIntent.putExtra("userdate", date);
+				 AmtCollectIntent.putExtra("pickerDate", pickerDate);
+				 AmtCollectIntent.putExtra("SN", SN);
+				 AmtCollectIntent.putExtra("OrderPDAID", strGlobalOrderID);
+				// AmtCollectIntent.putExtra("flgOrderType",flgOrderType);
+				 startActivity(AmtCollectIntent);
+				 finish();
+			 }
+		   }
+
+
+		 }
+
+		 public class standBYtask extends AsyncTask<Void, Void, Void>
+			{
+
+				@Override
+				protected Void doInBackground(Void... params)
+				{
+					// TODO Auto-generated method stub
+
+					// Thread ttt = new Thread();
+					return null;
+				}
+
+				@Override
+				protected void onPostExecute(Void result)
+				{
+					// TODO Auto-generated method stub
+					super.onPostExecute(result);
+				}
+
+				@Override
+				protected void onPreExecute()
+				{
+					// TODO Auto-generated method stub
+					super.onPreExecute();
+				}
+
+			}
+
+		public class CoundownClass2 extends CountDownTimer{
+
+			public CoundownClass2(long startTime, long interval) {
+				super(startTime, interval);
+				// TODO Auto-generated constructor stub
+			}
+
+			@Override
+			public void onTick(long millisUntilFinished) {
+
+			}
+
+			@Override
+			public void onFinish() {
+
+				isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+				String GpsLat="0";
+				String GpsLong="0";
+				String GpsAccuracy="0";
+				String GpsAddress="0";
+				if(isGPSEnabled)
+				{
+
+					Location nwLocation=appLocationService.getLocation(locationManager,LocationManager.GPS_PROVIDER,location);
+					if(nwLocation!=null){
+						double lattitude=nwLocation.getLatitude();
+						double longitude=nwLocation.getLongitude();
+						double accuracy= nwLocation.getAccuracy();
+						GpsLat=""+lattitude;
+						GpsLong=""+longitude;
+						GpsAccuracy=""+accuracy;
+
+						GPSLocationLatitude=""+lattitude;
+						GPSLocationLongitude=""+longitude;
+						GPSLocationProvider="GPS";
+						GPSLocationAccuracy=""+accuracy;
+						System.out.println("LOCATION(GPS)  LATTITUDE: " +lattitude + "LONGITUDE:" + longitude+ "accuracy:" + accuracy);
+						//text2.setText(" LOCATION(GPS) \n LATTITUDE: " +lattitude + "\nLONGITUDE:" + longitude+ "\naccuracy:" + accuracy);
+						//Toast.makeText(getApplicationContext(), " LOCATION(NW) \n LATTITUDE: " +lattitude + "\nLONGITUDE:" + longitude+ "\naccuracy:" + accuracy, Toast.LENGTH_LONG).show();
+					}
+				}
+
+				Location gpsLocation=appLocationService.getLocation(locationManager,LocationManager.NETWORK_PROVIDER,location);
+				String NetwLat="0";
+				String NetwLong="0";
+				String NetwAccuracy="0";
+				String NetwAddress="0";
+				if(gpsLocation!=null){
+					double lattitude1=gpsLocation.getLatitude();
+					double longitude1=gpsLocation.getLongitude();
+					double accuracy1= gpsLocation.getAccuracy();
+					NetwLat=""+lattitude1;
+					NetwLong=""+longitude1;
+					NetwAccuracy=""+accuracy1;
+
+					NetworkLocationLatitude=""+lattitude1;
+					NetworkLocationLongitude=""+longitude1;
+					NetworkLocationProvider="Network";
+					NetworkLocationAccuracy=""+accuracy1;
+					System.out.println("LOCATION(N/W)  LATTITUDE: " +lattitude1 + "LONGITUDE:" + longitude1+ "accuracy:" + accuracy1);
+					// Toast.makeText(this, " LOCATION(NW) \n LATTITUDE: " +lattitude + "\nLONGITUDE:" + longitude, Toast.LENGTH_LONG).show();
+					//text1.setText(" LOCATION(N/W) \n LATTITUDE: " +lattitude1 + "\nLONGITUDE:" + longitude1+ "\naccuracy:" + accuracy1);
+
+				}
+					 /* TextView accurcy=(TextView) findViewById(R.id.Acuracy);
+					  accurcy.setText("GPS:"+GPSLocationAccuracy+"\n"+"NETWORK"+NetworkLocationAccuracy+"\n"+"FUSED"+fusedData);*/
+
+				System.out.println("LOCATION Fused"+fusedData);
+				String FusedLat="0";
+				String FusedLong="0";
+				String FusedAccuracy="0";
+				String FusedAddress="0";
+
+				if(!FusedLocationProvider.equals(""))
+				{
+					fnAccurateProvider="Fused";
+					fnLati=FusedLocationLatitude;
+					fnLongi=FusedLocationLongitude;
+					fnAccuracy= Double.parseDouble(FusedLocationAccuracy);
+
+					FusedLat=FusedLocationLatitude;
+					FusedLong=FusedLocationLongitude;
+					FusedAccuracy=FusedLocationAccuracy;
+				}
+
+
+
+
+				appLocationService.KillServiceLoc(appLocationService,locationManager);
+				try {
+					if(mGoogleApiClient!=null && mGoogleApiClient.isConnected())
+					{
+						stopLocationUpdates();
+						mGoogleApiClient.disconnect();
+					}
+				}
+				catch (Exception e){
+
+				}
+
+
+
+
+				fnAccurateProvider="";
+				fnLati="0";
+				fnLongi="0";
+				fnAccuracy=0.0;
+
+				if(!FusedLocationProvider.equals(""))
+				{
+					fnAccurateProvider="Fused";
+					fnLati=FusedLocationLatitude;
+					fnLongi=FusedLocationLongitude;
+					fnAccuracy= Double.parseDouble(FusedLocationAccuracy);
+				}
+
+				if(!fnAccurateProvider.equals(""))
+				{
+					if(!GPSLocationProvider.equals(""))
+					{
+						if(Double.parseDouble(GPSLocationAccuracy)<=fnAccuracy)
+						{
+							fnAccurateProvider="Gps";
+							fnLati=GPSLocationLatitude;
+							fnLongi=GPSLocationLongitude;
+							fnAccuracy= Double.parseDouble(GPSLocationAccuracy);
+						}
+					}
+				}
+				else
+				{
+					if(!GPSLocationProvider.equals(""))
+					{
+						fnAccurateProvider="Gps";
+						fnLati=GPSLocationLatitude;
+						fnLongi=GPSLocationLongitude;
+						fnAccuracy= Double.parseDouble(GPSLocationAccuracy);
+					}
+				}
+
+				if(!fnAccurateProvider.equals(""))
+				{
+					if(!NetworkLocationProvider.equals(""))
+					{
+						if(Double.parseDouble(NetworkLocationAccuracy)<=fnAccuracy)
+						{
+							fnAccurateProvider="Network";
+							fnLati=NetworkLocationLatitude;
+							fnLongi=NetworkLocationLongitude;
+							fnAccuracy= Double.parseDouble(NetworkLocationAccuracy);
+						}
+					}
+				}
+				else
+				{
+					if(!NetworkLocationProvider.equals(""))
+					{
+						fnAccurateProvider="Network";
+						fnLati=NetworkLocationLatitude;
+						fnLongi=NetworkLocationLongitude;
+						fnAccuracy= Double.parseDouble(NetworkLocationAccuracy);
+					}
+				}
+				// fnAccurateProvider="";
+				if(fnAccurateProvider.equals(""))
+				{
+					if(pDialog2STANDBY.isShowing())
+					{
+						pDialog2STANDBY.dismiss();
+					}
+					//alert ... try again nothing found // return back
+
+					// Toast.makeText(getApplicationContext(), "Please try again, No Fused,GPS or Network found.", Toast.LENGTH_LONG).show();
+
+					showAlertForEveryOne(ProductOrderReview.this.getResources().getString(R.string.AlertTryAgain));
+				}
+				else
+				{
+
+
+					if(pDialog2STANDBY.isShowing())
+					{
+						pDialog2STANDBY.dismiss();
+					}
+					if(!GpsLat.equals("0") )
+					{
+						fnCreateLastKnownGPSLoction(GpsLat,GpsLong,GpsAccuracy);
+					}
+
+					if(!checkLastFinalLoctionIsRepeated(String.valueOf(fnLati), String.valueOf(fnLongi), String.valueOf(fnAccuracy)))
+					{
+
+						fnCreateLastKnownFinalLocation(String.valueOf(fnLati), String.valueOf(fnLongi), String.valueOf(fnAccuracy));
+						UpdateLocationAndProductAllData();
+					}
+					else
+					{countSubmitClicked++;
+						if(countSubmitClicked==1)
+						{
+							AlertDialog.Builder alertDialog = new AlertDialog.Builder(ProductOrderReview.this);
+
+							// Setting Dialog Title
+							alertDialog.setTitle(getText(R.string.genTermNoDataConnection));
+							alertDialog.setIcon(R.drawable.error_info_ico);
+							alertDialog.setCancelable(false);
+							// Setting Dialog Message
+							alertDialog.setMessage(ProductOrderReview.this.getResources().getString(R.string.AlertSameLoc));
+
+							// On pressing Settings button
+							alertDialog.setPositiveButton(ProductOrderReview.this.getResources().getString(R.string.AlertDialogOkButton), new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog, int which) {
+									countSubmitClicked++;
+									Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+									startActivity(intent);
+								}
+							});
+
+							// Showing Alert Message
+							alertDialog.show();
+
+
+
+						}
+						else
+						{
+							UpdateLocationAndProductAllData();
+						}
+
+
+					}
+
+				}
+
+			}
+
+		}
 
 }
