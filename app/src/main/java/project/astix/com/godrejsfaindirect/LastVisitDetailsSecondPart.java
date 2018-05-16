@@ -22,18 +22,11 @@ public class LastVisitDetailsSecondPart extends BaseActivity
 	public String fIMEI;
 	public String fDate;
 	public String pickerDate;
-	
+	public TableLayout tbl1_dyntable_For_LastVisitDate;
+	public TableLayout tbl1_dyntable_For_LastOrderDate;
+	public String LastVisitDateForTable[]=new String[1];
 	PRJDatabase dbengine = new PRJDatabase(this);
 	
-	public TableLayout tbl1_dyntable_For_LastVisitDate; 
-	
-	public TableLayout tbl1_dyntable_For_LastOrderDate; 
-	
-	public String LastVisitDateForTable[]=new String[1];
-	
-	
-
-	 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -111,9 +104,9 @@ public class LastVisitDetailsSecondPart extends BaseActivity
 			System.out.println("Hello Value OV :"+OV);
 			System.out.println("Hello Value EV :"+EV);
 			
-			OrderValue.setText("Rs. "+OV);
+			OrderValue.setText("GH. "+OV);
 			
-			ExecutionValue.setText("Rs. "+EV);
+			ExecutionValue.setText("GH. "+EV);
 			dbengine.close();
 		}
 		

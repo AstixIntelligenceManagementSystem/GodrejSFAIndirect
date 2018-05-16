@@ -12175,27 +12175,33 @@ public class PRJDatabase
 
     }
 
-    public void UpdateStoreStoreClose(String StoreID, int StoreClose)
+    public void UpdateStoreStoreClose(String StoreID, int StoreClose,String StoreVisitCode)
     {
 
 
         final ContentValues values = new ContentValues();
         values.put("StoreClose", StoreClose);
 
-        int affected = db.update("tblStoreVisitMstr", values, "StoreID=?",new String[] { StoreID });
+        int affected = db.update("tblStoreVisitMstr", values, "StoreID=? AND StoreVisitCode=?",new String[] { StoreID,StoreVisitCode });
         int affected1 = db.update("tblStoreList", values, "StoreID=?",new String[] { StoreID });
+        int affected21 = db.update("tblOutletQuestAnsMstr", values,"OutletID=?", new String[] { StoreID });
+        //nitishdubey
+        int affected261 = db.update("tblNewAddedStoreLocationDetails", values,"StoreID=?", new String[] { StoreID });
 
     }
 
-    public void UpdateStoreSstat(String StoreID, int Sstat)
+    public void UpdateStoreSstat(String StoreID, int Sstat,String StoreVisitCode)
     {
 
 
         final ContentValues values = new ContentValues();
         values.put("Sstat", Sstat);
 
-        int affected = db.update("tblStoreVisitMstr", values, "StoreID=?",new String[] { StoreID });
+        int affected = db.update("tblStoreVisitMstr", values, "StoreID=? AND StoreVisitCode=?",new String[] { StoreID,StoreVisitCode });
         int affected1 = db.update("tblStoreList", values, "StoreID=?",new String[] { StoreID });
+        int affected21 = db.update("tblOutletQuestAnsMstr", values,"OutletID=?", new String[] { StoreID });
+        //nitishdubey
+        int affected261 = db.update("tblNewAddedStoreLocationDetails", values,"StoreID=?", new String[] { StoreID });
 
     }
 

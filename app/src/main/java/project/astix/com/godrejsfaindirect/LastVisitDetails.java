@@ -132,7 +132,7 @@ public class LastVisitDetails extends BaseActivity
 		public void onReceive(Context arg0, Intent intent) {
 
 			battLevel =intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
-			getStoreVisitCode();
+
 		}
 	};
 
@@ -539,7 +539,8 @@ final Button btn_Cancel=(Button) findViewById(R.id.btn_Cancel);
 		        
 		        	int flag=0;
 					//getStoreVisitCode();
-		    		
+					String passdLevel = battLevel + "%";
+					dbengine.UpdateStoreVisitBattVisitWise(storeID,passdLevel,StoreVisitCode);
 		    		
 		    		
 		        	Intent storeSaveIntent = new Intent(LastVisitDetails.this, LauncherActivity.class);
@@ -581,7 +582,8 @@ final Button btn_Cancel=(Button) findViewById(R.id.btn_Cancel);
 				int checkDataForVisitDetails=dbengine.counttblForPDAGetLastVisitDetails(storeID);
 				int checkDataForOrderDetails=dbengine.counttblForPDAGetLastOrderDetails(storeID);
 				dbengine.close();
-				
+				String passdLevel = battLevel + "%";
+				dbengine.UpdateStoreVisitBattVisitWise(storeID,passdLevel,StoreVisitCode);
 				if(checkDataForVisitDetails!=0 || checkDataForOrderDetails!=0) 
 				{
 					Intent nxtP4 = new Intent(LastVisitDetails.this,LastVisitDetailsSecondPart.class);
@@ -1190,6 +1192,8 @@ final Button btn_Cancel=(Button) findViewById(R.id.btn_Cancel);
 
 
 			//	getStoreVisitCode();
+				String passdLevel = battLevel + "%";
+				dbengine.UpdateStoreVisitBattVisitWise(storeID,passdLevel,StoreVisitCode);
 				dbengine.open();
 				String rID=dbengine.GetActiveRouteID();
 				dbengine.close();
@@ -1221,9 +1225,11 @@ final Button btn_Cancel=(Button) findViewById(R.id.btn_Cancel);
 					 String flgGSTCompliance="NA";
 						// String flgGSTCapture="NA";
 						 String GSTNumber="NA";
-						 
-						
-						 
+
+
+					String passdLevel = battLevel + "%";
+					dbengine.UpdateStoreVisitBattVisitWise(storeID,passdLevel,StoreVisitCode);
+
 						 if(ll_gstDetails.getVisibility()==View.VISIBLE)
 						 {
 							 flgGSTCapture="1";
@@ -1345,6 +1351,8 @@ final Button btn_Cancel=(Button) findViewById(R.id.btn_Cancel);
 			public void onClick(View v)
 			{
 			//	getStoreVisitCode();
+				String passdLevel = battLevel + "%";
+				dbengine.UpdateStoreVisitBattVisitWise(storeID,passdLevel,StoreVisitCode);
 				Intent nxtP4=new Intent(LastVisitDetails.this,StoreClosedActivity.class);
 				nxtP4.putExtra("storeID", storeID);
 				nxtP4.putExtra("SN", selStoreName);
@@ -1359,6 +1367,9 @@ final Button btn_Cancel=(Button) findViewById(R.id.btn_Cancel);
 		Double outstandingvalue=dbengine.fnGetStoretblLastOutstanding(storeID);
 		tv_outstandingvalue.setText(""+outstandingvalue);
 		setInvoiceData();
+
+
+		getStoreVisitCode();
 
 	}
 
