@@ -1139,6 +1139,47 @@ if(flgCheckNewOldStore==1)
         helperDb.close();
 
 
+        /*try {
+
+
+            File OrderXMLFolder = new File(Environment.getExternalStorageDirectory(), CommonInfo.OrderXMLFolder);
+
+            if (!OrderXMLFolder.exists())
+            {
+                OrderXMLFolder.mkdirs();
+
+            }
+            dbengine.open();
+            String presentRoute=dbengine.GetActiveRouteID();
+            dbengine.close();
+
+
+            Date dateobj = new Date(syncTIMESTAMP);
+            SimpleDateFormat df1 = new SimpleDateFormat("dd.MM.yyyy.HH.mm.ss",Locale.ENGLISH);
+         //   String StampEndsTime = df1.format(dateobj);
+			*//*long syncTIMESTAMP = System.currentTimeMillis();
+			Date dateobj = new Date(syncTIMESTAMP);*//*
+
+
+            newfullFileName=imei+"."+presentRoute+"."+df1.format(dateobj);
+
+
+            DA.open();
+            DA.export(CommonInfo.DATABASE_NAME, newfullFileName,presentRoute);
+            DA.close();
+
+            dbengine.savetbl_XMLfiles(newfullFileName, "3","1");
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+            if(pDialogGetStores.isShowing())
+            {
+                pDialogGetStores.dismiss();
+            }
+        }
+        */
+
         if(activityFrom.equals("StoreSelection")){
             Intent ide=new Intent(AddNewStore_DynamicSectionWise.this,StoreSelection.class);
             ide.putExtra("userDate", date_value);

@@ -5566,9 +5566,9 @@ public void loadPurchaseProductDefault()
 
 		long syncTIMESTAMP = System.currentTimeMillis();
 		Date dateobj = new Date(syncTIMESTAMP);
-		SimpleDateFormat df = new SimpleDateFormat(imei+"."+presentRoute+"."+ "dd.MM.yyyy.HH.mm.ss",Locale.ENGLISH);
+		SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy.HH.mm.ss",Locale.ENGLISH);
 
-		String newfullFileName=df.format(dateobj);
+		String newfullFileName=imei+"."+presentRoute+"."+ df.format(dateobj);
 
 
 
@@ -7495,9 +7495,9 @@ public void loadPurchaseProductDefault()
 
 			/*long syncTIMESTAMP = System.currentTimeMillis();
 			Date dateobj = new Date(syncTIMESTAMP);*/
-			SimpleDateFormat df1 = new SimpleDateFormat(imei+"."+presentRoute+"."+ "dd.MM.yyyy.HH.mm.ss",Locale.ENGLISH);
+			SimpleDateFormat df1 = new SimpleDateFormat("dd.MM.yyyy.HH.mm.ss",Locale.ENGLISH);
 
-			newfullFileName=df1.format(dateobj);
+			newfullFileName=imei+"."+presentRoute+"."+df1.format(dateobj);
 
 
 
