@@ -60,7 +60,7 @@ import com.astix.Common.CommonInfo;
 public class LastVisitDetails extends BaseActivity
 {
 
-	LinkedHashMap<String, String> hmapStoreBasicDetails=new LinkedHashMap<String, String>();
+	public static int battLevel=0;
 	public  LinearLayout ll_gstDetails,ll_gstDependent;
 	public  RadioButton rb_gst_yes,rb_gst_no,rb_pending;
 	public  EditText edit_gstYes;
@@ -77,11 +77,6 @@ public class LastVisitDetails extends BaseActivity
 	
 	public int chkIfStoreFasQuote=0;
 	public int chkIfStoreAllowedQuote=1;
-
-	String[] strInvoiceData;
-	LinearLayout ll_InvoiceLastVisit,ll_inflateInvoiceData;
-	
-	 LinkedHashMap<String, String> hmapDistinctSalesQuotePersonMeetMstr=new LinkedHashMap<String, String>();
 	public String storeID;
 	public String imei;
 	public String date;
@@ -89,56 +84,35 @@ public class LastVisitDetails extends BaseActivity
 	public Double currLon;
 	public Double currLat;
 	public String selStoreName;
-	
 	public String startTS;
 	public int bck = 0;
-	
 	public int checkdataForVisit=0;
-	
-	
 	public LocationManager locationManager;
 	public Location location;
 	public float acc;
-	
-	
-	public Double myCurrentLon; 
+	public Double myCurrentLon;
 	public Double myCurrentLat;
-
-
-	public static int battLevel=0;
-	
-	Float locACC;
-	
-	
-	
-	public TableLayout tbl4_dyntable_dynprodtableQuatation; 
+	public TableLayout tbl4_dyntable_dynprodtableQuatation;
 	public TableRow tr2PG4;
-	
-	public TableLayout tbl1_dyntable_For_OrderDetails; 
+	public TableLayout tbl1_dyntable_For_OrderDetails;
 	public TableRow tr1PG2;
-	
-	public TableLayout tbl3_dyntable_SchemeApplicable; 
+	public TableLayout tbl3_dyntable_SchemeApplicable;
 	public TableRow tr2PG2;
-	
-	public TableLayout tbl3_dyntable_SpecialSchemeApplicable; 
+	public TableLayout tbl3_dyntable_SpecialSchemeApplicable;
 	public TableRow tr2PG2_SpecialScheme;
-	
-	
 	public String Noti_text="Null";
 	public int MsgServerID=0;
-
-
-
-	public TableLayout tbl2_dyntable_For_LastVisitDate; 
+	public TableLayout tbl2_dyntable_For_LastVisitDate;
 	public TableRow tr3PG2;
-	
-	
-	public TableLayout tbl1_dyntable_For_ExecutionDetails; 
+	public TableLayout tbl1_dyntable_For_ExecutionDetails;
 	public TableRow ExecutionRow;
-	
 	public String lastVisitDate="";
 	public String lastOrderDate="";
-	
+	LinkedHashMap<String, String> hmapStoreBasicDetails=new LinkedHashMap<String, String>();
+	String[] strInvoiceData;
+	LinearLayout ll_InvoiceLastVisit,ll_inflateInvoiceData;
+	 LinkedHashMap<String, String> hmapDistinctSalesQuotePersonMeetMstr=new LinkedHashMap<String, String>();
+	Float locACC;
 	 LinkedHashMap<String, String> hmapAllValuesOfPaymentMode;
 	 CheckBox chBoxView,AdvanceBeforeDeliveryCheckBoxNew,OnDeliveryCheckBoxNew,CreditCheckBoxNew;
 	 LinearLayout ll_data,parentOfAdvanceBeforeDeliveryPayMentMode,parentOfOnDeliveryPayMentMode,parentOfCreditPayMentMode,parentOfCheckBox;
@@ -153,8 +127,14 @@ public class LastVisitDetails extends BaseActivity
 	TextView tv_outstandingvalue;
 
 	PRJDatabase dbengine = new PRJDatabase(this);
-	
-	
+	private BroadcastReceiver mBatInfoReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context arg0, Intent intent) {
+
+			battLevel =intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
+			getStoreVisitCode();
+		}
+	};
 
 	@Override
 	protected void onResume() {
@@ -171,14 +151,14 @@ public class LastVisitDetails extends BaseActivity
 		if(!Noti_textWithMsgServerID.equals("Null"))
 		{
 		StringTokenizer token = new StringTokenizer(String.valueOf(Noti_textWithMsgServerID), "_");
-		
+
 		MsgServerID= Integer.parseInt(token.nextToken().trim());
 		Noti_text= token.nextToken().trim();
-		
-		
+
+
 		if(Noti_text.equals("") || Noti_text.equals("Null"))
 		{
-			
+
 		}
 		else
 		{
@@ -187,27 +167,27 @@ public class LastVisitDetails extends BaseActivity
 				LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		        View openDialog = inflater.inflate(R.layout.custom_dialog, null);
 		        openDialog.setBackgroundColor(Color.parseColor("#ffffff"));
-		        
+
 		        builder.setCancelable(false);
 		     	TextView header_text=(TextView)openDialog. findViewById(R.id.txt_header);
 		     	final TextView msg=(TextView)openDialog. findViewById(R.id.msg);
-		     	
+
 				final Button ok_but=(Button)openDialog. findViewById(R.id.but_yes);
 				final Button cancel=(Button)openDialog. findViewById(R.id.but_no);
-				
+
 				cancel.setVisibility(View.GONE);
 			    header_text.setText(getText(R.string.AlertDialogHeaderMsg));
 			     msg.setText(Noti_text);
-			     	
+
 			     	ok_but.setText(getText(R.string.AlertDialogOkButton));
-			     	
+
 					builder.setView(openDialog,0,0,0,0);
 
-			        ok_but.setOnClickListener(new OnClickListener() 
+			        ok_but.setOnClickListener(new OnClickListener()
 			        {
-						
+
 						@Override
-						public void onClick(View arg0) 
+						public void onClick(View arg0)
 						{
 							// TODO Auto-generated method stub
 
@@ -215,11 +195,11 @@ public class LastVisitDetails extends BaseActivity
 							Date dateobj = new Date(syncTIMESTAMP);
 							SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss",Locale.ENGLISH);
 							String Noti_ReadDateTime = df.format(dateobj);
-				    	
+
 							dbengine.open();
 							dbengine.updatetblNotificationMstr(MsgServerID,Noti_text,0,Noti_ReadDateTime,3);
 							dbengine.close();
-							
+
 							try
 							{
 								dbengine.open();
@@ -231,72 +211,71 @@ public class LastVisitDetails extends BaseActivity
 										if(!Noti_textWithMsgServerID.equals("Null"))
 										{
 											StringTokenizer token = new StringTokenizer(String.valueOf(Noti_textWithMsgServerID), "_");
-											
+
 											MsgServerID= Integer.parseInt(token.nextToken().trim());
 											Noti_text= token.nextToken().trim();
-											
+
 											dbengine.close();
 											if(Noti_text.equals("") || Noti_text.equals("Null"))
 											{
-												
+
 											}
 											else
 											{
 												  msg.setText(Noti_text);
 											}
 										}
-							    	
+
 							    }
 								else
 								{
 									builder.dismiss();
 								}
-							
+
 							}
 							catch(Exception e)
 							{
-								
+
 							}
 				            finally
 				            {
 				            	dbengine.close();
-							   
+
 				            }
-			            
-						
+
+
 						}
 					});
-			        
-			       
-			      
-			 
-			     	builder.show();
-				
-				
-				
 
-		
-			 
+
+
+
+			     	builder.show();
+
+
+
+
+
+
 		}
 		}
 		}
 		catch(Exception e)
 		{
-			
+
 		}
 	}
 
-
 	public void showSettingsAlert(){
 		  AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-		     
+
 		        // Setting Dialog Title
 		        alertDialog.setTitle(R.string.genTermInformation);
 		        alertDialog.setIcon(R.drawable.error_info_ico);
-	
+
 		        // Setting Dialog Message
 		        alertDialog.setMessage(R.string.genTermGPSDisablePleaseEnable);
-		 
+
 		        // On pressing Settings button
 		        alertDialog.setPositiveButton(getText(R.string.AlertDialogOkButton), new DialogInterface.OnClickListener() {
 		            public void onClick(DialogInterface dialog,int which) {
@@ -304,38 +283,29 @@ public class LastVisitDetails extends BaseActivity
 		             startActivity(intent);
 		            }
 		        });
-		 
+
 		        // Showing Alert Message
 		        alertDialog.show();
 		 }
-
-
-
-
-	private BroadcastReceiver mBatInfoReceiver = new BroadcastReceiver() {
-		@Override
-		public void onReceive(Context arg0, Intent intent) {
-
-			battLevel =intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
-			getStoreVisitCode();
-		}
-	};
 		
-
-
-	
 	public void StoreNameAndSalesPersonInfo()
 	{
 		hmapStoreBasicDetails=dbengine.fngetStoreBasicDetails(storeID);
 		TextView storeName = (TextView)findViewById(R.id.txt_storeSummary);
 		TextView txt_SalesPersonName_Value = (TextView)findViewById(R.id.txt_SalesPersonName_Value);
 		TextView txt_SalesPersonContact_Value = (TextView)findViewById(R.id.txt_SalesPersonContact_Value);
+
+		TextView txt_StoreOwner_Value = (TextView)findViewById(R.id.txt_StoreOwner_Value);
+		TextView txt_StoreOwnerContact_Value = (TextView)findViewById(R.id.txt_StoreOwnerContact_Value);
+
 		TextView txt_StoreCatType_Value = (TextView)findViewById(R.id.txt_StoreCatType_Value);
 
 		storeName.setText(hmapStoreBasicDetails.get("StoreName")+" "+getText(R.string.Summary));
-		txt_SalesPersonName_Value.setText(hmapStoreBasicDetails.get("OwnerName"));
-		txt_SalesPersonContact_Value.setText(hmapStoreBasicDetails.get("StoreContactNo"));
+		txt_StoreOwner_Value.setText(hmapStoreBasicDetails.get("OwnerName"));
+		txt_StoreOwnerContact_Value.setText(hmapStoreBasicDetails.get("StoreContactNo"));
 		txt_StoreCatType_Value.setText(hmapStoreBasicDetails.get("StoreCatType"));
+		txt_SalesPersonName_Value.setText(hmapStoreBasicDetails.get("SalesPersonName"));
+		txt_SalesPersonContact_Value.setText(hmapStoreBasicDetails.get("SalesPersonContact"));
 	}
 
 	public String  getStoreVisitCode()

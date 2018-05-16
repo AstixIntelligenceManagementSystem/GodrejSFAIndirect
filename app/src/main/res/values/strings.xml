@@ -438,7 +438,8 @@
 
 
     <!-- LastVisitDetails Activity start -->
-
+    <string name="OwnerName">Owner Name :</string>
+    <string name="OwnerContact">Owner Contact :</string>
     <string name="SalesPersonName">Sales Person Name :</string>
     <string name="SalesPersonContact">Sales Person Contact :</string>
     <string name="SalesPersonAddress">Sales Person Address :</string>

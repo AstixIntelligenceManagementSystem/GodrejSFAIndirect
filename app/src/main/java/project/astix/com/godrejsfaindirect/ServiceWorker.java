@@ -37,35 +37,28 @@ import com.astix.Common.CommonInfo;
 public class ServiceWorker 
 {
 	
+	public static int flagExecutedServiceSuccesfully=0;
 	public int chkTblStoreListContainsRow=1;
-	private Context context;
 	
     //Live Path WebServiceAndroidParagSFATesting
 	//public String UrlForWebService="http://115.124.126.184/WebServiceAndroidParagSFA/Service.asmx";
 	
 	//Testing Path
 	//public String UrlForWebService="http://115.124.126.184/WebServiceAndroidParagSFATesting/Service.asmx";
-	
-	public static int flagExecutedServiceSuccesfully=0;
 	public String UrlForWebService= CommonInfo.WebServicePath.trim();
-	
- 
-	
-	
-	Locale locale  = new Locale("en", "UK");
-	String pattern = "###.##";
-	DecimalFormat decimalFormat = (DecimalFormat)NumberFormat.getNumberInstance(locale);
-	//private ServiceWorker _activity;
-	private ContextWrapper cw;
-	String movie_name;
-	String director;
 	//int counts;
 	public String currSysDate;
 	public String SysDate;
-	
 	public int newStat = 0;
 	public int timeout=0;
-	
+	Locale locale  = new Locale("en", "UK");
+	String pattern = "###.##";
+	DecimalFormat decimalFormat = (DecimalFormat)NumberFormat.getNumberInstance(locale);
+	String movie_name;
+	String director;
+	private Context context;
+	//private ServiceWorker _activity;
+	private ContextWrapper cw;
 	
 	public ServiceWorker getallStores(Context ctx, String dateVAL, String uuid, String rID,String RouteType) {
 		this.context = ctx;
@@ -200,6 +193,8 @@ public class ServiceWorker
 					int flgTransType=0;
 					int IsClose=0;
 					String StoreIDPDAFromServer="NA";
+					String SalesPersonName="NA";
+					String SalesPersonContactNo="NA";
 					//not used
 					//int IsNextDat=0;
 					//int flgSubmitFromQuotation=0;
@@ -561,6 +556,26 @@ public class ServiceWorker
 						}
 					}
 
+					if(!element.getElementsByTagName("SalesPersonName").equals(null))
+					{
+						NodeList SalesPersonNameNode = element.getElementsByTagName("SalesPersonName");
+						Element     line = (Element) SalesPersonNameNode.item(0);
+						if(SalesPersonNameNode.getLength()>0)
+						{
+							SalesPersonName=XMLParser.getCharacterDataFromElement(line);
+						}
+					}
+
+					if(!element.getElementsByTagName("SalesPersonContact").equals(null))
+					{
+						NodeList SalesPersonContactNoNode = element.getElementsByTagName("SalesPersonContact");
+						Element     line = (Element) SalesPersonContactNoNode.item(0);
+						if(SalesPersonContactNoNode.getLength()>0)
+						{
+							SalesPersonContactNo=XMLParser.getCharacterDataFromElement(line);
+						}
+					}
+
 					//hmapStoreIdVisitStatus
          /*    if(hmapStoreIdVisitStatus!=null)
                {
@@ -620,7 +635,7 @@ public class ServiceWorker
 							StoreLatitude,StoreLongitude,LastVisitDate,LastTransactionDate, Sstat,StoreRouteID,
 							RouteNodeType, StoreCatNodeId,PaymentStage , flgHasQuote , flgAllowQuotation, flgGSTCapture,
 							flgGSTCompliance, GSTNumber , flgGSTRecordFromServer , StoreCity , StorePinCode , StoreState,
-							OutStanding , OverDue , DBR , flgRuleTaxVal,flgTransType,StoreType,IsClose);
+							OutStanding , OverDue , DBR , flgRuleTaxVal,flgTransType,StoreType,IsClose,SalesPersonName,SalesPersonContactNo);
 					}
 				}
 

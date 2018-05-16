@@ -89,60 +89,25 @@ import java.util.regex.Pattern;
 public class AddNewStore_DynamicSectionWise extends BaseFragmentActivity implements LocationListener,GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener,SearchListCommunicator,OnMapReadyCallback
 {
 
+    private static final String TAG = "LocationActivity";
+    private static final long INTERVAL = 1000 * 10;
+    private static final long FASTEST_INTERVAL = 1000 * 5;
+    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 meters
+    // The minimum time between updates in milliseconds
+    private static final long MIN_TIME_BW_UPDATES = 1000  * 1; // 1 second
+    private static final long MIN_TIME_BW_UPDATESNew = 100  * 1; // 1 second
    public static String OwnerName,StoreContactNo,StoreCatType;
     public static int flgRuleTaxVal, flgTransType;
-    public String flgGSTCapture="1";
-    public String flgGSTCompliance="0";
-    public String GSTNumber="NA";
-    public int flgGSTRecordFromServer=0;
-
     public static String distID="0";
-
     public static String fnAccurateProvider="";
     public static String fnLati="0";
     public static String fnLongi="0";
     public static Double fnAccuracy=0.0;
-
     public static String prvsStoreId="";
-
-     public String newfullFileName;
-    String allValuesOfPaymentStageID="0";
-    public String QuestIDForOutChannel="0";
     public static String channelOptId;
-    public GetUpdateSchemeForNewStore  taskUpdateScheme=null;
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    public int flgHasQuote=0;
     public static String address,pincode,city,state,latitudeToSave,longitudeToSave,accuracyToSave;
-    public int flgAllowQuotation=1;
-    public int flgSubmitFromQuotation=0;
-    public CoundownClass countDownTimer;
-
-    private final long startTime = 15000;
-    private final long interval = 200;
-
-    private static final String TAG = "LocationActivity";
-    private static final long INTERVAL = 1000 * 10;
-    private static final long FASTEST_INTERVAL = 1000 * 5;
-    GoogleApiClient mGoogleApiClient;
-    Location mCurrentLocation;
-    String mLastUpdateTime;
-
-    LocationRequest mLocationRequest;
-
-
-
-    public String OutletID="NA";
-    public String StoreName="NA",fnlStoreType="0",fnlOwnerName="NA",fnlMobileNumber="NA",fnlAddressName="NA";
     public static String storeNameToShow="";
-    public String StoreName_tag="NA";
     public static int StoreTypeTradeChannel=0;
-
-
     public static int flgLocationServicesOnOff=0;
     public static int flgGPSOnOff=0;
     public static int flgNetworkOnOff=0;
@@ -150,100 +115,11 @@ public class AddNewStore_DynamicSectionWise extends BaseFragmentActivity impleme
     public static int flgInternetOnOffWhileLocationTracking=0;
     public static int flgRestart=0;
     public static int flgStoreOrder=0;
-
-
-
-    String fusedData;
-
-    public int checkSecondTaskStatus=0;
     public static int ServiceWorkerDataComingFlag=0;
     public static String ServiceWorkerStoreID="";
     public static String ServiceWorkerResultSet="";
-
-    public String FusedLocationLatitudeWithFirstAttempt="0";
-    public String FusedLocationLongitudeWithFirstAttempt="0";
-    public String FusedLocationAccuracyWithFirstAttempt="0";
-    public String AllProvidersLocation="";
-    public String FusedLocationLatitude="0";
-    public String FusedLocationLongitude="0";
-    public String FusedLocationProvider="";
-    public String FusedLocationAccuracy="0";
-
-    public String GPSLocationLatitude="0";
-    public String GPSLocationLongitude="0";
-    public String GPSLocationProvider="";
-    public String GPSLocationAccuracy="0";
-
-    public String NetworkLocationLatitude="0";
-    public String NetworkLocationLongitude="0";
-    public String NetworkLocationProvider="";
-    public String NetworkLocationAccuracy="0";
-
-    public AppLocationService appLocationService;
-    TextView txtAddress,txtAccuracy,txtLong,txtLat,txt_internetProb;
-    RelativeLayout rl_sectionMap,rl_sectionQuest;
-
-    public	GetAddingStoreInfo task=null;
-    public Timer timer;
-    public	MyTimerTask myTimerTask;
-
-    public ProgressDialog pDialogGetStores;
-    String VisitEndTS;
-    public int chkFlgForErrorToCloseApp=0;
-    String CustomStringForServiceWorker="";
-
-    String CustomStoreID="NA";
-    LocationVo locVo;
-
-    public LocationManager locationManager;
     public static int battLevel;
-
-    public float Current_acc;
-    MapFragment mapFrag;
-    GoogleMap googleMap;
-
-    Button btnSubmit;
-    public Location location;
-    public ProgressDialog pDialog2STANDBY;
-
-    public LocationListener locationListener;
-    public double latitude; // latitude
-    public double longitude; // longitude
-    int countSubmitClicked=0;
-
-    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 meters
-    private boolean mIsServiceStarted = false;
-    // The minimum time between updates in milliseconds
-    private static final long MIN_TIME_BW_UPDATES = 1000  * 1; // 1 second
-
-    private static final long MIN_TIME_BW_UPDATESNew = 100  * 1; // 1 second
-
-    public boolean isGPSEnabled = false;
-    public   boolean isNetworkEnabled = false;
-    public PowerManager pm;
-    public	 PowerManager.WakeLock wl;
-    public float acc=0F;
-    String locProvider="None";
-    public String lastKnownLocLatitude="";
-    public String lastKnownLocLongitude="";
-    public String accuracy="0";
-    public String locationProvider="Default";
-
-    public ProgressDialog pDialogSync;
-
-
-
-    LinearLayout ll_allData,ll_locmsg;
-    AddressResultReceiver mResultReceiver;
     public static String fetchAddress="";
-
-
-    NewStoreForm newStore_Fragment;
-    FragmentManager manager;
-    FragmentTransaction fragTrans;
-    ImageView img_next;
-    TextView txt_Next;
-
     public static LinkedHashMap<String, ArrayList<String>> hmapSection_key=new LinkedHashMap<String, ArrayList<String>>();
     public static LinkedHashMap<String, String> hmapDpndtQustGrpId=new LinkedHashMap<String, String>();
     public static LinkedHashMap<String, String> hmapQuesIdandGetAnsCntrlType=new LinkedHashMap<String, String>();
@@ -251,48 +127,17 @@ public class AddNewStore_DynamicSectionWise extends BaseFragmentActivity impleme
     public static LinkedHashMap<String, ArrayList<String>> hmapQuesGropKeySection=new LinkedHashMap<String, ArrayList<String>>();
     public static LinkedHashMap<String, String> hmapGroupId_Desc=new LinkedHashMap<String, String>();
     public static LinkedHashMap<String, ArrayList<String>> hmapSctnId_GrpId=new LinkedHashMap<String, ArrayList<String>>();
-   // public static LinkedHashMap<String, String> hmapOptionId_OptionValue=new LinkedHashMap<String, String>();
-
-    LinkedHashMap<String, String> hmapStoreQuestAnsNew = new LinkedHashMap<String, String>();
-    LinkedHashMap<String, String> hmapStoreAddress = new LinkedHashMap<String, String>();
-
-
-    LinearLayout ll_next,ll_back,ll_save_Exit,ll_map,ll_refresh;
-
-    int refreshCount=0;
-    RadioGroup rg_yes_no;
-    RadioButton rb_yes,rb_no;
-    Button btn_refresh;
-    TextView txt_rfrshCmnt;
-
-    ImageView img_exit;
-    PRJDatabase helperDb;
-
-
     public static String date_value="";
     public static String pickerDate="";
     public static String imei;
     public static String rID;
     public static String activityFrom="";
-
-
-
-
-
-    public  int sectionToShowHide=1;
-
-
     public static String VisitStartTS="NA";
     public static String selStoreID="0";
     public static String FLAG_NEW_UPDATE="";
     public static String LattitudeFromLauncher="NA";
     public static String LongitudeFromLauncher="NA";
     public static String AccuracyFromLauncher="NA";
-    String AddressFromLauncher="NA";
-    String CityFromLauncher="NA";
-    String PincodeFromLauncher="NA";
-    String StateFromLauncher="NA";
-
     public static String ProviderFromLauncher="NA";
     public static String GpsLatFromLauncher="NA";
     public static String GpsLongFromLauncher="NA";
@@ -303,7 +148,6 @@ public class AddNewStore_DynamicSectionWise extends BaseFragmentActivity impleme
     public static String FusedLatFromLauncher="NA";
     public static String FusedLongFromLauncher="NA";
     public static String FusedAccuracyFromLauncher="NA";
-
     public static String fnAddressFromLauncher="NA";
     public static String AllProvidersLocationFromLauncher="NA";
     public static String GpsAddressFromLauncher="NA";
@@ -312,12 +156,120 @@ public class AddNewStore_DynamicSectionWise extends BaseFragmentActivity impleme
     public static String FusedLocationLatitudeWithFirstAttemptFromLauncher="NA";
     public static String FusedLocationLongitudeWithFirstAttemptFromLauncher="NA";
     public static String FusedLocationAccuracyWithFirstAttemptFromLauncher="NA";
-
-
+    private final long startTime = 15000;
+    private final long interval = 200;
+    public String flgGSTCapture="1";
+    public String flgGSTCompliance="0";
+    public String GSTNumber="NA";
+    public int flgGSTRecordFromServer=0;
+     public String newfullFileName;
+    public String QuestIDForOutChannel="0";
+    public GetUpdateSchemeForNewStore  taskUpdateScheme=null;
+    public int flgHasQuote=0;
+    public int flgAllowQuotation=1;
+    public int flgSubmitFromQuotation=0;
+    public CoundownClass countDownTimer;
+    public String OutletID="NA";
+    public String StoreName="NA",fnlStoreType="0",fnlOwnerName="NA",fnlMobileNumber="NA",fnlAddressName="NA",fnSalesPersonName="NA",fnSalesPersonContactNo="NA",fnStoreCatType="NA";
+    public String StoreName_tag="NA";
+    public int checkSecondTaskStatus=0;
+    public String FusedLocationLatitudeWithFirstAttempt="0";
+    public String FusedLocationLongitudeWithFirstAttempt="0";
+    public String FusedLocationAccuracyWithFirstAttempt="0";
+    public String AllProvidersLocation="";
+    public String FusedLocationLatitude="0";
+    public String FusedLocationLongitude="0";
+    public String FusedLocationProvider="";
+    public String FusedLocationAccuracy="0";
+    public String GPSLocationLatitude="0";
+    public String GPSLocationLongitude="0";
+    public String GPSLocationProvider="";
+    public String GPSLocationAccuracy="0";
+    public String NetworkLocationLatitude="0";
+    public String NetworkLocationLongitude="0";
+    public String NetworkLocationProvider="";
+    public String NetworkLocationAccuracy="0";
+    public AppLocationService appLocationService;
+    public	GetAddingStoreInfo task=null;
+    public Timer timer;
+    public	MyTimerTask myTimerTask;
+    public ProgressDialog pDialogGetStores;
+    public int chkFlgForErrorToCloseApp=0;
+    public LocationManager locationManager;
+    public float Current_acc;
+    public Location location;
+    public ProgressDialog pDialog2STANDBY;
+    public LocationListener locationListener;
+    public double latitude; // latitude
+    public double longitude; // longitude
+    public boolean isGPSEnabled = false;
+    public   boolean isNetworkEnabled = false;
+    public PowerManager pm;
+    public	 PowerManager.WakeLock wl;
+    public float acc=0F;
+    public String lastKnownLocLatitude="";
+    public String lastKnownLocLongitude="";
+   // public static LinkedHashMap<String, String> hmapOptionId_OptionValue=new LinkedHashMap<String, String>();
+    public String accuracy="0";
+    public String locationProvider="Default";
+    public ProgressDialog pDialogSync;
+    public  int sectionToShowHide=1;
+    String allValuesOfPaymentStageID="0";
+    GoogleApiClient mGoogleApiClient;
+    Location mCurrentLocation;
+    String mLastUpdateTime;
+    LocationRequest mLocationRequest;
+    String fusedData;
+    TextView txtAddress,txtAccuracy,txtLong,txtLat,txt_internetProb;
+    RelativeLayout rl_sectionMap,rl_sectionQuest;
+    String VisitEndTS;
+    String CustomStringForServiceWorker="";
+    String CustomStoreID="NA";
+    LocationVo locVo;
+    MapFragment mapFrag;
+    GoogleMap googleMap;
+    Button btnSubmit;
+    int countSubmitClicked=0;
+    String locProvider="None";
+    LinearLayout ll_allData,ll_locmsg;
+    AddressResultReceiver mResultReceiver;
+    NewStoreForm newStore_Fragment;
+    FragmentManager manager;
+    FragmentTransaction fragTrans;
+    ImageView img_next;
+    TextView txt_Next;
+    LinkedHashMap<String, String> hmapStoreQuestAnsNew = new LinkedHashMap<String, String>();
+    LinkedHashMap<String, String> hmapStoreAddress = new LinkedHashMap<String, String>();
+    LinearLayout ll_next,ll_back,ll_save_Exit,ll_map,ll_refresh;
+    int refreshCount=0;
+    RadioGroup rg_yes_no;
+    RadioButton rb_yes,rb_no;
+    Button btn_refresh;
+    TextView txt_rfrshCmnt;
+    ImageView img_exit;
+    PRJDatabase helperDb;
+    String AddressFromLauncher="NA";
+    String CityFromLauncher="NA";
+    String PincodeFromLauncher="NA";
+    String StateFromLauncher="NA";
     MyReceiver myReceiver;
-
     PRJDatabase dbengine=new PRJDatabase(this);
     DatabaseAssistant DA=new DatabaseAssistant(this);
+    private boolean mIsServiceStarted = false;
+    private BroadcastReceiver mBatInfoReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context arg0, Intent intent) {
+
+
+            battLevel = intent.getIntExtra("level", 0);
+
+        }
+    };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
     @Override
     protected void onDestroy() {
@@ -329,6 +281,7 @@ public class AddNewStore_DynamicSectionWise extends BaseFragmentActivity impleme
         }*/
         this.unregisterReceiver(this.mBatInfoReceiver);
     }
+
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         // TODO Auto-generated method stub
         if(keyCode== KeyEvent.KEYCODE_BACK)
@@ -948,20 +901,11 @@ if(flgCheckNewOldStore==1)
 
         }
     }
+
     public void hideSoftKeyboard(View view){
         InputMethodManager imm =(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
-    private BroadcastReceiver mBatInfoReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context arg0, Intent intent) {
-
-
-            battLevel = intent.getIntExtra("level", 0);
-
-        }
-    };
-
 
     public boolean getSectionNextOrBack(int isNextPressed,int sectionToShowOrHide)
     {
@@ -1057,6 +1001,9 @@ if(flgCheckNewOldStore==1)
                     fnlOwnerName=recFragment.currentOwnerName;
                     fnlMobileNumber=recFragment.currentMobileNumber;
                     fnlAddressName=recFragment.currentAddressName;
+                    fnSalesPersonName=recFragment.currentSalesPersonName;
+                    fnSalesPersonContactNo=recFragment.currentSalesPersonContactNo;
+                    fnStoreCatType=recFragment.currentStoreCatType;
                     if(!TextUtils.isEmpty(recFragment.distBId))
                     {
                         distID=recFragment.distBId;
@@ -1186,7 +1133,7 @@ if(flgCheckNewOldStore==1)
         }
                                                 //RetailerName
         helperDb.savetblStoreMain("NA",selStoreID,StoreName,"NA","NA","NA","NA","NA","NA","NA","0",StoreTypeTradeChannel,
-                Integer.parseInt(fnlStoreType),0,0, 0, "NA",VisitStartTS,imei,""+battLevel,3,1,String.valueOf(fnLati),String.valueOf(fnLongi),"" + fnAccuracy,"" + fnAccurateProvider,0,fnlAddressName,allValuesOfPaymentStageID,flgHasQuote,flgAllowQuotation,flgSubmitFromQuotation,flgGSTCapture,flgGSTCompliance,GSTNumber,flgGSTRecordFromServer,flgLocationServicesOnOff,flgGPSOnOff,flgNetworkOnOff,flgFusedOnOff,flgInternetOnOffWhileLocationTracking,flgRestart,flgStoreOrder, hmapStoreAddress.get("2"), hmapStoreAddress.get("1"), hmapStoreAddress.get("3"),distID,fnlOwnerName,fnlMobileNumber,StoreCatType,flgRuleTaxVal,flgTransType,fnlMobileNumber);
+                Integer.parseInt(fnlStoreType),0,0, 0, "NA",VisitStartTS,imei,""+battLevel,3,1,String.valueOf(fnLati),String.valueOf(fnLongi),"" + fnAccuracy,"" + fnAccurateProvider,0,fnlAddressName,allValuesOfPaymentStageID,flgHasQuote,flgAllowQuotation,flgSubmitFromQuotation,flgGSTCapture,flgGSTCompliance,GSTNumber,flgGSTRecordFromServer,flgLocationServicesOnOff,flgGPSOnOff,flgNetworkOnOff,flgFusedOnOff,flgInternetOnOffWhileLocationTracking,flgRestart,flgStoreOrder, hmapStoreAddress.get("2"), hmapStoreAddress.get("1"), hmapStoreAddress.get("3"),distID,fnlOwnerName,fnlMobileNumber,fnStoreCatType,flgRuleTaxVal,flgTransType,fnlMobileNumber,fnSalesPersonName,fnSalesPersonContactNo);
 
         helperDb.saveSOAPdataStoreListDetailsInNewTable(selStoreID, hmapStoreAddress.get("2"), hmapStoreAddress.get("1"), hmapStoreAddress.get("3"),1);
         helperDb.close();
@@ -1410,7 +1357,718 @@ if(flgCheckNewOldStore==1)
         alert.show();
     }
 
+    @Override
+    public void onConnectionFailed(ConnectionResult arg0) {
+        // TODO Auto-generated method stub
 
+        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, appLocationService);
+    }
+
+   /* private void initializaeMap(GoogleMap googleMap) {
+
+
+        googleMap.setMyLocationEnabled(true);
+        MarkerOptions marker = new MarkerOptions().position(new LatLng(latitude, longitude)).title(StoreName);
+        Marker locationMarker=googleMap.addMarker(marker);
+        locationMarker.showInfoWindow();
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 15));
+
+        //}
+			    *//*else
+			    {
+			     ft.hide(mapFrag);
+			       txt_internetProb.setVisibility(View.VISIBLE);
+			    }*//*
+        //mapFrag.getView().setVisibility(View.GONE);
+
+        ft.commit();
+    }*/
+    public String genTempID()
+    {
+        //store ID generation <x>
+
+        String cxz;
+        cxz = UUID.randomUUID().toString();
+						/*cxz.split("^([^-]*,[^-]*,[^-]*,[^-]*),(.*)$");*/
+        //System.out.println("cxz (BEFORE split): "+cxz);
+        StringTokenizer tokens = new StringTokenizer(String.valueOf(cxz), "-");
+
+        String val1 = tokens.nextToken().trim();
+        String val2 = tokens.nextToken().trim();
+        String val3 = tokens.nextToken().trim();
+        String val4 = tokens.nextToken().trim();
+        cxz = tokens.nextToken().trim();
+
+        //System.out.println("cxz (AFTER split): "+cxz);
+
+        TelephonyManager tManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        String imei = tManager.getDeviceId();
+        String IMEIid =  imei.substring(9);
+
+        cxz = IMEIid +"-"+cxz+"-"+VisitStartTS.replace(" ", "").replace(":", "").trim();
+
+
+        return cxz;
+        //-_
+    }
+
+    public void fetchAddress()
+    {
+
+
+        /*Intent intent = new Intent(this, GeocodeAddressIntentService.class);
+        intent.putExtra("Reciever", mResultReceiver);
+        Location location = new Location("");
+        location.setLatitude(latitude);
+        location.setLongitude(longitude);
+        intent.putExtra("Location", location);
+        startService(intent);*/
+    }
+
+    @Override
+    public void selectedOption(String optId, String optionVal,
+                               EditText txtVw, ListView listViewOption, String tagVal,
+                               Dialog dialog, TextView textView,ArrayList<String> listStoreIDOrigin) {
+
+        NewStoreForm recFragment = (NewStoreForm)getFragmentManager().findFragmentByTag("NewStoreFragment");
+        if(null != recFragment)
+        {
+            recFragment.selectedOption( optId,  optionVal,txtVw,  listViewOption,  tagVal,dialog,  textView,listStoreIDOrigin);
+        }
+
+    }
+
+    @Override
+    public void selectedStoreMultiple(String optId, String optionVal,
+                                      EditText txtVw, ListView listViewOption, String tagVal,
+                                      Dialog dialog, TextView textView, LinearLayout ll_SlctdOpt,
+                                      ArrayList<String> listSelectedOpt,
+                                      ArrayList<String> listSelectedStoreID, ArrayList<String> listSelectedStoreOrigin) {
+
+        NewStoreForm recFragment = (NewStoreForm)getFragmentManager().findFragmentByTag("NewStoreFragment");
+        if(null != recFragment)
+        {
+            recFragment.selectedStoreMultiple( optId,  optionVal,
+                    txtVw,  listViewOption,  tagVal,
+                    dialog,  textView,  ll_SlctdOpt,
+                    listSelectedOpt,
+                    listSelectedStoreID,listSelectedStoreOrigin);
+        }
+
+    }
+
+    public void alertSubmit()
+    {
+        AlertDialog alertDialog = new AlertDialog.Builder(
+                AddNewStore_DynamicSectionWise.this).create();
+
+        // Setting Dialog Title
+        alertDialog.setTitle(getText(R.string.DataSent));
+
+        // Setting Dialog Message
+        alertDialog.setMessage(getText(R.string.DataSucc));
+
+        // Setting Icon to Dialog
+      //  alertDialog.setIcon(R.drawable.tick);
+
+        // Setting OK Button
+        alertDialog.setButton(getText(R.string.AlertDialogOkButton), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                // Write your code here to execute after dialog closed
+                Intent intent = new Intent(AddNewStore_DynamicSectionWise.this, LauncherActivity.class);
+                intent.putExtra("FROM", "AddNewStore_DynamicSectionWise");
+               startActivity(intent);
+               finish();
+            }
+        });
+
+        // Showing Alert Message
+        alertDialog.show();
+    }
+
+    public void locationRetrievingAndDistanceCalculating()
+    {
+
+        appLocationService = new AppLocationService();
+
+        pm = (PowerManager) getSystemService(POWER_SERVICE);
+        wl = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK
+                | PowerManager.ACQUIRE_CAUSES_WAKEUP
+                | PowerManager.ON_AFTER_RELEASE, "INFO");
+        wl.acquire();
+
+
+        pDialog2STANDBY = ProgressDialog.show(AddNewStore_DynamicSectionWise.this, getText(R.string.genTermPleaseWaitNew), getText(R.string.rtrvng_loc), true);
+        pDialog2STANDBY.setIndeterminate(true);
+
+        pDialog2STANDBY.setCancelable(false);
+        pDialog2STANDBY.show();
+
+        if (isGooglePlayServicesAvailable()) {
+            createLocationRequest();
+
+            mGoogleApiClient = new GoogleApiClient.Builder(AddNewStore_DynamicSectionWise.this)
+                    .addApi(LocationServices.API)
+                    .addConnectionCallbacks(AddNewStore_DynamicSectionWise.this)
+                    .addOnConnectionFailedListener(AddNewStore_DynamicSectionWise.this)
+                    .build();
+            mGoogleApiClient.connect();
+        }
+        //startService(new Intent(DynamicActivity.this, AppLocationService.class));
+        startService(new Intent(AddNewStore_DynamicSectionWise.this, AppLocationService.class));
+        Location nwLocation = appLocationService.getLocation(locationManager, LocationManager.GPS_PROVIDER, location);
+        Location gpsLocation = appLocationService.getLocation(locationManager, LocationManager.NETWORK_PROVIDER, location);
+        countDownTimer = new CoundownClass(startTime, interval);
+        countDownTimer.start();
+
+    }
+
+    public String getAddressForDynamic(String latti, String longi){
+
+
+        String areaToMerge="NA";
+        Address addressTemp=null;
+        String addr="NA";
+        String zipcode="NA";
+        String city="NA";
+        String state="NA";
+        String fullAddress="";
+        StringBuilder FULLADDRESS3 =new StringBuilder();
+        try {
+            Geocoder geocoder = new Geocoder(this, Locale.ENGLISH);
+
+           /* AddressFromLauncher = allLoctionDetails.split(Pattern.quote("^"))[3];
+            CityFromLauncher = allLoctionDetails.split(Pattern.quote("^"))[4];
+            PincodeFromLauncher = allLoctionDetails.split(Pattern.quote("^"))[5];
+            StateFromLauncher = allLoctionDetails.split(Pattern.quote("^"))[6];*/
+            List<Address> addresses = geocoder.getFromLocation(Double.parseDouble(latti), Double.parseDouble(longi), 1);
+            if (addresses != null && addresses.size() > 0){
+                if(addresses.get(0).getAddressLine(1)!=null){
+                    addr=addresses.get(0).getAddressLine(1);
+                    address=addr;
+                }
+
+
+
+
+                if(addresses.get(0).getLocality()!=null){
+                    city=addresses.get(0).getLocality();
+                    this.city=city;
+                }
+
+                if(addresses.get(0).getAdminArea()!=null){
+                    state=addresses.get(0).getAdminArea();
+                    this.state=state;
+                }
+
+
+                for(int i=0 ;i<addresses.size();i++){
+                    addressTemp = addresses.get(i);
+                    if(addressTemp.getPostalCode()!=null){
+                        zipcode=addressTemp.getPostalCode();
+                        this.pincode=zipcode;
+                        break;
+                    }
+
+
+
+
+
+                }
+                if(addresses.get(0).getAddressLine(0)!=null && addr.equals("NA")){
+                    String countryname="NA";
+                    if(addresses.get(0).getCountryName()!=null){
+                        countryname=addresses.get(0).getCountryName();
+                    }
+
+                    addr=  getAddressNewWay(addresses.get(0).getAddressLine(0),city,state,zipcode,countryname);
+                }
+
+
+                NewStoreForm recFragment = (NewStoreForm)getFragmentManager().findFragmentByTag("NewStoreFragment");
+                if(null != recFragment)
+                {
+                    recFragment.setFreshAddress();
+                }
+            }
+            else{FULLADDRESS3.append("NA");}
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        finally{
+            return fullAddress=addr+"^"+zipcode+"^"+city+"^"+state;
+        }
+    }
+
+    public void fnCreateLastKnownGPSLoction(String chekLastGPSLat, String chekLastGPSLong, String chekLastGpsAccuracy)
+    {
+
+        try {
+
+            JSONArray jArray=new JSONArray();
+            JSONObject jsonObjMain=new JSONObject();
+
+
+            JSONObject jOnew = new JSONObject();
+            jOnew.put( "chekLastGPSLat",chekLastGPSLat);
+            jOnew.put( "chekLastGPSLong",chekLastGPSLong);
+            jOnew.put( "chekLastGpsAccuracy", chekLastGpsAccuracy);
+
+
+            jArray.put(jOnew);
+            jsonObjMain.put("GPSLastLocationDetils", jArray);
+
+            File jsonTxtFolder = new File(Environment.getExternalStorageDirectory(), CommonInfo.AppLatLngJsonFile);
+            if (!jsonTxtFolder.exists())
+            {
+                jsonTxtFolder.mkdirs();
+
+            }
+            String txtFileNamenew="GPSLastLocation.txt";
+            File file = new File(jsonTxtFolder,txtFileNamenew);
+            String fpath = Environment.getExternalStorageDirectory()+"/"+CommonInfo.AppLatLngJsonFile+"/"+txtFileNamenew;
+
+
+            // If file does not exists, then create it
+            if (!file.exists()) {
+                try {
+                    file.createNewFile();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+
+
+            FileWriter fw;
+            try {
+                fw = new FileWriter(file.getAbsoluteFile());
+
+                BufferedWriter bw = new BufferedWriter(fw);
+
+                bw.write(jsonObjMain.toString());
+
+                bw.close();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+				 /*  file=contextcopy.getFilesDir();
+				//fileOutputStream=contextcopy.openFileOutput("GPSLastLocation.txt", Context.MODE_PRIVATE);
+				fileOutputStream.write(jsonObjMain.toString().getBytes());
+				fileOutputStream.close();*/
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        finally{
+
+        }
+    }
+
+    public void fnCreateLastKnownFinalLocation(String chekLastGPSLat, String chekLastGPSLong, String chekLastGpsAccuracy)
+    {
+
+        try {
+
+            JSONArray jArray=new JSONArray();
+            JSONObject jsonObjMain=new JSONObject();
+
+
+            JSONObject jOnew = new JSONObject();
+            jOnew.put( "chekLastGPSLat",chekLastGPSLat);
+            jOnew.put( "chekLastGPSLong",chekLastGPSLong);
+            jOnew.put( "chekLastGpsAccuracy", chekLastGpsAccuracy);
+
+
+            jArray.put(jOnew);
+            jsonObjMain.put("GPSLastLocationDetils", jArray);
+
+            File jsonTxtFolder = new File(Environment.getExternalStorageDirectory(), CommonInfo.FinalLatLngJsonFile);
+            if (!jsonTxtFolder.exists())
+            {
+                jsonTxtFolder.mkdirs();
+
+            }
+            String txtFileNamenew="FinalGPSLastLocation.txt";
+            File file = new File(jsonTxtFolder,txtFileNamenew);
+            String fpath = Environment.getExternalStorageDirectory()+"/"+CommonInfo.FinalLatLngJsonFile+"/"+txtFileNamenew;
+
+
+            // If file does not exists, then create it
+            if (!file.exists()) {
+                try {
+                    file.createNewFile();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+
+
+            FileWriter fw;
+            try {
+                fw = new FileWriter(file.getAbsoluteFile());
+
+                BufferedWriter bw = new BufferedWriter(fw);
+
+                bw.write(jsonObjMain.toString());
+
+                bw.close();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+				 /*  file=contextcopy.getFilesDir();
+				//fileOutputStream=contextcopy.openFileOutput("FinalGPSLastLocation.txt", Context.MODE_PRIVATE);
+				fileOutputStream.write(jsonObjMain.toString().getBytes());
+				fileOutputStream.close();*/
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        finally{
+
+        }
+    }
+
+    public boolean checkLastFinalLoctionIsRepeated(String currentLat, String currentLong, String currentAccuracy){
+        boolean repeatedLoction=false;
+
+        try {
+
+            String chekLastGPSLat="0";
+            String chekLastGPSLong="0";
+            String chekLastGpsAccuracy="0";
+            File jsonTxtFolder = new File(Environment.getExternalStorageDirectory(), CommonInfo.FinalLatLngJsonFile);
+            if (!jsonTxtFolder.exists())
+            {
+                jsonTxtFolder.mkdirs();
+
+            }
+            String txtFileNamenew="FinalGPSLastLocation.txt";
+            File file = new File(jsonTxtFolder,txtFileNamenew);
+            String fpath = Environment.getExternalStorageDirectory()+"/"+CommonInfo.FinalLatLngJsonFile+"/"+txtFileNamenew;
+
+            // If file does not exists, then create it
+            if (file.exists()) {
+                StringBuffer buffer=new StringBuffer();
+                String myjson_stampiGPSLastLocation="";
+                StringBuffer sb = new StringBuffer();
+                BufferedReader br = null;
+
+                try {
+                    br = new BufferedReader(new FileReader(file));
+
+                    String temp;
+                    while ((temp = br.readLine()) != null)
+                        sb.append(temp);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        br.close(); // stop reading
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                myjson_stampiGPSLastLocation=sb.toString();
+
+                JSONObject jsonObjGPSLast = new JSONObject(myjson_stampiGPSLastLocation);
+                JSONArray jsonObjGPSLastInneralues = jsonObjGPSLast.getJSONArray("GPSLastLocationDetils");
+
+                String StringjsonGPSLastnew = jsonObjGPSLastInneralues.getString(0);
+                JSONObject jsonObjGPSLastnewwewe = new JSONObject(StringjsonGPSLastnew);
+
+                chekLastGPSLat=jsonObjGPSLastnewwewe.getString("chekLastGPSLat");
+                chekLastGPSLong=jsonObjGPSLastnewwewe.getString("chekLastGPSLong");
+                chekLastGpsAccuracy=jsonObjGPSLastnewwewe.getString("chekLastGpsAccuracy");
+
+                if(currentLat!=null )
+                {
+                    if(currentLat.equals(chekLastGPSLat) && currentLong.equals(chekLastGPSLong) && currentAccuracy.equals(chekLastGpsAccuracy))
+                    {
+                        repeatedLoction=true;
+                    }
+                }
+            }
+        }
+        catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return repeatedLoction;
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        boolean isGPSokCheckInResume = false;
+        boolean isNWokCheckInResume=false;
+        isGPSokCheckInResume = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        isNWokCheckInResume = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+        if(!isGPSokCheckInResume && !isNWokCheckInResume)
+        {
+            try
+            {
+                showSettingsAlert();
+            }
+            catch(Exception e)
+            {
+
+            }
+            isGPSokCheckInResume = false;
+            isNWokCheckInResume=false;
+        }
+        else
+        {
+
+
+                if(countSubmitClicked==1)
+                {
+
+                        locationRetrievingAndDistanceCalculating();
+                        countSubmitClicked++;
+
+
+                }else if(countSubmitClicked==0)
+            {
+
+                locationRetrievingAndDistanceCalculating();
+                countSubmitClicked=2;
+
+
+            }
+
+
+        }
+    }
+
+    public String getAddressOfProviders(String latti, String longi){
+
+        StringBuilder FULLADDRESS2 =new StringBuilder();
+        Geocoder geocoder;
+        List<Address> addresses;
+        geocoder = new Geocoder(this, Locale.ENGLISH);
+
+
+
+        try {
+            addresses = geocoder.getFromLocation(Double.parseDouble(latti), Double.parseDouble(longi), 1);
+
+            if (addresses == null || addresses.size()  == 0)
+            {
+                FULLADDRESS2=  FULLADDRESS2.append("NA");
+            }
+            else
+            {
+                for(Address address : addresses) {
+                    //  String outputAddress = "";
+                    for(int i = 0; i < address.getMaxAddressLineIndex(); i++) {
+                        if(i==1)
+                        {
+                            FULLADDRESS2.append(address.getAddressLine(i));
+                        }
+                        else if(i==2)
+                        {
+                            FULLADDRESS2.append(",").append(address.getAddressLine(i));
+                        }
+                    }
+                }
+		      /* //String address = addresses.get(0).getAddressLine(0);
+		       String address = addresses.get(0).getAddressLine(1); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+		       String city = addresses.get(0).getLocality();
+		       String state = addresses.get(0).getAdminArea();
+		       String country = addresses.get(0).getCountryName();
+		       String postalCode = addresses.get(0).getPostalCode();
+		       String knownName = addresses.get(0).getFeatureName();
+		       FULLADDRESS=address+","+city+","+state+","+country+","+postalCode;
+		      Toast.makeText(contextcopy, "ADDRESS"+address+"city:"+city+"state:"+state+"country:"+country+"postalCode:"+postalCode, Toast.LENGTH_LONG).show();*/
+
+            }
+
+        } catch (NumberFormatException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+
+
+        return FULLADDRESS2.toString();
+
+    }
+
+    public void checkHighAccuracyLocationMode(Context context) {
+        int locationMode = 0;
+        String locationProviders;
+
+        flgLocationServicesOnOff=0;
+        flgGPSOnOff=0;
+        flgNetworkOnOff=0;
+        flgFusedOnOff=0;
+        flgInternetOnOffWhileLocationTracking=0;
+
+        if(isGooglePlayServicesAvailable())
+        {
+            flgFusedOnOff=1;
+        }
+        if(isOnline())
+        {
+            flgInternetOnOffWhileLocationTracking=1;
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+        {
+            //Equal or higher than API 19/KitKat
+            try {
+                locationMode = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
+                if (locationMode == Settings.Secure.LOCATION_MODE_HIGH_ACCURACY){
+                    flgLocationServicesOnOff=1;
+                    flgGPSOnOff=1;
+                    flgNetworkOnOff=1;
+                    //flgFusedOnOff=1;
+                }
+                if (locationMode == Settings.Secure.LOCATION_MODE_BATTERY_SAVING){
+                    flgLocationServicesOnOff=1;
+                    flgGPSOnOff=0;
+                    flgNetworkOnOff=1;
+                   // flgFusedOnOff=1;
+                }
+                if (locationMode == Settings.Secure.LOCATION_MODE_SENSORS_ONLY){
+                    flgLocationServicesOnOff=1;
+                    flgGPSOnOff=1;
+                    flgNetworkOnOff=0;
+                    //flgFusedOnOff=0;
+                }
+            } catch (Settings.SettingNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+        else {
+            //Lower than API 19
+            locationProviders = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+
+
+            if (TextUtils.isEmpty(locationProviders)) {
+                locationMode = Settings.Secure.LOCATION_MODE_OFF;
+
+                flgLocationServicesOnOff = 0;
+                flgGPSOnOff = 0;
+                flgNetworkOnOff = 0;
+               // flgFusedOnOff = 0;
+            }
+            if (locationProviders.contains(LocationManager.GPS_PROVIDER) && locationProviders.contains(LocationManager.NETWORK_PROVIDER)) {
+                flgLocationServicesOnOff = 1;
+                flgGPSOnOff = 1;
+                flgNetworkOnOff = 1;
+                //flgFusedOnOff = 0;
+            } else {
+                if (locationProviders.contains(LocationManager.GPS_PROVIDER)) {
+                    flgLocationServicesOnOff = 1;
+                    flgGPSOnOff = 1;
+                    flgNetworkOnOff = 0;
+                   // flgFusedOnOff = 0;
+                }
+                if (locationProviders.contains(LocationManager.NETWORK_PROVIDER)) {
+                    flgLocationServicesOnOff = 1;
+                    flgGPSOnOff = 0;
+                    flgNetworkOnOff = 1;
+                    //flgFusedOnOff = 0;
+                }
+            }
+        }
+
+    }
+
+    public  void fnGettingGSTOFflineVal()
+    {
+        // Start for getting GST Offline
+
+        String OutletID="0",QuestID = "0",AnswerType,AnswerValue = "";
+        int sectionID = 0;
+        int QuestionGroupID=0;
+
+
+        for(Entry<String, String> entry:hmapStoreQuestAnsNew.entrySet())
+        {
+            String questId=entry.getKey().split(Pattern.quote("^"))[0].toString();
+            AnswerType=entry.getKey().split(Pattern.quote("^"))[1].toString();
+            QuestionGroupID=Integer.valueOf(entry.getKey().split(Pattern.quote("^"))[2].toString());
+            AnswerValue=entry.getValue();
+
+            String optionValue="0";
+
+            if(questId.equals("49"))
+            {
+                try
+                {
+                    //flgGSTCompliance=helperDb.fnGetGstOptionIDComplianceWhileAddingNewStore(""+AnswerValue);
+                    String OptionDescr=helperDb.fnGetOptionDescrFromtblOptionMstr(questId,""+AnswerValue);
+                    if(OptionDescr.equals("Yes"))
+                    {
+                        flgGSTCompliance="1";
+                    }
+                    else if(OptionDescr.equals("Not Required"))
+                    {
+                        flgGSTCompliance="0";
+                    }
+                    else if(OptionDescr.equals("Pending"))
+                    {
+                        flgGSTCompliance="2";
+                    }
+
+                }
+                catch(Exception e)
+                {
+
+                }
+            }
+            if(questId.equals("50"))
+            {
+                if(!AnswerValue.equals(""))
+                {
+                    GSTNumber=AnswerValue;
+                }
+            }
+
+
+
+        }
+
+        // End for gst getting
+    }
+
+    public String getAddressNewWay(String ZeroIndexAddress,String city,String State,String pincode,String country){
+        String editedAddress=ZeroIndexAddress;
+        if(editedAddress.contains(city)){
+            editedAddress= editedAddress.replace(city,"");
+
+        }
+        if(editedAddress.contains(State)){
+            editedAddress=editedAddress.replace(State,"");
+
+        }
+        if(editedAddress.contains(pincode)){
+            editedAddress= editedAddress.replace(pincode,"");
+
+        }
+        if(editedAddress.contains(country)){
+            editedAddress=editedAddress.replace(country,"");
+
+        }
+        if(editedAddress.contains(",")){
+            editedAddress=editedAddress.replace(","," ");
+
+        }
+
+        return editedAddress;
+    }
 
     class MyTimerTask extends TimerTask
     {
@@ -1485,13 +2143,6 @@ if(flgCheckNewOldStore==1)
                 }});
         }
 
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult arg0) {
-        // TODO Auto-generated method stub
-
-        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, appLocationService);
     }
 
     private class GetAddingStoreInfo extends AsyncTask<Void, Void, Void>
@@ -1800,7 +2451,6 @@ if(flgCheckNewOldStore==1)
         }
     }
 
-
     private class GetUpdateSchemeForNewStore extends AsyncTask<Void, Void, Void>
     {
         ServiceWorker newservice = new ServiceWorker();
@@ -1936,68 +2586,6 @@ if(flgCheckNewOldStore==1)
 
     }
 
-   /* private void initializaeMap(GoogleMap googleMap) {
-
-
-        googleMap.setMyLocationEnabled(true);
-        MarkerOptions marker = new MarkerOptions().position(new LatLng(latitude, longitude)).title(StoreName);
-        Marker locationMarker=googleMap.addMarker(marker);
-        locationMarker.showInfoWindow();
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 15));
-
-        //}
-			    *//*else
-			    {
-			     ft.hide(mapFrag);
-			       txt_internetProb.setVisibility(View.VISIBLE);
-			    }*//*
-        //mapFrag.getView().setVisibility(View.GONE);
-
-        ft.commit();
-    }*/
-    public String genTempID()
-    {
-        //store ID generation <x>
-
-        String cxz;
-        cxz = UUID.randomUUID().toString();
-						/*cxz.split("^([^-]*,[^-]*,[^-]*,[^-]*),(.*)$");*/
-        //System.out.println("cxz (BEFORE split): "+cxz);
-        StringTokenizer tokens = new StringTokenizer(String.valueOf(cxz), "-");
-
-        String val1 = tokens.nextToken().trim();
-        String val2 = tokens.nextToken().trim();
-        String val3 = tokens.nextToken().trim();
-        String val4 = tokens.nextToken().trim();
-        cxz = tokens.nextToken().trim();
-
-        //System.out.println("cxz (AFTER split): "+cxz);
-
-        TelephonyManager tManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        String imei = tManager.getDeviceId();
-        String IMEIid =  imei.substring(9);
-
-        cxz = IMEIid +"-"+cxz+"-"+VisitStartTS.replace(" ", "").replace(":", "").trim();
-
-
-        return cxz;
-        //-_
-    }
-
-
-
-    public void fetchAddress()
-    {
-
-
-        /*Intent intent = new Intent(this, GeocodeAddressIntentService.class);
-        intent.putExtra("Reciever", mResultReceiver);
-        Location location = new Location("");
-        location.setLatitude(latitude);
-        location.setLongitude(longitude);
-        intent.putExtra("Location", location);
-        startService(intent);*/
-    }
     class AddressResultReceiver extends ResultReceiver
     {
 
@@ -2024,38 +2612,6 @@ if(flgCheckNewOldStore==1)
             }
         }
     }
-
-    @Override
-    public void selectedOption(String optId, String optionVal,
-                               EditText txtVw, ListView listViewOption, String tagVal,
-                               Dialog dialog, TextView textView,ArrayList<String> listStoreIDOrigin) {
-
-        NewStoreForm recFragment = (NewStoreForm)getFragmentManager().findFragmentByTag("NewStoreFragment");
-        if(null != recFragment)
-        {
-            recFragment.selectedOption( optId,  optionVal,txtVw,  listViewOption,  tagVal,dialog,  textView,listStoreIDOrigin);
-        }
-
-    }
-    @Override
-    public void selectedStoreMultiple(String optId, String optionVal,
-                                      EditText txtVw, ListView listViewOption, String tagVal,
-                                      Dialog dialog, TextView textView, LinearLayout ll_SlctdOpt,
-                                      ArrayList<String> listSelectedOpt,
-                                      ArrayList<String> listSelectedStoreID, ArrayList<String> listSelectedStoreOrigin) {
-
-        NewStoreForm recFragment = (NewStoreForm)getFragmentManager().findFragmentByTag("NewStoreFragment");
-        if(null != recFragment)
-        {
-            recFragment.selectedStoreMultiple( optId,  optionVal,
-                    txtVw,  listViewOption,  tagVal,
-                    dialog,  textView,  ll_SlctdOpt,
-                    listSelectedOpt,
-                    listSelectedStoreID,listSelectedStoreOrigin);
-        }
-
-    }
-
 
     private class MyReceiver extends BroadcastReceiver {
 
@@ -2088,74 +2644,6 @@ if(flgCheckNewOldStore==1)
 
 
         }
-
-    }
-
-
-    public void alertSubmit()
-    {
-        AlertDialog alertDialog = new AlertDialog.Builder(
-                AddNewStore_DynamicSectionWise.this).create();
-
-        // Setting Dialog Title
-        alertDialog.setTitle(getText(R.string.DataSent));
-
-        // Setting Dialog Message
-        alertDialog.setMessage(getText(R.string.DataSucc));
-
-        // Setting Icon to Dialog
-      //  alertDialog.setIcon(R.drawable.tick);
-
-        // Setting OK Button
-        alertDialog.setButton(getText(R.string.AlertDialogOkButton), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                // Write your code here to execute after dialog closed
-                Intent intent = new Intent(AddNewStore_DynamicSectionWise.this, LauncherActivity.class);
-                intent.putExtra("FROM", "AddNewStore_DynamicSectionWise");
-               startActivity(intent);
-               finish();
-            }
-        });
-
-        // Showing Alert Message
-        alertDialog.show();
-    }
-
-
-    public void locationRetrievingAndDistanceCalculating()
-    {
-
-        appLocationService = new AppLocationService();
-
-        pm = (PowerManager) getSystemService(POWER_SERVICE);
-        wl = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK
-                | PowerManager.ACQUIRE_CAUSES_WAKEUP
-                | PowerManager.ON_AFTER_RELEASE, "INFO");
-        wl.acquire();
-
-
-        pDialog2STANDBY = ProgressDialog.show(AddNewStore_DynamicSectionWise.this, getText(R.string.genTermPleaseWaitNew), getText(R.string.rtrvng_loc), true);
-        pDialog2STANDBY.setIndeterminate(true);
-
-        pDialog2STANDBY.setCancelable(false);
-        pDialog2STANDBY.show();
-
-        if (isGooglePlayServicesAvailable()) {
-            createLocationRequest();
-
-            mGoogleApiClient = new GoogleApiClient.Builder(AddNewStore_DynamicSectionWise.this)
-                    .addApi(LocationServices.API)
-                    .addConnectionCallbacks(AddNewStore_DynamicSectionWise.this)
-                    .addOnConnectionFailedListener(AddNewStore_DynamicSectionWise.this)
-                    .build();
-            mGoogleApiClient.connect();
-        }
-        //startService(new Intent(DynamicActivity.this, AppLocationService.class));
-        startService(new Intent(AddNewStore_DynamicSectionWise.this, AppLocationService.class));
-        Location nwLocation = appLocationService.getLocation(locationManager, LocationManager.GPS_PROVIDER, location);
-        Location gpsLocation = appLocationService.getLocation(locationManager, LocationManager.NETWORK_PROVIDER, location);
-        countDownTimer = new CoundownClass(startTime, interval);
-        countDownTimer.start();
 
     }
 
@@ -2496,558 +2984,6 @@ if(flgCheckNewOldStore==1)
             // TODO Auto-generated method stub
 
         }}
-
-
-
-
-    public String getAddressForDynamic(String latti, String longi){
-
-
-        String areaToMerge="NA";
-        Address addressTemp=null;
-        String addr="NA";
-        String zipcode="NA";
-        String city="NA";
-        String state="NA";
-        String fullAddress="";
-        StringBuilder FULLADDRESS3 =new StringBuilder();
-        try {
-            Geocoder geocoder = new Geocoder(this, Locale.ENGLISH);
-
-           /* AddressFromLauncher = allLoctionDetails.split(Pattern.quote("^"))[3];
-            CityFromLauncher = allLoctionDetails.split(Pattern.quote("^"))[4];
-            PincodeFromLauncher = allLoctionDetails.split(Pattern.quote("^"))[5];
-            StateFromLauncher = allLoctionDetails.split(Pattern.quote("^"))[6];*/
-            List<Address> addresses = geocoder.getFromLocation(Double.parseDouble(latti), Double.parseDouble(longi), 1);
-            if (addresses != null && addresses.size() > 0){
-                if(addresses.get(0).getAddressLine(1)!=null){
-                    addr=addresses.get(0).getAddressLine(1);
-                    address=addr;
-                }
-
-
-
-
-                if(addresses.get(0).getLocality()!=null){
-                    city=addresses.get(0).getLocality();
-                    this.city=city;
-                }
-
-                if(addresses.get(0).getAdminArea()!=null){
-                    state=addresses.get(0).getAdminArea();
-                    this.state=state;
-                }
-
-
-                for(int i=0 ;i<addresses.size();i++){
-                    addressTemp = addresses.get(i);
-                    if(addressTemp.getPostalCode()!=null){
-                        zipcode=addressTemp.getPostalCode();
-                        this.pincode=zipcode;
-                        break;
-                    }
-
-
-
-
-
-                }
-                if(addresses.get(0).getAddressLine(0)!=null && addr.equals("NA")){
-                    String countryname="NA";
-                    if(addresses.get(0).getCountryName()!=null){
-                        countryname=addresses.get(0).getCountryName();
-                    }
-
-                    addr=  getAddressNewWay(addresses.get(0).getAddressLine(0),city,state,zipcode,countryname);
-                }
-
-
-                NewStoreForm recFragment = (NewStoreForm)getFragmentManager().findFragmentByTag("NewStoreFragment");
-                if(null != recFragment)
-                {
-                    recFragment.setFreshAddress();
-                }
-            }
-            else{FULLADDRESS3.append("NA");}
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        finally{
-            return fullAddress=addr+"^"+zipcode+"^"+city+"^"+state;
-        }
-    }
-    public void fnCreateLastKnownGPSLoction(String chekLastGPSLat, String chekLastGPSLong, String chekLastGpsAccuracy)
-    {
-
-        try {
-
-            JSONArray jArray=new JSONArray();
-            JSONObject jsonObjMain=new JSONObject();
-
-
-            JSONObject jOnew = new JSONObject();
-            jOnew.put( "chekLastGPSLat",chekLastGPSLat);
-            jOnew.put( "chekLastGPSLong",chekLastGPSLong);
-            jOnew.put( "chekLastGpsAccuracy", chekLastGpsAccuracy);
-
-
-            jArray.put(jOnew);
-            jsonObjMain.put("GPSLastLocationDetils", jArray);
-
-            File jsonTxtFolder = new File(Environment.getExternalStorageDirectory(), CommonInfo.AppLatLngJsonFile);
-            if (!jsonTxtFolder.exists())
-            {
-                jsonTxtFolder.mkdirs();
-
-            }
-            String txtFileNamenew="GPSLastLocation.txt";
-            File file = new File(jsonTxtFolder,txtFileNamenew);
-            String fpath = Environment.getExternalStorageDirectory()+"/"+CommonInfo.AppLatLngJsonFile+"/"+txtFileNamenew;
-
-
-            // If file does not exists, then create it
-            if (!file.exists()) {
-                try {
-                    file.createNewFile();
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-
-
-            FileWriter fw;
-            try {
-                fw = new FileWriter(file.getAbsoluteFile());
-
-                BufferedWriter bw = new BufferedWriter(fw);
-
-                bw.write(jsonObjMain.toString());
-
-                bw.close();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-				 /*  file=contextcopy.getFilesDir();
-				//fileOutputStream=contextcopy.openFileOutput("GPSLastLocation.txt", Context.MODE_PRIVATE);
-				fileOutputStream.write(jsonObjMain.toString().getBytes());
-				fileOutputStream.close();*/
-        } catch (JSONException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        finally{
-
-        }
-    }
-
-
-    public void fnCreateLastKnownFinalLocation(String chekLastGPSLat, String chekLastGPSLong, String chekLastGpsAccuracy)
-    {
-
-        try {
-
-            JSONArray jArray=new JSONArray();
-            JSONObject jsonObjMain=new JSONObject();
-
-
-            JSONObject jOnew = new JSONObject();
-            jOnew.put( "chekLastGPSLat",chekLastGPSLat);
-            jOnew.put( "chekLastGPSLong",chekLastGPSLong);
-            jOnew.put( "chekLastGpsAccuracy", chekLastGpsAccuracy);
-
-
-            jArray.put(jOnew);
-            jsonObjMain.put("GPSLastLocationDetils", jArray);
-
-            File jsonTxtFolder = new File(Environment.getExternalStorageDirectory(), CommonInfo.FinalLatLngJsonFile);
-            if (!jsonTxtFolder.exists())
-            {
-                jsonTxtFolder.mkdirs();
-
-            }
-            String txtFileNamenew="FinalGPSLastLocation.txt";
-            File file = new File(jsonTxtFolder,txtFileNamenew);
-            String fpath = Environment.getExternalStorageDirectory()+"/"+CommonInfo.FinalLatLngJsonFile+"/"+txtFileNamenew;
-
-
-            // If file does not exists, then create it
-            if (!file.exists()) {
-                try {
-                    file.createNewFile();
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-
-
-            FileWriter fw;
-            try {
-                fw = new FileWriter(file.getAbsoluteFile());
-
-                BufferedWriter bw = new BufferedWriter(fw);
-
-                bw.write(jsonObjMain.toString());
-
-                bw.close();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-				 /*  file=contextcopy.getFilesDir();
-				//fileOutputStream=contextcopy.openFileOutput("FinalGPSLastLocation.txt", Context.MODE_PRIVATE);
-				fileOutputStream.write(jsonObjMain.toString().getBytes());
-				fileOutputStream.close();*/
-        } catch (JSONException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        finally{
-
-        }
-    }
-
-
-
-    public boolean checkLastFinalLoctionIsRepeated(String currentLat, String currentLong, String currentAccuracy){
-        boolean repeatedLoction=false;
-
-        try {
-
-            String chekLastGPSLat="0";
-            String chekLastGPSLong="0";
-            String chekLastGpsAccuracy="0";
-            File jsonTxtFolder = new File(Environment.getExternalStorageDirectory(), CommonInfo.FinalLatLngJsonFile);
-            if (!jsonTxtFolder.exists())
-            {
-                jsonTxtFolder.mkdirs();
-
-            }
-            String txtFileNamenew="FinalGPSLastLocation.txt";
-            File file = new File(jsonTxtFolder,txtFileNamenew);
-            String fpath = Environment.getExternalStorageDirectory()+"/"+CommonInfo.FinalLatLngJsonFile+"/"+txtFileNamenew;
-
-            // If file does not exists, then create it
-            if (file.exists()) {
-                StringBuffer buffer=new StringBuffer();
-                String myjson_stampiGPSLastLocation="";
-                StringBuffer sb = new StringBuffer();
-                BufferedReader br = null;
-
-                try {
-                    br = new BufferedReader(new FileReader(file));
-
-                    String temp;
-                    while ((temp = br.readLine()) != null)
-                        sb.append(temp);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    try {
-                        br.close(); // stop reading
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                myjson_stampiGPSLastLocation=sb.toString();
-
-                JSONObject jsonObjGPSLast = new JSONObject(myjson_stampiGPSLastLocation);
-                JSONArray jsonObjGPSLastInneralues = jsonObjGPSLast.getJSONArray("GPSLastLocationDetils");
-
-                String StringjsonGPSLastnew = jsonObjGPSLastInneralues.getString(0);
-                JSONObject jsonObjGPSLastnewwewe = new JSONObject(StringjsonGPSLastnew);
-
-                chekLastGPSLat=jsonObjGPSLastnewwewe.getString("chekLastGPSLat");
-                chekLastGPSLong=jsonObjGPSLastnewwewe.getString("chekLastGPSLong");
-                chekLastGpsAccuracy=jsonObjGPSLastnewwewe.getString("chekLastGpsAccuracy");
-
-                if(currentLat!=null )
-                {
-                    if(currentLat.equals(chekLastGPSLat) && currentLong.equals(chekLastGPSLong) && currentAccuracy.equals(chekLastGpsAccuracy))
-                    {
-                        repeatedLoction=true;
-                    }
-                }
-            }
-        }
-        catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return repeatedLoction;
-
-    }
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        boolean isGPSokCheckInResume = false;
-        boolean isNWokCheckInResume=false;
-        isGPSokCheckInResume = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        isNWokCheckInResume = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-
-        if(!isGPSokCheckInResume && !isNWokCheckInResume)
-        {
-            try
-            {
-                showSettingsAlert();
-            }
-            catch(Exception e)
-            {
-
-            }
-            isGPSokCheckInResume = false;
-            isNWokCheckInResume=false;
-        }
-        else
-        {
-
-
-                if(countSubmitClicked==1)
-                {
-
-                        locationRetrievingAndDistanceCalculating();
-                        countSubmitClicked++;
-
-
-                }else if(countSubmitClicked==0)
-            {
-
-                locationRetrievingAndDistanceCalculating();
-                countSubmitClicked=2;
-
-
-            }
-
-
-        }
-    }
-    public String getAddressOfProviders(String latti, String longi){
-
-        StringBuilder FULLADDRESS2 =new StringBuilder();
-        Geocoder geocoder;
-        List<Address> addresses;
-        geocoder = new Geocoder(this, Locale.ENGLISH);
-
-
-
-        try {
-            addresses = geocoder.getFromLocation(Double.parseDouble(latti), Double.parseDouble(longi), 1);
-
-            if (addresses == null || addresses.size()  == 0)
-            {
-                FULLADDRESS2=  FULLADDRESS2.append("NA");
-            }
-            else
-            {
-                for(Address address : addresses) {
-                    //  String outputAddress = "";
-                    for(int i = 0; i < address.getMaxAddressLineIndex(); i++) {
-                        if(i==1)
-                        {
-                            FULLADDRESS2.append(address.getAddressLine(i));
-                        }
-                        else if(i==2)
-                        {
-                            FULLADDRESS2.append(",").append(address.getAddressLine(i));
-                        }
-                    }
-                }
-		      /* //String address = addresses.get(0).getAddressLine(0);
-		       String address = addresses.get(0).getAddressLine(1); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-		       String city = addresses.get(0).getLocality();
-		       String state = addresses.get(0).getAdminArea();
-		       String country = addresses.get(0).getCountryName();
-		       String postalCode = addresses.get(0).getPostalCode();
-		       String knownName = addresses.get(0).getFeatureName();
-		       FULLADDRESS=address+","+city+","+state+","+country+","+postalCode;
-		      Toast.makeText(contextcopy, "ADDRESS"+address+"city:"+city+"state:"+state+"country:"+country+"postalCode:"+postalCode, Toast.LENGTH_LONG).show();*/
-
-            }
-
-        } catch (NumberFormatException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-
-
-        return FULLADDRESS2.toString();
-
-    }
-
-
-    public void checkHighAccuracyLocationMode(Context context) {
-        int locationMode = 0;
-        String locationProviders;
-
-        flgLocationServicesOnOff=0;
-        flgGPSOnOff=0;
-        flgNetworkOnOff=0;
-        flgFusedOnOff=0;
-        flgInternetOnOffWhileLocationTracking=0;
-
-        if(isGooglePlayServicesAvailable())
-        {
-            flgFusedOnOff=1;
-        }
-        if(isOnline())
-        {
-            flgInternetOnOffWhileLocationTracking=1;
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
-        {
-            //Equal or higher than API 19/KitKat
-            try {
-                locationMode = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
-                if (locationMode == Settings.Secure.LOCATION_MODE_HIGH_ACCURACY){
-                    flgLocationServicesOnOff=1;
-                    flgGPSOnOff=1;
-                    flgNetworkOnOff=1;
-                    //flgFusedOnOff=1;
-                }
-                if (locationMode == Settings.Secure.LOCATION_MODE_BATTERY_SAVING){
-                    flgLocationServicesOnOff=1;
-                    flgGPSOnOff=0;
-                    flgNetworkOnOff=1;
-                   // flgFusedOnOff=1;
-                }
-                if (locationMode == Settings.Secure.LOCATION_MODE_SENSORS_ONLY){
-                    flgLocationServicesOnOff=1;
-                    flgGPSOnOff=1;
-                    flgNetworkOnOff=0;
-                    //flgFusedOnOff=0;
-                }
-            } catch (Settings.SettingNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-        else {
-            //Lower than API 19
-            locationProviders = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
-
-
-            if (TextUtils.isEmpty(locationProviders)) {
-                locationMode = Settings.Secure.LOCATION_MODE_OFF;
-
-                flgLocationServicesOnOff = 0;
-                flgGPSOnOff = 0;
-                flgNetworkOnOff = 0;
-               // flgFusedOnOff = 0;
-            }
-            if (locationProviders.contains(LocationManager.GPS_PROVIDER) && locationProviders.contains(LocationManager.NETWORK_PROVIDER)) {
-                flgLocationServicesOnOff = 1;
-                flgGPSOnOff = 1;
-                flgNetworkOnOff = 1;
-                //flgFusedOnOff = 0;
-            } else {
-                if (locationProviders.contains(LocationManager.GPS_PROVIDER)) {
-                    flgLocationServicesOnOff = 1;
-                    flgGPSOnOff = 1;
-                    flgNetworkOnOff = 0;
-                   // flgFusedOnOff = 0;
-                }
-                if (locationProviders.contains(LocationManager.NETWORK_PROVIDER)) {
-                    flgLocationServicesOnOff = 1;
-                    flgGPSOnOff = 0;
-                    flgNetworkOnOff = 1;
-                    //flgFusedOnOff = 0;
-                }
-            }
-        }
-
-    }
-
-    public  void fnGettingGSTOFflineVal()
-    {
-        // Start for getting GST Offline
-
-        String OutletID="0",QuestID = "0",AnswerType,AnswerValue = "";
-        int sectionID = 0;
-        int QuestionGroupID=0;
-
-
-        for(Entry<String, String> entry:hmapStoreQuestAnsNew.entrySet())
-        {
-            String questId=entry.getKey().split(Pattern.quote("^"))[0].toString();
-            AnswerType=entry.getKey().split(Pattern.quote("^"))[1].toString();
-            QuestionGroupID=Integer.valueOf(entry.getKey().split(Pattern.quote("^"))[2].toString());
-            AnswerValue=entry.getValue();
-
-            String optionValue="0";
-
-            if(questId.equals("49"))
-            {
-                try
-                {
-                    //flgGSTCompliance=helperDb.fnGetGstOptionIDComplianceWhileAddingNewStore(""+AnswerValue);
-                    String OptionDescr=helperDb.fnGetOptionDescrFromtblOptionMstr(questId,""+AnswerValue);
-                    if(OptionDescr.equals("Yes"))
-                    {
-                        flgGSTCompliance="1";
-                    }
-                    else if(OptionDescr.equals("Not Required"))
-                    {
-                        flgGSTCompliance="0";
-                    }
-                    else if(OptionDescr.equals("Pending"))
-                    {
-                        flgGSTCompliance="2";
-                    }
-
-                }
-                catch(Exception e)
-                {
-
-                }
-            }
-            if(questId.equals("50"))
-            {
-                if(!AnswerValue.equals(""))
-                {
-                    GSTNumber=AnswerValue;
-                }
-            }
-
-
-
-        }
-
-        // End for gst getting
-    }
-    public String getAddressNewWay(String ZeroIndexAddress,String city,String State,String pincode,String country){
-        String editedAddress=ZeroIndexAddress;
-        if(editedAddress.contains(city)){
-            editedAddress= editedAddress.replace(city,"");
-
-        }
-        if(editedAddress.contains(State)){
-            editedAddress=editedAddress.replace(State,"");
-
-        }
-        if(editedAddress.contains(pincode)){
-            editedAddress= editedAddress.replace(pincode,"");
-
-        }
-        if(editedAddress.contains(country)){
-            editedAddress=editedAddress.replace(country,"");
-
-        }
-        if(editedAddress.contains(",")){
-            editedAddress=editedAddress.replace(","," ");
-
-        }
-
-        return editedAddress;
-    }
 
 
 }

@@ -84,28 +84,22 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 
 public class NewStoreForm extends Fragment  {
 
-	String distBId="";
+		private final int requestCode = 200;
 	public String flgGSTCapture="1";
 	public String flgGSTCompliance="0";
 	public String GSTNumber="NA";
 	public int flgGSTRecordFromServer=0;
-
+	public  Dialog dialog=null;
+	 public LinkedHashMap<String, ArrayList<String>> hmapSelectedMultipleDepend=new LinkedHashMap<String, ArrayList<String>>();
+	public LinkedHashMap<String, Integer> hmapisPhotolicked=new LinkedHashMap<String, Integer>();
+	  public String currentStoreName="NA",currentStoreType="0",currentOwnerName="NA",currentMobileNumber="NA",currentAddressName="NA",currentSalesPersonName="NA",currentSalesPersonContactNo="NA",currentStoreCatType="NA";
+	String distBId="";
 	String selectedRoute="";
 	String getActiveRouteId="";
 	int flgHasQuote=0;
 	ImageView flashImage;
-	private boolean isLighOn = false;
 	float mDist=0;
-	public  Dialog dialog=null;
 	ArrayList<Object> arrImageData=new ArrayList<Object>();
-	private Camera mCamera;
-	private CameraPreview mPreview;
-	private Camera.PictureCallback mPicture;
-	private Button capture,cancelCam, switchCamera;
-	private Context myContext;
-	private LinearLayout cameraPreview;
-	private boolean cameraFront = false;
-
 	String singleSelectedVal="";
 	EditText etLocalArea,etPinCode,etCity,etState;
 	LinearLayout ll_address_section,ll_local_area;
@@ -116,7 +110,7 @@ public class NewStoreForm extends Fragment  {
 	LinkedHashMap<String, String> hmapQuestionflgPrvValue=new LinkedHashMap<String, String>();
 	LinkedHashMap<String, String> hmapPreviousVisitServerQuestionSavedAns=new LinkedHashMap<String,String>();
 	LinkedHashMap<String,String> grpQstId_qstIdForName;
-	String grpQstIdForChannel,nameForStore,storeType,ownerName,mobileNumber,addressName;
+	String grpQstIdForChannel,nameForStore,storeType,ownerName,mobileNumber,addressName,salespersonname,salespersoncontactno;
 	LinkedHashMap<String,String> hmapGetCheckBoxVisible=new LinkedHashMap<String,String>();
 	TextView PaymentStageTextView,paymentModeTextviewNew,creditdaysTextboxNew,CreditlimitTextboxNew,percentageTextviewNew,paymentstagetextviewNew, CreditDaysTextbox, PaymentModeTextView, Date,SalesQuoteTypeSpinner,ValFrom,ValTo,SalesQuoteType,ValidityFrom,PaymentTerms,headerstring;
 	 Calendar calendarS ;
@@ -129,7 +123,6 @@ public class NewStoreForm extends Fragment  {
 	int section=0;
 	String globalValueOfPaymentStageCheck="0"+"_"+"0"+"_"+"0";
 	CheckBox chBoxView,AdvanceBeforeDeliveryCheckBoxNew,OnDeliveryCheckBoxNew,CreditCheckBoxNew;
-	
 	EditText percentageOfAdvanceBeforeDelivery,percentageOfOnDelivery,creditDaysOfOnDelivery,PercentageOfCredit,creditDaysOfCredit,creditLimitOfCredit;
 	LinearLayout MainlayoutParentOfWholePage;
 	 String QuestCode,QuestDesc,AnsControlType,AsnControlInputTypeID,AnsControlInputTypeMaxLength,AnsMustRequiredFlg,flgPrvsVisitQstIdWd1,
@@ -137,17 +130,14 @@ public class NewStoreForm extends Fragment  {
 	 LinkedHashMap<String,String> hmapZoneDisplayMstr;
 	LinearLayout ll_data,parentOfAdvanceBeforeDeliveryPayMentMode,parentOfOnDeliveryPayMentMode,parentOfCreditPayMentMode,parentOfCheckBox;
 	LayoutInflater inflaterSection;
-	 private Calendar calendar;
 	 LinkedHashMap<String, String> hmapsearchAnswerSlctd=new LinkedHashMap<String, String>();
-	 private int year, month, day;
 	LinkedHashMap<String,String> hmapAddress=new LinkedHashMap<String,String>();
 	 LinkedHashMap<String, ArrayList<String>> hmapOptionValues=new LinkedHashMap<String, ArrayList<String>>();
-	 public LinkedHashMap<String, ArrayList<String>> hmapSelectedMultipleDepend=new LinkedHashMap<String, ArrayList<String>>();
 	 Uri uriSavedImage;
 	 String uriStringPath="";
 	 ArrayList<String> listimagePath=new ArrayList<String>();
 	 String userName,imageName,imagButtonTag;
-	 String  allDataToExistingCntct="",visitPlanLocId,newfullFileName,imei,onlyDate,taskGroupSelected,flagNewOld="1",locNodeID="0",locNodeType="0",	 
+	 String  allDataToExistingCntct="",visitPlanLocId,newfullFileName,imei,onlyDate,taskGroupSelected,flagNewOld="1",locNodeID="0",locNodeType="0",
 			 flgScheduleFollowUp="0",followUpScheduleDate="0",locNodeId_NodeTypeSelected,personName="";
 	 File imageF;
 	 String filePathPhoto;
@@ -161,35 +151,129 @@ public class NewStoreForm extends Fragment  {
 	LinkedHashMap<String, String> hmapAllValuesOfPaymentMode;
 	LinkedHashMap<String, String> hmapgetOptDepMstr=new LinkedHashMap<String, String>();
 	LinkedHashMap<String, ArrayList<String>> hmapGetOptionValDpndnt=new LinkedHashMap<String, ArrayList<String>>();
-	
 	LinkedHashMap<String, String> hmapImageClkdTempIdData=new LinkedHashMap<String,String>();
-	
 	LinkedHashMap<String, String> hmapGroupIdCopyAsAbove=new LinkedHashMap<String, String>();
-
-	public LinkedHashMap<String, Integer> hmapisPhotolicked=new LinkedHashMap<String, Integer>();
-
 	 LinearLayout ll_Section;
 	 LinkedHashMap<String, String> hmapAnsValues=new LinkedHashMap<String, String>();
 	 LinkedHashMap<String, String> hmapQuesIdandGetAnsCntrlType=new LinkedHashMap<String, String>();
 	 Button calenderClkdBtn,cameraButton,btn_saveAsDraft;
 	 TextView tv_Ques,txt_Username,textStCode,textQntty;
 		String VisitStartTS;
-		private final int requestCode = 200;
 		 String[] dependentValuesQuesId,dependentParentQuesId;
-	
 		 SimpleDateFormat input = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
 		 SimpleDateFormat output = new SimpleDateFormat("dd-MMM-yyyy",Locale.ENGLISH);
 		StringBuilder sbMultiple=new StringBuilder();
 		 boolean isSelectedSearch=false;
-		
 	  View headerView;
 	  PRJDatabase helperDb;
 	  LinearLayout ll_Image;
 	  String activityFrom="";
-	  public String currentStoreName="NA",currentStoreType="0",currentOwnerName="NA",currentMobileNumber="NA",currentAddressName="NA";
-
-	  
 	  String fullStringOfDelivery="0";
+	private boolean isLighOn = false;
+	private Camera mCamera;
+	private CameraPreview mPreview;
+	private Camera.PictureCallback mPicture;
+	private Button capture,cancelCam, switchCamera;
+	private Context myContext;
+	private LinearLayout cameraPreview;
+	OnClickListener captrureListener = new OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			v.setEnabled(false);
+			getActivity().getWindow().setFlags(LayoutParams.FLAG_NOT_TOUCHABLE, LayoutParams.FLAG_NOT_TOUCHABLE);
+			cancelCam.setEnabled(false);
+			flashImage.setEnabled(false);
+			if(cameraPreview!=null)
+			{
+				cameraPreview.setEnabled(false);
+			}
+
+			if(mCamera!=null)
+			{
+				mCamera.takePicture(null, null, mPicture);
+			}
+			else
+			{
+				dialog.dismiss();
+			}
+			getActivity().getWindow().clearFlags(LayoutParams.FLAG_NOT_TOUCHABLE);
+
+		}
+	};
+	private boolean cameraFront = false;
+	 private Calendar calendar;
+	 private int year, month, day;
+private InputFilter filter = new InputFilter() {
+
+    @Override
+    public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+    	  if(source.equals("")){ // for backspace
+              return source;
+         }
+         if(source.toString().matches("[a-zA-Z ]+")){
+              return source;
+         }
+         return "";
+
+    }
+};
+
+		 public static Bitmap decodeSampledBitmapFromFile(String path, int reqWidth, int reqHeight)
+		 { // BEST QUALITY MATCH
+
+		     //First decode with inJustDecodeBounds=true to check dimensions
+		     final BitmapFactory.Options options = new BitmapFactory.Options();
+		     options.inJustDecodeBounds = true;
+		     BitmapFactory.decodeFile(path, options);
+
+		     // Calculate inSampleSize, Raw height and width of image
+		     final int height = options.outHeight;
+		     final int width = options.outWidth;
+		     options.inPreferredConfig = Bitmap.Config.RGB_565;
+		     int inSampleSize = 1;
+
+		     if (height > reqHeight)
+		     {
+		         inSampleSize = Math.round((float)height / (float)reqHeight);
+		     }
+		     int expectedWidth = width / inSampleSize;
+
+		     if (expectedWidth > reqWidth)
+		     {
+		         //if(Math.round((float)width / (float)reqWidth) > inSampleSize) // If bigger SampSize..
+		         inSampleSize = Math.round((float)width / (float)reqWidth);
+		     }
+
+		     options.inSampleSize = inSampleSize;
+
+		     // Decode bitmap with inSampleSize set
+		     options.inJustDecodeBounds = false;
+
+		     return BitmapFactory.decodeFile(path, options);
+		 }
+
+	private static File getOutputMediaFile() {
+		//make a new file directory inside the "sdcard" folder
+		File mediaStorageDir = new File("/sdcard/", CommonInfo.ImagesFolder);
+
+		//if this "JCGCamera folder does not exist
+		if (!mediaStorageDir.exists()) {
+			//if you cannot make this folder return
+			if (!mediaStorageDir.mkdirs()) {
+				return null;
+			}
+		}
+
+		//take the current timeStamp
+		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",Locale.ENGLISH).format(new Date());
+		File mediaFile;
+		//and make a media file:
+	//	mediaFile = new File(mediaStorageDir.getPath() + File.separator + "IMG_" + timeStamp + ".jpg");
+		mediaFile = new File(mediaStorageDir.getPath() + File.separator + "IMG_" +CommonInfo.imei+timeStamp + ".jpg");
+
+		return mediaFile;
+	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -202,11 +286,11 @@ public class NewStoreForm extends Fragment  {
 			Date dateobj = new Date(syncTIMESTAMP);
 			SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss",Locale.ENGLISH);
 			VisitStartTS = df.format(dateobj);
-	
+
 
 		return view;
 	}
-
+	
 	@Override
 	public Transition getReturnTransition() {
 		return super.getReturnTransition();
@@ -234,24 +318,27 @@ public class NewStoreForm extends Fragment  {
 
 		hmapGroupIdCopyAsAbove=helperDb.getGroupIdCopyAsAbove();
 		grpQstIdForChannel=helperDb.getChannelGroupId();
-		
+
 		grpQstId_qstIdForName=helperDb.getNameQstGrpId_QstId();
 		nameForStore=grpQstId_qstIdForName.get("2").split(Pattern.quote("^"))[1]+"^"+hmapQuesIdandGetAnsCntrlType.get(grpQstId_qstIdForName.get("2").split(Pattern.quote("^"))[1])+"^"+grpQstId_qstIdForName.get("2").split(Pattern.quote("^"))[0];
 		storeType=grpQstId_qstIdForName.get("1").split(Pattern.quote("^"))[1]+"^"+hmapQuesIdandGetAnsCntrlType.get(grpQstId_qstIdForName.get("1").split(Pattern.quote("^"))[1])+"^"+grpQstId_qstIdForName.get("1").split(Pattern.quote("^"))[0];
 		ownerName=grpQstId_qstIdForName.get("3").split(Pattern.quote("^"))[1]+"^"+hmapQuesIdandGetAnsCntrlType.get(grpQstId_qstIdForName.get("3").split(Pattern.quote("^"))[1])+"^"+grpQstId_qstIdForName.get("3").split(Pattern.quote("^"))[0];
 		mobileNumber=grpQstId_qstIdForName.get("4").split(Pattern.quote("^"))[1]+"^"+hmapQuesIdandGetAnsCntrlType.get(grpQstId_qstIdForName.get("4").split(Pattern.quote("^"))[1])+"^"+grpQstId_qstIdForName.get("4").split(Pattern.quote("^"))[0];
 		addressName=grpQstId_qstIdForName.get("5").split(Pattern.quote("^"))[1]+"^"+hmapQuesIdandGetAnsCntrlType.get(grpQstId_qstIdForName.get("5").split(Pattern.quote("^"))[1])+"^"+grpQstId_qstIdForName.get("5").split(Pattern.quote("^"))[0];
+
+		salespersonname=grpQstId_qstIdForName.get("6").split(Pattern.quote("^"))[1]+"^"+hmapQuesIdandGetAnsCntrlType.get(grpQstId_qstIdForName.get("6").split(Pattern.quote("^"))[1])+"^"+grpQstId_qstIdForName.get("6").split(Pattern.quote("^"))[0];
+		salespersoncontactno=grpQstId_qstIdForName.get("7").split(Pattern.quote("^"))[1]+"^"+hmapQuesIdandGetAnsCntrlType.get(grpQstId_qstIdForName.get("7").split(Pattern.quote("^"))[1])+"^"+grpQstId_qstIdForName.get("7").split(Pattern.quote("^"))[0];
+
 		hmapgetOptDepMstr=helperDb.getDepOptMstr();
 		listimagePath=helperDb.getImagePath(AddNewStore_DynamicSectionWise.selStoreID);
-		
+
 		//currentStoreName=AddNewStore_DynamicSectionWise.
 
 		createView();
 		fillUnmapData();
 		fillViewsValues();
-		 
-	}
 
+	}
 
 	private void fillUnmapData()
 	{
@@ -281,6 +368,7 @@ public class NewStoreForm extends Fragment  {
 
 
 	}
+
 	public boolean nextOrBackSection(int isNextPressed,int sectionToShowOrHide)
 	{
 		boolean isNextMovedSlide=false;
@@ -289,12 +377,12 @@ public class NewStoreForm extends Fragment  {
 			if(validate())
 			{
 
-					
+
 					View view=ll_data.findViewWithTag(nameForStore);
-					
+
 						EditText edVal=(EditText)view;
 						currentStoreName=edVal.getText().toString();
-				
+
 
 				isNextMovedSlide=true;
 				saveDynamicQuesAns(true);
@@ -304,7 +392,7 @@ public class NewStoreForm extends Fragment  {
 				LinearLayout ll_SectionToHide=(LinearLayout) ll_data.findViewWithTag(String.valueOf(sectionToShowOrHide)+"_Section");
 				ll_SectionToHide.setVisibility(View.GONE);
 				ll_SectionToShow.setVisibility(View.VISIBLE);
-				
+
 			}
 			else
 			{
@@ -316,7 +404,7 @@ public class NewStoreForm extends Fragment  {
 		else if(isNextPressed==1)
 		{
 
-			isNextMovedSlide=false;	
+			isNextMovedSlide=false;
 			sectionIsShown=sectionToShowOrHide;
 			LinearLayout ll_SectionToShow=(LinearLayout) ll_data.findViewWithTag(String.valueOf(sectionToShowOrHide)+"_Section");
 			LinearLayout ll_SectionToHide=(LinearLayout) ll_data.findViewWithTag(String.valueOf(sectionToShowOrHide+1)+"_Section");
@@ -325,17 +413,17 @@ public class NewStoreForm extends Fragment  {
 		}
 		else if(isNextPressed==2)
 		{
-			isNextMovedSlide=false;	
+			isNextMovedSlide=false;
 			sectionIsShown=sectionToShowOrHide;
 			if(sectionIsShown==1)
 			{
 				if(validateNameFilled())
 				{
-					
+
 					alertSaveAndSaveExit(getResources().getString(R.string.SaveData),getResources().getString(R.string.Datawillbesaved),false);
-				
+
 				}
-				
+
 			}
 			else{
 				alertSaveAndSaveExit(getResources().getString(R.string.SaveData),getResources().getString(R.string.Datawillbesaved),false);
@@ -343,26 +431,26 @@ public class NewStoreForm extends Fragment  {
 		}
 		else if(isNextPressed==3)
 		{
-			isNextMovedSlide=false;	
-			
+			isNextMovedSlide=false;
+
 				saveDynamicQuesAns(true);
 				//saveDataToDataBase();
 				helperDb.fnsaveOutletQuestAnsMstrSectionWise(hmapAnsValues,sectionIsShown,AddNewStore_DynamicSectionWise.selStoreID);
 		}
 		else if(isNextPressed==4)
 		{
-			isNextMovedSlide=false;	
+			isNextMovedSlide=false;
 			sectionIsShown=sectionToShowOrHide;
-			
-			
+
+
 			//	alertSaveAndSaveExit(getResources().getString(R.string.txtExit),getResources().getString(R.string.SveDataBeforeExit),true);
 
 			alertOnbackButtonClick(getResources().getString(R.string.txtExit),getResources().getString(R.string.strDataLostIfNotSubmitted),true);
 		}
 		else if(isNextPressed==5)
 		{
-			isNextMovedSlide=false;	
-			
+			isNextMovedSlide=false;
+
 				saveDynamicQuesAns(true);
 				//saveDataToDataBase();
 				//helperDb.fnsaveOutletQuestAnsMstrSectionWise(hmapAnsValues,sectionIsShown,AddNewStore_DynamicSectionWise.selStoreID,AddNewStore_DynamicSectionWise.hmapOptionId_OptionValue);
@@ -382,79 +470,78 @@ public class NewStoreForm extends Fragment  {
 			  section=Integer.valueOf(entry.getKey());
 			  createSection(entry);
 		  }
-		
+
 	}
+
 	public void removeErrorMsgwhenclickOnedittext() {
 		/*percentageOfAdvanceBeforeDelivery.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View arg0) {
 				percentageTextviewNew.setError(null);
 				percentageTextviewNew.clearFocus();
-				
+
 			}
 		});*/
 		/*percentageOfOnDelivery.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View arg0) {
 				percentageTextviewNew.setError(null);
 				percentageTextviewNew.clearFocus();
-				
+
 			}
 		});*/
 		creditDaysOfOnDelivery.setOnClickListener(new OnClickListener() {
-		
+
 		@Override
 		public void onClick(View arg0) {
 			creditdaysTextboxNew.setError(null);
 			creditdaysTextboxNew.clearFocus();
-			
+
 		}
 	});
 		/*PercentageOfCredit.setOnClickListener(new OnClickListener() {
-		
+
 		@Override
 		public void onClick(View arg0) {
 			percentageTextviewNew.setError(null);
 			percentageTextviewNew.clearFocus();
-			
+
 		}
 	});*/
 		creditDaysOfCredit.setOnClickListener(new OnClickListener() {
-		
+
 		@Override
 		public void onClick(View arg0) {
 			creditdaysTextboxNew.setError(null);
 			creditdaysTextboxNew.clearFocus();
-			
+
 		}
 	});
 		creditLimitOfCredit.setOnClickListener(new OnClickListener() {
-		
+
 		@Override
 		public void onClick(View arg0) {
 			CreditlimitTextboxNew.setError(null);
 			CreditlimitTextboxNew.clearFocus();
-			
+
 		}
 	});
 
 	}
 
-	
-
 	private void createSection(Entry<String,ArrayList<String>> entry) {
 
-		 
+
 		 ll_Section=new LinearLayout(getActivity());
 		  ll_Section.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
-		 
+
 		  ll_Section.setOrientation(LinearLayout.VERTICAL);
-		
+
 		  ll_Section.setTag(entry.getKey()+"_Section");
-		  
-		
+
+
 		  ArrayList<String> listGroupIdMpdWdSection=new ArrayList<String>();
 		 listGroupIdMpdWdSection=entry.getValue();
 		  // getActivity() loop is for section's groupHeading or groupDescription
@@ -505,9 +592,9 @@ if(view!=null)
 		}
 		  //if(section==AddNewStore_DynamicSectionWise.hmapSctnId_GrpId.size())
 		    /*{
-		     View viewPaymentMode=getActivity().getLayoutInflater().inflate(R.layout.payment_mode_layout, null); 
+		     View viewPaymentMode=getActivity().getLayoutInflater().inflate(R.layout.payment_mode_layout, null);
 		     ll_Section.addView(viewPaymentMode);
-		     
+
 		   //  parentOfCheckBox= (LinearLayout) viewPaymentMode.findViewById(R.id.ss);
 			 parentOfCreditPayMentMode= (LinearLayout) viewPaymentMode.findViewById(R.id.parentOfCreditPayMentMode);
 			 parentOfOnDeliveryPayMentMode= (LinearLayout) viewPaymentMode.findViewById(R.id.parentOfOnDeliveryPayMentMode);
@@ -516,12 +603,12 @@ if(view!=null)
 			 creditdaysTextboxNew=(TextView) viewPaymentMode.findViewById(R.id.creditdaysTextboxNew);
 			 CreditlimitTextboxNew=(TextView) viewPaymentMode.findViewById(R.id.CreditlimitTextboxNew);
 			 //PaymentModeTextView=(TextView) viewPaymentMode.findViewById(R.id.PaymentModeTextView);
-			 
+
 			 percentageTextviewNew=(TextView) viewPaymentMode.findViewById(R.id.percentageTextviewNew);
 			// PaymentStageTextView=(TextView) viewPaymentMode.findViewById(R.id.PaymentStageTextView);
 			 paymentstagetextviewNew=(TextView) viewPaymentMode.findViewById(R.id.paymentstagetextviewNew);
-			 
-			 
+
+
 			 AdvanceBeforeDeliveryCheckBoxNew =(CheckBox) viewPaymentMode.findViewById(R.id.AdvanceBeforeDeliveryCheckBoxNew );
 			 OnDeliveryCheckBoxNew=(CheckBox) viewPaymentMode.findViewById(R.id.OnDeliveryCheckBoxNew);
 			 CreditCheckBoxNew=(CheckBox) viewPaymentMode.findViewById(R.id.CreditCheckBoxNew);
@@ -539,75 +626,76 @@ if(view!=null)
 			 disableAndUncheckPaymntMdOfOnDelivery();
 			disableAndUncheckPaymntMdOfCredit();
 			removeErrorMsgwhenclickOnedittext();
-			
+
 			 MainlayoutParentOfWholePage.setOnClickListener(new OnClickListener() {
-					
+
 					@Override
 					public void onClick(View arg0) {
 						// TODO Auto-generated method stub
 						*//*PaymentModeTextView.setError(null);
 						PaymentModeTextView.clearFocus();*//*
-						
+
 						paymentstagetextviewNew.setError(null);
 						paymentstagetextviewNew.clearFocus();
-						
-						
+
+
 						//percentageTextviewNew.setError(null);
 						//percentageTextviewNew.clearFocus();
-						
+
 						paymentModeTextviewNew.setError(null);
 						paymentModeTextviewNew.clearFocus();
-						
-						
+
+
 						creditdaysTextboxNew.setError(null);
 						creditdaysTextboxNew.clearFocus();
 						CreditlimitTextboxNew.setError(null);
 						CreditlimitTextboxNew.clearFocus();
-						
-						
-						
+
+
+
 							//PaymentModeTextView.setError(null);
 						               // PaymentModeTextView.clearFocus();
 					}
 				});
-			 
+
 			 if(helperDb.checkCountIntblNewStoreSalesQuotePaymentDetails(AddNewStore_DynamicSectionWise.selStoreID)==1){
-				 String allValuesOfPaymentStageID="0";	
+				 String allValuesOfPaymentStageID="0";
 				 fillValuesInPaymentSection(allValuesOfPaymentStageID);
 			 }
-			
-			 
+
+
 		    }*/
 	System.out.println("Section Added = "+section);
 		  ll_data.addView(ll_Section);
 			if(section>1)
 			{
-				ll_Section.setVisibility(View.GONE);	
+				ll_Section.setVisibility(View.GONE);
 			}
 	}
+
 	public void fillValuesInPaymentSection(String allValuesOfPaymentStageID) {
 	//String all	helperDb.fngettblNewStoreSalesQuotePaymentDetails(AddNewStore_DynamicSectionWise.selStoreID)
 		allValuesOfPaymentStageID=helperDb.fngettblNewStoreSalesQuotePaymentDetails(AddNewStore_DynamicSectionWise.selStoreID);
-		
+
 		String pymntStagIDofAdvn="0";
 		if(allValuesOfPaymentStageID.split(Pattern.quote("~"))[0].equals("1")){
 			percentageOfAdvanceBeforeDelivery.setText("100");
 			enablePaymntMdOfAdvanceBeforeDelivery();
-			
+
 		pymntStagIDofAdvn=	allValuesOfPaymentStageID.split(Pattern.quote("~"))[0].toString().trim();
-		
+
 	String percentageOfAdvn=		allValuesOfPaymentStageID.split(Pattern.quote("~"))[1].toString().trim();
 		String paymentModeIdOfADVNC=	allValuesOfPaymentStageID.split(Pattern.quote("~"))[4].toString().trim();
-		
-		
+
+
 		enablePaymntMdOfAdvanceBeforeDelivery();
 		AdvanceBeforeDeliveryCheckBoxNew .setChecked(true);
 		 if(!percentageOfAdvn.equals("0")){
 			 percentageOfAdvanceBeforeDelivery.setText(percentageOfAdvn);
-			 
+
 			  }
 		 percentageOfAdvanceBeforeDelivery.setEnabled(true);
-		
+
 		if(paymentModeIdOfADVNC.contains("|")){
 
 			String[] option=	paymentModeIdOfADVNC.split(Pattern.quote("|"));
@@ -616,49 +704,49 @@ if(view!=null)
 				if(hmapAllValuesOfPaymentMode.containsKey(opt)){
 				String valueOfChebox=	hmapAllValuesOfPaymentMode.get(opt);
 				int count = parentOfAdvanceBeforeDeliveryPayMentMode.getChildCount();
-				
-				 for (int ui=0;ui<count;ui++) 
+
+				 for (int ui=0;ui<count;ui++)
 				 {
-					 
+
 					 View ch = parentOfAdvanceBeforeDeliveryPayMentMode.getChildAt(ui);
 			            if (ch instanceof CheckBox)
 			            {
-			            	
+
 			            		String chkedChkBoxTag=ch.getTag().toString();
 			        			int chkedchkQuestId=Integer.parseInt(chkedChkBoxTag.split(Pattern.quote("^"))[0]);
 			       			String chkedchkOptionId=chkedChkBoxTag.split(Pattern.quote("^"))[1];
 			       			if(valueOfChebox.equals(chkedchkOptionId)){
 			       				((CheckBox) ch).setChecked(true);
-			       				
+
 			       			}
 
 			            }
 				 }
 				}
-				
+
 			}
-			
+
 		}
 		else{
 			if(hmapAllValuesOfPaymentMode.containsKey(paymentModeIdOfADVNC)){
 				String valueOfChebox=	hmapAllValuesOfPaymentMode.get(paymentModeIdOfADVNC);
 				int count = parentOfAdvanceBeforeDeliveryPayMentMode.getChildCount();
-				
-				 for (int ui=0;ui<count;ui++) 
+
+				 for (int ui=0;ui<count;ui++)
 				 {
-					 
+
 					 View ch = parentOfAdvanceBeforeDeliveryPayMentMode.getChildAt(ui);
 			            if (ch instanceof CheckBox)
 			            {
-			            	
+
 			            		String chkedChkBoxTag=ch.getTag().toString();
 			        			int chkedchkQuestId=Integer.parseInt(chkedChkBoxTag.split(Pattern.quote("^"))[0]);
 			       			String chkedchkOptionId=chkedChkBoxTag.split(Pattern.quote("^"))[1];
 			       			if(valueOfChebox.equals(chkedchkOptionId)){
 			       				((CheckBox) ch).setChecked(true);
-			       				
+
 			       			}
-			            		
+
 
 
 
@@ -666,20 +754,20 @@ if(view!=null)
 			            }
 				 }
 				}
-				
-				
-			
+
+
+
 		}
-		
-			
-			
-			
+
+
+
+
 		}
 		String pymntStagIDofDelivery="0";
        if(allValuesOfPaymentStageID.split(Pattern.quote("~"))[0].equals("2")){
-    	   
+
     	   PercentageOfCredit.setText("100");
-    	   
+
      pymntStagIDofDelivery=	   allValuesOfPaymentStageID.split(Pattern.quote("~"))[0].toString().trim();
     		String percentageofDelivery=allValuesOfPaymentStageID.split(Pattern.quote("~"))[1].toString().trim();
     String creditDysofDelivery=	   allValuesOfPaymentStageID.split(Pattern.quote("~"))[2].toString().trim();
@@ -687,7 +775,7 @@ if(view!=null)
     enablePaymntMdOfOnDelivery();
     if(!percentageofDelivery.equals("0")){
     	percentageOfOnDelivery.setText(percentageofDelivery);
-    	
+
 	  }
     percentageOfOnDelivery.setEnabled(true);
 	  if(!creditDysofDelivery.equals("0")){
@@ -704,74 +792,74 @@ if(view!=null)
 			if(hmapAllValuesOfPaymentMode.containsKey(opt)){
 			String valueOfChebox=	hmapAllValuesOfPaymentMode.get(opt);
 			int count = parentOfOnDeliveryPayMentMode.getChildCount();
-			
-			 for (int ui=0;ui<count;ui++) 
+
+			 for (int ui=0;ui<count;ui++)
 			 {
-				 
+
 				 View ch = parentOfOnDeliveryPayMentMode.getChildAt(ui);
 		            if (ch instanceof CheckBox)
 		            {
-		            	
+
 		            		String chkedChkBoxTag=ch.getTag().toString();
 		        			int chkedchkQuestId=Integer.parseInt(chkedChkBoxTag.split(Pattern.quote("^"))[0]);
 		       			String chkedchkOptionId=chkedChkBoxTag.split(Pattern.quote("^"))[1];
 		       			if(valueOfChebox.equals(chkedchkOptionId)){
 		       				((CheckBox) ch).setChecked(true);
-		       				
+
 		       			}
-		            		
-		            		
-		            		
-						
-		            	
+
+
+
+
+
 		            }
 			 }
 			}
-			
+
 		}
-		
-	
-    	
+
+
+
     }
     else{
 
 		if(hmapAllValuesOfPaymentMode.containsKey(pymntmodeIDofDElivery)){
 			String valueOfChebox=	hmapAllValuesOfPaymentMode.get(pymntmodeIDofDElivery);
 			int count = parentOfOnDeliveryPayMentMode.getChildCount();
-			
-			 for (int ui=0;ui<count;ui++) 
+
+			 for (int ui=0;ui<count;ui++)
 			 {
-				 
+
 				 View ch = parentOfOnDeliveryPayMentMode.getChildAt(ui);
 		            if (ch instanceof CheckBox)
 		            {
-		            	
+
 		            		String chkedChkBoxTag=ch.getTag().toString();
 		        			int chkedchkQuestId=Integer.parseInt(chkedChkBoxTag.split(Pattern.quote("^"))[0]);
 		       			String chkedchkOptionId=chkedChkBoxTag.split(Pattern.quote("^"))[1];
 		       			if(valueOfChebox.equals(chkedchkOptionId)){
 		       				((CheckBox) ch).setChecked(true);
-		       				
+
 		       			}
-		            		
-		            		
-		            		
-						
-		            	
+
+
+
+
+
 		            }
 			 }
 			}
-			
-			
-		
-	
-    	
+
+
+
+
+
     }
-			
+
 		}
        String pymntStagIDofcredit="0";
       if(allValuesOfPaymentStageID.split(Pattern.quote("~"))[0].equals("3")){
-    	  
+
     	  percentageOfOnDelivery.setText("100");
     	  pymntStagIDofcredit=	  allValuesOfPaymentStageID.split(Pattern.quote("~"))[0].toString().trim();
     	  String percentageofcredit=	  allValuesOfPaymentStageID.split(Pattern.quote("~"))[1].toString().trim();
@@ -780,21 +868,21 @@ if(view!=null)
     	  String pymntmodeIDofcredit = allValuesOfPaymentStageID.split(Pattern.quote("~"))[4].toString().trim();
     	  if(!percentageofcredit.equals("0")){
     		  PercentageOfCredit.setText(percentageofcredit);
-    		  
+
     	  }
     	  PercentageOfCredit.setEnabled(true);
     	  if(!creditDysofcredit.equals("0")){
     		  creditDaysOfCredit.setText(creditDysofcredit);
     		  creditDaysOfCredit.setEnabled(true);
     	  }
-    	  
+
     	  if(!creditLimitofcredit.equals("0")){
     		  creditLimitOfCredit.setText(creditLimitofcredit);
     		  creditLimitOfCredit.setEnabled(true);
-    		  
+
     	  }
     	  CreditCheckBoxNew.setChecked(true);
-    	 
+
     	  enablePaymntMdOfCredit();
     	  if(pymntmodeIDofcredit.contains("|")){
 
@@ -805,196 +893,202 @@ if(view!=null)
     				if(hmapAllValuesOfPaymentMode.containsKey(opt)){
     				String valueOfChebox=	hmapAllValuesOfPaymentMode.get(opt);
     				int count = parentOfCreditPayMentMode.getChildCount();
-    				
-    				 for (int ui=0;ui<count;ui++) 
+
+    				 for (int ui=0;ui<count;ui++)
     				 {
-    					 
+
     					 View ch = parentOfCreditPayMentMode.getChildAt(ui);
     			            if (ch instanceof CheckBox)
     			            {
-    			            	
+
     			            		String chkedChkBoxTag=ch.getTag().toString();
     			        			int chkedchkQuestId=Integer.parseInt(chkedChkBoxTag.split(Pattern.quote("^"))[0]);
     			       			String chkedchkOptionId=chkedChkBoxTag.split(Pattern.quote("^"))[1];
     			       			if(valueOfChebox.equals(chkedchkOptionId)){
     			       				((CheckBox) ch).setChecked(true);
-    			       				
+
     			       			}
-    			            		
-    			            		
-    			            		
-    							
-    			            	
+
+
+
+
+
     			            }
     				 }
     				}
-    				
+
     			}
-    			
-    		
-    	    	
+
+
+
     	    }
     	    else{
 
     			if(hmapAllValuesOfPaymentMode.containsKey(pymntmodeIDofcredit)){
     				String valueOfChebox=	hmapAllValuesOfPaymentMode.get(pymntmodeIDofcredit);
     				int count = parentOfCreditPayMentMode.getChildCount();
-    				
-    				 for (int ui=0;ui<count;ui++) 
+
+    				 for (int ui=0;ui<count;ui++)
     				 {
-    					 
+
     					 View ch = parentOfCreditPayMentMode.getChildAt(ui);
     			            if (ch instanceof CheckBox)
     			            {
-    			            	
+
     			            		String chkedChkBoxTag=ch.getTag().toString();
     			        			int chkedchkQuestId=Integer.parseInt(chkedChkBoxTag.split(Pattern.quote("^"))[0]);
     			       			String chkedchkOptionId=chkedChkBoxTag.split(Pattern.quote("^"))[1];
     			       			if(valueOfChebox.equals(chkedchkOptionId)){
     			       				((CheckBox) ch).setChecked(true);
-    			       				
+
     			       			}
-    			            		
-    			            		
-    			            		
-    							
-    			            	
+
+
+
+
+
     			            }
     				 }
     				}
-    				
-    				
-    			
-    		
-    	    	
+
+
+
+
+
     	    }
-	
+
         }
-				
-				
+
+
        globalValueOfPaymentStageCheck=pymntStagIDofAdvn+"_"+pymntStagIDofDelivery+"_"+pymntStagIDofcredit;
-       
-		 
+
+
 
 	}
-	
+
 	public void disableAndUncheckPaymntMdOfOnDelivery() {
 		int count = parentOfOnDeliveryPayMentMode.getChildCount();
-		
-		 for (int ui=0;ui<count;ui++) 
+
+		 for (int ui=0;ui<count;ui++)
 		 {
 			 View ch = parentOfOnDeliveryPayMentMode.getChildAt(ui);
 	           if (ch instanceof CheckBox)
 	           {
 	           	((CheckBox) ch).setChecked(false);
 	           	ch.setEnabled(false);
-	           	
-	           	
+
+
 	           }
 		 }
-		
+
 
 	}
+
 	public void disableAndUncheckPaymntMdOfCredit() {
 		int count = parentOfCreditPayMentMode.getChildCount();
-		
-		 for (int ui=0;ui<count;ui++) 
+
+		 for (int ui=0;ui<count;ui++)
 		 {
 			 View ch = parentOfCreditPayMentMode.getChildAt(ui);
 	           if (ch instanceof CheckBox)
 	           {
 	           	((CheckBox) ch).setChecked(false);
 	           	ch.setEnabled(false);
-	           	
-	           	
+
+
 	           }
 		 }
-		
+
 
 	}
+
 	public void disableAndUncheckPaymntMdOfAdvanceBeforeDelivery() {
 		int count = parentOfAdvanceBeforeDeliveryPayMentMode.getChildCount();
-		
-		 for (int ui=0;ui<count;ui++) 
+
+		 for (int ui=0;ui<count;ui++)
 		 {
 			 View ch = parentOfAdvanceBeforeDeliveryPayMentMode.getChildAt(ui);
 	           if (ch instanceof CheckBox)
 	           {
 	           	((CheckBox) ch).setChecked(false);
 	           	ch.setEnabled(false);
-	           	
-	           	
+
+
 	           }
 		 }
-		
+
 
 	}
+
 	public void enablePaymntMdOfAdvanceBeforeDelivery() {
 		int count = parentOfAdvanceBeforeDeliveryPayMentMode.getChildCount();
-		
-		 for (int ui=0;ui<count;ui++) 
+
+		 for (int ui=0;ui<count;ui++)
 		 {
 			 View ch = parentOfAdvanceBeforeDeliveryPayMentMode.getChildAt(ui);
 	           if (ch instanceof CheckBox)
 	           {
 	           	//((CheckBox) ch).setChecked(false);
 	           	ch.setEnabled(true);
-	           	
-	           	
+
+
 	           }
 		 }
-		
+
 
 	}
+	
 	public void enablePaymntMdOfOnDelivery() {
 		int count = parentOfOnDeliveryPayMentMode.getChildCount();
-		
-		 for (int ui=0;ui<count;ui++) 
+
+		 for (int ui=0;ui<count;ui++)
 		 {
 			 View ch = parentOfOnDeliveryPayMentMode.getChildAt(ui);
 	           if (ch instanceof CheckBox)
 	           {
 	           	//((CheckBox) ch).setChecked(false);
 	           	ch.setEnabled(true);
-	           	
-	           	
+
+
 	           }
 		 }
-		
+
 
 	}
+
 	public void enablePaymntMdOfCredit() {
 		int count = parentOfCreditPayMentMode.getChildCount();
-		
-		 for (int ui=0;ui<count;ui++) 
+
+		 for (int ui=0;ui<count;ui++)
 		 {
 			 View ch = parentOfCreditPayMentMode.getChildAt(ui);
 	           if (ch instanceof CheckBox)
 	           {
 	           	//((CheckBox) ch).setChecked(false);
 	           	ch.setEnabled(true);
-	           	
-	           	
+
+
 	           }
 		 }
-		
+
 
 	}
+
 	public void whenPaymentStageClickNew() {
 		AdvanceBeforeDeliveryCheckBoxNew .setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View arg0) {
 				 paymentstagetextviewNew.setError(null);
 					paymentstagetextviewNew.clearFocus();
 					AdvanceBeforeDeliveryCheckBoxNew.setChecked(true);
 				if(AdvanceBeforeDeliveryCheckBoxNew.isChecked()){
-					
+
 					//setting percentage 100 because we hide the percent edittext but it also now in validation
 					percentageOfAdvanceBeforeDelivery.setText("100");
-					
+
 					//uncheck ,disable and delete data of other checkboxes when click on this checkbox
-					
+
 
 					OnDeliveryCheckBoxNew.setChecked(false);
 					percentageOfOnDelivery.setText("");
@@ -1009,7 +1103,7 @@ if(view!=null)
 					paymntStgDelvry2="0";
 					String paymntStgCrdt2=globalValueOfPaymentStageCheck.split(Pattern.quote("_"))[2];
 					globalValueOfPaymentStageCheck=paymntStgAdvnc2+"_"+paymntStgDelvry2+"_"+paymntStgCrdt2;
-					
+
 
 					CreditCheckBoxNew.setChecked(false);
 					PercentageOfCredit.setText("");
@@ -1027,33 +1121,33 @@ if(view!=null)
 					String paymntStgCrdt3=globalValueOfPaymentStageCheck.split(Pattern.quote("_"))[2];
 					paymntStgCrdt3="0";
 					globalValueOfPaymentStageCheck=paymntStgAdvnc3+"_"+paymntStgDelvry3+"_"+paymntStgCrdt3;
-				
-				
-					
-					
-				
-					
-					
+
+
+
+
+
+
+
 					//And now update the enable the checkbox ,which is clicked
 					AdvanceBeforeDeliveryCheckBoxNew.setChecked(true);
 					percentageOfAdvanceBeforeDelivery.setEnabled(true);
 					enablePaymntMdOfAdvanceBeforeDelivery();
-					
+
 					String paymntStgAdvnc=globalValueOfPaymentStageCheck.split(Pattern.quote("_"))[0];
 					paymntStgAdvnc="1";
 					String paymntStgDelvry=globalValueOfPaymentStageCheck.split(Pattern.quote("_"))[1];
 					String paymntStgCrdt=globalValueOfPaymentStageCheck.split(Pattern.quote("_"))[2];
 					globalValueOfPaymentStageCheck=paymntStgAdvnc+"_"+paymntStgDelvry+"_"+paymntStgCrdt;
-					
-					
-					
+
+
+
 				}
-				
-				
+
+
 			}
 		});
 		OnDeliveryCheckBoxNew .setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View arg0) {
 				 paymentstagetextviewNew.setError(null);
@@ -1062,22 +1156,22 @@ if(view!=null)
 				if(OnDeliveryCheckBoxNew.isChecked()){
 					//setting percentage 100 because we hide the percent edittext but it also now in validation
 					percentageOfOnDelivery.setText("100");
-					
-					
+
+
 		//@@@@@@@@@@@  uncheck ,disable and delete data of other checkboxes when click on this checkbox
-					
+
 					AdvanceBeforeDeliveryCheckBoxNew.setChecked(false);
 					percentageOfAdvanceBeforeDelivery.setText("");
 					percentageOfAdvanceBeforeDelivery.setEnabled(false);
 					percentageOfAdvanceBeforeDelivery.clearFocus();
 					disableAndUncheckPaymntMdOfAdvanceBeforeDelivery();
-					
+
 					String paymntStgAdvnc2=globalValueOfPaymentStageCheck.split(Pattern.quote("_"))[0];
 					paymntStgAdvnc2="0";
 					String paymntStgDelvry2=globalValueOfPaymentStageCheck.split(Pattern.quote("_"))[1];
 					String paymntStgCrdt2=globalValueOfPaymentStageCheck.split(Pattern.quote("_"))[2];
 					globalValueOfPaymentStageCheck=paymntStgAdvnc2+"_"+paymntStgDelvry2+"_"+paymntStgCrdt2;
-					
+
 
 					CreditCheckBoxNew.setChecked(false);
 					PercentageOfCredit.setText("");
@@ -1095,15 +1189,15 @@ if(view!=null)
 					String paymntStgCrdt3=globalValueOfPaymentStageCheck.split(Pattern.quote("_"))[2];
 					paymntStgCrdt3="0";
 					globalValueOfPaymentStageCheck=paymntStgAdvnc3+"_"+paymntStgDelvry3+"_"+paymntStgCrdt3;
-				
-				
-					
-					
-					
-					
+
+
+
+
+
+
 					//And now update the enable the checkbox ,which is clicked
-					
-					
+
+
 					OnDeliveryCheckBoxNew.setChecked(true);
 					percentageOfOnDelivery.setEnabled(true);
 					//creditDaysOfOnDelivery.setEnabled(true);
@@ -1113,25 +1207,25 @@ if(view!=null)
 					paymntStgDelvry="2";
 					String paymntStgCrdt=globalValueOfPaymentStageCheck.split(Pattern.quote("_"))[2];
 					globalValueOfPaymentStageCheck=paymntStgAdvnc+"_"+paymntStgDelvry+"_"+paymntStgCrdt;
-					
+
 				}
-				
-				
+
+
 			}
 		});
 		CreditCheckBoxNew .setOnClickListener(new OnClickListener() {
-		
+
 		@Override
 		public void onClick(View arg0) {
 			 paymentstagetextviewNew.setError(null);
 				paymentstagetextviewNew.clearFocus();
 				CreditCheckBoxNew.setChecked(true);
 			if(CreditCheckBoxNew.isChecked()){
-				
+
 				//setting percentage 100 because we hide the percent edittext but it also now in validation
 			PercentageOfCredit.setText("100");
-				
-				
+
+
 				//uncheck ,disable and delete data of other checkboxes when click on this checkbox
 				OnDeliveryCheckBoxNew.setChecked(false);
 				percentageOfOnDelivery.setText("");
@@ -1146,29 +1240,29 @@ if(view!=null)
 				paymntStgDelvry2="0";
 				String paymntStgCrdt2=globalValueOfPaymentStageCheck.split(Pattern.quote("_"))[2];
 				globalValueOfPaymentStageCheck=paymntStgAdvnc2+"_"+paymntStgDelvry2+"_"+paymntStgCrdt2;
-				
-				
 
-				
-				
-				 
-				
+
+
+
+
+
+
 				AdvanceBeforeDeliveryCheckBoxNew.setChecked(false);
 				percentageOfAdvanceBeforeDelivery.setText("");
 				percentageOfAdvanceBeforeDelivery.setEnabled(false);
 				percentageOfAdvanceBeforeDelivery.clearFocus();
 				disableAndUncheckPaymntMdOfAdvanceBeforeDelivery();
-				
+
 				String paymntStgAdvnc3=globalValueOfPaymentStageCheck.split(Pattern.quote("_"))[0];
 				paymntStgAdvnc3="0";
 				String paymntStgDelvry3=globalValueOfPaymentStageCheck.split(Pattern.quote("_"))[1];
 				String paymntStgCrdt3=globalValueOfPaymentStageCheck.split(Pattern.quote("_"))[2];
 				globalValueOfPaymentStageCheck=paymntStgAdvnc3+"_"+paymntStgDelvry3+"_"+paymntStgCrdt3;
-				
-				
-			
+
+
+
 				//And now update the enable the checkbox ,which is clicked
-				
+
 				CreditCheckBoxNew.setChecked(true);
 				PercentageOfCredit.setEnabled(true);
 				creditDaysOfCredit.setEnabled(true);
@@ -1179,17 +1273,18 @@ if(view!=null)
 				String paymntStgCrdt=globalValueOfPaymentStageCheck.split(Pattern.quote("_"))[2];
 				paymntStgCrdt="3";
 				globalValueOfPaymentStageCheck=paymntStgAdvnc+"_"+paymntStgDelvry+"_"+paymntStgCrdt;
-				
-				
+
+
 			}
-			
+
 		}
 	});
 
 	}
+
 	public void checkBoxCreationwhenPageLoading(String paymentStageID) {
 		hmapZoneDisplayMstr=helperDb.fnGettblSalesQuotePaymentModeMstr(paymentStageID);
-		
+
 		for(Entry<String, String> entry:hmapZoneDisplayMstr.entrySet())
 		{
         	 int checkBoxDescId=Integer.parseInt(entry.getKey().toString());
@@ -1206,9 +1301,9 @@ if(view!=null)
 			 chBoxView.setId(checkBoxDescId);
 			 chBoxView.setTag(checkBoxDescId+"^"+checkBoxDesc);
 	    	 chBoxView.setOnClickListener(getOnClickDoSomething(chBoxView));
-	    	 
+
 			 if(paymentStageID.equals("1")){
-				 
+
 				 parentOfAdvanceBeforeDeliveryPayMentMode.addView(chBoxView,layoutParamss);
 			 }
 			 if(paymentStageID.equals("2")){
@@ -1217,18 +1312,18 @@ if(view!=null)
 			 if(paymentStageID.equals("3")){
 				 parentOfCreditPayMentMode.addView(chBoxView,layoutParamss);
 			 }
-			 
+
 	    	 //  parentOfCheckBox.addView(chBoxView,layoutParamss);
-	    	  
+
     }}
-	
+
 	OnClickListener getOnClickDoSomething(final CheckBox button) {
     	return new OnClickListener() {
     		public void onClick(View v) {
     			String idOfAllCheckedBoxes="";
     			paymentModeTextviewNew.setError(null);
     			paymentModeTextviewNew.clearFocus();
-    			
+
     			/*PaymentModeTextView.setError(null);
     			PaymentModeTextView.clearFocus();*/
     			//int count = parentOfCheckBox.getChildCount();
@@ -1236,9 +1331,9 @@ if(view!=null)
     			String chkedChkBoxTag=button.getTag().toString();
     			int chkedchkQuestId=Integer.parseInt(chkedChkBoxTag.split(Pattern.quote("^"))[0]);
    			String chkedchkOptionId=chkedChkBoxTag.split(Pattern.quote("^"))[1];
-   			
+
    			if(OnDeliveryCheckBoxNew.isChecked()){
-   				
+
    				if(chkedchkOptionId.trim().equals("Post Dated Cheque")){
    					if(button.isChecked()){
    						creditDaysOfOnDelivery.setEnabled(true);
@@ -1248,25 +1343,26 @@ if(view!=null)
    						creditDaysOfOnDelivery.clearFocus();
    						creditDaysOfOnDelivery.setText("");
    					}
-   					
+
    				}
-   				
+
    			}
-   			
-   		
-   			
-    			
+
+
+
+
     		} };
 
-   
+
 }
+
 	private void createGroup(String groupId) {
-		
+
 
 		   String groupDesc=AddNewStore_DynamicSectionWise.hmapGroupId_Desc.get(groupId);
-		 
+
 		   final LinearLayout layGroup = new LinearLayout(getActivity());
-			
+
 		   //layGroup.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
 			/*lay.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
 					LayoutParams.WRAP_CONTENT),);*/
@@ -1296,19 +1392,19 @@ if(view!=null)
 		//	txtVw_ques.setTag(groupId+"_group");
 			txtVw_ques.setPadding(16, 3, 16, 3);
 			txtVw_ques.setText(groupDesc);
-			
+
 			//	headerView.setTag(tag);
 				layGroup.addView(txtVw_ques);
 			if(hmapGroupIdCopyAsAbove.containsKey(groupId))
 			{
-			
+
 				CheckBox chBox=new CheckBox(getActivity());
 				chBox.setLayoutParams(layoutParams2);
 				chBox.setTextSize(14);
 				chBox.setText("(Select as above)");
 				layGroup.addView(chBox);
 				chBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-					
+
 					@Override
 					public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 						// TODO Auto-generated method stub
@@ -1347,29 +1443,29 @@ if(view!=null)
 			 }
 			 if(isAllQuestHide)
 			 {
-				 layGroup.setVisibility(View.GONE);	
+				 layGroup.setVisibility(View.GONE);
 			 }
 
 				createQuesDynamic(listQuesGroup);
-			
-	  
-		
+
+
+
 	}
 
 	private void createQuesDynamic(ArrayList<String> listQuestToBeDisplay) {
-		
-		
+
+
 		ArrayList<String> quesWithBndlFlag3=new ArrayList<String>();
-		
+
 		int count=0;
 		for(String questionKeyToShow:listQuestToBeDisplay)
 		{
-			
+
 			String quesWithAllValues=AddNewStore_DynamicSectionWise.hmapQuesIdValues.get(questionKeyToShow);
 			String quesId=questionKeyToShow.split(Pattern.quote("^"))[0];
-			
+
 			String[] quesVal=quesWithAllValues.split(Pattern.quote("^")) ;
-			
+
 			questGroupId=questionKeyToShow.split(Pattern.quote("^"))[2];
 			QuestDesc=quesVal[2];
 			System.out.println("Question Added = "+QuestDesc);
@@ -1377,7 +1473,7 @@ if(view!=null)
 			AsnControlInputTypeID=quesVal[5];
 			AnsControlInputTypeMaxLength=quesVal[6];
 			AnsMustRequiredFlg=quesVal[7];//1=Not Must Required,2=Must Required
-			
+
 			QuestBundleFlg=quesVal[8];
 			//QuestBundleGroupId=quesVal[13];
 		//	flgPrvsVisitQstIdWd1=quesVal[14];
@@ -1465,7 +1561,7 @@ if(view!=null)
 
 			hmapOptionValues.put(questionKeyToShow, helperDb.fnGetOptionMstr(Integer.valueOf(quesId)));
 			ArrayList<String> listOptionVal=hmapOptionValues.get(questionKeyToShow);
-			
+
 			if(QuestBundleFlg.equals("1"))
 			{
 				View viewVerticalLayout;
@@ -1475,10 +1571,10 @@ if(view!=null)
 				}
 				else
 				{
-					
+
 					 viewVerticalLayout=getLinearLayoutVertical(tv_Ques, AnsControlType,AsnControlInputTypeID,Integer.valueOf(AnsControlInputTypeMaxLength),answerHint, quesId,questGroupId,listOptionVal);
 				}
-				
+
 				ll_Section.addView(viewVerticalLayout);
 				if(dependentValuesQuesId!=null)
 				{
@@ -1488,11 +1584,11 @@ if(view!=null)
 					}
 				}
 
-				
-			
-				
+
+
+
 			}
-			
+
 			if(QuestBundleFlg.equals("2"))
 			{
 			View viewHorizontalLayout=getLinearLayoutHorizontal(tv_Ques, AnsControlType,AsnControlInputTypeID,Integer.valueOf(AnsControlInputTypeMaxLength),answerHint, quesId,questGroupId,listOptionVal);
@@ -1505,7 +1601,7 @@ if(view!=null)
 					}
 				}
 
-			
+
 			}
 
 			if(QuestBundleFlg.equals("3"))
@@ -1527,9 +1623,9 @@ if(view!=null)
 						}
 						quesWithBndlFlag3.add(questWithSameGroup[0].toString().trim());
 						quesWithBndlFlag3.add(questWithSameGroup[1].toString().trim());
-						
+
 						int index=0;
-					
+
 							String[] quesVal2=AddNewStore_DynamicSectionWise.hmapQuesIdValues.get(otherQues).split(Pattern.quote("^")) ;
 							String quesId2=quesVal2[0].toString();
 							String QuestDesc2=quesVal2[2];
@@ -1538,7 +1634,7 @@ if(view!=null)
 							String AsnControlInputTypeID2=quesVal2[5];
 							String AnsControlInputTypeMaxLength2=quesVal2[6];
 							String AnsMustRequiredFlg2=quesVal2[7];//1=Not Must Required,2=Must Required
-							
+
 							String QuestBundleFlg2=quesVal2[8];
 							String QuestBundleGroupId2=quesVal2[13];
 							String Sequence2=String.valueOf(count);
@@ -1555,42 +1651,43 @@ if(view!=null)
 							if(AnsMustRequiredFlg2.equals("2"))
 							{
 								tv_Ques2=getTextView(QuestDesc2, Sequence2, true, quesId2+"^"+AnsControlType2+"^"+questGroupId2+"?");
-								
-								
-								
+
+
+
 							}
-							else 
+							else
 							{
 								tv_Ques2=getTextView(QuestDesc2, Sequence2, false, quesId2+"^"+AnsControlType2+"^"+questGroupId2+"?");
-								
+
 							}
-							
-							
-							
+
+
+
 							hmapOptionValues.put(questionKeyToShow, helperDb.fnGetOptionMstr(Integer.valueOf(quesId)));
 							ArrayList<String> listOptionVal2=hmapOptionValues.get(quesId2+"^"+AnsControlType2);
 							ll_Section.addView(getLinearLayoutHorizontal2Ques(getLinearLayoutVertical(tv_Ques, AnsControlType,AsnControlInputTypeID,Integer.valueOf(AnsControlInputTypeMaxLength),answerHint, quesId,questGroupId,listOptionVal), getLinearLayoutVertical(tv_Ques2, AnsControlType2,AsnControlInputTypeID2,Integer.valueOf(AnsControlInputTypeMaxLength2),answerHint2, quesId2,questGroupId2,listOptionVal2)));
-							
-							
+
+
 							index++;
-						
-						
-					
+
+
+
 					}
 
-				
+
 				}
 				else
 				{
 
 				}
 			}
-			
+
 			count++;
 		}
-		
-		
+
+
 	}
+	
 	protected void setCopyOfAboveGroup(String groupTag,boolean isChecked) {
 		LinkedHashMap<String, String> hmapQuestIDAndValue=new LinkedHashMap<String, String>();
 		String groupId=groupTag.split(Pattern.quote("_"))[0];
@@ -1616,31 +1713,30 @@ if(view!=null)
 		}
 		else
 		{
-			
+
 		}
-		
+
 	}
 
-
 	private void copyValueFromParentGroup(String questKey,String groupId) {
-		
-		
+
+
 		LinkedHashMap<String, String> hmapCopyValue=new LinkedHashMap<String, String>();
 		String questId=questKey.split(Pattern.quote("^"))[0];
 		View view=ll_data.findViewWithTag(questKey);
 		if(view instanceof EditText)
 		{
 			EditText edVal=(EditText)view;
-			
-			
+
+
 //saveOutletQuestAnsMstr(String OutletID,String QuestID,String AnswerType,String AnswerValue)
-			
+
 			if(!TextUtils.isEmpty(edVal.getText().toString()))
 			{
 				hmapCopyValue.put(questId, TextUtils.htmlEncode(edVal.getText().toString()));
 				ArrayList<String> listAllQyestInParentCopyGrpId=new ArrayList<String>();
 				listAllQyestInParentCopyGrpId=AddNewStore_DynamicSectionWise.hmapQuesGropKeySection.get(groupId);
-			
+
 				for(String toCopyTxtView:listAllQyestInParentCopyGrpId)
 				{
 				String questIdOfToCpyQuestId=toCopyTxtView.split(Pattern.quote("^"))[0];
@@ -1649,28 +1745,28 @@ if(view!=null)
 					EditText edValToCopy=(EditText) ll_data.findViewWithTag(toCopyTxtView);
 					edValToCopy.setText(edVal.getText().toString());
 					break;
-					
+
 				}
 				}
-			
+
 			}
-		
+
 		}
-		
+
 		else if(view instanceof Button)
 		{
 			if(questKey.split(Pattern.quote("^"))[1].toString().equals("11"))
 			{
 
 				Button buttonCalender=(Button)view;
-				
+
 				if(!buttonCalender.getText().toString().equals("Select Date"))
 				{
 					hmapCopyValue.put(questId, TextUtils.htmlEncode(buttonCalender.getText().toString()));
-					
+
 					ArrayList<String> listAllQyestInParentCopyGrpId=new ArrayList<String>();
 					listAllQyestInParentCopyGrpId=AddNewStore_DynamicSectionWise.hmapQuesGropKeySection.get(groupId);
-				
+
 					for(String toCopyTxtView:listAllQyestInParentCopyGrpId)
 					{
 					String questIdOfToCpyQuestId=toCopyTxtView.split(Pattern.quote("^"))[0];
@@ -1679,13 +1775,13 @@ if(view!=null)
 						Button btnValToCopy=(Button) ll_data.findViewWithTag(toCopyTxtView);
 						btnValToCopy.setText(buttonCalender.getText().toString());
 						break;
-						
+
 					}
 					}
-				
-				
+
+
 				}
-				
+
 			}
 		}
 		else if(questKey.split(Pattern.quote("^"))[1].toString().equals("4") || questKey.split(Pattern.quote("^"))[1].toString().equals("5"))
@@ -1704,20 +1800,20 @@ if(view!=null)
 					if(checkBoxVal.isChecked())
 					{
 						noValSelected=false;
-						
+
 						if(checkBoxVal.getText().toString().equals("Others") || checkBoxVal.getText().toString().equals("Other"))
 						{
 							isOtherSelected=true;
 							EditText editTextCheckBox=(EditText) ll_data.findViewWithTag(checkBoxVal.getTag().toString()+"_ed");
 							if(!TextUtils.isEmpty(editTextCheckBox.getText().toString()))
 							{
-								
+
 								ediTextVal=editTextCheckBox.getText().toString();
-								
+
 							}
-							
+
 						}
-						
+
 						if(i==0)
 						{
 						if(isOtherSelected)
@@ -1728,8 +1824,8 @@ if(view!=null)
 						{
 							answer.append(hmapOptionId.get((questKey.split(Pattern.quote("^"))[2])+"^"+checkBoxVal.getText().toString()));
 						}
-							
-							
+
+
 							isSingleSelected=false;
 						}
 						else
@@ -1744,7 +1840,7 @@ if(view!=null)
 								{
 									answer.append(hmapOptionId.get((questKey.split(Pattern.quote("^"))[2])+"^"+checkBoxVal.getText().toString()));
 								}
-								
+
 								isSingleSelected=false;
 							}
 							else
@@ -1757,15 +1853,15 @@ if(view!=null)
 								{
 									answer.append("^").append(hmapOptionId.get((questKey.split(Pattern.quote("^"))[2])+"^"+checkBoxVal.getText().toString()));
 								}
-								
-								
+
+
 							}
-							
+
 						}
 					}
 				}
-				
-				
+
+
 			}
 			if(noValSelected)
 			{
@@ -1777,25 +1873,25 @@ if(view!=null)
 			}
 			else
 			{
-				
+
 				//tempOutletQuestAnsMstrVal.add(0,OutletID);
 			/*	tempOutletQuestAnsMstrVal.add(1,entry.getKey().split(Pattern.quote("^"))[0].toString());
 				tempOutletQuestAnsMstrVal.add(2,entry.getKey().split(Pattern.quote("^"))[1].toString());
 				tempOutletQuestAnsMstrVal.add(3,answer.toString());*/
 				hmapCopyValue.put(questKey, TextUtils.htmlEncode( answer.toString()));
 				String selectdCheckBox=answer.toString();
-				
-				
+
+
 				ArrayList<String> listAllQyestInParentCopyGrpId=new ArrayList<String>();
 				listAllQyestInParentCopyGrpId=AddNewStore_DynamicSectionWise.hmapQuesGropKeySection.get(groupId);
-			
+
 				for(String toCopyTxtView:listAllQyestInParentCopyGrpId)
 				{
 				String questIdOfToCpyQuestId=toCopyTxtView.split(Pattern.quote("^"))[0];
 				if(questIdOfToCpyQuestId.equals(questId))
 				{
 					LinearLayout ll_CheckBox=(LinearLayout) ll_data.findViewWithTag(toCopyTxtView);
-				
+
 					//	boolean isSingleSelected=true;
 					//	boolean noValSelected=true;
 						for(int i=0;i<ll_checkBoxVal.getChildCount();i++)
@@ -1825,8 +1921,8 @@ if(view!=null)
 													ediTextVal=multipleChecked[index].split(Pattern.quote("~"))[1];
 													editTextOther.setText(ediTextVal);
 												}
-												
-														
+
+
 											}
 										}
 									}
@@ -1846,30 +1942,30 @@ if(view!=null)
 												ediTextVal=selectdCheckBox.split(Pattern.quote("~"))[1];
 												editTextOther.setText(ediTextVal);
 											}
-													
+
 										}
-										
+
 									}
 								}
-								
-								
-							
+
+
+
 							}
-							
-							
+
+
 						}
 					break;
-					
+
 				}
 				}
-			
-			
-			
+
+
+
 			}
 			//hmapAnsValues.put(entry.getKey(), answer.toString());
-			
+
 		}
-		
+
 		else if(view instanceof RadioGroup)
 		{
 			RadioGroup radioGroupSelected=(RadioGroup) view;
@@ -1883,7 +1979,7 @@ if(view!=null)
 					tempOutletQuestAnsMstrVal.add(2,entry.getKey().split(Pattern.quote("^"))[1].toString());
 					tempOutletQuestAnsMstrVal.add(3,hmapOptionId.get((entry.getKey().split(Pattern.quote("^"))[0])+"^"+radioButtonVal.getText().toString()));*/
 					hmapCopyValue.put(questKey, hmapOptionId.get((questKey.split(Pattern.quote("^"))[2])+"^"+radioButtonVal.getText().toString()));
-			
+
 			 }
 			 else
 			 {
@@ -1892,17 +1988,17 @@ if(view!=null)
 					tempOutletQuestAnsMstrVal.add(2,entry.getKey().split(Pattern.quote("^"))[1].toString());
 					tempOutletQuestAnsMstrVal.add(3,"");*/
 				// hmapAnsValues.put(entry.getKey(), "");
-		    		
+
 			 }
 	            // find the radiobutton by returned id
-	        
+
 		}
-		
+
 		else if(view instanceof Spinner)
 		{
-			
+
 			Spinner spinnerSelected=(Spinner) view;
-			 
+
 
 	          if(!spinnerSelected.getSelectedItem().equals("Select"))
 	          {
@@ -1911,16 +2007,16 @@ if(view!=null)
 						if(spinnerSelected.getSelectedItem().toString().equals("Others"))
 						{
 							EditText editText=(EditText) ll_data.findViewWithTag(questKey.toString()+"_ed");
-							
+
 							if(!TextUtils.isEmpty(editText.getText().toString()))
 							{
-								
+
 				        	  hmapCopyValue.put(questId,"-99"+"~"+editText.getText().toString().trim());
-				        		
+
 							}
 							ArrayList<String> listAllQyestInParentCopyGrpId=new ArrayList<String>();
 							listAllQyestInParentCopyGrpId=AddNewStore_DynamicSectionWise.hmapQuesGropKeySection.get(groupId);
-						
+
 							for(String toCopyTxtView:listAllQyestInParentCopyGrpId)
 							{
 							String questIdOfToCpyQuestId=toCopyTxtView.split(Pattern.quote("^"))[0];
@@ -1936,44 +2032,44 @@ if(view!=null)
 									String ediTextVal=editText.getText().toString().trim();
 									editTextOther.setText(ediTextVal);
 								}
-	
+
 							}
 							}
-							
+
 						}
 						else
 			        	{
 			        	/*	tempOutletQuestAnsMstrVal.add(1,entry.getKey().split(Pattern.quote("^"))[0].toString());
 							tempOutletQuestAnsMstrVal.add(2,entry.getKey().split(Pattern.quote("^"))[1].toString());
 							tempOutletQuestAnsMstrVal.add(3,hmapOptionId.get((entry.getKey().split(Pattern.quote("^"))[0])+"^"+spinnerSelected.getSelectedItem().toString()));
-				    	*/	
+				    	*/
 							hmapCopyValue.put(questId,hmapOptionId.get((questKey.split(Pattern.quote("^"))[2])+"^"+spinnerSelected.getSelectedItem().toString()) );
 							String valueOfParentSpinner=hmapOptionId.get((questKey.split(Pattern.quote("^"))[2])+"^"+spinnerSelected.getSelectedItem().toString());
 
-							
+
 							ArrayList<String> listAllQyestInParentCopyGrpId=new ArrayList<String>();
 							listAllQyestInParentCopyGrpId=AddNewStore_DynamicSectionWise.hmapQuesGropKeySection.get(groupId);
-						
+
 							for(String toCopyTxtView:listAllQyestInParentCopyGrpId)
 							{
 							String questIdOfToCpyQuestId=toCopyTxtView.split(Pattern.quote("^"))[0];
 							if(questIdOfToCpyQuestId.equals(questId))
 							{
 								Spinner spinnerSelectedCopy=(Spinner) ll_data.findViewWithTag(toCopyTxtView);
-								
-								
+
+
 									ArrayAdapter adapter = (ArrayAdapter) spinnerSelectedCopy.getAdapter();
 									String ansName=getOptionNameFromHmap(valueOfParentSpinner);
 									spinnerSelectedCopy.setSelection(adapter.getPosition(ansName));
-								
+
 								break;
-								
+
 							}
 							}
-						
-						
+
+
 			        	}
-						
+
 					}
 		            //tempOutletQuestAnsMstrVal.add(0,OutletID);
 	        	else
@@ -1983,46 +2079,46 @@ if(view!=null)
 					tempOutletQuestAnsMstrVal.add(3,hmapOptionId.get((entry.getKey().split(Pattern.quote("^"))[0])+"^"+spinnerSelected.getSelectedItem().toString()));
 		    		*/
 	        	//  hmapAnsValues.put(questId,hmapOptionId.get((questKey.split(Pattern.quote("^"))[2])+"^"+spinnerSelected.getSelectedItem().toString()) );
-	        	  
+
 	        		String valueOfParentSpinner=hmapOptionId.get((questKey.split(Pattern.quote("^"))[2])+"^"+spinnerSelected.getSelectedItem().toString());
 
-					
+
 					ArrayList<String> listAllQyestInParentCopyGrpId=new ArrayList<String>();
 					listAllQyestInParentCopyGrpId=AddNewStore_DynamicSectionWise.hmapQuesGropKeySection.get(groupId);
-				
+
 					for(String toCopyTxtView:listAllQyestInParentCopyGrpId)
 					{
 					String questIdOfToCpyQuestId=toCopyTxtView.split(Pattern.quote("^"))[0];
 					if(questIdOfToCpyQuestId.equals(questId))
 					{
 
-						
+
 						Spinner spinnerSelectedCopy=(Spinner) ll_data.findViewWithTag(toCopyTxtView);
-						
-						
+
+
 						ArrayAdapter adapter = (ArrayAdapter) spinnerSelectedCopy.getAdapter();
 						String ansName=getOptionNameFromHmap(valueOfParentSpinner);
 						spinnerSelectedCopy.setSelection(adapter.getPosition(ansName));
-					
-						
+
+
 						break;
-						
+
 					}
 					}
-				
-				
+
+
 	        	}
-					
+
 	          }
-	          
+
 	          else
-	        	  
+
 	          {
-	        	 
-		    		  
+
+
 	          }
 		}
-		
+
 		 if(questKey.split(Pattern.quote("^"))[1].toString().equals("13"))
 		 {/*
 			 TextView textView=(TextView) ll_data.findViewWithTag(entry.getKey());
@@ -2030,7 +2126,7 @@ if(view!=null)
 			 {
 				  hmapAnsValues.put(entry.getKey(),hmapsearchAnswerSlctd.get(entry.getKey()) );
 			 }
-			
+
 		 */}
 		 if(questKey.split(Pattern.quote("^"))[1].toString().equals("15"))
 		 {
@@ -2038,9 +2134,9 @@ if(view!=null)
 			 if(hmapSelectedMultipleDepend.containsKey(questKey))
 			 {
 				  ArrayList<String> listSelectedMultiple=new ArrayList<String>();
-				  
+
 						  listSelectedMultiple=hmapSelectedMultipleDepend.get(questKey);
-					  
+
 				 StringBuilder sbfetchVal=new StringBuilder();
 				 for(int i=0;i<listSelectedMultiple.size();i++)
 				 {
@@ -2055,7 +2151,7 @@ if(view!=null)
 				 }
 				  hmapCopyValue.put(questId,sbfetchVal.toString());
 			 }
-			
+
 		 }
 		 if(questKey.split(Pattern.quote("^"))[1].toString().equals("16"))
 		 {
@@ -2063,9 +2159,9 @@ if(view!=null)
 			 if(hmapSelectedMultipleDepend.containsKey(questKey))
 			 {
 				  ArrayList<String> listSelectedMultiple=new ArrayList<String>();
-				  
+
 						  listSelectedMultiple=hmapSelectedMultipleDepend.get(questKey);
-					 
+
 				 StringBuilder sbfetchVal=new StringBuilder();
 				 ArrayList<String> listOptionValName=hmapOptionValues.get(questKey);
 				 for(int i=0;i<listSelectedMultiple.size();i++)
@@ -2079,15 +2175,15 @@ if(view!=null)
 							{
 								if(valueSelected.split(Pattern.quote("^"))[1].equals("Others")||valueSelected.split(Pattern.quote("^"))[1].equals("Other"))
 								{
-									 
+
 										 EditText edText=(EditText) ll_data.findViewWithTag(questKey+"_ed");
 										 sbfetchVal.append("~").append(edText.getText().toString());
-									
+
 								}
 							}
 						}
-						
-						
+
+
 					 }
 					 else
 					 {
@@ -2098,10 +2194,10 @@ if(view!=null)
 								{
 									if(valueSelected.split(Pattern.quote("^"))[1].equals("Others")||valueSelected.split(Pattern.quote("^"))[1].equals("Other"))
 									{
-										 
+
 											 EditText edText=(EditText) ll_data.findViewWithTag(questKey+"_ed");
 											 sbfetchVal.append("~").append(edText.getText().toString());
-										
+
 									}
 								}
 							}
@@ -2109,9 +2205,9 @@ if(view!=null)
 				 }
 				 // hmapAnsValues.put(questId ,sbfetchVal.toString());
 			 }
-			
+
 		 }
-		
+
 		else if(view instanceof LinearLayout)
 		{
 			StringBuilder sbLandline=new StringBuilder();
@@ -2122,19 +2218,19 @@ if(view!=null)
 				{
 					EditText edLandLine=(EditText) ll_phone.getChildAt(i);
 					sbLandline.append(edLandLine.getText().toString());
-					
+
 				}
-				
+
 				if(!TextUtils.isEmpty(sbLandline.toString()))
 				{
-					
+
 				/*	//tempOutletQuestAnsMstrVal.add(0,OutletID);
 					tempOutletQuestAnsMstrVal.add(1,entry.getKey().split(Pattern.quote("^"))[0].toString());
 					tempOutletQuestAnsMstrVal.add(2,entry.getKey().split(Pattern.quote("^"))[1].toString());
 					//tempOutletQuestAnsMstrVal.add(3,edVal.getText().toString());
 					 tempOutletQuestAnsMstrVal.add(3,TextUtils.htmlEncode(sbLandline.toString()));*/
 					// hmapAnsValues.put(questId,TextUtils.htmlEncode(sbLandline.toString()));
-				
+
 				}
 				else
 				{
@@ -2143,12 +2239,12 @@ if(view!=null)
 					tempOutletQuestAnsMstrVal.add(2,entry.getKey().split(Pattern.quote("^"))[1].toString());
 					tempOutletQuestAnsMstrVal.add(3,"");*/
 				//	 hmapAnsValues.put(entry.getKey(),"");
-				
+
 				}
-				
+
 		}
-			
-			
+
+
 			if(questKey.split(Pattern.quote("^"))[1].toString().equals("14"))
 			{
 
@@ -2162,12 +2258,12 @@ if(view!=null)
 				{
 					LinearLayout checkBoxVal_ll=(LinearLayout) ll_checkBoxVal.getChildAt(i);
 					CheckBox chckBox=(CheckBox) checkBoxVal_ll.getChildAt(0);
-					
+
 					if(chckBox.isChecked())
 					{
 						isSelected=true;
 						EditText ediText=(EditText) checkBoxVal_ll.getChildAt(1);
-						
+
 						String tagChckBox=chckBox.getTag().toString();
 						String inputType=ediText.getTag().toString();
 						String edtTextVal="0";
@@ -2175,8 +2271,8 @@ if(view!=null)
 						{
 							edtTextVal=ediText.getText().toString();
 						}
-						
-					
+
+
 							if(isSingleSelected)
 							{
 								answer.append(hmapOptionId.get((questKey.split(Pattern.quote("^"))[2])+"^"+chckBox.getText().toString())+"~"+edtTextVal);
@@ -2184,25 +2280,25 @@ if(view!=null)
 							}
 							else
 							{
-								
+
 								answer.append("^").append(hmapOptionId.get((questKey.split(Pattern.quote("^"))[2])+"^"+chckBox.getText().toString())+"~"+edtTextVal);
-								
+
 							}
-							
-						
-						
+
+
+
 					}
-					
+
 				}
 				if(isSelected)
 				{
 				//	hmapAnsValues.put(questId, answer.toString());
 				}
-				
+
 				else
 				{
 				//	hmapAnsValues.put(entry.getKey(), "");
-					
+
 				}
 			}
 		}
@@ -2210,8 +2306,8 @@ if(view!=null)
 		{
 			//hmapAnsValues.put(entry.getKey(), "");
 		}
-	
-		
+
+
 	}
 
 	public TextView getTextViewSpecial(String quesDes,String sequence,boolean isMustRqrdField,String tagVal,float valueWeight)
@@ -2238,17 +2334,16 @@ if(view!=null)
 
 		return txtVw_ques;
 	}
-
-
+	
 	public TextView getTextView(String quesDes,String sequence,boolean isMustRqrdField,String tagVal)
 	{
-		
-		
+
+
 		TextView txtVw_ques=new TextView(getActivity());
 		LinearLayout.LayoutParams layoutParams1 = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1f);
 		txtVw_ques.setLayoutParams(layoutParams1);
 		txtVw_ques.setTag(tagVal);
-	
+
 		txtVw_ques.setTextColor(getResources().getColor(R.color.blue));
 		txtVw_ques.setText(quesDes);
 		if(isMustRqrdField)
@@ -2256,62 +2351,61 @@ if(view!=null)
 			 SpannableStringBuilder text_Value=textWithMandatory(txtVw_ques.getText().toString());
 			 txtVw_ques.setText(text_Value);
 		}
-		
-		
-		
-			
-		
-		
+
+
+
+
+
+
 		return txtVw_ques;
 	}
 	
-	
 	public TextView getTextViewPreviousData(String quesDes,String sequence,boolean isMustRqrdField,String tagVal)
 	{
-		
-		
+
+
 		TextView txtVw_ques=new TextView(getActivity());
 		LinearLayout.LayoutParams layoutParams1 = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1f);
 		txtVw_ques.setLayoutParams(layoutParams1);
 		txtVw_ques.setTag(tagVal);
-	
+
 		txtVw_ques.setTextColor(Color.parseColor("#CD005B"));
-		
-		
+
+
 		 SpannableString content = new SpannableString(quesDes);
 		 content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
 		 txtVw_ques.setText(quesDes);
-		 
+
 		if(isMustRqrdField)
 		{
 			 SpannableStringBuilder text_Value=textWithMandatory(txtVw_ques.getText().toString());
 			 txtVw_ques.setText(text_Value);
 		}
-		
-		
-		
-			
-		
-		
+
+
+
+
+
+
 		return txtVw_ques;
 	}
 
 	public View getHorizontalScrollView(String tagVal)
 	{
-		
+
 		View viewHorizontal = null;
 		//=new EditText(getActivity());
-		
-		
+
+
 		viewHorizontal=getActivity().getLayoutInflater().inflate(R.layout.horizontal_scroll_view, null);
 			final LinearLayout ll_Image=(LinearLayout) viewHorizontal.findViewById(R.id.ll_imageView);
 		ll_Image.setTag(tagVal);
-		
+
 
 		 return viewHorizontal;
-		
-	}
 
+	}
+	
 	public View getEditTextView(boolean isSingleLine,int maxLength,String tagVal,String ed_hint,String ansControlInputTypeID)
 	{
 		View viewEditText = null;
@@ -2365,7 +2459,7 @@ if(view!=null)
 			viewEditText=getActivity().getLayoutInflater().inflate(R.layout.edit_text_email, null);
 			editText=(EditText) viewEditText.findViewById(R.id.et_email);
 			editText.setHint(ed_hint);
-			
+
 		}
 		else if(ansControlInputTypeID.equals("7"))
 		{
@@ -2380,21 +2474,21 @@ if(view!=null)
 			editText=(EditText) viewEditText.findViewById(R.id.et_alphabet);
 			editText.setHint(ed_hint);
 		}
-		
-		
+
+
 		System.out.println("AnsCntrolType = "+ansControlInputTypeID);
 	//	editText.setBackgroundResource(R.drawable.et_boundary);
 		LinearLayout.LayoutParams layoutParams1 = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1f);
 		editText.setLayoutParams(layoutParams1);
 		editText.setTag(tagVal);
-		
+
 
 
 		//et_alphabet.setHint(ed_hint);
 		InputFilter[] FilterArray = new InputFilter[1];
 		FilterArray[0] = new InputFilter.LengthFilter(maxLength);
-		editText.setFilters(FilterArray); 
-	
+		editText.setFilters(FilterArray);
+
 		return viewEditText;
 	}
 	
@@ -2411,38 +2505,38 @@ if(view!=null)
          //there are a lot of settings, for dialog, check them all out!
 	        parms.dimAmount = (float) 0.5;
 	        isSelectedSearch=false;
-			   
+
 	        List<String> listOptinVal=new ArrayList<String>();
 			List<String> listOptionId=new ArrayList<String>();
-			
+
 			for(int index=0;index <listOption.size();index++)
 			{
-				
+
 
 				listOptinVal.add(listOption.get(index).split(Pattern.quote("^"))[1].toString());
 				listOptionId.add(listOption.get(index).split(Pattern.quote("^"))[0].toString());
-				
+
 			}
-			
+
 	        TextView txt_section=(TextView) listDialog.findViewById(R.id.txt_section);
 	        txt_section.setText(sectionHeader);
 	        TextView txtVwCncl=(TextView) listDialog.findViewById(R.id.txtVwCncl);
 	    //    TextView txtVwSubmit=(TextView) listDialog.findViewById(R.id.txtVwSubmit);
-	        
+
 	        final EditText ed_search=(AutoCompleteTextView) listDialog.findViewById(R.id.ed_search);
 			final ListView list_store=(ListView) listDialog.findViewById(R.id.list_store);
 		   final CardArrayAdapter cardArrayAdapter = new CardArrayAdapter(getActivity(),listOptinVal,listOptionId,ed_search,list_store,tagVal,listDialog,textView);
 
-	       
 
-				
-			
-				
-			
+
+
+
+
+
 			 list_store.setAdapter(cardArrayAdapter);
 		//	editText.setBackgroundResource(R.drawable.et_boundary);
-			
-				
+
+
 		boolean isSingleLine=true;
 			ed_search.setSingleLine(isSingleLine);
 			if(!isSingleLine)
@@ -2454,52 +2548,52 @@ if(view!=null)
 			//et_alphabet.setHint(ed_hint);
 			InputFilter[] FilterArray = new InputFilter[1];
 			FilterArray[0] = new InputFilter.LengthFilter(maxLength);
-			ed_search.setFilters(FilterArray); 
+			ed_search.setFilters(FilterArray);
 			  ed_search.addTextChangedListener(new TextWatcher() {
-					
+
 					@Override
 					public void onTextChanged(CharSequence s, int start, int before, int count)
 					{
-						
-						
+
+
 					}
-					
+
 					@Override
 					public void beforeTextChanged(CharSequence s, int start, int count,
 							int after) {
 						// TODO Auto-generated method stub
-						
+
 					}
-					
+
 					@Override
 					public void afterTextChanged(Editable s) {
-						
+
 							cardArrayAdapter.filter(s.toString());
-						
-						
-						
+
+
+
 					}
 				});
-	        
-         
-			  
-			  
+
+
+
+
 	        txtVwCncl.setOnClickListener(new OnClickListener() {
-				
+
 				@Override
 				public void onClick(View v) {
 					listDialog.dismiss();
 					isSelectedSearch=false;
-					
+
 				}
 			});
-	       
-	        
-	     
-			
+
+
+
+
          //now that the dialog is set up, it's time to show it
          listDialog.show();
-    
+
 	}
 	
 	public void customAlertStoreListMultiCheckWithoutOther(final List<String> listOption,String sectionHeader,int maxLength,final TextView textView,final String tagVal)
@@ -2514,25 +2608,25 @@ if(view!=null)
 	        parms.gravity =Gravity.CENTER;
          //there are a lot of settings, for dialog, check them all out!
 	        parms.dimAmount = (float) 0.5;
-	      
-			   
+
+
 	        List<String> listOptinVal=new ArrayList<String>();
 			List<String> listOptionId=new ArrayList<String>();
 			isSelectedSearch=false;
 			for(int index=0;index <listOption.size();index++)
 			{
-				
-			
+
+
 				listOptinVal.add(listOption.get(index).split(Pattern.quote("^"))[1].toString());
 				listOptionId.add(listOption.get(index).split(Pattern.quote("^"))[0].toString());
-				
+
 			}
 			LinearLayout ll_selectedText=(LinearLayout) listDialogMulti.findViewById(R.id.ll_selectedText);
 	        TextView txt_section=(TextView) listDialogMulti.findViewById(R.id.txt_section);
 	        txt_section.setText(sectionHeader);
 	        TextView txtVwCncl=(TextView) listDialogMulti.findViewById(R.id.txtVwCncl);
 	       TextView txtVwSubmit=(TextView) listDialogMulti.findViewById(R.id.txtVwSubmit);
-	        
+
 	        final EditText ed_search=(AutoCompleteTextView) listDialogMulti.findViewById(R.id.multpl_ed_search);
 			final ListView list_store=(ListView) listDialogMulti.findViewById(R.id.list_store);
 		  ArrayList<String> listSelectedMultiple=new ArrayList<String>();
@@ -2541,21 +2635,21 @@ if(view!=null)
 			  if(hmapSelectedMultipleDepend.containsKey(tagVal))
 			  {
 				  listSelectedMultiple=hmapSelectedMultipleDepend.get(tagVal);
-			  } 
+			  }
 		  }
-		
+
 			final CardArrayAdapterMultipleSelected cardArrayAdapter = new CardArrayAdapterMultipleSelected(getActivity(),listOptinVal,listOptionId,ed_search,list_store,tagVal,listDialogMulti,textView,ll_selectedText,listSelectedMultiple);
 
-	       
 
-				
-			
-				
-			
+
+
+
+
+
 			 list_store.setAdapter(cardArrayAdapter);
 		//	editText.setBackgroundResource(R.drawable.et_boundary);
-			
-				
+
+
 		boolean isSingleLine=true;
 			ed_search.setSingleLine(isSingleLine);
 			if(!isSingleLine)
@@ -2567,47 +2661,47 @@ if(view!=null)
 			//et_alphabet.setHint(ed_hint);
 			InputFilter[] FilterArray = new InputFilter[1];
 			FilterArray[0] = new InputFilter.LengthFilter(maxLength);
-			ed_search.setFilters(FilterArray); 
+			ed_search.setFilters(FilterArray);
 			  ed_search.addTextChangedListener(new TextWatcher() {
-					
+
 					@Override
 					public void onTextChanged(CharSequence s, int start, int before, int count)
 					{
-						
-						
+
+
 					}
-					
+
 					@Override
 					public void beforeTextChanged(CharSequence s, int start, int count,
 							int after) {
-						
-						
+
+
 					}
-					
+
 					@Override
 					public void afterTextChanged(Editable s) {
-						
+
 							cardArrayAdapter.filter(s.toString());
-						
-						
-						
+
+
+
 					}
 				});
-	        
-         
-			  
-			  
+
+
+
+
 	        txtVwCncl.setOnClickListener(new OnClickListener() {
-				
+
 				@Override
 				public void onClick(View v) {
 					listDialogMulti.dismiss();
 					isSelectedSearch=false;
-					
+
 				}
 			});
 	      txtVwSubmit.setOnClickListener(new OnClickListener() {
-				
+
 				@Override
 				public void onClick(View v) {
 					if(isSelectedSearch)
@@ -2624,7 +2718,7 @@ if(view!=null)
 							{
 								hmapSelectedMultipleDepend.remove(tagVal);
 							}
-						}	
+						}
 					listDialogMulti.dismiss();
 					isSelectedSearch=false;
 
@@ -2864,13 +2958,14 @@ if(view!=null)
 					}
 				}
 			});
-	        
-	     
-			
+
+
+
          //now that the dialog is set up, it's time to show it
 	      listDialogMulti.show();
-    
+
 	}
+	
 	public void customAlertStoreListMultiCheck(final List<String> listOption,String sectionHeader,int maxLength,final TextView textView,final String tagVal)
 	{
 
@@ -2883,25 +2978,25 @@ if(view!=null)
 	        parms.gravity =Gravity.CENTER;
          //there are a lot of settings, for dialog, check them all out!
 	        parms.dimAmount = (float) 0.5;
-	      
-			   
+
+
 	        List<String> listOptinVal=new ArrayList<String>();
 			List<String> listOptionId=new ArrayList<String>();
 			isSelectedSearch=false;
 			for(int index=0;index <listOption.size();index++)
 			{
-				
-			
+
+
 				listOptinVal.add(listOption.get(index).split(Pattern.quote("^"))[1].toString());
 				listOptionId.add(listOption.get(index).split(Pattern.quote("^"))[0].toString());
-				
+
 			}
 			LinearLayout ll_selectedText=(LinearLayout) listDialogMulti.findViewById(R.id.ll_selectedText);
 	        TextView txt_section=(TextView) listDialogMulti.findViewById(R.id.txt_section);
 	        txt_section.setText(sectionHeader);
 	        TextView txtVwCncl=(TextView) listDialogMulti.findViewById(R.id.txtVwCncl);
 	       TextView txtVwSubmit=(TextView) listDialogMulti.findViewById(R.id.txtVwSubmit);
-	        
+
 	        final EditText ed_search=(AutoCompleteTextView) listDialogMulti.findViewById(R.id.multpl_ed_search);
 			final ListView list_store=(ListView) listDialogMulti.findViewById(R.id.list_store);
 		  ArrayList<String> listSelectedMultiple=new ArrayList<String>();
@@ -2910,21 +3005,21 @@ if(view!=null)
 			  if(hmapSelectedMultipleDepend.containsKey(tagVal))
 			  {
 				  listSelectedMultiple=hmapSelectedMultipleDepend.get(tagVal);
-			  } 
+			  }
 		  }
-		
+
 			final CardArrayAdapterMultipleSelected cardArrayAdapter = new CardArrayAdapterMultipleSelected(getActivity(),listOptinVal,listOptionId,ed_search,list_store,tagVal,listDialogMulti,textView,ll_selectedText,listSelectedMultiple);
 
-	       
 
-				
-			
-				
-			
+
+
+
+
+
 			 list_store.setAdapter(cardArrayAdapter);
 		//	editText.setBackgroundResource(R.drawable.et_boundary);
-			
-				
+
+
 		boolean isSingleLine=true;
 			ed_search.setSingleLine(isSingleLine);
 			if(!isSingleLine)
@@ -2936,47 +3031,47 @@ if(view!=null)
 			//et_alphabet.setHint(ed_hint);
 			InputFilter[] FilterArray = new InputFilter[1];
 			FilterArray[0] = new InputFilter.LengthFilter(maxLength);
-			ed_search.setFilters(FilterArray); 
+			ed_search.setFilters(FilterArray);
 			  ed_search.addTextChangedListener(new TextWatcher() {
-					
+
 					@Override
 					public void onTextChanged(CharSequence s, int start, int before, int count)
 					{
-						
-						
+
+
 					}
-					
+
 					@Override
 					public void beforeTextChanged(CharSequence s, int start, int count,
 							int after) {
-						
-						
+
+
 					}
-					
+
 					@Override
 					public void afterTextChanged(Editable s) {
-						
+
 							cardArrayAdapter.filter(s.toString());
-						
-						
-						
+
+
+
 					}
 				});
-	        
-         
-			  
-			  
+
+
+
+
 	        txtVwCncl.setOnClickListener(new OnClickListener() {
-				
+
 				@Override
 				public void onClick(View v) {
 					listDialogMulti.dismiss();
 					isSelectedSearch=false;
-					
+
 				}
 			});
 	      txtVwSubmit.setOnClickListener(new OnClickListener() {
-				
+
 				@Override
 				public void onClick(View v) {
 					if(isSelectedSearch)
@@ -3013,12 +3108,12 @@ if(view!=null)
 					}
 				}
 			});
-	        
-	     
-			
+
+
+
          //now that the dialog is set up, it's time to show it
 	      listDialogMulti.show();
-    
+
 	}
 	
 	public View getSearchEditTextView(boolean isSingleLine,final int maxLength,final String tagVal,String ed_hint,String ansControlInputTypeID,final ArrayList<String> listOption)
@@ -3037,7 +3132,7 @@ if(view!=null)
 		txtVw_Search.setPadding(5, 5, 0, 5);
 		txtVw_Search.setBackgroundDrawable(getResources().getDrawable(R.drawable.search_boundary));
 		txtVw_Search.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				String grpQuestIdValuesDpndnt=tagVal.split(Pattern.quote("^"))[2].toString();
@@ -3051,13 +3146,13 @@ if(view!=null)
 						String DepAnsCntrlType=hmapQuesIdandGetAnsCntrlType.get(hmapQuestGrpId_QstId.get(hmapgetOptDepMstr.get(grpQuestIdValuesDpndnt)));
 						String DepGrpQstId=hmapgetOptDepMstr.get(grpQuestIdValuesDpndnt);
 						if(hmapSelectedMultipleDepend.containsKey(DepQstId+"^"+DepAnsCntrlType+"^"+DepGrpQstId))
-							
+
 						{
 							ArrayList<String> listQestValuesDpndnt=new ArrayList<String>();
-							
+
 								listQestValuesDpndnt=helperDb.getDepOtnVal(hmapGrpQstId_DepndentQstOptId.get(grpQuestIdValuesDpndnt),Integer.parseInt(grpQuestIdValuesDpndnt),Integer.parseInt(DepGrpQstId));
-							
-							
+
+
 							 if(listQestValuesDpndnt!=null && listQestValuesDpndnt.size()>0)
 							 {
 								 if(tagVal.split(Pattern.quote("^"))[1].toString().equals("13"))
@@ -3069,13 +3164,13 @@ if(view!=null)
 									 customAlertStoreListMultiCheckWithoutOther(listQestValuesDpndnt, txtvWQues.getText().toString(), maxLength, txtVw_Search, tagVal); }
 								 else if( tagVal.split(Pattern.quote("^"))[1].toString().equals("16"))
 								 {
-									 
-									 customAlertStoreListMultiCheck(listQestValuesDpndnt, txtvWQues.getText().toString(), maxLength, txtVw_Search, tagVal); 
+
+									 customAlertStoreListMultiCheck(listQestValuesDpndnt, txtvWQues.getText().toString(), maxLength, txtVw_Search, tagVal);
 								 }
 								 //
-								 
+
 							 }
-							
+
 						}
 					}
 					else
@@ -3089,17 +3184,17 @@ if(view!=null)
 							 customAlertStoreListMultiCheckWithoutOther(listOption, txtvWQues.getText().toString(), maxLength, txtVw_Search, tagVal); }
 						 else if( tagVal.split(Pattern.quote("^"))[1].toString().equals("16"))
 						 {
-							 
-							 customAlertStoreListMultiCheck(listOption, txtvWQues.getText().toString(), maxLength, txtVw_Search, tagVal); 
+
+							 customAlertStoreListMultiCheck(listOption, txtvWQues.getText().toString(), maxLength, txtVw_Search, tagVal);
 						 }
-						 
-						
+
+
 						//
-						
+
 					}
-				
+
 				}
-				
+
 				else
 				{
 					if(tagVal.split(Pattern.quote("^"))[1].toString().equals("13"))
@@ -3111,26 +3206,26 @@ if(view!=null)
 						 customAlertStoreListMultiCheckWithoutOther(listOption, txtvWQues.getText().toString(), maxLength, txtVw_Search, tagVal); }
 					 else if( tagVal.split(Pattern.quote("^"))[1].toString().equals("16"))
 					 {
-						 
-						 customAlertStoreListMultiCheck(listOption, txtvWQues.getText().toString(), maxLength, txtVw_Search, tagVal); 
+
+						 customAlertStoreListMultiCheck(listOption, txtvWQues.getText().toString(), maxLength, txtVw_Search, tagVal);
 					 }
-					 
-					
+
+
 					//
-					
+
 				}
 			}
 		});
-		
-		
-		
-		
+
+
+
+
 		return txtVw_Search;
 	}
 	
 	public Button getCalenderView(String btnText,String tagVal)
 	{
-		
+
 		Button btn_calender=new Button(getActivity());
 		btn_calender.setTag(tagVal);
 		LinearLayout.LayoutParams layoutParams1 = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1f);
@@ -3140,7 +3235,7 @@ if(view!=null)
 		String date=(new StringBuilder().append(day).append("/")
 				   .append(month+1).append("/").append(year)).toString();
 		try {
-			Date oneWayTripDate = input.parse(date);                 // parse input 
+			Date oneWayTripDate = input.parse(date);                 // parse input
 			Calendar c = Calendar.getInstance();
 			c.setTime(oneWayTripDate);
 			c.add(Calendar.DAY_OF_MONTH, 7);
@@ -3150,10 +3245,10 @@ if(view!=null)
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-		
+
 
 		btn_calender.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				calenderClkdBtn=(Button)v;
@@ -3163,19 +3258,19 @@ if(view!=null)
 			       Month = calendarS.get(Calendar.MONTH);
 			       Day = calendarS.get(Calendar.DAY_OF_MONTH);
 			       datePickerDialogs = DatePickerDialog.newInstance(new OnDateSetListener() {
-					
+
 					@Override
 					public void onDateSet(DatePickerDialog view, int year, int monthOfYear,
 							int dayOfMonth) {
-						
+
 						String[] MONTHS = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 					    String mon=MONTHS[monthOfYear];
 					   //
 					    calenderClkdBtn.setText(dayOfMonth+"/"+mon+"/"+year);
-					 
+
 					   // TODO Auto-generated method stub
 					   //String questIdClndr= calenderClkdBtn.getTag().toString().split(Pattern.quote("^"))[0];
-					  // getCalenderQuesDepndnt(questIdClndr);	
+					  // getCalenderQuesDepndnt(questIdClndr);
 					}
 				}, Year, Month, Day);
 
@@ -3188,21 +3283,19 @@ if(view!=null)
 			       datePickerDialogs.setTitle("Select Date From DatePickerDialog");
 			       Calendar calendar = Calendar.getInstance();
 			       calendar.setTimeInMillis(System.currentTimeMillis()+24*60*60*1000);
-			      
+
 			       datePickerDialogs.setMaxDate(Calendar.getInstance());
 			      // datePickerDialogs.setMinDate(calendar);
-			      
+
 			       datePickerDialogs.show(getFragmentManager(), "DatePickerDialog");
-				
+
 				 // showDialog(999);
-				
+
 			}
 		});
-		
+
 		return btn_calender;
 	}
-	
-		
 	
 	public LinearLayout getCheckBoxView(final ArrayList<String> chckBoxVal,final boolean isSingleChecked,String tagVal)
 	{
@@ -3210,7 +3303,7 @@ if(view!=null)
 		lay.setTag(tagVal);
 		lay.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
 				LayoutParams.WRAP_CONTENT));
-		
+
 		lay.setOrientation(LinearLayout.VERTICAL);
 		lay.removeAllViews();
 		for(int index=0;index <chckBoxVal.size();index++)
@@ -3219,40 +3312,38 @@ if(view!=null)
 			String quesIdForkey=tagVal.split(Pattern.quote("^"))[0];
 			String grpQuestId=tagVal.split(Pattern.quote("^"))[2];
 			String checkBoxVal=chckBoxVal.get(index).split(Pattern.quote("^"))[1];
-			
+
 			String checkBoxValNoneOptionNo=chckBoxVal.get(index).split(Pattern.quote("^"))[0];
 			chBox.setTextSize(14);
-			
+
 			chBox.setTag(checkBoxValNoneOptionNo);
-			
+
 			chBox.setText(checkBoxVal);
-			
+
 			hmapOptionId.put(grpQuestId+"^"+checkBoxVal, chckBoxVal.get(index).split(Pattern.quote("^"))[0]);
-			
+
 			 RelativeLayout.LayoutParams params2 = new RelativeLayout.LayoutParams
 		        		((int)LayoutParams.WRAP_CONTENT, (int) LayoutParams.WRAP_CONTENT);
 		        params2.leftMargin = 16;
 		        params2.topMargin = 0;
 		        chBox.setLayoutParams(params2);
 		        lay.addView(chBox);
-		       
+
 		    	if(checkBoxVal.equals("Others") || checkBoxVal.equals("Other"))
 				{
 					View viewSpinnerEditText=getEditTextView(true,200, checkBoxValNoneOptionNo+"_ed", "Type Here", "3");
 					 lay.addView(viewSpinnerEditText);
 					 viewSpinnerEditText.setVisibility(View.GONE);
 				}
-		     
-		      
+
+
 
 
 
 		}
-		
+
 	        return lay;
 	}
-	
-	
 	
 	public LinearLayout getCheckBoxViewWithEditText(final ArrayList<String> chckBoxVal,boolean isSingleChecked,String tagVal,String AsnControlInputTypeID,int maxLengthEditText)
 	{
@@ -3269,14 +3360,14 @@ if(view!=null)
 	
 	public RadioGroup getRadioView(ArrayList<String> radioVal,String tagVal,boolean isParntDpntdQues)
 	{
-		
+
 		// create radio button final
-		RadioButton[] rb = new RadioButton[radioVal.size()]; 
-		RadioGroup rg = new RadioGroup(getActivity()); 
+		RadioButton[] rb = new RadioButton[radioVal.size()];
+		RadioGroup rg = new RadioGroup(getActivity());
 		rg.setTag(tagVal);
-	
-		rg.setOrientation(RadioGroup.HORIZONTAL); 
-		for (int i = 0; i < radioVal.size(); i++) 
+
+		rg.setOrientation(RadioGroup.HORIZONTAL);
+		for (int i = 0; i < radioVal.size(); i++)
 		{
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT,1f);
@@ -3295,21 +3386,21 @@ if(view!=null)
 		if(isParntDpntdQues)
 		{
 
-			
+
 			rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-				
+
 				@Override
 				public void onCheckedChanged(RadioGroup group, int checkedId) {
-		
+
 					RadioButton    radioButtonVal = (RadioButton) group.findViewById(checkedId);
-					
+
 					String selectedVal=radioButtonVal.getText().toString();
 					String tagValueOfSpinner=group.getTag().toString();
 					String questionId=tagValueOfSpinner.split(Pattern.quote("^"))[0];
 					String grpQuestId=tagValueOfSpinner.split(Pattern.quote("^"))[2];
-					
+
 					String optionId=hmapOptionId.get(grpQuestId+"^"+selectedVal);
-					
+
 					if(grpQstIdForChannel.equals(grpQuestId))
 					{
 						//clearAllValues(grpQuestId);
@@ -3320,18 +3411,18 @@ if(view!=null)
 								View view2=ll_data.findViewWithTag(entry.getKey()+"ll");
 								if(view2 instanceof LinearLayout)
 								{
-									
+
 									LinearLayout ll_view=(LinearLayout)view2;
 									if(ll_view.getVisibility()==View.VISIBLE)
 									{
-										
+
 										ll_view.setVisibility(View.GONE);
-										
+
 										hideOrShowGroup(entry.getKey());
-										
-										
+
+
 									}
-									
+
 								}
 							}
 						}
@@ -3340,18 +3431,18 @@ if(view!=null)
 					{
 						for(int i=0;i<group.getChildCount();i++)
 						{
-						
+
 							RadioButton unChckdOtherRadio=(RadioButton) group.getChildAt(i);
 							if(unChckdOtherRadio.getId()!=checkedId)
 							{
-								
-								
-								
+
+
+
 								String notSelectedVal=unChckdOtherRadio.getText().toString();
 								String tagValueOfRadio=group.getTag().toString();
 								String notSlctdquestionId=tagValueOfRadio.split(Pattern.quote("^"))[0];
 								String notSlctdgrpQuestionId=tagValueOfRadio.split(Pattern.quote("^"))[2];
-								
+
 								String notSlctdoptionId=hmapOptionId.get(notSlctdgrpQuestionId+"^"+notSelectedVal);
 								if(AddNewStore_DynamicSectionWise.hmapDpndtQustGrpId.containsKey(notSlctdgrpQuestionId+"^"+notSlctdoptionId))
 								{
@@ -3364,21 +3455,21 @@ if(view!=null)
 											View view2=ll_data.findViewWithTag(questionToVisible[j]+"ll");
 											if(view2 instanceof LinearLayout)
 											{
-												
+
 												LinearLayout ll_view=(LinearLayout)view2;
 												if(ll_view.getVisibility()==View.VISIBLE)
 												{
-													
+
 													ll_view.setVisibility(View.GONE);
-													
+
 													hideOrShowGroup(questionToVisible[j]);
-													
-													
+
+
 												}
-												
+
 											}
-											
-											
+
+
 										}
 									}
 									else
@@ -3390,24 +3481,24 @@ if(view!=null)
 											LinearLayout ll_view=(LinearLayout)view2;
 											if(ll_view.getVisibility()==View.VISIBLE)
 											{
-											
+
 												ll_view.setVisibility(View.GONE);
 											//	hideDpndntQstn(questionToVisible);
 												hideOrShowGroup(questionToVisible);
-												
+
 												break;
 											}
 										}
 									}
-									
+
 								}
-							
+
 						}
-							
-							
-						}	
+
+
+						}
 					}
-					
+
 					if(AddNewStore_DynamicSectionWise.hmapDpndtQustGrpId.containsKey(grpQuestId+"^"+optionId))
 					{
 						String questIdDependent=AddNewStore_DynamicSectionWise.hmapDpndtQustGrpId.get(grpQuestId+"^"+optionId);
@@ -3418,7 +3509,7 @@ if(view!=null)
 
 						if(questIdDependent.contains("^"))
 						{
-							
+
 							String[] questionToVisible=questIdDependent.split(Pattern.quote("^"));
 							for(int i=0;i<questionToVisible.length;i++)
 							{
@@ -3426,14 +3517,14 @@ if(view!=null)
 								if(view2 instanceof LinearLayout)
 								{
 									LinearLayout ll_view=(LinearLayout)view2;
-									
+
 									ll_view.setVisibility(View.VISIBLE);
 									//showDpndntQstn(questionToVisible[i]);
 									hideOrShowGroup(questionToVisible[i]);
 								}
 							}
-						
-							
+
+
 						}
 						else
 						{
@@ -3448,34 +3539,33 @@ if(view!=null)
 								hideOrShowGroup(questionToVisible);
 							}
 						}
-						
+
 					}
-					
-					
-					
-					
-				
-					
+
+
+
+
+
+
 				}
 			});
-		
+
 		}
-		
-		
+
+
 		return rg;
-		
+
 	}
-	
-	
+
 	public View getSpinnerView(final String[] list,String tagVal,boolean isParentDpndnt,String descPrompt)
 	{
-		
-		
+
+
 		final View viewSpinner=getActivity().getLayoutInflater().inflate(R.layout.spinner_layout, null);
 		final Spinner spinner_view=(Spinner) viewSpinner.findViewById(R.id.spinner_view);
-		
+
 		spinner_view.setTag(tagVal);
-		
+
 		spinner_view.setPrompt(descPrompt.split(Pattern.quote("*"))[0].toString());
 		LinearLayout.LayoutParams layoutParams1 = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1f);
 		spinner_view.setLayoutParams(layoutParams1);
@@ -3504,14 +3594,14 @@ if(view!=null)
 								String questIdDependent=AddNewStore_DynamicSectionWise.hmapDpndtQustGrpId.get(grpQustId+"^"+notSlctdOptionId);
 								if(questIdDependent.contains("^"))
 								{
-									
+
 									String[] questionToVisible=questIdDependent.split(Pattern.quote("^"));
 									for(int j=0;j<questionToVisible.length;j++)
 									{//
 //										/
-										
+
 										View view2=ll_data.findViewWithTag(questionToVisible[j]+"ll");
-										
+
 										if(view2 instanceof LinearLayout)
 										{
 											LinearLayout ll_view=(LinearLayout)view2;
@@ -3524,16 +3614,16 @@ if(view!=null)
 													{
 														spinner.setSelection(0);
 													}
-													
+
 												}
-											
-												
+
+
 												ll_view.setVisibility(View.GONE);
 												//hideDpndntQstn(questionToVisible[j]);
 												hideOrShowGroup(questionToVisible[j]);
-												
+
 											}
-											
+
 										}
 										if(hmapQuestDependVisible.containsKey(questionToVisible[j]))
 										{
@@ -3545,23 +3635,23 @@ if(view!=null)
 												if(viewGrandChild instanceof LinearLayout)
 												{
 													LinearLayout ll_view=(LinearLayout)viewGrandChild;
-													
+
 													if(ll_view.getVisibility()==View.VISIBLE)
 													{
-														
+
 														ll_view.setVisibility(View.GONE);
 														//hideDpndntQstn(questionToVisible[j]);
 														hideOrShowGroup(questionToVisible[j]);
-														
+
 													}
-													
+
 												}
 											}
 										}
-	
+
 									}
-								
-									
+
+
 								}
 								else
 								{
@@ -3580,17 +3670,17 @@ if(view!=null)
 												{
 													spinner.setSelection(0);
 												}
-												
+
 											}
-										
-											
+
+
 											ll_view.setVisibility(View.GONE);
 										//	hideDpndntQstn(questionToVisible);
 											hideOrShowGroup(questionToVisible);
-											
+
 										}
-										
-										
+
+
 									}
 									if(hmapQuestDependVisible.containsKey(questionToVisible))
 									{
@@ -3602,40 +3692,40 @@ if(view!=null)
 											if(viewGrandChild instanceof LinearLayout)
 											{
 												LinearLayout ll_view=(LinearLayout)viewGrandChild;
-												
+
 												if(ll_view.getVisibility()==View.VISIBLE)
 												{
-													
+
 													ll_view.setVisibility(View.GONE);
 												//	hideDpndntQstn(listQuestDpndOnHideQuest.get(questCount));
 													hideOrShowGroup(listQuestDpndOnHideQuest.get(questCount));
-													
+
 												}
-												
+
 											}
 										}
 									}
 								}
 							}
 						}
-						
+
 					}
 					if(!spinner_view.getSelectedItem().toString().equals("Select"))
 					{
-						
-					
+
+
 							if(!spinner_view.getSelectedItem().toString().equals("Others") || ansCntrlType.equals("8"))
 							{
 								String optionId=hmapOptionId.get(grpQustId+"^"+spinner_view.getSelectedItem().toString());
-								
-								
+
+
 								if(AddNewStore_DynamicSectionWise.hmapDpndtQustGrpId.containsKey(grpQustId+"^"+optionId))
 								{
 
 									String questIdDependent=AddNewStore_DynamicSectionWise.hmapDpndtQustGrpId.get(grpQustId+"^"+optionId);
 									if(questIdDependent.contains("^"))
 									{
-										
+
 										String[] questionToVisible=questIdDependent.split(Pattern.quote("^"));
 										for(int i=0;i<questionToVisible.length;i++)
 										{
@@ -3643,15 +3733,15 @@ if(view!=null)
 											if(view2 instanceof LinearLayout)
 											{
 												LinearLayout ll_view=(LinearLayout)view2;
-											
+
 												ll_view.setVisibility(View.VISIBLE);
 											//	showDpndntQstn(questionToVisible[i]);
 												hideOrShowGroup(questionToVisible[i]);
 											}
-											
+
 										}
-									
-										
+
+
 									}
 									else
 									{
@@ -3661,27 +3751,27 @@ if(view!=null)
 										if(view2 instanceof LinearLayout)
 										{
 											LinearLayout ll_view=(LinearLayout)view2;
-										
+
 											ll_view.setVisibility(View.VISIBLE);
 										//	showDpndntQstn(questionToVisible);
 											hideOrShowGroup(questionToVisible);
-										
+
 										}
-									
+
 									}
-								
+
 								}
-								
-								
-								
-							
+
+
+
+
 							}
-							
-					
+
+
 					}
 					else
 					{
-						
+
 						if(ansCntrlType.equals("7"))
 						{
 							EditText editText=(EditText) ll_data.findViewWithTag(spinner_view.getTag().toString()+"_ed");
@@ -3690,10 +3780,10 @@ if(view!=null)
 								editText.setVisibility(View.GONE);
 							}
 						}
-						
-						
+
+
 					}
-					
+
 				}
 				@Override
 				public void onNothingSelected(AdapterView<?> parent) {
@@ -3736,20 +3826,17 @@ if(view!=null)
 		return viewSpinner;
 	}
 	
-
 	public Button getButtonView(String buttonDesc,String tagValue)
 	{
-		
+
 		Button btn_view=new Button(getActivity());
 		btn_view.setTag(tagValue);
-		
+
 		btn_view.setText(buttonDesc);
-		
+
 		return btn_view;
 	}
-	
-	
-	
+
 	public Button getCameraView(String tagValue)
 	{
 
@@ -3766,7 +3853,7 @@ if(view!=null)
 		//	btn_view.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.camera_icon, 0);
 		cameraButton=btn_view;
 		btn_view.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				clickedTagPhoto=v.getTag().toString();
@@ -3777,11 +3864,11 @@ if(view!=null)
 				 imageIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriSavedImage);
 	        startActivityForResult(imageIntent,
 	        		requestCode );*/
-				
+
 			}
 		});
-	
-		
+
+
 		return btn_view;
 	}
 	
@@ -3791,10 +3878,10 @@ if(view!=null)
 		final LinearLayout ll_landline=(LinearLayout) etPhone_view.findViewById(R.id.ll_landline);
 		final EditText ed_std_code=(EditText) etPhone_view.findViewById(R.id.ed_std_code);
 		final EditText ed_phone_num=(EditText) etPhone_view.findViewById(R.id.ed_phone_num);
-		
+
 		ll_landline.setTag(tagVal);
-	
-		
+
+
 		InputFilter[] FilterArrayStdCode = new InputFilter[1];
 		FilterArrayStdCode[0] = new InputFilter.LengthFilter(5);
 		InputFilter[] FilterArrayLandLine = new InputFilter[1];
@@ -3808,11 +3895,11 @@ if(view!=null)
 	                 // TODO Auto-generated method stub
 				 if(ed_phone_num.length()==0)
                  {
-                    
+
 				   ed_phone_num.clearFocus();
                      ed_std_code.requestFocus();
                      ed_std_code.setCursorVisible(true);
-                  
+
 
                  }
 	             }
@@ -3820,17 +3907,17 @@ if(view!=null)
 	             public void beforeTextChanged(CharSequence s, int start, int count,
 	                     int after) {
 
-	            	
-	                
+
+
 	             }
 
-	           
+
 
 				@Override
 				public void afterTextChanged(Editable s) {
 					// TODO Auto-generated method stub
-					  
-					
+
+
 				}
 	         });
 		ed_std_code.addTextChangedListener(new TextWatcher() {
@@ -3839,11 +3926,11 @@ if(view!=null)
 	                 // TODO Auto-generated method stub
 	                 if(ed_std_code.length()==5)
 	                 {
-	                    
+
 	                     ed_std_code.clearFocus();
 	                     ed_phone_num.requestFocus();
 	                     ed_phone_num.setCursorVisible(true);
-	                  
+
 
 	                 }
 	             }
@@ -3851,28 +3938,29 @@ if(view!=null)
 	             public void beforeTextChanged(CharSequence s, int start, int count,
 	                     int after) {
 
-	            	
-	                
+
+
 	             }
 
-	           
+
 
 				@Override
 				public void afterTextChanged(Editable s) {
 					// TODO Auto-generated method stub
-					
+
 
 				}
 	         });
 		return etPhone_view;
 	}
+	
 	private LinearLayout getLinearLayoutVertical(TextView tv,String AnsControlType,String AsnControlInputTypeID,int AnsControlInputTypeMaxLength,String answerHint,String quesId,String questGroupId,ArrayList<String> listOptionVal) {
 		LinearLayout lay = new LinearLayout(getActivity());
-		
+
 		lay.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
 		/*lay.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
 				LayoutParams.WRAP_CONTENT),);*/
-	
+
 		lay.setOrientation(LinearLayout.VERTICAL);
 		lay.addView(tv);
 	//	lay.setPadding(16, 0, 16, 0);
@@ -3901,37 +3989,37 @@ if(view!=null)
 			LinearLayout layHor = new LinearLayout(getActivity());
 			layHor.removeAllViews();
 			layHor.setOrientation(LinearLayout.HORIZONTAL);
-			LinearLayout.LayoutParams layoutParams1 = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1f); 
-			
+			LinearLayout.LayoutParams layoutParams1 = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1f);
+
 			textStCode.setLayoutParams(layoutParams1);
 			LinearLayout.LayoutParams layoutParams2 = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1f);
 			layoutParams2.setMargins(10, 0, 0, 0);
 			tv.setLayoutParams(layoutParams2);
-			
+
 			layHor.addView(textStCode);
 			layHor.addView(tv);
 			lay.addView(layHor);
 		}
-	
-		
-		
+
+
+
 		if(AnsControlType.equals("2"))
 		{
 			 if(AsnControlInputTypeID.equals("6"))
 			{
 				 lay.addView(getCalenderView("Calender",quesId+"^"+AnsControlType+"^"+questGroupId));
-			
+
 			}
 			 else
 			 {
-				
-				 lay.addView(getEditTextView(true,AnsControlInputTypeMaxLength, quesId+"^"+AnsControlType+"^"+questGroupId, answerHint, AsnControlInputTypeID)); 
+
+				 lay.addView(getEditTextView(true,AnsControlInputTypeMaxLength, quesId+"^"+AnsControlType+"^"+questGroupId, answerHint, AsnControlInputTypeID));
 			 }
-			
+
 		}
 		else if(AnsControlType.equals("3"))
 		{
-			
+
 			lay.addView(getEditTextView(false, AnsControlInputTypeMaxLength, quesId+"^"+AnsControlType+"^"+questGroupId, answerHint, AsnControlInputTypeID));
 		}
 		else if(AnsControlType.equals("4"))
@@ -3950,12 +4038,12 @@ if(view!=null)
 				isParentDpndQues=true;
 			}
 				lay.addView(getRadioView(listOptionVal, quesId+"^"+AnsControlType+"^"+questGroupId, isParentDpndQues));
-			
+
 
 		}
 		else if(AnsControlType.equals("7") || AnsControlType.equals("8"))
 		{
-			
+
 			String[] SpinnerValWithOther=null;//;
 			if(listOptionVal!=null && listOptionVal.size()>0)
 			{
@@ -3992,19 +4080,19 @@ if(view!=null)
 						{
 							SpinnerValWithOther[0]="Select";
 						}
-						
+
 							hmapOptionId.put(questGroupId+"^"+listOptionVal.get(index).split(Pattern.quote("^"))[1].toString(), listOptionVal.get(index).split(Pattern.quote("^"))[0].toString());
 							SpinnerValWithOther[index+1]=listOptionVal.get(index).split(Pattern.quote("^"))[1].toString();
-						
-						
+
+
 						if(index==(listOptionVal.size()-1))
 						{
 							SpinnerValWithOther[index+2]="Others";
 						}
 					}
-					
+
 				}
-					
+
 			}
 			else
 			{
@@ -4018,41 +4106,41 @@ if(view!=null)
 				}
 
 			}
-			
+
 			boolean isParentDpndQues=false;
-			
+
 			if(Arrays.asList(dependentParentQuesId).contains(questGroupId) )
 			{
 				isParentDpndQues=true;
 			}
-			
+
 				lay.addView(getSpinnerView(SpinnerValWithOther, quesId+"^"+AnsControlType+"^"+questGroupId, isParentDpndQues,tv.getText().toString()));
 				if(AnsControlType.equals("7"))
 				{
 					View viewSpinnerEditText=getEditTextView(true,200, quesId+"^"+AnsControlType+"^"+questGroupId+"_ed", "Type Here", "3");
 					LinearLayout.LayoutParams params = (LinearLayout.LayoutParams)lay.getLayoutParams();
-					   params.setMargins(0, 3, 0, 0); 
+					   params.setMargins(0, 3, 0, 0);
 					   lay.setLayoutParams(params);
 					lay.addView(viewSpinnerEditText);
-					
+
 					viewSpinnerEditText.setVisibility(View.GONE);
 				}
-				
-			
-		
+
+
+
 		}
 		else if(AnsControlType.equals("10"))
 		{
 			lay.addView(getCameraView(quesId+"^"+AnsControlType+"^"+questGroupId));
 			lay.addView(getHorizontalScrollView(quesId+"^"+AnsControlType+"^"+questGroupId+"_camera"));
-			
+
 		}
-		
+
 		else if(AnsControlType.equals("11"))
 		{
 			lay.addView(getCalenderView("Calender", quesId+"^"+AnsControlType+"^"+questGroupId));
 		}
-		
+
 		else if(AnsControlType.equals("12"))
 		{
 			lay.addView(getEditTextPhoneNumView(AnsControlInputTypeMaxLength, quesId+"^"+AnsControlType+"^"+questGroupId, answerHint));
@@ -4064,7 +4152,7 @@ if(view!=null)
 		}
 		else if(AnsControlType.equals("14"))
 		{
-			
+
 			lay.addView(getCheckBoxViewWithEditText(listOptionVal, false, quesId+"^"+AnsControlType+"^"+questGroupId,AsnControlInputTypeID,AnsControlInputTypeMaxLength));
 		}
 		else if(AnsControlType.equals("15") || AnsControlType.equals("16"))
@@ -4075,35 +4163,47 @@ if(view!=null)
 			{
 				View viewSpinnerEditText=getEditTextView(true,200, quesId+"^"+AnsControlType+"^"+questGroupId+"_ed", "Type Here", "3");
 				LinearLayout.LayoutParams params = (LinearLayout.LayoutParams)lay.getLayoutParams();
-				   params.setMargins(0, 3, 0, 0); 
+				   params.setMargins(0, 3, 0, 0);
 				   lay.setLayoutParams(params);
 				lay.addView(viewSpinnerEditText);
-				
+
 				viewSpinnerEditText.setVisibility(View.GONE);
 			}
 		}
-	
-	
-		
+
+
+
 		return lay;
 
 	}
+
+/*@Override
+public void selectedOption(String optId, String optionVal, EditText editext,ListView listViewOption,String tagVal,Dialog dialog,TextView textView) {
+	hmapsearchAnswerSlctd.put(tagVal, optId);
+	editext.setText(optionVal);
+	isSelectedSearch=true;
+	textView.setText(optionVal);
+	dialog.dismiss();
+	listViewOption.setVisibility(View.GONE);
 	
+	
+}*/
+
 	private LinearLayout getLinearLayoutHorizontal(TextView tv,String AnsControlType,String AsnControlInputTypeID,int AnsControlInputTypeMaxLength,String answerHint,String quesId,String questGroupId,ArrayList<String> listOptionVal) {
 		LinearLayout lay = new LinearLayout(getActivity());
 
 		lay.setOrientation(LinearLayout.HORIZONTAL);
-		
+
 		lay.addView(tv);
 		lay.setTag(questGroupId+"ll");
 		if(AnsControlType.equals("2"))
 		{
-			 
+
 			lay.addView(getEditTextView(true,AnsControlInputTypeMaxLength, quesId+"^"+AnsControlType+"^"+questGroupId, answerHint, AsnControlInputTypeID));
 		}
 		else if(AnsControlType.equals("3"))
 		{
-		
+
 			lay.addView(getEditTextView(false, AnsControlInputTypeMaxLength, quesId+"^"+AnsControlType+"^"+questGroupId, answerHint, AsnControlInputTypeID));
 		}
 		else if(AnsControlType.equals("5"))
@@ -4150,11 +4250,11 @@ if(view!=null)
 						{
 							SpinnerValWithOther[0]="Select";
 						}
-						
+
 							hmapOptionId.put(questGroupId+"^"+listOptionVal.get(index).split(Pattern.quote("^"))[1].toString(), listOptionVal.get(index).split(Pattern.quote("^"))[0].toString());
 							SpinnerValWithOther[index+1]=listOptionVal.get(index).split(Pattern.quote("^"))[1].toString();
-						
-						
+
+
 						if(index==(listOptionVal.size()-1))
 						{
 							SpinnerValWithOther[index+2]="Others";
@@ -4176,37 +4276,37 @@ if(view!=null)
 				}
 
 			}
-			
+
 			boolean isParentDpndQues=false;
 			if(Arrays.asList(dependentParentQuesId).contains(questGroupId))
 			{
 				isParentDpndQues=true;
 			}
-		
-			
-			
-			
+
+
+
+
 				lay.addView(getSpinnerView(SpinnerValWithOther, quesId+"^"+AnsControlType+"^"+questGroupId, isParentDpndQues,tv.getText().toString()));
 				if(AnsControlType.equals("7"))
 				{
 					View viewSpinnerEditText=getEditTextView(true,200, quesId+"^"+AnsControlType+"^"+questGroupId+"_ed", "Type Here", "3");
 					LinearLayout.LayoutParams params = (LinearLayout.LayoutParams)lay.getLayoutParams();
-					   params.setMargins(0, 3, 0, 0); 
+					   params.setMargins(0, 3, 0, 0);
 					   lay.setLayoutParams(params);
 					lay.addView(viewSpinnerEditText);
-					
+
 					viewSpinnerEditText.setVisibility(View.GONE);
 				}
-				
-			
-		
+
+
+
 		}
 
 		else if(AnsControlType.equals("11"))
 		{
 			lay.addView(getCalenderView("Calender", quesId+"^"+AnsControlType+"^"+questGroupId));
 		}
-		
+
 		else if(AnsControlType.equals("12"))
 		{
 			lay.addView(getEditTextPhoneNumView(AnsControlInputTypeMaxLength, quesId+"^"+AnsControlType+"^"+questGroupId, answerHint));
@@ -4215,25 +4315,26 @@ if(view!=null)
 		return lay;
 
 	}
+
 	private LinearLayout getLinearLayoutHorizontal2Ques(LinearLayout lay1,LinearLayout lay2) {
 		LinearLayout lay = new LinearLayout(getActivity());
-	
+
 		lay.setOrientation(LinearLayout.HORIZONTAL);
-		LinearLayout.LayoutParams layoutParams1 = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1f); 
+		LinearLayout.LayoutParams layoutParams1 = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1f);
 		lay1.setLayoutParams(layoutParams1);
 		LinearLayout.LayoutParams layoutParams2 = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1f);
 		layoutParams2.setMargins(10, 0, 0, 0);
 		lay2.setLayoutParams(layoutParams2);
 		lay.addView(lay1);
 		lay.addView(lay2);
-		
+
 
 		return lay;
 
 	}
-	
+		
 public SpannableStringBuilder textWithMandatory(String text_Value)
-	
+
 	{
 		String simple = text_Value;
 		String colored = "*";
@@ -4244,60 +4345,25 @@ public SpannableStringBuilder textWithMandatory(String text_Value)
 		builder.append(colored);
 		int end = builder.length();
 
-		builder.setSpan(new ForegroundColorSpan(Color.RED), start, end, 
+		builder.setSpan(new ForegroundColorSpan(Color.RED), start, end,
 		                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
 		//text.setText(builder);
-		
+
 		return builder;
 
 	}
-	
-private InputFilter filter = new InputFilter() {
-
-    @Override
-    public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
-    	  if(source.equals("")){ // for backspace
-              return source;
-         }
-         if(source.toString().matches("[a-zA-Z ]+")){
-              return source;
-         }
-         return "";
-    	
-    }
-};
-
-/*@Override
-public void selectedOption(String optId, String optionVal, EditText editext,ListView listViewOption,String tagVal,Dialog dialog,TextView textView) {
-	hmapsearchAnswerSlctd.put(tagVal, optId);
-	editext.setText(optionVal);
-	isSelectedSearch=true;
-	textView.setText(optionVal);
-	dialog.dismiss();
-	listViewOption.setVisibility(View.GONE);
-	
-	
-}*/
-
-
-
-	
-	
-
-
-
-
+		
 		@Override
 		public void onActivityResult(int requestCode, int resultCode, Intent data) {
 			// TODO Auto-generated method stub
 			super.onActivityResult(requestCode, resultCode, data);
 
-		
-		
+
+
 			 if(requestCode == requestCode && resultCode == getActivity().RESULT_OK){
-				 
-					
+
+
 					 if(imageF!=null && imageF.getAbsolutePath()!=null)
 					 {
 						 File file=imageF;
@@ -4322,10 +4388,10 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 			               Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0,
 			                       byteArray.length);
 
-			              // 
+			              //
 			               setSavedImageToScrollView(bitmap, imageName,valueOfKey,clickedTagPhoto);
 				 }
-					 
+
 
 
 				 else
@@ -4335,7 +4401,7 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 
 					// make alert
 
-					 
+
 						 AlertDialog.Builder alertDialogSyncOK = new AlertDialog.Builder(getActivity());
 						 alertDialogSyncOK.setTitle(getResources().getString(R.string.AlertDialogHeaderMsg));
 						 alertDialogSyncOK.setCancelable(false);
@@ -4354,83 +4420,22 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 						 AlertDialog alert = alertDialogSyncOK.create();
 						 alert.show();
 
-					 
+
 
 				 }
-				
+
 /*
              ImageView image = new ImageView(getActivity());
-            
+
                //btn.setLayoutParams(new android.view.ViewGroup.LayoutParams(80,60));
-             
-               
+
+
                image.setImageBitmap(bitmap);
                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(90, 90);
                params.setMargins(10,0,10,0);
-              
+
                ll_Image.addView(image,params);*/
                }
-		}
-		public void saveImage()
-		{
-			long syncTIMESTAMP = System.currentTimeMillis();
-			   Date datefromat = new Date(syncTIMESTAMP);
-			   SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss",Locale.ENGLISH);
-			   onlyDate=df.format(datefromat);
-			   onlyDate=onlyDate.replace(":","").trim().replace("-", "").replace(" ","").trim().toString();
-			   File imagesFolder = new File(Environment.getExternalStorageDirectory(), CommonInfo.ImagesFolder);
-				if (!imagesFolder.exists()) 
-				{
-					 imagesFolder.mkdirs();
-				}
-				imageName=onlyDate+".jpg";
-				imageF = new File(imagesFolder,imageName);
-			
-				try {
-					FileOutputStream fo = new FileOutputStream(imageF);
-					
-				/*	fo.write(bmp);
-					fo.close();*/
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-				
-	            uriSavedImage = Uri.fromFile(imageF);
-	           
-	                          
-	       
-		}
-		
-		
-		 private boolean isValidEmail(String email) {
-				String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
-						+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-
-				Pattern pattern = Pattern.compile(EMAIL_PATTERN);
-				Matcher matcher = pattern.matcher(email);
-				return matcher.matches();
-			}
-		
-		public void showErrorAlert(String message) 
-		{
-		 AlertDialog.Builder alertDialogNoConn = new AlertDialog.Builder(getActivity());
-		 alertDialogNoConn.setTitle(getResources().getString(R.string.txtErr));
-		 alertDialogNoConn.setMessage(message);
-		 alertDialogNoConn.setNeutralButton(getResources().getString(R.string.AlertDialogOkButton),
-		   new DialogInterface.OnClickListener() 
-		           {
-		     public void onClick(DialogInterface dialog, int which) 
-		     {
-		                        dialog.dismiss();
-		                       // finish();
-		                    }
-		     });
-		
-		 AlertDialog alert = alertDialogNoConn.create();
-		 alert.show();
-		 
 		}
 		
 		
@@ -4465,16 +4470,74 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 			}
 */
 
+		public void saveImage()
+		{
+			long syncTIMESTAMP = System.currentTimeMillis();
+			   Date datefromat = new Date(syncTIMESTAMP);
+			   SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss",Locale.ENGLISH);
+			   onlyDate=df.format(datefromat);
+			   onlyDate=onlyDate.replace(":","").trim().replace("-", "").replace(" ","").trim().toString();
+			   File imagesFolder = new File(Environment.getExternalStorageDirectory(), CommonInfo.ImagesFolder);
+				if (!imagesFolder.exists())
+				{
+					 imagesFolder.mkdirs();
+				}
+				imageName=onlyDate+".jpg";
+				imageF = new File(imagesFolder,imageName);
+
+				try {
+					FileOutputStream fo = new FileOutputStream(imageF);
+
+				/*	fo.write(bmp);
+					fo.close();*/
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+
+	            uriSavedImage = Uri.fromFile(imageF);
 
 
 
+		}
+		 
+		 private boolean isValidEmail(String email) {
+				String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+						+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+
+				Pattern pattern = Pattern.compile(EMAIL_PATTERN);
+				Matcher matcher = pattern.matcher(email);
+				return matcher.matches();
+			}
+		 
+		public void showErrorAlert(String message)
+		{
+		 AlertDialog.Builder alertDialogNoConn = new AlertDialog.Builder(getActivity());
+		 alertDialogNoConn.setTitle(getResources().getString(R.string.txtErr));
+		 alertDialogNoConn.setMessage(message);
+		 alertDialogNoConn.setNeutralButton(getResources().getString(R.string.AlertDialogOkButton),
+		   new DialogInterface.OnClickListener()
+		           {
+		     public void onClick(DialogInterface dialog, int which)
+		     {
+		                        dialog.dismiss();
+		                       // finish();
+		                    }
+		     });
+
+		 AlertDialog alert = alertDialogNoConn.create();
+		 alert.show();
+
+		}
+		 
 	public void setSavedImageToScrollView(Bitmap bitmap,String imageValidName,String valueOfKey,final String tagOfClkdPic){
 	    	//clickedTagPhoto
-	    	
+
 	    	 LayoutInflater inflater=(LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	           View viewStoreLocDetail=inflater.inflate(R.layout.store_loc_display,null);
-	         
-	           
+
+
 	           final RelativeLayout rl_photo=(RelativeLayout) viewStoreLocDetail.findViewById(R.id.rl_photo);
 	          final ImageView img_thumbnail=(ImageView)viewStoreLocDetail.findViewById(R.id.img_thumbnail);
 	          img_thumbnail.setImageBitmap(bitmap);
@@ -4499,9 +4562,9 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 
 			 hmapImageClkdTempIdData.put(imageValidName,valueOfKey );
 	          final ImageView imgCncl=(ImageView) viewStoreLocDetail.findViewById(R.id.imgCncl);
-	        
+
 	         img_thumbnail.setOnClickListener(new OnClickListener() {
-					
+
 					@Override
 					public void onClick(View view) {
 						Intent intent = new Intent();
@@ -4533,9 +4596,9 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 
 					}
 				});
-	          
+
 	          imgCncl.setOnClickListener(new OnClickListener() {
-					
+
 					@Override
 					public void onClick(View v) {
 
@@ -4556,17 +4619,17 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 					        File fdelete = new File(file_dj_path);
 					        if (fdelete.exists()) {
 					            if (fdelete.delete()) {
-					               
+
 					                callBroadCast();
 					            } else {
-					               
+
 					            }
 					        }
 						ViewGroup parent = (ViewGroup) rl_photo.getParent();
 						parent.removeView(rl_photo);
 					}
 				});
-	      
+
 
 	         LinearLayout ll_ImageToSet= (LinearLayout) ll_data.findViewWithTag(clickedTagPhoto+"_camera");
 			if(ll_ImageToSet!=null)
@@ -4574,21 +4637,21 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 				ll_ImageToSet.addView(viewStoreLocDetail);
 			}
 
-	         
-	       	   
-	       	   
-	         
-	        
-	         
+
+
+
+
+
+
 	    }
-		 
+
 		 public void callBroadCast() {
 		        if (Build.VERSION.SDK_INT >= 14) {
 		            Log.e("-->", " >= 14");
 		            MediaScannerConnection.scanFile(getActivity(), new String[]{Environment.getExternalStorageDirectory().toString()}, null, new MediaScannerConnection.OnScanCompletedListener() {
-		              
+
 		                public void onScanCompleted(String path, Uri uri) {
-		                
+
 		                }
 		            });
 		        } else {
@@ -4597,41 +4660,7 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 		                    Uri.parse("file://" + Environment.getExternalStorageDirectory())));
 		        }
 		    }
-		 
-		 public static Bitmap decodeSampledBitmapFromFile(String path, int reqWidth, int reqHeight) 
-		 { // BEST QUALITY MATCH
-		      
-		     //First decode with inJustDecodeBounds=true to check dimensions
-		     final BitmapFactory.Options options = new BitmapFactory.Options();
-		     options.inJustDecodeBounds = true;
-		     BitmapFactory.decodeFile(path, options);
-		  
-		     // Calculate inSampleSize, Raw height and width of image
-		     final int height = options.outHeight;
-		     final int width = options.outWidth;
-		     options.inPreferredConfig = Bitmap.Config.RGB_565;
-		     int inSampleSize = 1;
-
-		     if (height > reqHeight) 
-		     {
-		         inSampleSize = Math.round((float)height / (float)reqHeight);
-		     }
-		     int expectedWidth = width / inSampleSize;
-		  
-		     if (expectedWidth > reqWidth) 
-		     {
-		         //if(Math.round((float)width / (float)reqWidth) > inSampleSize) // If bigger SampSize..
-		         inSampleSize = Math.round((float)width / (float)reqWidth);
-		     }
-
-		     options.inSampleSize = inSampleSize;
-		  
-		     // Decode bitmap with inSampleSize set
-		     options.inJustDecodeBounds = false;
-		  
-		     return BitmapFactory.decodeFile(path, options);
-		 }
-		 
+			
 		 public void hideOrShowGroup(String questGrpId)
 		 {
 				if(hmapQuestGrpId_GrpId.containsKey(questGrpId))
@@ -4659,9 +4688,9 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 						 LinearLayout textViewGroupHeader=(LinearLayout) ll_data.findViewWithTag(groupId+"_group");
 						 if(textViewGroupHeader!=null)
 						 {
-							 textViewGroupHeader.setVisibility(View.GONE);	 
+							 textViewGroupHeader.setVisibility(View.GONE);
 						 }
-						 
+
 					 }
 					 else
 					 {
@@ -4669,18 +4698,19 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 						 if(textViewGroupHeader!=null)
 						 {
 							 textViewGroupHeader.setVisibility(View.VISIBLE);
-							 
+
 						 }
 					 }
-					
+
 				}
 		 }
+
 		 public boolean validatecheckboxofAdvance() {
 
 				boolean ckeckbox=false;
 				int count = parentOfAdvanceBeforeDeliveryPayMentMode.getChildCount();
-				
-				 for (int ui=0;ui<count;ui++) 
+
+				 for (int ui=0;ui<count;ui++)
 				 {
 					 View ch = parentOfAdvanceBeforeDeliveryPayMentMode.getChildAt(ui);
 			            if (ch instanceof CheckBox)
@@ -4688,23 +4718,23 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 			            	if(((CompoundButton) ch).isChecked()==true)
 							{
 			            		ckeckbox=true;
-			            		
+
 			            		break;
 							}
-			            	
+
 			            }
 				 }
-				 
-					 return ckeckbox;		
+
+					 return ckeckbox;
 
 			}
-			
+		 
 			public boolean validatecheckboxofDelivery() {
 
 				boolean ckeckbox=false;
 				int count = parentOfOnDeliveryPayMentMode.getChildCount();
-				
-				 for (int ui=0;ui<count;ui++) 
+
+				 for (int ui=0;ui<count;ui++)
 				 {
 					 View ch = parentOfOnDeliveryPayMentMode.getChildAt(ui);
 			            if (ch instanceof CheckBox)
@@ -4712,22 +4742,23 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 			            	if(((CompoundButton) ch).isChecked()==true)
 							{
 			            		ckeckbox=true;
-			            		
+
 			            		break;
 							}
-			            	
+
 			            }
 				 }
-				 
-					 return ckeckbox;		
+
+					 return ckeckbox;
 
 			}
+			
 			public boolean validatecheckboxofCredit() {
 
 				boolean ckeckbox=false;
 				int count = parentOfCreditPayMentMode.getChildCount();
-				
-				 for (int ui=0;ui<count;ui++) 
+
+				 for (int ui=0;ui<count;ui++)
 				 {
 					 View ch = parentOfCreditPayMentMode.getChildAt(ui);
 			            if (ch instanceof CheckBox)
@@ -4735,221 +4766,219 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 			            	if(((CompoundButton) ch).isChecked()==true)
 							{
 			            		ckeckbox=true;
-			            		
+
 			            		break;
 							}
-			            	
+
 			            }
 				 }
-				 
-					 return ckeckbox;		
 
-			} 
-		 
-			
+					 return ckeckbox;
+
+			}
+		
 			public void saveDataToDataBase() {
-				
+
 				getActivity().getWindow().setFlags(LayoutParams.FLAG_NOT_TOUCHABLE, LayoutParams.FLAG_NOT_TOUCHABLE);
-				
+
 				String PaymntTermEditString="0";  //CreditLimit
 				String SalesQuoteTypeString="0";
 				String PaymntTermSpinnerString="0"; //CREDITdays
-				
+
 				String storeIDString="0";
-				
+
 		    	String PAYMENT_STAGEID_Values="0";
 		    	String PaymentModeId="0";
-		    	
+
 		    	String paymntStgAdvnc=globalValueOfPaymentStageCheck.split(Pattern.quote("_"))[0];
-				
+
 				String paymntStgDelvry=globalValueOfPaymentStageCheck.split(Pattern.quote("_"))[1];
 				String paymntStgCrdt=globalValueOfPaymentStageCheck.split(Pattern.quote("_"))[2];
-				
+
 				String fullStringOfAdvnc="0";
 				String perOfAd="0";
 				String checkBoxOfAdvance="0";
-				
+
 				if(paymntStgAdvnc.equals("1")){
 					if(!percentageOfAdvanceBeforeDelivery.getText().toString().trim().equals("")){
 						perOfAd=percentageOfAdvanceBeforeDelivery.getText().toString().trim();
-						
+
 					}
 					int count = parentOfAdvanceBeforeDeliveryPayMentMode.getChildCount();
-					
-					 for (int ui=0;ui<count;ui++) 
+
+					 for (int ui=0;ui<count;ui++)
 					 {
 						 View ch = parentOfAdvanceBeforeDeliveryPayMentMode.getChildAt(ui);
 				            if (ch instanceof CheckBox)
 				            {
 				            	if(((CompoundButton) ch).isChecked()==true)
 								{
-				            		
+
 				            		int chkedchkQuestId=Integer.parseInt(ch.getTag().toString().trim().split(Pattern.quote("^"))[0]);
-				            		
+
 				            		if(checkBoxOfAdvance.equals("0")){
 				            			checkBoxOfAdvance=String.valueOf(chkedchkQuestId);
 				            		}
 				            		else{
 				            			checkBoxOfAdvance=checkBoxOfAdvance+"|"+String.valueOf(chkedchkQuestId);
-				            			
+
 				            		}
-				            		
+
 								}
-				            	
+
 				            }
 					 }
-					
-					
+
+
 				}
 				 fullStringOfAdvnc=paymntStgAdvnc+"~"+perOfAd+"~"+"0"+"~"+"0"+"~"+checkBoxOfAdvance;
-				 
+
 				/*String fullStringOfDelivery="0";*/
 				 fullStringOfDelivery="0";
 				String perOfDelivery="0";
 				String checkBoxOfDelivery="0";
 				String creditDaysOfDelvry="0";
-				
+
 				if(paymntStgDelvry.equals("2")){
 
 					if(!percentageOfOnDelivery.getText().toString().trim().equals("")){
 						perOfDelivery=percentageOfOnDelivery.getText().toString().trim();
-						
+
 					}
 					int count = parentOfOnDeliveryPayMentMode.getChildCount();
-					
-					 for (int ui=0;ui<count;ui++) 
+
+					 for (int ui=0;ui<count;ui++)
 					 {
 						 View ch = parentOfOnDeliveryPayMentMode.getChildAt(ui);
 				            if (ch instanceof CheckBox)
 				            {
 				            	if(((CompoundButton) ch).isChecked()==true)
 								{
-				            		
+
 				            		int chkedchkQuestId=Integer.parseInt(ch.getTag().toString().trim().split(Pattern.quote("^"))[0]);
-				            		
+
 				            		if(checkBoxOfDelivery.equals("0")){
 				            			checkBoxOfDelivery=String.valueOf(chkedchkQuestId);
 				            		}
 				            		else{
 				            			checkBoxOfDelivery=checkBoxOfDelivery+"|"+String.valueOf(chkedchkQuestId);
-				            			
+
 				            		}
-				            		
+
 								}
-				            	
+
 				            }
 					 }
 					 if(creditDaysOfOnDelivery.isEnabled() && !creditDaysOfOnDelivery.getText().toString().trim().equals("")){
-						 
+
 						 creditDaysOfDelvry=	 creditDaysOfOnDelivery.getText().toString().trim();
-						 
+
 					 }
-					
-					
-				
-					
+
+
+
+
 				}
 				 fullStringOfDelivery=paymntStgDelvry+"~"+perOfDelivery+"~"+creditDaysOfDelvry+"~"+"0"+"~"+checkBoxOfDelivery;
-				 
+
 				String fullStringOfCredit="0";
 				String perOfCredit="0";
 				String checkBoxOfCredit="0";
 				String creditDaysOfCreditString="0";
 				String creditLimitOfCreditString="0";
-				
+
 				if(paymntStgCrdt.equals("3")){
-					
+
 
 
 					if(!PercentageOfCredit.getText().toString().trim().equals("")){
 						perOfCredit=PercentageOfCredit.getText().toString().trim();
-						
+
 					}
 					int count = parentOfCreditPayMentMode.getChildCount();
-					
-					 for (int ui=0;ui<count;ui++) 
+
+					 for (int ui=0;ui<count;ui++)
 					 {
 						 View ch = parentOfCreditPayMentMode.getChildAt(ui);
 				            if (ch instanceof CheckBox)
 				            {
 				            	if(((CompoundButton) ch).isChecked()==true)
 								{
-				            		
+
 				            		int chkedchkQuestId=Integer.parseInt(ch.getTag().toString().trim().split(Pattern.quote("^"))[0]);
-				            		
+
 				            		if(checkBoxOfCredit.equals("0")){
 				            			checkBoxOfCredit=String.valueOf(chkedchkQuestId);
 				            		}
 				            		else{
 				            			checkBoxOfCredit=checkBoxOfCredit+"|"+String.valueOf(chkedchkQuestId);
-				            			
+
 				            		}
-				            		
+
 								}
-				            	
+
 				            }
 					 }
 					 if(!creditDaysOfCredit.getText().toString().trim().equals("")){
-						 
+
 						 creditDaysOfDelvry=	 creditDaysOfCredit.getText().toString().trim();
-						 
+
 					 }
 		 if(!creditLimitOfCredit.getText().toString().trim().equals("")){
-						 
-			 creditLimitOfCreditString=	 creditLimitOfCredit.getText().toString().trim();
-						 
-					 }
-					 
 
-					
-				
-					
-				
-					
+			 creditLimitOfCreditString=	 creditLimitOfCredit.getText().toString().trim();
+
+					 }
+
+
+
+
+
+
+
 				}
 				 fullStringOfCredit=paymntStgCrdt+"~"+"100"+"~"+creditDaysOfDelvry+"~"+creditLimitOfCreditString+"~"+checkBoxOfCredit;
-				
+
 				 PAYMENT_STAGEID_Values=fullStringOfAdvnc+"$"+fullStringOfDelivery+"$"+fullStringOfCredit;
-				 
+
 				/// if you want multiple selection again comment these lises
 				   if(paymntStgAdvnc.equals("1")){
-				    
+
 				    PAYMENT_STAGEID_Values=fullStringOfAdvnc;
-				   } 
+				   }
 				   if(paymntStgDelvry.equals("2")){
-				    
+
 				    PAYMENT_STAGEID_Values=fullStringOfDelivery;
-				   } 
+				   }
 				   if(paymntStgCrdt.equals("3")){
-				    
+
 				    PAYMENT_STAGEID_Values=fullStringOfCredit;
 				   }
 				   // end here
-		    	
-		    
+
+
 			 storeIDString=	AddNewStore_DynamicSectionWise.selStoreID;
-			
-			
-			
+
+
+
 			helperDb.open();
 			helperDb.fndeleteNewStoreSalesQuotePaymentDetails(storeIDString);
 			helperDb.fnsaveNewStoreSalesQuotePaymentDetails(storeIDString,PAYMENT_STAGEID_Values);
-		
+
 			helperDb.close();
-			
+
 			 getActivity().getWindow().clearFlags(LayoutParams.FLAG_NOT_TOUCHABLE);
-			
+
 			}
-			
-			
+		 
 			public boolean validatePaymentStageID()
 		 {
 			 boolean returnResult=true;
 			 if(globalValueOfPaymentStageCheck.equals("0"+"_"+"0"+"_"+"0")){
-					
+
 					paymentstagetextviewNew.clearFocus();
 					paymentstagetextviewNew.requestFocus();
-					
+
 					/*String estring = "Please Select Payment Stage";
 					   ForegroundColorSpan fgcspan = new ForegroundColorSpan(Color.BLACK);
 					   SpannableStringBuilder ssbuilder = new SpannableStringBuilder(estring);
@@ -4957,7 +4986,7 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 					   paymentstagetextviewNew.setError(ssbuilder);*/
 					paymentstagetextviewNew.setError("Please Select Payment Stage");
 					returnResult= false;
-					
+
 				}
 				/*else if(!validatePercentage()){
 					percentageOfAdvanceBeforeDelivery.clearFocus();
@@ -4968,19 +4997,19 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 					PercentageOfCredit.clearFocus();
 					creditDaysOfCredit.clearFocus();
 					creditLimitOfCredit.clearFocus();
-					
+
 					percentageTextviewNew.clearFocus();
 					percentageTextviewNew.requestFocus();
-					percentageTextviewNew.setError("Percentage is not 100%");  
-					
+					percentageTextviewNew.setError("Percentage is not 100%");
+
 					return false;
-					
+
 				}
-						
+
 				*/else if(!validatecheckboxofAdvance() && globalValueOfPaymentStageCheck.split(Pattern.quote("_"))[0].equals("1")){
 					paymentModeTextviewNew.clearFocus();
 					paymentModeTextviewNew.requestFocus();
-					
+
 					/*String estring = "Select Payment Mode";
 					   ForegroundColorSpan fgcspan = new ForegroundColorSpan(Color.BLACK);
 					   SpannableStringBuilder ssbuilder = new SpannableStringBuilder(estring);
@@ -4988,25 +5017,25 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 					   paymentModeTextviewNew.setError(ssbuilder);*/
 
 					paymentModeTextviewNew.setError("Select Payment Mode");
-					
+
 					returnResult= false;
-					
-					
+
+
 				}
 				else if(!validatecheckboxofDelivery() && globalValueOfPaymentStageCheck.split(Pattern.quote("_"))[1].equals("2")){
 					paymentModeTextviewNew.clearFocus();
 					paymentModeTextviewNew.requestFocus();
-					
+
 					/*String estring = "Select Payment Mode";
 					   ForegroundColorSpan fgcspan = new ForegroundColorSpan(Color.BLACK);
 					   SpannableStringBuilder ssbuilder = new SpannableStringBuilder(estring);
 					   ssbuilder.setSpan(fgcspan, 0, estring.length(), 0);
 					   paymentModeTextviewNew.setError(ssbuilder);*/
 					paymentModeTextviewNew.setError("Select Payment Mode");
-					
+
 					returnResult= false;
-					
-					
+
+
 				}
 				else if(!validatecheckboxofCredit() && globalValueOfPaymentStageCheck.split(Pattern.quote("_"))[2].equals("3")){
 					paymentModeTextviewNew.clearFocus();
@@ -5017,13 +5046,13 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 					   ssbuilder.setSpan(fgcspan, 0, estring.length(), 0);
 					   paymentModeTextviewNew.setError(ssbuilder);*/
 					paymentModeTextviewNew.setError("Select Payment Mode");
-					
+
 					returnResult= false;
-					
-					
+
+
 				}
 				else if(creditDaysOfOnDelivery.isEnabled() && creditDaysOfOnDelivery.getText().toString().trim().equals("")){
-					
+
 					creditdaysTextboxNew.clearFocus();
 					creditdaysTextboxNew.requestFocus();
 					/*String estring = "Credit days is empty";
@@ -5031,12 +5060,12 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 					   SpannableStringBuilder ssbuilder = new SpannableStringBuilder(estring);
 					   ssbuilder.setSpan(fgcspan, 0, estring.length(), 0);
 					   creditdaysTextboxNew.setError(ssbuilder);*/
-					
+
 					creditdaysTextboxNew.setError("Credit days is empty");
 					returnResult= false;
 				}
 				else if(CreditCheckBoxNew.isChecked() && creditDaysOfCredit.getText().toString().trim().equals("")){
-					
+
 					creditdaysTextboxNew.clearFocus();
 					creditdaysTextboxNew.requestFocus();
 					/*String estring = "Credit days is empty";
@@ -5044,12 +5073,12 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 					   SpannableStringBuilder ssbuilder = new SpannableStringBuilder(estring);
 					   ssbuilder.setSpan(fgcspan, 0, estring.length(), 0);
 					   creditdaysTextboxNew.setError(ssbuilder);*/
-					
+
 					creditdaysTextboxNew.setError("Credit days is empty");
 					returnResult= false;
 				}
 				else if(CreditCheckBoxNew.isChecked() && creditLimitOfCredit.getText().toString().trim().equals("")){
-					
+
 					CreditlimitTextboxNew.clearFocus();
 					CreditlimitTextboxNew.requestFocus();
 					/*String estring = "Credit limit is empty";
@@ -5060,10 +5089,10 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 					CreditlimitTextboxNew.setError("Credit limit is empty");
 					returnResult= false;
 				}
-						
+
 				//else if(creditDaysOfOnDelivery.isEnabled() && creditDaysOfOnDelivery.getText().toString().trim().equals("0")){
 					else if(creditDaysOfOnDelivery.isEnabled() && Double.parseDouble(creditDaysOfOnDelivery.getText().toString().trim())==0.0){
-					
+
 					creditDaysOfOnDelivery.clearFocus();
 					creditdaysTextboxNew.clearFocus();
 					creditdaysTextboxNew.requestFocus();
@@ -5076,7 +5105,7 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 					returnResult= false;
 				}
 				else if(CreditCheckBoxNew.isChecked() && Double.parseDouble(creditDaysOfCredit.getText().toString().trim())==0.0){
-					
+
 					creditDaysOfCredit.clearFocus();
 					creditdaysTextboxNew.clearFocus();
 					creditdaysTextboxNew.requestFocus();
@@ -5089,7 +5118,7 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 					returnResult= false;
 				}
 				else if(CreditCheckBoxNew.isChecked() && Double.parseDouble(creditLimitOfCredit.getText().toString().trim())==0.0){
-					
+
 					creditLimitOfCredit.clearFocus();
 					CreditlimitTextboxNew.clearFocus();
 					CreditlimitTextboxNew.requestFocus();
@@ -5104,12 +5133,12 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 				}
 			 return returnResult;
 		 }
-		
+		 
 			public boolean validate()
 			{
-				
-				
-			
+
+
+
 				for(Entry<String, Boolean> entry:hmapMustRqrdFiled.entrySet())
 				{
 					LinearLayout ll_view=(LinearLayout) ll_data.findViewWithTag(entry.getKey().split(Pattern.quote("^"))[2].toString()+"ll");
@@ -5117,12 +5146,12 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 					listKeyMapdWithSection=AddNewStore_DynamicSectionWise.hmapSection_key.get(String.valueOf(sectionIsShown));
 					View view=ll_data.findViewWithTag(entry.getKey());
 					if(ll_view.getVisibility()==View.VISIBLE && listKeyMapdWithSection.contains(entry.getKey()))
-						
+
 					{
 						if(view instanceof EditText)
 						{
 							EditText edVal=(EditText)view;
-							
+
 							if(TextUtils.isEmpty(edVal.getText().toString()))
 							{
 								edVal.requestFocus();
@@ -5145,9 +5174,9 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 										validateNameFilled();
 										//hmapMustRqrdFiled.put(entry.getKey(), true);
 									}
-									
+
 								}
-								
+
 								else if(((AddNewStore_DynamicSectionWise.hmapQuesIdValues.get(entry.getKey())).split(Pattern.quote("^"))[5]).equals("5"))
 								{
 									if(!isValidEmail(edVal.getText().toString()))
@@ -5165,11 +5194,11 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 								{
 									//hmapMustRqrdFiled.put(entry.getKey(), true);
 								}
-							
+
 							}
-							
+
 						}
-						
+
 						 if(entry.getKey().split(Pattern.quote("^"))[1].toString().equals("4") || entry.getKey().split(Pattern.quote("^"))[1].toString().equals("5"))
 						{
 							StringBuilder answer=new StringBuilder();
@@ -5192,7 +5221,7 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 											if(TextUtils.isEmpty(editTextCheckBox.getText().toString()))
 											{
 												isEditTextFilled=false;
-											
+
 												break;
 											}
 											else
@@ -5203,13 +5232,13 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 										else
 										{
 											isSelected=true;
-											
+
 										}
-										
+
 									}
 								}
-								
-								
+
+
 							}
 							if(isSelected)
 							{
@@ -5218,7 +5247,7 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 									if(!isEditTextFilled)
 									{
 										showErrorAlert(getResources().getString(R.string.PleaseFill)+((TextView)ll_data.findViewWithTag(entry.getKey()+"?")).getText().toString()+" for Others");
-										return false;	
+										return false;
 									}
 									else
 									{
@@ -5229,16 +5258,16 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 								{
 									hmapMustRqrdFiled.put(entry.getKey(), true);
 								}
-								
+
 							}
 							else
 							{
 								showErrorAlert(getResources().getString(R.string.PleaseSelect)+" "+((TextView)ll_data.findViewWithTag(entry.getKey()+"?")).getText().toString());
 								return false;
 							}
-						
+
 						}
-						
+
 						 if(view instanceof RadioGroup)
 						{
 							RadioGroup radioGroupSelected=(RadioGroup) view;
@@ -5249,7 +5278,7 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 							   // no radio buttons are checked
 								 showErrorAlert(getResources().getString(R.string.PleaseSelect)+" "+((TextView)ll_data.findViewWithTag(entry.getKey()+"?")).getText().toString());
 									return false;
-								 
+
 							 }
 							 else
 							 {
@@ -5257,12 +5286,12 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 								 hmapMustRqrdFiled.put(entry.getKey(), true);
 							 }
 						}
-						 
-						
+
+
 						 if(view instanceof Spinner)
 						{
 							Spinner spinnerSelected=(Spinner) view;
-							 
+
 								if(spinnerSelected.getSelectedItem().toString().equals("Select"))
 								{
 									showErrorAlert(getResources().getString(R.string.PleaseSelect)+" "+((TextView)ll_data.findViewWithTag(entry.getKey()+"?")).getText().toString());
@@ -5276,19 +5305,19 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 										if(TextUtils.isEmpty(editText.getText().toString()))
 										{
 											showErrorAlert(getResources().getString(R.string.PleaseFill)+((TextView)ll_data.findViewWithTag(entry.getKey()+"?")).getText().toString());
-											return false;	
+											return false;
 										}
 									}
-									
+
 								}
 								else
 								{
 									 hmapMustRqrdFiled.put(entry.getKey(), true);
 								}
-					          
-					           
-					         
-					            
+
+
+
+
 						}
 					 if(entry.getKey().split(Pattern.quote("^"))[1].toString().equals("10"))
 							{
@@ -5345,8 +5374,8 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 									return false;
 							 }
 						 }
-						 
-						 
+
+
 						 if(entry.getKey().split(Pattern.quote("^"))[1].toString().equals("16"))
 						 {
 							 TextView textView=(TextView) ll_data.findViewWithTag(entry.getKey());
@@ -5365,7 +5394,7 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 									}
 							 }
 						 }
-						
+
 						 if(view instanceof LinearLayout)
 						{
 							if(entry.getKey().split(Pattern.quote("^"))[1].toString().equals("12"))
@@ -5379,18 +5408,18 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 									if(TextUtils.isEmpty(edVal.getText().toString()))
 									{
 										errorAlert=true;
-									}	
+									}
 									else if(!((AddNewStore_DynamicSectionWise.hmapQuesIdValues.get(entry.getKey())).split(Pattern.quote("^"))[11]).equals("0"))
 									{
 										totalLengthOfPhn=edVal.getText().toString().length()+totalLengthOfPhn;
-										
-										
+
+
 									}
 								}
-								
+
 								if(errorAlert)
 								{
-									
+
 									showErrorAlert(getResources().getString(R.string.STDAndLandline));
 									return false;
 								}
@@ -5405,12 +5434,12 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 											return false;
 										}
 									}
-									
+
 								}
-							
+
 							}
-							
-							
+
+
 							if(entry.getKey().split(Pattern.quote("^"))[1].toString().equals("14"))
 							{
 
@@ -5423,7 +5452,7 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 								{
 									LinearLayout checkBoxVal_ll=(LinearLayout) ll_checkBoxVal.getChildAt(i);
 									CheckBox chckBox=(CheckBox) checkBoxVal_ll.getChildAt(0);
-									
+
 									if(chckBox.isChecked())
 									{
 										EditText ediText=(EditText) checkBoxVal_ll.getChildAt(1);
@@ -5431,7 +5460,7 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 										String tagChckBox=chckBox.getTag().toString();
 										String inputType=ediText.getTag().toString();
 										String edtTextVal=ediText.getText().toString();
-										
+
 											if(TextUtils.isEmpty(edtTextVal))
 											{
 												ediText.requestFocus();
@@ -5442,10 +5471,10 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 											{
 												isEditTextFilled=true;
 											}
-									
-										
+
+
 									}
-									
+
 								}
 								if(isSelected)
 								{
@@ -5458,40 +5487,40 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 										showErrorAlert(getResources().getString(R.string.PleaseFill)+((TextView)ll_data.findViewWithTag(entry.getKey()+"?")).getText().toString());
 										return false;
 									}
-								
-									
+
+
 								}
-								
+
 								else
 								{
 									showErrorAlert(getResources().getString(R.string.PleaseSelect)+" "+((TextView)ll_data.findViewWithTag(entry.getKey()+"?")).getText().toString());
 									return false;
 								}
-							
-							
+
+
 							}
-							
-							
+
+
 						}
-						
-						
+
+
 					}
-					
+
 				}
 				for(Entry<String, String> entry:hmapOptionalFiled.entrySet())
 				{
 					LinearLayout ll_view=(LinearLayout) ll_data.findViewWithTag(entry.getKey().split(Pattern.quote("^"))[2].toString()+"ll");
 					ArrayList<String> listKeyMapdWithSection=new ArrayList<String>();
 					listKeyMapdWithSection=AddNewStore_DynamicSectionWise.hmapSection_key.get(String.valueOf(sectionIsShown));
-					
+
 					View view=ll_data.findViewWithTag(entry.getKey());
 					if(ll_view.getVisibility()==View.VISIBLE && listKeyMapdWithSection.contains(entry.getKey()))
 					{
-					
+
 						if(view instanceof EditText)
 						{
 							EditText edVal=(EditText)view;
-							
+
 							if(!TextUtils.isEmpty(edVal.getText().toString().trim()))
 							{
 								//(edVal.getText().toString()).length()!=0
@@ -5506,7 +5535,7 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 									{
 										//hmapMustRqrdFiled.put(entry.getKey(), true);
 									}
-									
+
 								}
 								else if(hmapOptionalFiled.get(entry.getKey()).equals("Email"))
 								{
@@ -5517,25 +5546,25 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 									}
 									else
 									{
-										
+
 									}
 								}
 								else
 								{
-									
+
 								}
-							
-							
+
+
 							}
-						
-							
+
+
 						}
-						
+
 						else if(view instanceof LinearLayout)
 						{
 							if(entry.getKey().split(Pattern.quote("^"))[1].toString().equals("12"))
 							{
-								
+
 								LinearLayout ll_landline_phone=(LinearLayout) view;
 								int totalLengthOfPhn=0;
 								for(int i=0;i<ll_landline_phone.getChildCount();i++)
@@ -5544,12 +5573,12 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 									 if(!((AddNewStore_DynamicSectionWise.hmapQuesIdValues.get(entry.getKey())).split(Pattern.quote("^"))[11]).equals("0"))
 									{
 										totalLengthOfPhn=edVal.getText().toString().length()+totalLengthOfPhn;
-										
-										
+
+
 									}
 								}
-								
-								
+
+
 									if(!((AddNewStore_DynamicSectionWise.hmapQuesIdValues.get(entry.getKey())).split(Pattern.quote("^"))[11]).equals("0"))
 									{
 										//11= MinLength 6= MaxLength
@@ -5561,16 +5590,16 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 												return false;
 											}
 										}
-										
+
 									}
-									
-								
-							
+
+
+
 							}
-							
-							
+
+
 						}
-						
+
 					}
 				}
 				return true;
@@ -5622,15 +5651,30 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 			 View viewAddress=ll_data.findViewWithTag(addressName);
 			 View viewStoreType=ll_data.findViewWithTag(storeType);
 
+			 View viewSalesPersonName=ll_data.findViewWithTag(salespersonname);
+			 View viewSalesPersonContact=ll_data.findViewWithTag(salespersoncontactno);
+
 			 EditText edOwner=(EditText)viewOwner;
 			 EditText edMobileNumber=(EditText)viewMobileNumber;
 			 EditText edAddress=(EditText)viewAddress;
-			// TextView txtStoreType=(EditText)viewStoreType;
+			 EditText edSalesPersonName=(EditText)viewSalesPersonName;
+			 EditText edSalesPersonContact=(EditText)viewSalesPersonContact;
+			 TextView txtStoreType=(TextView)viewStoreType;
 
 			 if(hmapsearchAnswerSlctd.containsKey(storeType))
 			 {
 
 				currentStoreType=hmapsearchAnswerSlctd.get(storeType);
+				 if(txtStoreType!=null)
+				 {
+					 if(!TextUtils.isEmpty(txtStoreType.getText().toString().trim()))
+					 {
+						 currentStoreCatType =txtStoreType.getText().toString();
+					 }
+
+				 }
+
+
 			 }
 			 if(edOwner!=null)
 			 {
@@ -5640,6 +5684,26 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 				 }
 
 			 }
+
+			 if(edSalesPersonName!=null)
+			 {
+				 if(!TextUtils.isEmpty(edSalesPersonName.getText().toString().trim()))
+				 {
+					 currentSalesPersonName=edSalesPersonName.getText().toString();
+				 }
+
+			 }
+
+			 if(edSalesPersonContact!=null)
+			 {
+				 if(!TextUtils.isEmpty(edSalesPersonContact.getText().toString().trim()))
+				 {
+					 currentSalesPersonContactNo=edSalesPersonContact.getText().toString();
+				 }
+
+			 }
+
+
 			 if(edMobileNumber!=null)
 			 {
 				 if(!TextUtils.isEmpty(edMobileNumber.getText().toString().trim()))
@@ -5657,10 +5721,10 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 
 			 }
 
-			
+
 				for(Entry<String, String> entry:AddNewStore_DynamicSectionWise.hmapQuesIdValues.entrySet())
 				{
-					
+
 						ArrayList<String> tempOutletQuestAnsMstrVal=new ArrayList<String>();
 						View ll_view=ll_data.findViewWithTag(entry.getKey().split(Pattern.quote("^"))[2].toString()+"ll");
 						View view=ll_data.findViewWithTag(entry.getKey());
@@ -5671,10 +5735,10 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 							if(view instanceof EditText)
 							{
 								EditText edVal=(EditText)view;
-								
-								
+
+
 			//saveOutletQuestAnsMstr(String OutletID,String QuestID,String AnswerType,String AnswerValue)
-								
+
 								if(!TextUtils.isEmpty(edVal.getText().toString()))
 								{
 
@@ -5694,28 +5758,28 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 									tempOutletQuestAnsMstrVal.add(2,entry.getKey().split(Pattern.quote("^"))[1].toString());
 									tempOutletQuestAnsMstrVal.add(3,"");*/
 								}
-							
+
 							}
-							
+
 							else if(view instanceof Button)
 							{
 								if(entry.getKey().split(Pattern.quote("^"))[1].toString().equals("11"))
 								{
 
 									Button buttonCalender=(Button)view;
-									
-									
+
+
 									//saveOutletQuestAnsMstr(String OutletID,String QuestID,String AnswerType,String AnswerValue)
-									
+
 									if(!buttonCalender.getText().toString().equals("Select Date"))
 									{
 										hmapAnsValues.put(entry.getKey(), TextUtils.htmlEncode(buttonCalender.getText().toString()));
-										
+
 									}
 									/*else
 									{
 										hmapAnsValues.put(entry.getKey(), "");
-										
+
 									}*/
 								}
 							}
@@ -5735,20 +5799,20 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 										if(checkBoxVal.isChecked())
 										{
 											noValSelected=false;
-											
+
 											if(checkBoxVal.getText().toString().equals("Others") || checkBoxVal.getText().toString().equals("Other"))
 											{
 												isOtherSelected=true;
 												EditText editTextCheckBox=(EditText) ll_data.findViewWithTag(checkBoxVal.getTag().toString()+"_ed");
 												if(!TextUtils.isEmpty(editTextCheckBox.getText().toString()))
 												{
-													
+
 													ediTextVal=editTextCheckBox.getText().toString();
-													
+
 												}
-												
+
 											}
-											
+
 											if(i==0)
 											{
 											if(isOtherSelected)
@@ -5759,8 +5823,8 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 											{
 												answer.append(hmapOptionId.get((entry.getKey().split(Pattern.quote("^"))[2])+"^"+checkBoxVal.getText().toString()));
 											}
-												
-												
+
+
 												isSingleSelected=false;
 											}
 											else
@@ -5775,7 +5839,7 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 													{
 														answer.append(hmapOptionId.get((entry.getKey().split(Pattern.quote("^"))[2])+"^"+checkBoxVal.getText().toString()));
 													}
-													
+
 													isSingleSelected=false;
 												}
 												else
@@ -5788,15 +5852,15 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 													{
 														answer.append("^").append(hmapOptionId.get((entry.getKey().split(Pattern.quote("^"))[2])+"^"+checkBoxVal.getText().toString()));
 													}
-													
-													
+
+
 												}
-												
+
 											}
 										}
 									}
-									
-									
+
+
 								}
 								if(noValSelected)
 								{
@@ -5808,7 +5872,7 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 								}
 								else
 								{
-									
+
 									//tempOutletQuestAnsMstrVal.add(0,OutletID);
 								/*	tempOutletQuestAnsMstrVal.add(1,entry.getKey().split(Pattern.quote("^"))[0].toString());
 									tempOutletQuestAnsMstrVal.add(2,entry.getKey().split(Pattern.quote("^"))[1].toString());
@@ -5816,9 +5880,9 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 									hmapAnsValues.put(entry.getKey(), TextUtils.htmlEncode( answer.toString()));
 								}
 								//hmapAnsValues.put(entry.getKey(), answer.toString());
-								
+
 							}
-							
+
 							else if(view instanceof RadioGroup)
 							{
 								RadioGroup radioGroupSelected=(RadioGroup) view;
@@ -5832,7 +5896,7 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 										tempOutletQuestAnsMstrVal.add(2,entry.getKey().split(Pattern.quote("^"))[1].toString());
 										tempOutletQuestAnsMstrVal.add(3,hmapOptionId.get((entry.getKey().split(Pattern.quote("^"))[0])+"^"+radioButtonVal.getText().toString()));*/
 										hmapAnsValues.put(entry.getKey(), hmapOptionId.get((entry.getKey().split(Pattern.quote("^"))[2])+"^"+radioButtonVal.getText().toString()));
-								
+
 								 }
 								 else
 								 {
@@ -5841,17 +5905,17 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 										tempOutletQuestAnsMstrVal.add(2,entry.getKey().split(Pattern.quote("^"))[1].toString());
 										tempOutletQuestAnsMstrVal.add(3,"");*/
 									// hmapAnsValues.put(entry.getKey(), "");
-							    		
+
 								 }
 						            // find the radiobutton by returned id
-						        
+
 							}
-							
+
 							else if(view instanceof Spinner)
 							{
-								
+
 								Spinner spinnerSelected=(Spinner) view;
-								 
+
 
 						          if(!spinnerSelected.getSelectedItem().equals("Select"))
 						          {
@@ -5860,21 +5924,21 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 											if(spinnerSelected.getSelectedItem().toString().equals("Others"))
 											{
 												EditText editText=(EditText) ll_data.findViewWithTag(entry.getKey().toString()+"_ed");
-												
+
 												if(!TextUtils.isEmpty(editText.getText().toString()))
 												{
 												/*	tempOutletQuestAnsMstrVal.add(1,entry.getKey().split(Pattern.quote("^"))[0].toString());
 													tempOutletQuestAnsMstrVal.add(2,entry.getKey().split(Pattern.quote("^"))[1].toString());
 													tempOutletQuestAnsMstrVal.add(3,hmapOptionId.get((entry.getKey().split(Pattern.quote("^"))[0])+"^"+spinnerSelected.getSelectedItem().toString()));
-										    	*/	
+										    	*/
 									        	  hmapAnsValues.put(entry.getKey(),"-99"+"~"+editText.getText().toString().trim());
-									        		
+
 												}
 												/*else
 												{
 													  hmapAnsValues.put(entry.getKey(),"-99"+"~"+"" );
 												}*/
-												
+
 											}
 											else
 								        	{
@@ -5885,7 +5949,7 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 
 								        	  hmapAnsValues.put(entry.getKey(),hmapOptionId.get((entry.getKey().split(Pattern.quote("^"))[2])+"^"+spinnerSelected.getSelectedItem().toString()) );
 								        	}
-											
+
 										}
 							            //tempOutletQuestAnsMstrVal.add(0,OutletID);
 						        	else
@@ -5907,17 +5971,17 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 										}
 						        	  hmapAnsValues.put(entry.getKey(),hmapOptionId.get((entry.getKey().split(Pattern.quote("^"))[2])+"^"+spinnerSelected.getSelectedItem().toString()) );
 						        	}
-										
+
 						          }
-						          
+
 						          else
-						        	  
+
 						          {
-						        	 
-							    		  
+
+
 						          }
 							}
-							
+
 							 if(entry.getKey().split(Pattern.quote("^"))[1].toString().equals("13"))
 							 {
 								 TextView textView=(TextView) ll_data.findViewWithTag(entry.getKey());
@@ -5925,7 +5989,7 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 								 {
 									  hmapAnsValues.put(entry.getKey(),hmapsearchAnswerSlctd.get(entry.getKey()) );
 								 }
-								
+
 							 }
 							 if(entry.getKey().split(Pattern.quote("^"))[1].toString().equals("15"))
 							 {
@@ -5933,9 +5997,9 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 								 if(hmapSelectedMultipleDepend.containsKey(entry.getKey()))
 								 {
 									  ArrayList<String> listSelectedMultiple=new ArrayList<String>();
-									  
+
 											  listSelectedMultiple=hmapSelectedMultipleDepend.get(entry.getKey());
-										  
+
 									 StringBuilder sbfetchVal=new StringBuilder();
 									 for(int i=0;i<listSelectedMultiple.size();i++)
 									 {
@@ -5950,7 +6014,7 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 									 }
 									  hmapAnsValues.put(entry.getKey(),sbfetchVal.toString());
 								 }
-								
+
 							 }
 							 if(entry.getKey().split(Pattern.quote("^"))[1].toString().equals("16"))
 							 {
@@ -5958,9 +6022,9 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 								 if(hmapSelectedMultipleDepend.containsKey(entry.getKey()))
 								 {
 									  ArrayList<String> listSelectedMultiple=new ArrayList<String>();
-									  
+
 											  listSelectedMultiple=hmapSelectedMultipleDepend.get(entry.getKey());
-										  
+
 									 StringBuilder sbfetchVal=new StringBuilder();
 									 ArrayList<String> listOptionValName=hmapOptionValues.get(entry.getKey());
 									 for(int i=0;i<listSelectedMultiple.size();i++)
@@ -5974,15 +6038,15 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 												{
 													if(valueSelected.split(Pattern.quote("^"))[1].equals("Others")||valueSelected.split(Pattern.quote("^"))[1].equals("Other"))
 													{
-														 
+
 															 EditText edText=(EditText) ll_data.findViewWithTag(entry.getKey()+"_ed");
 															 sbfetchVal.append("~").append(edText.getText().toString());
-														
+
 													}
 												}
 											}
-											
-											
+
+
 										 }
 										 else
 										 {
@@ -5993,10 +6057,10 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 													{
 														if(valueSelected.split(Pattern.quote("^"))[1].equals("Others")||valueSelected.split(Pattern.quote("^"))[1].equals("Other"))
 														{
-															 
+
 																 EditText edText=(EditText) ll_data.findViewWithTag(entry.getKey()+"_ed");
 																 sbfetchVal.append("~").append(edText.getText().toString());
-															
+
 														}
 													}
 												}
@@ -6004,9 +6068,9 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 									 }
 									  hmapAnsValues.put(entry.getKey(),sbfetchVal.toString());
 								 }
-								
+
 							 }
-							
+
 							else if(view instanceof LinearLayout)
 							{
 								StringBuilder sbLandline=new StringBuilder();
@@ -6017,19 +6081,19 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 									{
 										EditText edLandLine=(EditText) ll_phone.getChildAt(i);
 										sbLandline.append(edLandLine.getText().toString());
-										
+
 									}
-									
+
 									if(!TextUtils.isEmpty(sbLandline.toString()))
 									{
-										
+
 									/*	//tempOutletQuestAnsMstrVal.add(0,OutletID);
 										tempOutletQuestAnsMstrVal.add(1,entry.getKey().split(Pattern.quote("^"))[0].toString());
 										tempOutletQuestAnsMstrVal.add(2,entry.getKey().split(Pattern.quote("^"))[1].toString());
 										//tempOutletQuestAnsMstrVal.add(3,edVal.getText().toString());
 										 tempOutletQuestAnsMstrVal.add(3,TextUtils.htmlEncode(sbLandline.toString()));*/
 										 hmapAnsValues.put(entry.getKey(),TextUtils.htmlEncode(sbLandline.toString()));
-									
+
 									}
 									else
 									{
@@ -6038,12 +6102,12 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 										tempOutletQuestAnsMstrVal.add(2,entry.getKey().split(Pattern.quote("^"))[1].toString());
 										tempOutletQuestAnsMstrVal.add(3,"");*/
 									//	 hmapAnsValues.put(entry.getKey(),"");
-									
+
 									}
-									
+
 							}
-								
-								
+
+
 								if(entry.getKey().split(Pattern.quote("^"))[1].toString().equals("14"))
 								{
 
@@ -6057,12 +6121,12 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 									{
 										LinearLayout checkBoxVal_ll=(LinearLayout) ll_checkBoxVal.getChildAt(i);
 										CheckBox chckBox=(CheckBox) checkBoxVal_ll.getChildAt(0);
-										
+
 										if(chckBox.isChecked())
 										{
 											isSelected=true;
 											EditText ediText=(EditText) checkBoxVal_ll.getChildAt(1);
-											
+
 											String tagChckBox=chckBox.getTag().toString();
 											String inputType=ediText.getTag().toString();
 											String edtTextVal="0";
@@ -6070,8 +6134,8 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 											{
 												edtTextVal=ediText.getText().toString();
 											}
-											
-										
+
+
 												if(isSingleSelected)
 												{
 													answer.append(chckBox.getTag().toString().split(Pattern.quote("#"))[0]+"~"+edtTextVal);
@@ -6079,25 +6143,25 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 												}
 												else
 												{
-													
+
 													answer.append("^").append(chckBox.getTag().toString().split(Pattern.quote("#"))[0]+"~"+edtTextVal);
-													
+
 												}
-												
-											
-											
+
+
+
 										}
-										
+
 									}
 									if(isSelected)
 									{
 										hmapAnsValues.put(entry.getKey(), answer.toString());
 									}
-									
+
 									else
 									{
 									//	hmapAnsValues.put(entry.getKey(), "");
-										
+
 									}
 								}
 							}
@@ -6106,10 +6170,10 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 								//hmapAnsValues.put(entry.getKey(), "");
 							}
 						}
-							
+
 				System.out.println("Savind Data = "+entry.getKey()+" Value = "+hmapAnsValues.get(entry.getKey()));
 				}
-				
+
 				if(hmapAnsValues!=null && hmapAnsValues.size()>0)
 				{
 					//helperDb.fnsaveOutletQuestAnsMstrSectionWise(hmapAnsValues,sectionIsShown,tempId);
@@ -6119,36 +6183,36 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 						View view=ll_data.findViewWithTag("2^2");
 						EditText edVal=(EditText)view;
 						personName=edVal.getText().toString();
-						
+
 					}*/
-					
+
 					if(hmapImageClkdTempIdData!=null && hmapImageClkdTempIdData.size()>0)
 					{
-						
+
 						 helperDb.insertImageInfo(AddNewStore_DynamicSectionWise.selStoreID,hmapImageClkdTempIdData);
 						// hmapImageClkdTempIdData=new LinkedHashMap<String, String>();
-						 
+
 					}
 				if(isSaveAsDraft)
 				{
-					
-				
+
+
 				//	helperDb.insertExistingCntctMstr(visitPlanLocMapTaskId, nodeId, nodeType, remark, personName, flagNewOld, tempId, taskGrpId,flgScheduleFollowUp,followUpScheduleDate,locNodeID,locNodeType,visitPlanLocId,sequence,2);
-				
+
 					//helperDb.fnUpdateOutletQuestAnsMstrServerAnsValueFeild(nodeId,nodeType,nodeId+"_"+nodeType);
 				//	Toast.makeText(NewReatilerForm.this, "Data has been successfully saved", Toast.LENGTH_SHORT).show();
 				}
 				else
 				{
-					
+
 				//	 fnSaveFilledDataToDatabase();
 				}
-					
+
 				}
-				
-			
+
+
 		 }
-		 
+			 
 		 private void fillViewsValues() {
 				if(hmapQuestionSavedAns!=null && hmapQuestionSavedAns.size()>0)
 				{
@@ -6182,14 +6246,14 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 									{
 										edVal.setEnabled(false);
 									}
-									
+
 								}
-								
+
 								else if(view instanceof Button)
 								{
 									if(entry.getKey().split(Pattern.quote("^"))[1].toString().equals("11"))
 									{
-										
+
 										Button buttonCalender=(Button)view;
 										buttonCalender.setText(entry.getValue());
 
@@ -6232,8 +6296,8 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 																ediTextVal=multipleChecked[index].split(Pattern.quote("~"))[1];
 																editTextOther.setText(ediTextVal);
 															}
-															
-																	
+
+
 														}
 													}
 												}
@@ -6253,21 +6317,21 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 															ediTextVal=entry.getValue().split(Pattern.quote("~"))[1];
 															editTextOther.setText(ediTextVal);
 														}
-																
+
 													}
-													
+
 												}
 											}
-											
-											
-										
+
+
+
 										}
-										
-										
+
+
 									}
-									
+
 								}
-								
+
 								else if(view instanceof RadioGroup)
 								{
 
@@ -6279,7 +6343,7 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 										{
 											radioButton.setChecked(true);
 										}
-										
+
 									}
 									if(entry.getKey().equals("1^6^1"))
 									{
@@ -6293,13 +6357,13 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 										}
 									}
 								}
-								
-								
-								
+
+
+
 								else if(view instanceof Spinner)
 								{
 									Spinner spinnerSelected=(Spinner) view;
-									 
+
 									if(entry.getValue().contains("~"))
 									{
 										ArrayAdapter adapter = (ArrayAdapter) spinnerSelected.getAdapter();
@@ -6313,8 +6377,8 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 												String ediTextVal=entry.getValue().split(Pattern.quote("~"))[1];
 												editTextOther.setText(ediTextVal);
 											}
-											
-													
+
+
 										}
 									}
 									else
@@ -6329,7 +6393,7 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 										spinnerSelected.setEnabled(false);
 									}
 								}
-								
+
 								 if(entry.getKey().split(Pattern.quote("^"))[1].toString().equals("13"))
 								 {
 									 TextView textView=(TextView) ll_data.findViewWithTag(entry.getKey());
@@ -6389,7 +6453,7 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 												 }
 											 }
 										 }
-										
+
 									 }
 									 if(QuestionflgPrvValue==1)
 									 {
@@ -6409,21 +6473,21 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 											 String[] multipleVal=entry.getValue().toString().split(Pattern.quote("^"));
 											 for(int i=0;i<multipleVal.length;i++)
 											 {
-												
+
 												 listOptionVal.add(multipleVal[i]);
 											 }
 											 for(int j=0;j<listOptionVal.size();j++)
 											 {
 												 for(String alertVal:listOptionValName)
 												 {
-													 
-													
-												
+
+
+
 														 if(listOptionVal.get(j).equals(alertVal.split(Pattern.quote("^"))[0].toString()))
-														 { 
+														 {
 														 if(j==0)
 														 {
-															 sBuilderEntry.append(alertVal.split(Pattern.quote("^"))[1].toString());	 
+															 sBuilderEntry.append(alertVal.split(Pattern.quote("^"))[1].toString());
 														 }
 														 else
 														 {
@@ -6540,17 +6604,17 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 														 }
 
 
-													
-												 } 
-												
+
+												 }
+
 											 }
 											 hmapSelectedMultipleDepend.put(entry.getKey(), listOptionVal);
 											 textView.setText(sBuilderEntry.toString());
 										 }
 										 else
 										 {
-											 
-											
+
+
 												 listOptionVal.add(entry.getValue().toString());
 												 hmapSelectedMultipleDepend.put(entry.getKey(), listOptionVal);
 												 for(String alertVal:listOptionValName)
@@ -6638,9 +6702,9 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 														 }
 													 }
 												 }
-												
-											
-											
+
+
+
 										 }
 
 
@@ -6661,17 +6725,17 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 											 String[] multipleVal=entry.getValue().toString().split(Pattern.quote("^"));
 											 for(int i=0;i<multipleVal.length;i++)
 											 {
-												 if(multipleVal[i].contains("~")) 
+												 if(multipleVal[i].contains("~"))
 												 {
 													 listOptionVal.add(multipleVal[i].split(Pattern.quote("~"))[0]);
-													
+
 													 String[] othersSelected=multipleVal[i].split(Pattern.quote("~"));
 													 for(String alertVal:listOptionValName)
 													 {
 														 if(othersSelected[0].equals(alertVal.split(Pattern.quote("^"))[0].toString()))
 														 {
-															 
-															 
+
+
 																	 EditText edText=(EditText) ll_data.findViewWithTag(entry.getKey()+"_ed");
 																	 if(othersSelected.length>1)
 																	 {
@@ -6681,96 +6745,96 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 																		 edText.setVisibility(View.VISIBLE);
 																			}
 																	 }
-																	 
-																	 
-														 } 
+
+
+														 }
 													 }
-													 
+
 												 }
 												 else
 												 {
-													 listOptionVal.add(multipleVal[i]); 
+													 listOptionVal.add(multipleVal[i]);
 												 }
-												
+
 											 }
 											 for(int j=0;j<listOptionVal.size();j++)
 											 {
 												 for(String alertVal:listOptionValName)
 												 {
-													 
-													
+
+
 														 if(listOptionVal.get(j).equals(alertVal.split(Pattern.quote("^"))[0].toString()))
-														 { 
+														 {
 														 if(j==0)
 														 {
-															
-																 sBuilderEntry.append(alertVal.split(Pattern.quote("^"))[1].toString()); 
+
+																 sBuilderEntry.append(alertVal.split(Pattern.quote("^"))[1].toString());
 															 }
-															 	 
-														 
+
+
 														 else
 														 {
 
-															
-																 sBuilderEntry.append(",").append(alertVal.split(Pattern.quote("^"))[1].toString()); 
-															
-															 	 
-														 
-															 
-														 } 
+
+																 sBuilderEntry.append(",").append(alertVal.split(Pattern.quote("^"))[1].toString());
+
+
+
+
+														 }
 														// textView.setText(alertVal.split(Pattern.quote("^"))[1].toString());
-														 } 
-													 
+														 }
+
 														 else if(listOptionVal.get(j).contains("~"))
 														 {
 															 if(listOptionVal.get(j).split(Pattern.quote("~"))[0].equals(alertVal.split(Pattern.quote("^"))[0].toString()))
-															 { 
+															 {
 															 if(j==0)
 															 {
-																 if(listOptionVal.get(j).contains("~")) 
+																 if(listOptionVal.get(j).contains("~"))
 																 {
 																	 String[] othersSelected=listOptionVal.get(j).split(Pattern.quote("~"));
 																	 sBuilderEntry.append(alertVal.split(Pattern.quote("^"))[1].toString());
-																	
+
 																 }
 																 else
 																 {
-																	 sBuilderEntry.append(alertVal.split(Pattern.quote("^"))[1].toString()); 
+																	 sBuilderEntry.append(alertVal.split(Pattern.quote("^"))[1].toString());
 																 }
-																 	 
+
 															 }
 															 else
 															 {
 
-																 if(listOptionVal.get(j).contains("~")) 
+																 if(listOptionVal.get(j).contains("~"))
 																 {
 																	 String[] othersSelected=listOptionVal.get(j).split(Pattern.quote("~"));
 																	 sBuilderEntry.append(",").append(alertVal.split(Pattern.quote("^"))[1].toString());
-																	
+
 																 }
 																 else
 																 {
-																	 sBuilderEntry.append(",").append(alertVal.split(Pattern.quote("^"))[1].toString()); 
+																	 sBuilderEntry.append(",").append(alertVal.split(Pattern.quote("^"))[1].toString());
 																 }
-																 	 
-															 
-																 
-															 } 
+
+
+
+															 }
 															// textView.setText(alertVal.split(Pattern.quote("^"))[1].toString());
-															 }  
+															 }
 														 }
-													
-													
-												 } 
-												
+
+
+												 }
+
 											 }
-											 
+
 											 hmapSelectedMultipleDepend.put(entry.getKey(), listOptionVal);
 											 textView.setText(sBuilderEntry.toString());
 										 }
 										 else
 										 {
-											 if(entry.getValue().contains("~")) 
+											 if(entry.getValue().contains("~"))
 											 {
 												 listOptionVal.add(entry.getValue().toString());
 												 hmapSelectedMultipleDepend.put(entry.getKey(), listOptionVal);
@@ -6779,28 +6843,28 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 												 {
 													 if(othersSelected[0].equals(alertVal.split(Pattern.quote("^"))[0].toString()))
 													 {
-														 
+
 														 textView.setText(alertVal.split(Pattern.quote("^"))[1].toString());
-														
-														 
+
+
 																 EditText edText=(EditText) ll_data.findViewWithTag(entry.getKey()+"_ed");
 																 if(othersSelected.length>1)
 																 {
-																	 
-																	 edText.setText(othersSelected[1]); 
+
+																	 edText.setText(othersSelected[1]);
 																	 if(alertVal.split(Pattern.quote("^"))[1].toString().equals("Others")||alertVal.split(Pattern.quote("^"))[1].toString().equals("Other"))
 																		{
 																				 edText.setVisibility(View.VISIBLE);
 																		}
-																		
+
 																 }
-													
-															
-													 } 
+
+
+													 }
 												 }
-												 
+
 											 }
-											 
+
 											 else
 											 {
 												 listOptionVal.add(entry.getValue().toString());
@@ -6812,9 +6876,9 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 														 textView.setText(alertVal.split(Pattern.quote("^"))[1].toString());
 													 }
 												 }
-												
+
 											 }
-											
+
 										 }
 
 
@@ -6823,9 +6887,9 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 										 textView.setEnabled(false);
 										 textView.setOnClickListener(null);
 									 }
-									
+
 								 }
-								
+
 								else if(view instanceof LinearLayout)
 								{
 									StringBuilder sbLandline=new StringBuilder();
@@ -6841,7 +6905,7 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 												{
 													edLandLine.setText(entry.getValue().substring(0, Math.min(entry.getValue().length(), 4)));
 												}
-												
+
 											}
 											else
 											{
@@ -6849,41 +6913,41 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 												{
 													edLandLine.setText(entry.getValue().substring(4, Math.min(entry.getValue().length(), entry.getValue().length())));
 												}
-												
+
 											}
 											if(QuestionflgPrvValue==1)
 											{
 												edLandLine.setEnabled(false);
 
 											}
-											
+
 										}
-										
-										
-										
+
+
+
 								}
-									
-									
+
+
 									if(entry.getKey().split(Pattern.quote("^"))[1].toString().equals("14"))
 									{
 
 										StringBuilder answer=new StringBuilder();
 										LinearLayout ll_checkBoxVal=(LinearLayout)view;
 										ArrayList<String> listTagChckBox=new ArrayList<String>();
-									
+
 										for(int i=0;i<ll_checkBoxVal.getChildCount();i++)
 										{
 											LinearLayout checkBoxVal_ll=(LinearLayout) ll_checkBoxVal.getChildAt(i);
 											CheckBox checkBoxVal=(CheckBox) checkBoxVal_ll.getChildAt(0);
-											
-											
+
+
 												String checkBoxId=checkBoxVal.getTag().toString().split(Pattern.quote("#"))[0];
 												EditText ediText=(EditText) checkBoxVal_ll.getChildAt(1);
-												
-												
+
+
 												//String inputType=ediText.getTag().toString();
 												String ediTextVal;
-											
+
 												if(entry.getValue().contains("^"))
 												{
 													String[] multipleChecked=entry.getValue().split(Pattern.quote("^"));
@@ -6892,15 +6956,15 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 														if(multipleChecked[index].contains(checkBoxId))
 														{
 															checkBoxVal.setChecked(true);
-															
+
 															if(multipleChecked[index].contains("~"))
 															{
 																ediTextVal=multipleChecked[index].split(Pattern.quote("~"))[1];
 																ediText.setText(ediTextVal);
-																			
+
 															}
-															
-															
+
+
 														}
 													}
 												}
@@ -6914,85 +6978,82 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 														{
 															ediTextVal=entry.getValue().split(Pattern.quote("~"))[1];
 															ediText.setText(ediTextVal);
-																		
+
 														}
-														
-																	
-													
-														
+
+
+
+
 													}
 												}
-													
-												
-												
-											
-											
+
+
+
+
+
 										}
-										
-									
+
+
 									}
-				
-									
-								
+
+
+
 								}
-								
+
 								else
 								{
 									//hmapAnsValues.put(entry.getKey(), "");
 								}
-								
-							
+
+
 							}
-								
-					
+
+
 					}
-					
+
 					if(listimagePath!=null && listimagePath.size()>0)
 					{
 						for(String valueForKey:listimagePath)
 						{
-							
+
 							/*
 							  Bitmap bmp = decodeSampledBitmapFromFile(imagePath, 160, 160);
-					          
+
 							    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-					            	
+
 					               bmp.compress(Bitmap.CompressFormat.JPEG, 70, stream);
 					               byte[] byteArray = stream.toByteArray();
 
 					               // Convert ByteArray to Bitmap::
-					              
+
 					               helperDb.insertImageInfo(tempId,imagButtonTag, imageName, file.getAbsolutePath(), 2);
 					               Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0,
 					                       byteArray.length);
 
-					              // 
+					              //
 
 					             ImageView image = new ImageView(NewReatilerForm.this);
-					            
+
 					               //btn.setLayoutParams(new android.view.ViewGroup.LayoutParams(80,60));
-					             
-					               
+
+
 					               image.setImageBitmap(bmp);
 					               LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(250, 250);
 					               params.setMargins(10,0,10,0);
-					              
+
 					               ll_Image.addView(image,params);*/
 							Bitmap bmp = decodeSampledBitmapFromFile(Uri.parse(valueForKey.split(Pattern.quote("~"))[2]).getPath(), 160, 160);
 							   String[] imageName=(valueForKey.split(Pattern.quote("~"))[2]).split(Pattern.quote("/"));
 							clickedTagPhoto=valueForKey.split(Pattern.quote("~"))[0];
 					           setSavedImageToScrollView(bmp,(valueForKey.split(Pattern.quote("~"))[2]).split(Pattern.quote("/"))[imageName.length-1],valueForKey,clickedTagPhoto);
-				
+
 						}
-						 
+
 					}
 				}
-				
+
 			}
-		 
-			
-			
-			
+
 			 public String getOptionNameFromHmap(String optionId)
 			 {
 				 String optionName="";
@@ -7002,51 +7063,51 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 					 {
 						 optionName=entry.getKey().split(Pattern.quote("^"))[1];
 					 }
-					 
+
 				 }
 				 return optionName;
 			 }
-			 
+
 			 public boolean validateNameFilled()
 				{
 					//Name EditText hardcoded Value
 				 boolean chekResult=false;
 
-			
-						 
+
+
 					if(currentStoreName.equals("NA"))
 					{
-						
+
 						View view=ll_data.findViewWithTag(nameForStore);
 						if(view.getVisibility()==View.VISIBLE)
 						{
 							EditText edVal=(EditText)view;
-							
+
 							if(TextUtils.isEmpty(edVal.getText().toString().trim()))
 							{
 								showErrorAlert(getResources().getString(R.string.OutletNametoSaveandExit));
 								edVal.requestFocus();
-								
-								
+
+
 								//AddNewStore_DynamicSectionWise.StoreName=personName;
 								chekResult= false;
 							}
 							else
 							{
 								currentStoreName=edVal.getText().toString();
-								
+
 								chekResult= true;
 							}
 						}
-						
-					
+
+
 					}
 					else
 					{
 
 						chekResult= true;
 					}
-					
+
 					return chekResult;
 				}
 
@@ -7195,101 +7256,6 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 
 		// Showing Alert Message
 		alertDialog.show();}
-
-			 
-				
-				public void selectedStoreMultiple(String optId, String optionVal,
-						EditText txtVw, ListView listViewOption, String tagVal,
-						Dialog dialog, TextView textView, LinearLayout ll_SlctdOpt,
-						ArrayList<String> listSelectedOpt,ArrayList<String> listSelectedStoreID,ArrayList<String> listSelectedStoreOrigin) {
-
-
-					ll_SlctdOpt.removeAllViews();
-					sbMultiple=new StringBuilder();
-					listFarmerID=new ArrayList<String>();
-					listSelectedStoreOriginTemp=new ArrayList<String>();
-					listFarmerID=listSelectedStoreID;
-					listSelectedStoreOriginTemp=listSelectedStoreOrigin;
-					String grpQustId=tagVal.split(Pattern.quote("^"))[2];
-					if(listSelectedOpt.size()>0) {
-
-						for (int i = 0; i < listSelectedOpt.size(); i++) {
-
-							isSelectedSearch = true;
-							TextView txtVwSlctdList = new TextView(getActivity());
-							txtVwSlctdList.setTextColor(Color.parseColor("#000000"));
-							if (i == 0) {
-								//textView.setText(listSelectedOpt.get(i));
-								sbMultiple.append(listSelectedOpt.get(i));
-								txtVwSlctdList.setText(listSelectedOpt.get(i));
-							} else {
-								sbMultiple.append(", " + listSelectedOpt.get(i));
-								//textView.setText(", "+listSelectedOpt.get(i));
-								txtVwSlctdList.setText(", " + listSelectedOpt.get(i));
-							}
-							txtVwSlctdList.setPadding(5, 0, 5, 0);
-							ll_SlctdOpt.addView(txtVwSlctdList);
-						}
-					}
-
-					else
-					{
-						isSelectedSearch=true;
-						
-					}
-				
-					
-				
-					
-				
-					
-				}
-
-				
-				public  void selectedOption(String optId, String optionVal,
-						EditText txtVw, ListView listViewOption, String tagVal,
-						Dialog dialog, TextView textView,ArrayList<String> listStoreIDOrigin) {
-					hmapsearchAnswerSlctd.put(tagVal, optId);
-					txtVw.setText(optionVal);
-					singleSelectedVal=optionVal;
-					isSelectedSearch=true;
-					textView.setText(optionVal);
-					dialog.dismiss();
-					listViewOption.setVisibility(View.GONE);
-					 if( tagVal.split(Pattern.quote("^"))[1].toString().equals("17"))
-				        {
-						 if(singleSelectedVal.contains("Others") || singleSelectedVal.contains("Other"))
-							{
-								EditText edText=(EditText) ll_data.findViewWithTag(tagVal+"_ed");
-								edText.setVisibility(View.VISIBLE);
-							}
-							else
-							{
-								EditText edText=(EditText) ll_data.findViewWithTag(tagVal+"_ed");
-								edText.setVisibility(View.GONE);
-							}
-				        }
-				/*	if(hmapOptionaDepend.containsKey(tagVal.split(Pattern.quote("^"))[0]))
-					{
-							ArrayList<String> listQuestIdDpndOnIt=new ArrayList<String>();
-							listQuestIdDpndOnIt=hmapOptionaDepend.get(tagVal.split(Pattern.quote("^"))[0]);
-							if(listQuestIdDpndOnIt!=null && listQuestIdDpndOnIt.size()>0)
-							{
-								for(int i=0;i<listQuestIdDpndOnIt.size();i++)
-								{
-									String tempQuestId=listQuestIdDpndOnIt.get(i);
-									String ansCntrlType=hmapQuesIdandGetAnsCntrlType.get(tempQuestId);
-									if(ansCntrlType.equals("13"))
-									{
-										TextView txtVw_Search=(TextView) ll_form.findViewWithTag(tempQuestId+"^"+ansCntrlType);
-										txtVw_Search.setText("Select");
-									}
-									
-								}
-							}
-					}*/
-					
-}
 				
 				/*public void hideDpndntQstn(String qstnGrpToHide)
 				{
@@ -7355,11 +7321,103 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 				}
 				*/
 				
+				public void selectedStoreMultiple(String optId, String optionVal,
+						EditText txtVw, ListView listViewOption, String tagVal,
+						Dialog dialog, TextView textView, LinearLayout ll_SlctdOpt,
+						ArrayList<String> listSelectedOpt,ArrayList<String> listSelectedStoreID,ArrayList<String> listSelectedStoreOrigin) {
+
+
+					ll_SlctdOpt.removeAllViews();
+					sbMultiple=new StringBuilder();
+					listFarmerID=new ArrayList<String>();
+					listSelectedStoreOriginTemp=new ArrayList<String>();
+					listFarmerID=listSelectedStoreID;
+					listSelectedStoreOriginTemp=listSelectedStoreOrigin;
+					String grpQustId=tagVal.split(Pattern.quote("^"))[2];
+					if(listSelectedOpt.size()>0) {
+
+						for (int i = 0; i < listSelectedOpt.size(); i++) {
+
+							isSelectedSearch = true;
+							TextView txtVwSlctdList = new TextView(getActivity());
+							txtVwSlctdList.setTextColor(Color.parseColor("#000000"));
+							if (i == 0) {
+								//textView.setText(listSelectedOpt.get(i));
+								sbMultiple.append(listSelectedOpt.get(i));
+								txtVwSlctdList.setText(listSelectedOpt.get(i));
+							} else {
+								sbMultiple.append(", " + listSelectedOpt.get(i));
+								//textView.setText(", "+listSelectedOpt.get(i));
+								txtVwSlctdList.setText(", " + listSelectedOpt.get(i));
+							}
+							txtVwSlctdList.setPadding(5, 0, 5, 0);
+							ll_SlctdOpt.addView(txtVwSlctdList);
+						}
+					}
+
+					else
+					{
+						isSelectedSearch=true;
+
+					}
+
+
+
+
+
+
+				}
+
+				public  void selectedOption(String optId, String optionVal,
+						EditText txtVw, ListView listViewOption, String tagVal,
+						Dialog dialog, TextView textView,ArrayList<String> listStoreIDOrigin) {
+					hmapsearchAnswerSlctd.put(tagVal, optId);
+					txtVw.setText(optionVal);
+					singleSelectedVal=optionVal;
+					isSelectedSearch=true;
+					textView.setText(optionVal);
+					dialog.dismiss();
+					listViewOption.setVisibility(View.GONE);
+					 if( tagVal.split(Pattern.quote("^"))[1].toString().equals("17"))
+				        {
+						 if(singleSelectedVal.contains("Others") || singleSelectedVal.contains("Other"))
+							{
+								EditText edText=(EditText) ll_data.findViewWithTag(tagVal+"_ed");
+								edText.setVisibility(View.VISIBLE);
+							}
+							else
+							{
+								EditText edText=(EditText) ll_data.findViewWithTag(tagVal+"_ed");
+								edText.setVisibility(View.GONE);
+							}
+				        }
+				/*	if(hmapOptionaDepend.containsKey(tagVal.split(Pattern.quote("^"))[0]))
+					{
+							ArrayList<String> listQuestIdDpndOnIt=new ArrayList<String>();
+							listQuestIdDpndOnIt=hmapOptionaDepend.get(tagVal.split(Pattern.quote("^"))[0]);
+							if(listQuestIdDpndOnIt!=null && listQuestIdDpndOnIt.size()>0)
+							{
+								for(int i=0;i<listQuestIdDpndOnIt.size();i++)
+								{
+									String tempQuestId=listQuestIdDpndOnIt.get(i);
+									String ansCntrlType=hmapQuesIdandGetAnsCntrlType.get(tempQuestId);
+									if(ansCntrlType.equals("13"))
+									{
+										TextView txtVw_Search=(TextView) ll_form.findViewWithTag(tempQuestId+"^"+ansCntrlType);
+										txtVw_Search.setText("Select");
+									}
+
+								}
+							}
+					}*/
+
+}
+
 				 public void clearAllValues(String grpQuestId)
 				 {
 
-						
-					
+
+
 						for(Entry<String, String> entry:AddNewStore_DynamicSectionWise.hmapQuesIdValues.entrySet())
 						{
 							if(!grpQuestId.equals(entry.getKey().split(Pattern.quote("^"))[2]) && !((nameForStore.split(Pattern.quote("^"))[2]).equals(entry.getKey().split(Pattern.quote("^"))[2])) && !(entry.getKey().split(Pattern.quote("^"))[2]).equals("6"))
@@ -7369,40 +7427,40 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 								View view=ll_data.findViewWithTag(entry.getKey());
 								ArrayList<String> listKeyMapdWithSection=new ArrayList<String>();
 								listKeyMapdWithSection=AddNewStore_DynamicSectionWise.hmapSection_key.get(String.valueOf(sectionIsShown));
-								
+
 									if(view instanceof EditText)
 									{
 										EditText edVal=(EditText)view;
-										
-										
+
+
 					//saveOutletQuestAnsMstr(String OutletID,String QuestID,String AnswerType,String AnswerValue)
-										
+
 										if(!TextUtils.isEmpty(edVal.getText().toString()))
 										{
 											edVal.setText("");
 										}
-										
+
 									}
-									
+
 									else if(view instanceof Button)
 									{
 										if(entry.getKey().split(Pattern.quote("^"))[1].toString().equals("11"))
 										{
 
 											Button buttonCalender=(Button)view;
-											
-											
+
+
 											//saveOutletQuestAnsMstr(String OutletID,String QuestID,String AnswerType,String AnswerValue)
-											
+
 											if(!buttonCalender.getText().toString().equals("Select Date"))
 											{
 												buttonCalender.setText("Select Date");
-												
+
 											}
 											/*else
 											{
 												hmapAnsValues.put(entry.getKey(), "");
-												
+
 											}*/
 										}
 									}
@@ -7429,24 +7487,24 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 														EditText editTextCheckBox=(EditText) ll_data.findViewWithTag(checkBoxVal.getTag().toString()+"_ed");
 														if(!TextUtils.isEmpty(editTextCheckBox.getText().toString()))
 														{
-															
+
 															editTextCheckBox.setText("");
-															
+
 														}
-														
+
 													}
-													
-													
+
+
 												}
 											}
-											
-											
+
+
 										}
-										
-										
-										
+
+
+
 									}
-									
+
 									else if(view instanceof RadioGroup)
 									{
 										RadioGroup radioGroupSelected=(RadioGroup) view;
@@ -7455,51 +7513,51 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 										 {
 											    RadioButton    radioButtonVal = (RadioButton) radioGroupSelected.findViewById(selectedId);
 											    radioButtonVal.setChecked(false);
-										
+
 										 }
 									}
 									else if(view instanceof Spinner)
 									{
-										
+
 										Spinner spinnerSelected=(Spinner) view;
 										ArrayAdapter adapter = (ArrayAdapter) spinnerSelected.getAdapter();
-										
+
 
 								          if(!spinnerSelected.getSelectedItem().equals("Select"))
 								          {
-								        	 
+
 								        	  if(entry.getKey().split(Pattern.quote("^"))[1].toString().equals("7"))
 												{
 													if(spinnerSelected.getSelectedItem().toString().equals("Others"))
 													{
 														EditText editText=(EditText) ll_data.findViewWithTag(entry.getKey().toString()+"_ed");
-														
+
 														if(!TextUtils.isEmpty(editText.getText().toString()))
 														{
 															editText.setText("");
-											        		
+
 														}
 														/*else
 														{
 															  hmapAnsValues.put(entry.getKey(),"-99"+"~"+"" );
 														}*/
-														
+
 													}
 													else
 										        	{
-										        		
-										        	 
+
+
 										        	}
-													
+
 												}
-									            
+
 								        	  spinnerSelected.setSelection(adapter.getPosition("Select"));
-												
+
 								          }
-								          
-								          
+
+
 									}
-									
+
 									 if(entry.getKey().split(Pattern.quote("^"))[1].toString().equals("13"))
 									 {
 										 TextView textView=(TextView) ll_data.findViewWithTag(entry.getKey());
@@ -7508,7 +7566,7 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 											 textView.setText("Select");
 											 hmapsearchAnswerSlctd.remove(entry.getKey());
 										 }
-										
+
 									 }
 									 if(entry.getKey().split(Pattern.quote("^"))[1].toString().equals("15"))
 									 {
@@ -7518,25 +7576,25 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 											 textView.setText("Select");
 											 hmapSelectedMultipleDepend.remove(entry.getKey());
 										 }
-										
+
 									 }
 									 if(entry.getKey().split(Pattern.quote("^"))[1].toString().equals("16"))
 									 {
 										 TextView textView=(TextView) ll_data.findViewWithTag(entry.getKey());
 										 if(hmapSelectedMultipleDepend.containsKey(entry.getKey()))
 										 {
-											
-											
-											 
+
+
+
 											 ArrayList<String> listSelectedMultiple=new ArrayList<String>();
-											  
+
 													  listSelectedMultiple=hmapSelectedMultipleDepend.get(entry.getKey());
-												  
+
 											 StringBuilder sbfetchVal=new StringBuilder();
 											 ArrayList<String> listOptionValName=hmapOptionValues.get(entry.getKey());
 											 for(int i=0;i<listSelectedMultiple.size();i++)
 											 {
-												 
+
 													 sbfetchVal.append(listSelectedMultiple.get(i));
 													for(String valueSelected:listOptionValName)
 													{
@@ -7544,24 +7602,24 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 														{
 															if(valueSelected.split(Pattern.quote("^"))[1].equals("Others")||valueSelected.split(Pattern.quote("^"))[1].equals("Other"))
 															{
-																 
+
 																	 EditText edText=(EditText) ll_data.findViewWithTag(entry.getKey()+"_ed");
 																	 edText.setText("");
-																	 
-																
+
+
 															}
 														}
 													}
-													
-													
-												
+
+
+
 											 }
 											 textView.setText("Select");
 											 hmapSelectedMultipleDepend.remove(entry.getKey());
 										 }
-										
+
 									 }
-									
+
 									else if(view instanceof LinearLayout)
 									{
 										StringBuilder sbLandline=new StringBuilder();
@@ -7572,14 +7630,14 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 											{
 												EditText edLandLine=(EditText) ll_phone.getChildAt(i);
 												sbLandline.append(edLandLine.getText().toString());
-												
+
 											}
-											
-											
-											
+
+
+
 									}
-										
-										
+
+
 										if(entry.getKey().split(Pattern.quote("^"))[1].toString().equals("14"))
 										{
 
@@ -7593,12 +7651,12 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 											{
 												LinearLayout checkBoxVal_ll=(LinearLayout) ll_checkBoxVal.getChildAt(i);
 												CheckBox chckBox=(CheckBox) checkBoxVal_ll.getChildAt(0);
-												
+
 												if(chckBox.isChecked())
 												{
 													isSelected=true;
 													EditText ediText=(EditText) checkBoxVal_ll.getChildAt(1);
-													
+
 													String tagChckBox=chckBox.getTag().toString();
 													String inputType=ediText.getTag().toString();
 													String edtTextVal="0";
@@ -7606,13 +7664,13 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 													{
 														ediText.setText("");
 													}
-													
+
 													chckBox.setChecked(false);
-													
+
 												}
-												
+
 											}
-											
+
 										}
 									}
 									else
@@ -7620,8 +7678,8 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 										//hmapAnsValues.put(entry.getKey(), "");
 									}
 								}
-					
-						
+
+
 						if(hmapAnsValues!=null && hmapAnsValues.size()>0)
 						{
 							//helperDb.fnsaveOutletQuestAnsMstrSectionWise(hmapAnsValues,sectionIsShown,tempId);
@@ -7631,24 +7689,23 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 								View view=ll_data.findViewWithTag("2^2");
 								EditText edVal=(EditText)view;
 								personName=edVal.getText().toString();
-								
+
 							}*/
-							
+
 							if(hmapImageClkdTempIdData!=null && hmapImageClkdTempIdData.size()>0)
 							{
-								
+
 								 //helperDb.insertImageInfo(tempId,hmapImageClkdTempIdData);
 								 hmapImageClkdTempIdData=new LinkedHashMap<String, String>();
-								 
-							}
-						
-						
-					
-				 }
-							}
-						
-				 }
 
+							}
+
+
+
+				 }
+							}
+
+				 }
 
 	public void getCheckBoxWithEditTextValues(ArrayList<String> chckBoxVal, final String tagVal)
 	{
@@ -7768,7 +7825,6 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 		}
 	}
 
-
 	public void   openCustomCamara()
 	{
 		if(dialog!=null)
@@ -7806,6 +7862,7 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 		params.setZoom(zoom);
 		mCamera.setParameters(params);
 	}
+
 	public void handleFocus(MotionEvent event, Camera.Parameters params) {
 		int pointerId = event.getPointerId(0);
 		int pointerIndex = event.findPointerIndex(pointerId);
@@ -7847,6 +7904,7 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 		float y = event.getY(0) - event.getY(1);
 		return (float)Math.sqrt(x * x + y * y);
 	}
+
 	private void setCameraDisplayOrientation(Activity activity,
 											 int cameraId, Camera camera) {
 		Camera.CameraInfo info =
@@ -7871,6 +7929,7 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 		}
 		camera.setDisplayOrientation(result);
 	}
+
 	private Camera.PictureCallback getPictureCallback() {
 		Camera.PictureCallback picture = new Camera.PictureCallback() {
 
@@ -7950,34 +8009,6 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 		return picture;
 	}
 
-
-	OnClickListener captrureListener = new OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			v.setEnabled(false);
-			getActivity().getWindow().setFlags(LayoutParams.FLAG_NOT_TOUCHABLE, LayoutParams.FLAG_NOT_TOUCHABLE);
-			cancelCam.setEnabled(false);
-			flashImage.setEnabled(false);
-			if(cameraPreview!=null)
-			{
-				cameraPreview.setEnabled(false);
-			}
-
-			if(mCamera!=null)
-			{
-				mCamera.takePicture(null, null, mPicture);
-			}
-			else
-			{
-				dialog.dismiss();
-			}
-			getActivity().getWindow().clearFlags(LayoutParams.FLAG_NOT_TOUCHABLE);
-
-		}
-	};
-
-
-
 	private boolean hasCamera(Context context) {
 		//check if the device has camera
 		if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
@@ -7986,6 +8017,7 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 			return false;
 		}
 	}
+
 	private int findFrontFacingCamera() {
 		int cameraId = -1;
 		// Search for the front facing camera
@@ -8001,6 +8033,7 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 		}
 		return cameraId;
 	}
+
 	private int findBackFacingCamera() {
 		int cameraId = -1;
 		//Search for the back facing camera
@@ -8018,30 +8051,6 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 		}
 		return cameraId;
 	}
-
-
-	private static File getOutputMediaFile() {
-		//make a new file directory inside the "sdcard" folder
-		File mediaStorageDir = new File("/sdcard/", CommonInfo.ImagesFolder);
-
-		//if this "JCGCamera folder does not exist
-		if (!mediaStorageDir.exists()) {
-			//if you cannot make this folder return
-			if (!mediaStorageDir.mkdirs()) {
-				return null;
-			}
-		}
-
-		//take the current timeStamp
-		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",Locale.ENGLISH).format(new Date());
-		File mediaFile;
-		//and make a media file:
-	//	mediaFile = new File(mediaStorageDir.getPath() + File.separator + "IMG_" + timeStamp + ".jpg");
-		mediaFile = new File(mediaStorageDir.getPath() + File.separator + "IMG_" +CommonInfo.imei+timeStamp + ".jpg");
-
-		return mediaFile;
-	}
-
 
 	/*private class OpenCameraAsyncTask extends AsyncTask<Void, Void, Void>
 	{

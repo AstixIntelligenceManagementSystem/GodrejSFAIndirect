@@ -411,7 +411,7 @@ public class PRJDatabase
             "TodaysSummary text null,MTDSummary text null);";
     private static final String DATABASE_CREATE_TABLE_11 = "create table tblPdaDate (PdaDate text null);";
     private static final String DATABASE_CREATE_TABLE_12 = "create table tblDayStartEndDetails (IMEINo text null,SyncTime text null,RouteID text null,EndTime text null,DayEndFlag int null,ChangeRouteFlg int null,ForDate text null,AppVersionID string null,Sstat int null);";//,AppVersionID int null//, VersionNo string null
-    private static final String DATABASE_CREATE_TABLE_13 = "create table tblStoreList(IMEINumber text null,AutoIdStore INTEGER PRIMARY KEY AUTOINCREMENT not null,StoreID text not null, StoreName string not null,OwnerName text null,StoreContactNo text null,StoreAddress text null,StoreType string not null,chainID integer null,StoreLatitude real not null, StoreLongitude real not null, LastVisitDate string not null, LastTransactionDate string not null, Sstat integer not null,ISNewStore int null,StoreRouteID int null,RouteNodeType int null,StoreCatNodeId int null,PaymentStage text null,flgHasQuote int null,flgAllowQuotation int null,flgGSTCapture text null,flgGSTCompliance text null,GSTNumber text null,flgGSTRecordFromServer int null,DistanceNear int null,flgStoreOrder int null,StoreCity text null,StorePinCode text not null,StoreState text null,OutStanding float null,OverDue float null,DBR text null,flgRuleTaxVal integer null,flgTransType integer null,StoreCatType text null,IsNewStoreDataCompleteSaved int null,StoreClose int null);";
+    private static final String DATABASE_CREATE_TABLE_13 = "create table tblStoreList(IMEINumber text null,AutoIdStore INTEGER PRIMARY KEY AUTOINCREMENT not null,StoreID text not null, StoreName string not null,OwnerName text null,StoreContactNo text null,StoreAddress text null,StoreType string not null,chainID integer null,StoreLatitude real not null, StoreLongitude real not null, LastVisitDate string not null, LastTransactionDate string not null, Sstat integer not null,ISNewStore int null,StoreRouteID int null,RouteNodeType int null,StoreCatNodeId int null,PaymentStage text null,flgHasQuote int null,flgAllowQuotation int null,flgGSTCapture text null,flgGSTCompliance text null,GSTNumber text null,flgGSTRecordFromServer int null,DistanceNear int null,flgStoreOrder int null,StoreCity text null,StorePinCode text not null,StoreState text null,OutStanding float null,OverDue float null,DBR text null,flgRuleTaxVal integer null,flgTransType integer null,StoreCatType text null,IsNewStoreDataCompleteSaved int null,StoreClose int null,SalesPersonName text null,SalesPersonContact text null);";//
     private static final String DATABASE_CREATE_TABLE_14 = "create table tblProductList(CategoryID text  null,ProductID text  null, ProductShortName text  null, DisplayUnit text null, CalculateKilo real  null,ProductMRP real null, ProductRLP real null, ProductTaxAmount real null, KGLiter string null,RetMarginPer real null,VatTax real null,StandardRate real null,StandardRateBeforeTax real null,StandardTax real null,CatOrdr int null,PrdOrdr int null,StoreCatNodeId int null,SearchField text null,ManufacturerID int null,RptUnitName text null,PerbaseUnit text null);";
     private static final String DATABASE_CREATE_TABLE_ProductSegementMap = "create table tblProductSegementMap(ProductID text  null,ProductMRP real not null, ProductRLP real not null, ProductTaxAmount real not null,RetMarginPer real null,VatTax real null,StandardRate real null,StandardRateBeforeTax real null,StandardTax real null,BusinessSegmentId int null,flgPriceAva int null,flgWholeSellApplicable int null,PriceRangeWholeSellApplicable real null,StandardRateWholeSale real null,StandardRateBeforeTaxWholeSell real null,StandardTaxWholeSale real null);";
 
@@ -2254,7 +2254,7 @@ public class PRJDatabase
                                  String VisitStartTS, String Imei,String BatteryStatus,int Sstat,int CityId,String ActualLatitude,
                                  String ActualLongitude,String Accuracy,String LocProvider,int IsNewStoreDataCompleteSaved,
                                  String fetchAddress,String PaymentStage,int flgHasQuote,int flgAllowQuotation,
-                                 int flgSubmitFromQuotation,String flgGSTCapture,String flgGSTCompliance,String GSTNumber,int flgGSTRecordFromServer, int flgLocationServicesOnOff, int flgGPSOnOff, int flgNetworkOnOff, int flgFusedOnOff, int flgInternetOnOffWhileLocationTracking, int flgRestart, int flgStoreOrder, String StoreCity,String StorePinCode, String StoreState,String DBR,String OwnerName,String StoreContactNo,String StoreCatType,int flgRuleTaxVal,int flgTransType,String mobileFnl)
+                                 int flgSubmitFromQuotation,String flgGSTCapture,String flgGSTCompliance,String GSTNumber,int flgGSTRecordFromServer, int flgLocationServicesOnOff, int flgGPSOnOff, int flgNetworkOnOff, int flgFusedOnOff, int flgInternetOnOffWhileLocationTracking, int flgRestart, int flgStoreOrder, String StoreCity,String StorePinCode, String StoreState,String DBR,String OwnerName,String StoreContactNo,String StoreCatType,int flgRuleTaxVal,int flgTransType,String mobileFnl,String SalesPersonName,String SalesPersonContactNo)
     {
 
         int MaxAutoStore = 0;
@@ -2292,7 +2292,7 @@ public class PRJDatabase
             }
 
             //saveSOAPdataStoreList = DBR,flgRetailerCredit
-            saveSOAPdataStoreListNewStore(StoreID, ""+StoreTypeId, StoreName, Double.parseDouble(ActualLatitude.trim()), Double.parseDouble(ActualLongitude.trim()), "", "", prevDate2Send, MaxAutoStore,Sstat,Accuracy.trim(),LocProvider.trim(),RouteID,BatteryStatus,IsNewStoreDataCompleteSaved,fetchAddress,PaymentStage,flgHasQuote,flgAllowQuotation,flgSubmitFromQuotation,flgGSTCapture,flgGSTCompliance,GSTNumber,flgGSTRecordFromServer,flgLocationServicesOnOff,flgGPSOnOff,flgNetworkOnOff,flgFusedOnOff,flgInternetOnOffWhileLocationTracking,flgRestart,flgStoreOrder,StoreCity,StorePinCode,StoreState,DBR,OwnerName,StoreContactNo,StoreCatType,flgRuleTaxVal,flgTransType); // in last parameter Fdate
+            saveSOAPdataStoreListNewStore(StoreID, ""+StoreTypeId, StoreName, Double.parseDouble(ActualLatitude.trim()), Double.parseDouble(ActualLongitude.trim()), "", "", prevDate2Send, MaxAutoStore,Sstat,Accuracy.trim(),LocProvider.trim(),RouteID,BatteryStatus,IsNewStoreDataCompleteSaved,fetchAddress,PaymentStage,flgHasQuote,flgAllowQuotation,flgSubmitFromQuotation,flgGSTCapture,flgGSTCompliance,GSTNumber,flgGSTRecordFromServer,flgLocationServicesOnOff,flgGPSOnOff,flgNetworkOnOff,flgFusedOnOff,flgInternetOnOffWhileLocationTracking,flgRestart,flgStoreOrder,StoreCity,StorePinCode,StoreState,DBR,OwnerName,StoreContactNo,StoreCatType,flgRuleTaxVal,flgTransType,SalesPersonName,SalesPersonContactNo); // in last parameter Fdate
 
             fnInsert_tblNewAddedStoreLocationDetails( StoreID, Sstat, ActualLatitude, ActualLongitude, prevDate2Send, LocProvider, Accuracy, BatteryStatus, flgLocationServicesOnOff, flgGPSOnOff, flgNetworkOnOff, flgFusedOnOff, flgInternetOnOffWhileLocationTracking);
         }
@@ -13399,7 +13399,7 @@ open();
     public long saveSOAPdataStoreList(String StoreID,String  StoreName ,String OwnerName ,String StoreContactNo ,
                                       String StoreAddress ,String StoreCatType
             ,Double StoreLatitude ,Double StoreLongitude ,String  LastVisitDate,String  LastTransactionDate
-            ,int Sstat,int StoreRouteID ,int RouteNodeType,int StoreCatNodeId ,String PaymentStage ,int flgHasQuote ,int flgAllowQuotation,String flgGSTCapture,String flgGSTCompliance,String GSTNumber ,int flgGSTRecordFromServer ,String StoreCity ,String StorePinCode ,String StoreState,String OutStanding ,String OverDue ,String DBR ,int flgRuleTaxVal,int flgTransType,int StoreType,int IsClose)
+            ,int Sstat,int StoreRouteID ,int RouteNodeType,int StoreCatNodeId ,String PaymentStage ,int flgHasQuote ,int flgAllowQuotation,String flgGSTCapture,String flgGSTCompliance,String GSTNumber ,int flgGSTRecordFromServer ,String StoreCity ,String StorePinCode ,String StoreState,String OutStanding ,String OverDue ,String DBR ,int flgRuleTaxVal,int flgTransType,int StoreType,int IsClose,String SalesPersonName,String SalesPersonContactNo)
     {
 
 
@@ -13438,6 +13438,9 @@ open();
         initialValues.put("StoreAddress", StoreAddress);
         initialValues.put("chainID", 1);
         initialValues.put("IsNewStoreDataCompleteSaved", 0);
+
+        initialValues.put("SalesPersonName", SalesPersonName.trim());
+        initialValues.put("SalesPersonContact", SalesPersonContactNo.trim());
 
 
         initialValues.put("StoreLatitude", StoreLatitude);
@@ -15113,7 +15116,7 @@ open();
                                               String sForDate, int AutoIdStore, int newStat, String Accuracy, String LocProvider,
                                               String activeRid,String BateryLevel,int IsNewStoreDataCompleteSaved,String fetchAddress,
                                               String PaymentStage,int flgHasQuote,int flgAllowQuotation,int flgSubmitFromQuotation
-            ,String flgGSTCapture,String flgGSTCompliance,String GSTNumber,int flgGSTRecordFromServer, int flgLocationServicesOnOff, int flgGPSOnOff, int flgNetworkOnOff, int flgFusedOnOff, int flgInternetOnOffWhileLocationTracking, int flgRestart, int flgStoreOrder, String StoreCity,String StorePinCode, String StoreState,String DBR,String OwnerName,String StoreContactNo,String StoreCatType,int flgRuleTaxVal,int flgTransType) {
+            ,String flgGSTCapture,String flgGSTCompliance,String GSTNumber,int flgGSTRecordFromServer, int flgLocationServicesOnOff, int flgGPSOnOff, int flgNetworkOnOff, int flgFusedOnOff, int flgInternetOnOffWhileLocationTracking, int flgRestart, int flgStoreOrder, String StoreCity,String StorePinCode, String StoreState,String DBR,String OwnerName,String StoreContactNo,String StoreCatType,int flgRuleTaxVal,int flgTransType,String SalesPersonName,String  SalesPersonContactNo) {
 
 
         int flgIfStoreHasRecords=0;
@@ -15146,7 +15149,8 @@ open();
         initialValues.put("OverDue", "0.00");
         initialValues.put("flgRuleTaxVal", flgRuleTaxVal);
 
-
+        initialValues.put("SalesPersonName", SalesPersonName);
+        initialValues.put("SalesPersonContact", SalesPersonContactNo);
 
 
         initialValues.put("chainID", 1);
@@ -30648,7 +30652,7 @@ String fetchdate=fnGetDateTimeString();
         Cursor cur=null;
         open();
         try {
-            cur=db.rawQuery("Select ifnull(StoreName,'NA'),ifnull(OwnerName,'NA'),ifnull(StoreContactNo,'NA'),ifnull(StoreAddress,'NA'),ifnull(StoreCatType,'NA') from tblStoreList where StoreID = '"+StoreID+"'", null);
+            cur=db.rawQuery("Select ifnull(StoreName,'NA'),ifnull(OwnerName,'NA'),ifnull(StoreContactNo,'NA'),ifnull(StoreAddress,'NA'),ifnull(StoreCatType,'NA'),ifnull(SalesPersonName,'NA'),ifnull(SalesPersonContact,'NA') from tblStoreList where StoreID = '"+StoreID+"'", null);//
             if(cur.getCount()>0)
             {
                 if(cur.moveToFirst())
@@ -30659,6 +30663,8 @@ String fetchdate=fnGetDateTimeString();
                     hmapStoreBasicDetails.put("StoreContactNo", cur.getString(2));
                     hmapStoreBasicDetails.put("StoreAddress", cur.getString(3));
                     hmapStoreBasicDetails.put("StoreCatType", cur.getString(4));
+                    hmapStoreBasicDetails.put("SalesPersonName", cur.getString(5));
+                    hmapStoreBasicDetails.put("SalesPersonContact", cur.getString(6));
 
                 }
 
