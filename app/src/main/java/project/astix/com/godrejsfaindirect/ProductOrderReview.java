@@ -7526,7 +7526,7 @@ public void loadPurchaseProductDefault()
 				dbengine.UpdateStoreMaterialphotoFlag(storeID.trim(), 5);
 				dbengine.UpdateStoreReturnphotoFlag(storeID.trim(), 5);
 				dbengine.UpdateNewAddedStorephotoFlag(storeID.trim(), 5);
-				dbengine.UpdateStoreImage(storeID.trim(), 5);
+				//dbengine.UpdateStoreImage(storeID.trim(), 5);
 
 
 
