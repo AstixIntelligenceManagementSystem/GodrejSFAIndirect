@@ -1169,6 +1169,7 @@ if(flgCheckNewOldStore==1)
             DA.close();
 
             dbengine.savetbl_XMLfiles(newfullFileName, "3","1");
+            dbengine.UpdateStorWhileAdding(selStoreID,5);
 
         } catch (Exception e) {
 

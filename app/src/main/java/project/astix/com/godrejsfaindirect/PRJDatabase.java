@@ -31868,6 +31868,29 @@ close();
 
     }
 
+    public void UpdateStorWhileAdding(String sID, int flag2set)
+    {
+        open();
+        try
+        {
+
+            final ContentValues values = new ContentValues();
+            values.put("Sstat", flag2set);
+            int affected1 = db.update("tblStoreList", values,"StoreID=?", new String[] { sID });
+            int affected2 = db.update("tblNewAddedStoreLocationDetails", values,"StoreID=?", new String[] { sID });
+            int affected3 = db.update("tblNewStoreListEntries", values,"StoreID=?", new String[] { sID });
+            int affected4 = db.update("tblNewStoreSalesQuotePaymentDetails", values,"StoreId=?", new String[] { sID });
+            int affected5 = db.update("tblOutletQuestAnsMstr", values,"OutletID=?", new String[] { sID });
+            int affected6 = db.update("tableImage", values,"StoreID=?", new String[] { sID });
+        }
+        catch (Exception ex)
+        {
+            Log.e(TAG, ex.toString());
+        }
+        close();
+
+    }
+
     private static class DatabaseHelper extends SQLiteOpenHelper
     {
         DatabaseHelper(Context context)
