@@ -7520,12 +7520,13 @@ public void loadPurchaseProductDefault()
 
 				dbengine.savetbl_XMLfiles(newfullFileName, "3","1");
 				dbengine.open();
-				dbengine.UpdateStoreFlag(storeID.trim(), 5);
+				dbengine.UpdatetblStoreClosedPhotoDetail(storeID.trim(), 5);
 
 				dbengine.UpdateStoreOtherMainTablesFlag(storeID.trim(), 5,strGlobalOrderID,TmpInvoiceCodePDA);
 				dbengine.UpdateStoreMaterialphotoFlag(storeID.trim(), 5);
 				dbengine.UpdateStoreReturnphotoFlag(storeID.trim(), 5);
 				dbengine.UpdateNewAddedStorephotoFlag(storeID.trim(), 5);
+				dbengine.UpdateStoreImage(storeID.trim(), 5);
 
 
 

@@ -12184,9 +12184,9 @@ public class PRJDatabase
 
         int affected = db.update("tblStoreVisitMstr", values, "StoreID=? AND StoreVisitCode=?",new String[] { StoreID,StoreVisitCode });
         int affected1 = db.update("tblStoreList", values, "StoreID=?",new String[] { StoreID });
-        int affected21 = db.update("tblOutletQuestAnsMstr", values,"OutletID=?", new String[] { StoreID });
+      // int affected21 = db.update("tblOutletQuestAnsMstr", values,"OutletID=?", new String[] { StoreID });
         //nitishdubey
-        int affected261 = db.update("tblNewAddedStoreLocationDetails", values,"StoreID=?", new String[] { StoreID });
+      //  int affected261 = db.update("tblNewAddedStoreLocationDetails", values,"StoreID=?", new String[] { StoreID });
 
     }
 
@@ -12508,6 +12508,24 @@ public class PRJDatabase
 
     }
 
+
+    public void UpdatetblStoreClosedPhotoDetail(String sID, int flag2set)
+    {
+
+        try
+        {
+             final ContentValues values = new ContentValues();
+             values.put("Sstat", flag2set);
+
+            int affected28 = db.update("tblStoreClosedPhotoDetail", values,"Sstat=?", new String[] { "3" });
+        }
+        catch (Exception ex)
+        {
+            Log.e(TAG, ex.toString());
+        }
+
+    }
+
     public void UpdateStoreImage(String sID, int flag2set)
     {
 
@@ -12518,6 +12536,7 @@ public class PRJDatabase
             values.put("Sstat", flag2set);
 
             int affected27 = db.update("tableImage", values,"Sstat=?", new String[] { "3" });
+            int affected28 = db.update("tblStoreClosedPhotoDetail", values,"Sstat=?", new String[] { "3" });
 
 
 
@@ -29596,7 +29615,7 @@ String fetchdate=fnGetDateTimeString();
     {
 
         int ScodecolumnIndex = 0;
-
+       // tblStoreClosedPhotoDetail
         Cursor cursor = db.rawQuery("SELECT Count(StoreID) FROM tblStoreClosedPhotoDetail where StoreID='" + StoreID + "'", null);
         try {
             int strProdStockQty = 0;
@@ -32357,5 +32376,7 @@ close();
             }
         }
     }
+
+    //sunil
 }
 

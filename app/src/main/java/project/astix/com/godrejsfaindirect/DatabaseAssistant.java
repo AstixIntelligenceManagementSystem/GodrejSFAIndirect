@@ -90,21 +90,8 @@ public class DatabaseAssistant
 		String sql = "select * from sqlite_master";
 		//////System.out.println("db print inside DA: " + db);
 		Cursor c = db.rawQuery(sql, new String[0]);
-		/*if (c.moveToFirst()) {
-			do {
-				String tableName = c.getString(c.getColumnIndex("name"));
 
-				// skip metadata, sequence, and uidx (unique indexes)
-				if (!tableName.equals("android_metadata")
-						&& !tableName.equals("sqlite_sequence")
-						&& !tableName.startsWith("uidx")) {
-					//exportTable(tableName);
-					exportTable("myPROmainData");		// FOR TEST! >> myPROmainData
-				}
-			} while (c.moveToNext());
-		}*/
-		if (1==1)
-		{			//reqd. if.. block
+
 			exportTableStoreList("tblStoreList");
 			exportTable("tblNewAddedStoreLocationDetails");
 			exportTableStoreVisit("tblStoreVisitMstr");
@@ -163,7 +150,7 @@ public class DatabaseAssistant
 
 			//String routeID=GetActiveRouteIDSunil();
 			UpdateNewAddedStorephotoFlag();
-		}
+
 		String xmlString = xmlBuilder.end();
 		writeToFile(xmlString, exportFileNamePrefix + ".xml");
 

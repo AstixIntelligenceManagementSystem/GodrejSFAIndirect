@@ -172,7 +172,7 @@ public class CommonInfo
 	    public static final String DistributorStockXMLFolder="GodrejDistributorStockXML";
 	    public static final String DistributorCheckInXMLFolder="GodrejDistributorCheckInXML";
 	    public static final String Preference="GodrejPrefrence";
-    public static int flgAllRoutesData=1;
+        public static int flgAllRoutesData=1;
 	    public static File imageF_savedInstance=null;
 	    public static String imageName_savedInstance=null;
 	    public static String clickedTagPhoto_savedInstance=null;
@@ -214,7 +214,7 @@ public class CommonInfo
 		public static int SalesmanNodeType=0;
 		public static int flgDataScope=0;
 		public static int FlgDSRSO=0;
-	public static String ActiveRouteSM="0";
+	    public static String ActiveRouteSM="0";
 
 
 

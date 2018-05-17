@@ -1139,7 +1139,9 @@ if(flgCheckNewOldStore==1)
         helperDb.close();
 
 
-        /*try {
+        // new code
+
+        try {
 
 
             File OrderXMLFolder = new File(Environment.getExternalStorageDirectory(), CommonInfo.OrderXMLFolder);
@@ -1156,10 +1158,6 @@ if(flgCheckNewOldStore==1)
 
             Date dateobj = new Date(syncTIMESTAMP);
             SimpleDateFormat df1 = new SimpleDateFormat("dd.MM.yyyy.HH.mm.ss",Locale.ENGLISH);
-         //   String StampEndsTime = df1.format(dateobj);
-			*//*long syncTIMESTAMP = System.currentTimeMillis();
-			Date dateobj = new Date(syncTIMESTAMP);*//*
-
 
             newfullFileName=imei+"."+presentRoute+"."+df1.format(dateobj);
 
@@ -1179,7 +1177,7 @@ if(flgCheckNewOldStore==1)
                 pDialogGetStores.dismiss();
             }
         }
-        */
+        // new code
 
         if(activityFrom.equals("StoreSelection")){
             Intent ide=new Intent(AddNewStore_DynamicSectionWise.this,StoreSelection.class);

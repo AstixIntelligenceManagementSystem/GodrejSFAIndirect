@@ -2504,8 +2504,8 @@ if(NoOfOutletID.length>0)
 							        			e.printStackTrace();
 							        		}*/
 
-							Intent submitStoreIntent = new Intent(SyncMaster.this, AllButtonActivity.class);
-							startActivity(submitStoreIntent);
+							//Intent submitStoreIntent = new Intent(SyncMaster.this, AllButtonActivity.class);
+							//startActivity(submitStoreIntent);
 							finish();
 
 

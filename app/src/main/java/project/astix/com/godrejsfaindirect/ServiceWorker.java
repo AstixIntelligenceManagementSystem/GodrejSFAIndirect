@@ -346,6 +346,11 @@ public class ServiceWorker
 								{
 									Sstat=Integer.parseInt(XMLParser.getCharacterDataFromElement(line));
 								}
+								if(Sstat==4)
+								{
+									Sstat=0;
+									hmapStoreIdSstat.put(StoreID,""+Sstat);
+								}
 							}
 						}
 					}
