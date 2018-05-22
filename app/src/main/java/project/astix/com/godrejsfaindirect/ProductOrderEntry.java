@@ -104,7 +104,7 @@ GoogleApiClient.OnConnectionFailedListener,CategoryCommunicator
 		  private static final long MIN_TIME_BW_UPDATES = 1000  * 1; //1 second
 	    private final long startTime = 15000;
 	    private final long interval = 200;
- public int flgTransferStatus=0;
+ 	public int flgTransferStatus=0;
 	public String VisitTimeInSideStore="NA";
 	public TextView tvRateHeading;
 	public String StoreVisitCode="NA";

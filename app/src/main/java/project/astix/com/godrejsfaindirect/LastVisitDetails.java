@@ -1221,7 +1221,7 @@ final Button btn_Cancel=(Button) findViewById(R.id.btn_Cancel);
 				
 				if (validate())
 				{
-				//	getStoreVisitCode();
+					getStoreVisitCode();
 					 String flgGSTCompliance="NA";
 						// String flgGSTCapture="NA";
 						 String GSTNumber="NA";
@@ -1350,7 +1350,7 @@ final Button btn_Cancel=(Button) findViewById(R.id.btn_Cancel);
 			@Override
 			public void onClick(View v)
 			{
-			//	getStoreVisitCode();
+				getStoreVisitCode();
 				String passdLevel = battLevel + "%";
 				dbengine.UpdateStoreVisitBattVisitWise(storeID,passdLevel,StoreVisitCode);
 				Intent nxtP4=new Intent(LastVisitDetails.this,StoreClosedActivity.class);
@@ -1369,7 +1369,7 @@ final Button btn_Cancel=(Button) findViewById(R.id.btn_Cancel);
 		setInvoiceData();
 
 
-		getStoreVisitCode();
+		//getStoreVisitCode();
 
 	}
 

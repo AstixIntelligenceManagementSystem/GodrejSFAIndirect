@@ -2033,7 +2033,7 @@ public void DayEndWithoutalert()
 							 next = 0;//Integer.parseInt(tokensInvoice.nextToken().toString().trim());
 						}
 
-
+						  close=0;
 					if (close == 0)
 					{
 
@@ -2311,8 +2311,6 @@ public void DayEndWithoutalert()
 					 open_pop_up();
 				}
 		  });
-
-
 
 
 		getManagersDetail();

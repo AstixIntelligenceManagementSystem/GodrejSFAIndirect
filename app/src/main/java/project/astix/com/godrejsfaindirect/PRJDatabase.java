@@ -770,17 +770,17 @@ public class PRJDatabase
         db.execSQL("DELETE FROM tblOptionMstr");
         db.execSQL("DELETE FROM tblPDAQuestOptionDependentMstr");
         db.execSQL("DELETE FROM tblPDAQuestOptionValuesDependentMstr");
-        db.execSQL("DELETE FROM tblLatLongDetails");
+        //db.execSQL("DELETE FROM tblLatLongDetails");
         //  db.execSQL("DELETE FROM tblOutletMstr");
         //  db.execSQL("DELETE FROM tblOutletQuestAnsMstr");
 
-        db.execSQL("DELETE FROM tblStoreList WHERE Sstat ="+ 4);
+      /*  db.execSQL("DELETE FROM tblStoreList WHERE Sstat ="+ 4);
         db.execSQL("DELETE FROM tblOutletQuestAnsMstr WHERE Sstat ="+ 4);
 
         db.execSQL("DELETE FROM tblNewAddedStoreLocationDetails WHERE Sstat ="+ 4);
 
 
-        db.execSQL("DELETE FROM tblOutletPhotoDetail WHERE Sstat ="+ 4);
+        db.execSQL("DELETE FROM tblOutletPhotoDetail WHERE Sstat ="+ 4);*/
 
 
 
@@ -816,7 +816,7 @@ public class PRJDatabase
         //	db.execSQL("DELETE FROM tblOutletQuestAnsMstr");
 
 
-        db.execSQL("DELETE FROM tblOutletPhotoDetail");
+       // db.execSQL("DELETE FROM tblOutletPhotoDetail");
 
 
 
@@ -12183,7 +12183,7 @@ public class PRJDatabase
         values.put("StoreClose", StoreClose);
 
         int affected = db.update("tblStoreVisitMstr", values, "StoreID=? AND StoreVisitCode=?",new String[] { StoreID,StoreVisitCode });
-        int affected1 = db.update("tblStoreList", values, "StoreID=?",new String[] { StoreID });
+     //   int affected1 = db.update("tblStoreList", values, "StoreID=?",new String[] { StoreID });
       // int affected21 = db.update("tblOutletQuestAnsMstr", values,"OutletID=?", new String[] { StoreID });
         //nitishdubey
       //  int affected261 = db.update("tblNewAddedStoreLocationDetails", values,"StoreID=?", new String[] { StoreID });
@@ -12620,7 +12620,7 @@ public class PRJDatabase
            // int affected42 = db.update("tblAllCollectionData", values,"StoreID=?", new String[] { sID });
 
             int affected = db.update("tblStoreList", values, "StoreID=?",new String[] { sID });
-            int affected1 = db.update("tblLatLongDetails", values, "StoreID=?",new String[] { sID });
+          //  int affected1 = db.update("tblLatLongDetails", values, "StoreID=?",new String[] { sID });
 
             int affected26 = db.update("tblRateDistribution", values,"StoreId=?", new String[] { sID });
 
@@ -32378,5 +32378,62 @@ close();
     }
 
     //sunil
+
+
+
+
+
+
+
+
+    public void UpdateXMLCreatedFilesTablesFlag(int flag2set)
+    {
+        open();
+        try
+        {
+
+            final ContentValues values = new ContentValues();
+            values.put("Sstat", flag2set);
+            int affected1 = db.update("tblStoreList", values,"Sstat=?", new String[] { "3" });
+            int affected2 = db.update("tblNewAddedStoreLocationDetails", values,"Sstat=?", new String[] { "3" });
+            int affected3 = db.update("tblNewStoreListEntries", values,"Sstat=?", new String[] { "3" });
+            int affected4 = db.update("tblNewStoreSalesQuotePaymentDetails", values,"Sstat=?", new String[] { "3" });
+            int affected5 = db.update("tblOutletQuestAnsMstr", values,"Sstat=?", new String[] { "3" });
+            int affected6 = db.update("tableImage", values,"Sstat=?", new String[] { "3" });
+
+
+            int affected7 = db.update("tblStoreVisitMstr", values,"Sstat=?", new String[] { "3" });
+            int affected8 = db.update("tblInvoiceDetails", values,"Sstat=?", new String[] { "3" });
+            int affected9 = db.update("tblInvoiceHeader", values,"Sstat=?", new String[] { "3" });
+            int affected10 = db.update("tblAllCollectionData", values,"Sstat=?", new String[] { "3" });
+            int affected11= db.update("tblStoreProductPhotoDetail", values,"Sstat=?", new String[] { "3" });
+            int affected12 = db.update("tblNewStoreEntries", values,"Sstat=?", new String[] { "3" });
+            int affected13 = db.update("tblNoVisitStoreDetails", values,"Sstat=?", new String[] { "3" });
+            int affected14= db.update("tblSelectedManagerDetails", values,"Sstat=?", new String[] { "3" });
+            int affected15= db.update("tblLatLongDetails", values,"Sstat=?", new String[] { "3" });
+            int affected16= db.update("tblStoreCloseLocationDetails", values,"Sstat=?", new String[] { "3" });
+            int affected17= db.update("tblStoreClosedPhotoDetail", values,"Sstat=?", new String[] { "3" });
+            int affected18= db.update("tblStoreCloseReasonSaving", values,"Sstat=?", new String[] { "3" });
+
+
+
+        }
+        catch (Exception ex)
+        {
+            Log.e(TAG, ex.toString());
+        }
+        close();
+
+    }
+
 }
+
+
+
+
+
+
+
+
+
 

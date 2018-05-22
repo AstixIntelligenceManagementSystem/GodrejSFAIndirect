@@ -7519,7 +7519,7 @@ public void loadPurchaseProductDefault()
 				DA.close();
 
 				dbengine.savetbl_XMLfiles(newfullFileName, "3","1");
-				dbengine.open();
+				/*dbengine.open();
 				dbengine.UpdatetblStoreClosedPhotoDetail(storeID.trim(), 5);
 
 				dbengine.UpdateStoreOtherMainTablesFlag(storeID.trim(), 5,strGlobalOrderID,TmpInvoiceCodePDA);
@@ -7544,7 +7544,8 @@ public void loadPurchaseProductDefault()
 						dbengine. fnsaveStoreSalesOrderPaymentDetails(storeID,strGlobalOrderID,strDefaultPaymentStageForStore,"4",TmpInvoiceCodePDA);
 						dbengine.close();
 					}
-				}
+				}*/
+				dbengine.UpdateXMLCreatedFilesTablesFlag(5);
 			} catch (Exception e) {
 
 				e.printStackTrace();
