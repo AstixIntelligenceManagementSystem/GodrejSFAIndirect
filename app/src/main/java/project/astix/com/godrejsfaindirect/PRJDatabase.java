@@ -28014,6 +28014,53 @@ String fetchdate=fnGetDateTimeString();
 
     }
 
+
+    public String getDistinctCollectionPaymentIds()
+    {
+        open();
+        String strStoreCollectionUniquneVisitId="";
+        Cursor cur=null;
+        //tblDistributorProductLeft
+        //tblDistributorOrderPdaId(DistributorNodeIdNodeType text null,OrderPDAID text null,ProductId text null,OrderQntty text null,Sstat integer not null);";
+        try {
+            cur=db.rawQuery("Select DISTINCT StoreVisitCode from tblAllCollectionData WHERE Sstat in(3,5,6)",null);
+            if(cur.getCount()>0)
+            {
+                StringBuilder sb=new StringBuilder();
+                if(cur.moveToFirst())
+                {
+                    for(int i=0;i<cur.getCount();i++)
+                    {
+                        if(i==0)
+                        {
+                            sb.append(cur.getString(0));
+                        }
+                        else
+                        {
+                            sb.append("^").append(cur.getString(0));
+                        }
+                        cur.moveToNext();
+                    }
+                }
+                strStoreCollectionUniquneVisitId=sb.toString();
+            }
+        }
+        catch(Exception e)
+        {
+
+        }
+        finally
+        {
+            if(cur!=null)
+            {
+                cur.close();
+            }
+            close();
+            return strStoreCollectionUniquneVisitId;
+        }
+
+    }
+
     public void insertDistributorPDAOrderId(String distributorNodeIdNodeType,String orderId,String productId,String orderQntty,int Sstat)
     {
         //tblDistributorOrderPdaId(DistributorNodeIdNodeType text null,OrderPDAID text null,ProductId text null,OrderQntty text null,Sstat integer not null);";

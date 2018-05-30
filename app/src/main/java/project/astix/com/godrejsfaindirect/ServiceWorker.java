@@ -18268,6 +18268,7 @@ String RouteType="0";
 
 		HttpTransportSE androidHttpTransport = new HttpTransportSE(URL,0);
 		String DstId_OrderPdaId=dbengine.getDistinctInvoiceNumbers();
+		//String strStoreCollectionUniquneVisitId=dbengine.getDistinctCollectionPaymentIds();
 		dbengine.open();
 		ServiceWorker setmovie = new ServiceWorker();
 
@@ -18279,6 +18280,7 @@ String RouteType="0";
 			client.addProperty("uuid", IMEINo.toString());
 			client.addProperty("CoverageAreaNodeID", CommonInfo.CoverageAreaNodeID);
 			client.addProperty("coverageAreaNodeType",CommonInfo.CoverageAreaNodeType);
+			//client.addProperty("strStoreCollectionUniquneVisitId",strStoreCollectionUniquneVisitId);
 
 			sse.setOutputSoapObject(client);
 
