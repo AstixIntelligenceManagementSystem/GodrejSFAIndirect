@@ -28020,8 +28020,6 @@ String fetchdate=fnGetDateTimeString();
         open();
         String strStoreCollectionUniquneVisitId="";
         Cursor cur=null;
-        //tblDistributorProductLeft
-        //tblDistributorOrderPdaId(DistributorNodeIdNodeType text null,OrderPDAID text null,ProductId text null,OrderQntty text null,Sstat integer not null);";
         try {
             cur=db.rawQuery("Select DISTINCT StoreVisitCode from tblAllCollectionData WHERE Sstat in(3,5,6)",null);
             if(cur.getCount()>0)
