@@ -759,6 +759,7 @@ public void loadPurchaseProductDefault()
 
 					    createProductPrepopulateDetail(CheckIfStoreExistInStoreProdcutPurchaseDetails);
 					    setInvoiceTableView();
+	orderBookingTotalCalc();
 }
 
 		public void	initializeFields() {
@@ -3150,6 +3151,7 @@ public void loadPurchaseProductDefault()
 					   txt_TotalLineCount_Value.setText(""+InvoiceReviewLineCount);
 					   int TotalInvoiceCount=dbengine.fetchtblInvoiceReviewCount(storeID,TmpInvoiceCodePDA);
 					   txt_TotalInvoiceCount_Value.setText(""+TotalInvoiceCount);
+
 		           }
 	           }
 	           
@@ -4240,9 +4242,167 @@ public void loadPurchaseProductDefault()
 		tv_GrossInvVal.setText(""+GrossInvValue);
 		//Now the its Time to Show the OverAll Summary Code Starts Here
 	}*/
+	public Double fnOnlyCalculateWholeSaleValue(int flgPriceApplyDiscountLevelType) {
+		Double StandardRate = 0.00;
+		Double StandardRateBeforeTax = 0.00;
+		Double StandardTax = 0.00;
+		Double ActualRateAfterDiscountBeforeTax = 0.00;
+		Double DiscountAmount = 0.00;
+		Double ActualTax = 0.00;
+		Double ActualRateAfterDiscountAfterTax = 0.00;
+
+		String PrdMaxValuePercentageDiscount = "";
+		String PrdMaxValueFlatDiscount = "";
+
+		Double TotalFreeQTY = 0.00;
+		Double TotalProductLevelDiscount = 0.00;
+		Double TotalOrderValBeforeTax = 0.00;
+		Double TotAdditionaDiscount = 0.00;
+		Double TotOderValueAfterAdditionaDiscount = 0.00;
+		Double TotTaxAmount = 0.00;
+		Double TotOderValueAfterTax = 0.00;
+
+		int flgWholeSellApplicable = 0;
+		Double PriceRangeWholeSellApplicable = 0.00;
+
+		int prdListCount = hmapPrdctIdPrdctNameVisible.size();
+
+		for (int index = 0; index < prdListCount; index++) {
+			View vRow = ll_prdct_detal.getChildAt(index);
+
+			int PCateIdDetails = Integer.parseInt(vRow.getTag().toString().split(Pattern.quote("_"))[0]);
+			String ProductID = ((TextView) (vRow).findViewById(R.id.tvProdctName)).getTag().toString().split(Pattern.quote("_"))[1];
+			//((TextView) (vRow).findViewById(R.id.txtVwRate)).setText("" + hmapStandardRateWholeSale.get(ProductID).toString());
+			if (hmapProductListOnWhichWholePriceNeedsToApplyIfRequired.containsKey(ProductID)) {
+				if (hmapPrdctOdrQty.containsKey(ProductID)) {
+					flgWholeSellApplicable = Integer.parseInt(hmapflgWholeSellApplicable.get(ProductID));
+					PriceRangeWholeSellApplicable = Double.parseDouble(hmapPriceRangeWholeSellApplicable.get(ProductID));
+					hmapPrdctFreeQty.put(ProductID, "0");
+					((TextView) (vRow).findViewById(R.id.tv_FreeQty)).setText(hmapPrdctFreeQty.get(ProductID).toString());
+					TotalFreeQTY = TotalFreeQTY + Integer.parseInt(hmapPrdctFreeQty.get(ProductID));
+					hmapProductTaxValue.put(ProductID, "0.00");
+					hmapMinDlvrQtyQPTaxAmount.put(ProductID, "0.00");
+
+					if (Integer.parseInt(hmapPrdctOdrQty.get(ProductID)) > 0) {
+
+						if (flgPriceApplyDiscountLevelType == 1) {
+							if (Integer.parseInt(hmapProductflgPriceAva.get(ProductID)) > 0) {
+								StandardRate = Double.parseDouble(hmapStandardRateWholeSale.get(ProductID));///((1+(Double.parseDouble(hmapProductRetailerMarginPercentage.get(ProductID))/100)));
+								StandardRateBeforeTax = StandardRate / (1 + (Double.parseDouble(hmapProductVatTaxPerventage.get(ProductID)) / 100));
+								StandardTax = StandardRateBeforeTax * (Double.parseDouble(hmapProductVatTaxPerventage.get(ProductID)) / 100);
+
+							} else {
+								StandardRate = Double.parseDouble(hmapStandardRateWholeSale.get(ProductID));
+								StandardRateBeforeTax = Double.parseDouble(hmapStandardRateBeforeTaxWholeSell.get(ProductID));
+								StandardTax = Double.parseDouble(hmapStandardTaxWholeSale.get(ProductID));
+
+							}
+
+						}
+						if (flgPriceApplyDiscountLevelType == 2) {
+							if (hmapflgWholeSellApplicable.containsKey(ProductID)) {
+								if (Double.parseDouble(hmapProductListOnWhichWholePriceNeedsToApplyIfRequired.get(ProductID)) >= Double.parseDouble(hmapPriceRangeWholeSellApplicable.get(ProductID))) {
+									if (Integer.parseInt(hmapProductflgPriceAva.get(ProductID)) > 0) {
+										StandardRate = Double.parseDouble(hmapStandardRateWholeSale.get(ProductID));///((1+(Double.parseDouble(hmapProductRetailerMarginPercentage.get(ProductID))/100)));
+										StandardRateBeforeTax = StandardRate / (1 + (Double.parseDouble(hmapProductVatTaxPerventage.get(ProductID)) / 100));
+										StandardTax = StandardRateBeforeTax * (Double.parseDouble(hmapProductVatTaxPerventage.get(ProductID)) / 100);
+
+									} else {
+										StandardRate = Double.parseDouble(hmapStandardRateWholeSale.get(ProductID));
+										StandardRateBeforeTax = Double.parseDouble(hmapStandardRateBeforeTaxWholeSell.get(ProductID));
+										StandardTax = Double.parseDouble(hmapStandardTaxWholeSale.get(ProductID));
+
+
+									}
+								} else {
+									if (Integer.parseInt(hmapProductflgPriceAva.get(ProductID)) > 0) {
+										StandardRate = Double.parseDouble(hmapProductStandardRate.get(ProductID));///((1+(Double.parseDouble(hmapProductRetailerMarginPercentage.get(ProductID))/100)));
+										StandardRateBeforeTax = StandardRate / (1 + (Double.parseDouble(hmapProductVatTaxPerventage.get(ProductID)) / 100));
+										StandardTax = StandardRateBeforeTax * (Double.parseDouble(hmapProductVatTaxPerventage.get(ProductID)) / 100);
+									} else {
+										StandardRate = Double.parseDouble(hmapProductStandardRate.get(ProductID));
+										StandardRateBeforeTax = Double.parseDouble(hmapProductStandardRateBeforeTax.get(ProductID));
+										StandardTax = Double.parseDouble(hmapProductStandardTax.get(ProductID));
+
+									}
+								}
+							} else {
+								if (Integer.parseInt(hmapProductflgPriceAva.get(ProductID)) > 0) {
+									StandardRate = Double.parseDouble(hmapProductStandardRate.get(ProductID));///((1+(Double.parseDouble(hmapProductRetailerMarginPercentage.get(ProductID))/100)));
+									StandardRateBeforeTax = StandardRate / (1 + (Double.parseDouble(hmapProductVatTaxPerventage.get(ProductID)) / 100));
+									StandardTax = StandardRateBeforeTax * (Double.parseDouble(hmapProductVatTaxPerventage.get(ProductID)) / 100);
+								} else {
+									StandardRate = Double.parseDouble(hmapProductStandardRate.get(ProductID));
+									StandardRateBeforeTax = Double.parseDouble(hmapProductStandardRateBeforeTax.get(ProductID));
+									StandardTax = Double.parseDouble(hmapProductStandardTax.get(ProductID));
+
+								}
+							}
+						}
+
+
+						String value = hmapPrdctVolRatTax.get(ProductID).toString();
+						StringTokenizer tokens = new StringTokenizer(value, Pattern.quote("^"));
+						//Volume^Rate^TaxAmount
+						String prdVolume = tokens.nextElement().toString();
+
+						StandardRate = Double.parseDouble(new DecimalFormat("##.##").format(StandardRate));
+
+						//If No Percentage Discount or Flat Discount is Applicable Code Starts Here
+						ActualRateAfterDiscountBeforeTax = StandardRateBeforeTax;
+						DiscountAmount = 0.00;
+						ActualTax = ActualRateAfterDiscountBeforeTax * (Double.parseDouble(hmapProductVatTaxPerventage.get(ProductID)) / 100);
+						ActualRateAfterDiscountAfterTax = ActualRateAfterDiscountBeforeTax * (1 + (Double.parseDouble(hmapProductVatTaxPerventage.get(ProductID)) / 100));
+
+						Double DiscAmtOnPreQtyBasic = DiscountAmount * Double.parseDouble(hmapPrdctOdrQty.get(ProductID));
+
+						Double DiscAmtOnPreQtyBasicToDisplay = 0.00;//DiscAmtOnPreQtyBasic;
+						DiscAmtOnPreQtyBasicToDisplay = Double.parseDouble(new DecimalFormat("##.##").format(DiscAmtOnPreQtyBasicToDisplay));
+
+
+						TotalProductLevelDiscount = TotalProductLevelDiscount + DiscAmtOnPreQtyBasic;
+						TotTaxAmount = TotTaxAmount + (ActualTax * Double.parseDouble(hmapPrdctOdrQty.get(ProductID)));
+
+						Double TaxValue = ActualTax * Double.parseDouble(hmapPrdctOdrQty.get(ProductID));
+						TaxValue = Double.parseDouble(new DecimalFormat("##.##").format(TaxValue));
+
+
+						Double OrderValPrdQtyBasis = ActualRateAfterDiscountAfterTax * Double.parseDouble(hmapPrdctOdrQty.get(ProductID));
+
+						Double OrderValPrdQtyBasisToDisplay = OrderValPrdQtyBasis;
+						OrderValPrdQtyBasisToDisplay = Double.parseDouble(new DecimalFormat("##.##").format(OrderValPrdQtyBasisToDisplay));
+
+						TotalOrderValBeforeTax = TotalOrderValBeforeTax + (ActualRateAfterDiscountBeforeTax * Double.parseDouble(hmapPrdctOdrQty.get(ProductID)));
+
+						TotOderValueAfterTax = TotOderValueAfterTax + OrderValPrdQtyBasis;
+						//If No Percentage Discount or Flat Discount is Applicable Code Ends Here
+						//}
+
+					}
+
+				}
+			}
+
+
+		}
+		//Now the its Time to Show the OverAll Summary Code Starts Here
+
+
+		TotalProductLevelDiscount = Double.parseDouble(new DecimalFormat("##.##").format(TotalProductLevelDiscount));
+		TotalOrderValBeforeTax = Double.parseDouble(new DecimalFormat("##.##").format(TotalOrderValBeforeTax));
+
+		TotTaxAmount = Double.parseDouble(new DecimalFormat("##.##").format(TotTaxAmount));
+		Double totalGrossVALAfterDiscount = TotalOrderValBeforeTax;//0.0;
+
+		Double GrossInvValue = TotOderValueAfterTax;// + TotTaxAmount;
+		GrossInvValue = Double.parseDouble(new DecimalFormat("##.##").format(GrossInvValue));
+		//Now the its Time to Show the OverAll Summary Code Starts Here
+		return  GrossInvValue;
+	}
 
 	public void orderBookingTotalCalc()
 	{
+
 		Double StandardRate=0.00;
 		Double StandardRateBeforeTax=0.00;
 		Double StandardTax=0.00;
@@ -4622,10 +4782,11 @@ public void loadPurchaseProductDefault()
 		}
 		dbengine.updateVisitTypeStatusOfStore(storeID,VisitTypeStatus,StoreVisitCode);
 		tv_GrossInvVal.setText(""+GrossInvValue);
+		Double TotOrderValuebasedonWholeSale=fnOnlyCalculateWholeSaleValue(PriceApplyDiscountLevelType);
 		if(PriceApplyDiscountLevelType!=0) {
 			if(PriceApplyDiscountLevelType==1) {// Invoice Level Whole Sell Price Applicable but Not At Invoice Level
 				//if (flgWholeSellApplicable != 0) {
-				if (GrossInvValue >= cutoffvalue) {
+				if (TotOrderValuebasedonWholeSale >= cutoffvalue) {
 					tvRateHeading.setText("Rate-W");
 					flgAllTotalOrderValueCrossesCutOff=true;
 					CalculateInvoiceLevelOrProductLevelWholeSaleValue(PriceApplyDiscountLevelType);
@@ -4642,94 +4803,80 @@ public void loadPurchaseProductDefault()
 
 	public void CalculateInvoiceLevelOrProductLevelWholeSaleValue(int flgPriceApplyDiscountLevelType)
 	{
-		Double StandardRate=0.00;
-		Double StandardRateBeforeTax=0.00;
-		Double StandardTax=0.00;
-		Double ActualRateAfterDiscountBeforeTax=0.00;
-		Double DiscountAmount=0.00;
-		Double ActualTax=0.00;
-		Double ActualRateAfterDiscountAfterTax=0.00;
+		Double StandardRate = 0.00;
+		Double StandardRateBeforeTax = 0.00;
+		Double StandardTax = 0.00;
+		Double ActualRateAfterDiscountBeforeTax = 0.00;
+		Double DiscountAmount = 0.00;
+		Double ActualTax = 0.00;
+		Double ActualRateAfterDiscountAfterTax = 0.00;
 
-		String PrdMaxValuePercentageDiscount="";
-		String PrdMaxValueFlatDiscount="";
+		String PrdMaxValuePercentageDiscount = "";
+		String PrdMaxValueFlatDiscount = "";
 
-		Double TotalFreeQTY=0.00;
-		Double TotalProductLevelDiscount=0.00;
-		Double TotalOrderValBeforeTax=0.00;
-		Double TotAdditionaDiscount=0.00;
-		Double TotOderValueAfterAdditionaDiscount=0.00;
-		Double TotTaxAmount=0.00;
-		Double TotOderValueAfterTax=0.00;
+		Double TotalFreeQTY = 0.00;
+		Double TotalProductLevelDiscount = 0.00;
+		Double TotalOrderValBeforeTax = 0.00;
+		Double TotAdditionaDiscount = 0.00;
+		Double TotOderValueAfterAdditionaDiscount = 0.00;
+		Double TotTaxAmount = 0.00;
+		Double TotOderValueAfterTax = 0.00;
 
-		int flgWholeSellApplicable=0;
-		Double PriceRangeWholeSellApplicable=0.00;
+		int flgWholeSellApplicable = 0;
+		Double PriceRangeWholeSellApplicable = 0.00;
 
-		int prdListCount =hmapPrdctIdPrdctNameVisible.size();
+		int prdListCount = hmapPrdctIdPrdctNameVisible.size();
 
-		for (int index=0; index < prdListCount; index++){
+		for (int index = 0; index < prdListCount; index++) {
 			View vRow = ll_prdct_detal.getChildAt(index);
 
-			int PCateIdDetails=Integer.parseInt(vRow.getTag().toString().split(Pattern.quote("_"))[0]);
-			String ProductID=((TextView)(vRow).findViewById(R.id.tvProdctName)).getTag().toString().split(Pattern.quote("_"))[1];
-			if(hmapProductListOnWhichWholePriceNeedsToApplyIfRequired.containsKey(ProductID))
-			{
-				if(hmapPrdctOdrQty.containsKey(ProductID))
-				{
-					flgWholeSellApplicable=Integer.parseInt(hmapflgWholeSellApplicable.get(ProductID));
-					PriceRangeWholeSellApplicable=Double.parseDouble(hmapPriceRangeWholeSellApplicable.get(ProductID));
-					hmapPrdctFreeQty.put(ProductID,"0");
-					((TextView)(vRow).findViewById(R.id.tv_FreeQty)).setText(hmapPrdctFreeQty.get(ProductID).toString());
-					TotalFreeQTY=TotalFreeQTY+Integer.parseInt(hmapPrdctFreeQty.get(ProductID));
+			int PCateIdDetails = Integer.parseInt(vRow.getTag().toString().split(Pattern.quote("_"))[0]);
+			String ProductID = ((TextView) (vRow).findViewById(R.id.tvProdctName)).getTag().toString().split(Pattern.quote("_"))[1];
+			((TextView) (vRow).findViewById(R.id.txtVwRate)).setText("" + hmapStandardRateWholeSale.get(ProductID).toString());
+			if (hmapProductListOnWhichWholePriceNeedsToApplyIfRequired.containsKey(ProductID)) {
+				if (hmapPrdctOdrQty.containsKey(ProductID)) {
+					flgWholeSellApplicable = Integer.parseInt(hmapflgWholeSellApplicable.get(ProductID));
+					PriceRangeWholeSellApplicable = Double.parseDouble(hmapPriceRangeWholeSellApplicable.get(ProductID));
+					hmapPrdctFreeQty.put(ProductID, "0");
+					((TextView) (vRow).findViewById(R.id.tv_FreeQty)).setText(hmapPrdctFreeQty.get(ProductID).toString());
+					TotalFreeQTY = TotalFreeQTY + Integer.parseInt(hmapPrdctFreeQty.get(ProductID));
 					hmapProductTaxValue.put(ProductID, "0.00");
 					hmapMinDlvrQtyQPTaxAmount.put(ProductID, "0.00");
-					((TextView)(vRow).findViewById(R.id.tv_Orderval)).setText("0.00");
-					if(Integer.parseInt(hmapPrdctOdrQty.get(ProductID))>0)
-					{
+					((TextView) (vRow).findViewById(R.id.tv_Orderval)).setText("0.00");
+					if (Integer.parseInt(hmapPrdctOdrQty.get(ProductID)) > 0) {
 						/*StandardRate=Double.parseDouble(hmapProductMRP.get(ProductID))/((1+(Double.parseDouble(hmapProductRetailerMarginPercentage.get(ProductID))/100)));
 						StandardRateBeforeTax=StandardRate/(1+(Double.parseDouble(hmapProductVatTaxPerventage.get(ProductID))/100));
 						StandardTax=StandardRateBeforeTax*(Double.parseDouble(hmapProductVatTaxPerventage.get(ProductID))/100);*/
-						if(flgPriceApplyDiscountLevelType==1)
-						{
-							if(Integer.parseInt(hmapProductflgPriceAva.get(ProductID))>0)
-							{
-								StandardRate=Double.parseDouble(hmapStandardRateWholeSale.get(ProductID));///((1+(Double.parseDouble(hmapProductRetailerMarginPercentage.get(ProductID))/100)));
-								StandardRateBeforeTax=StandardRate/(1+(Double.parseDouble(hmapProductVatTaxPerventage.get(ProductID))/100));
-								StandardTax=StandardRateBeforeTax*(Double.parseDouble(hmapProductVatTaxPerventage.get(ProductID))/100);
-								((TextView)(vRow).findViewById(R.id.txtVwRate)).setText(""+hmapStandardRateWholeSale.get(ProductID));
-							}
-							else
-							{
-								StandardRate=Double.parseDouble(hmapStandardRateWholeSale.get(ProductID));
-								StandardRateBeforeTax=Double.parseDouble(hmapStandardRateBeforeTaxWholeSell.get(ProductID));
-								StandardTax=Double.parseDouble(hmapStandardTaxWholeSale.get(ProductID));
-								((TextView)(vRow).findViewById(R.id.txtVwRate)).setText(""+hmapStandardRateWholeSale.get(ProductID));
+						if (flgPriceApplyDiscountLevelType == 1) {
+							if (Integer.parseInt(hmapProductflgPriceAva.get(ProductID)) > 0) {
+								StandardRate = Double.parseDouble(hmapStandardRateWholeSale.get(ProductID));///((1+(Double.parseDouble(hmapProductRetailerMarginPercentage.get(ProductID))/100)));
+								StandardRateBeforeTax = StandardRate / (1 + (Double.parseDouble(hmapProductVatTaxPerventage.get(ProductID)) / 100));
+								StandardTax = StandardRateBeforeTax * (Double.parseDouble(hmapProductVatTaxPerventage.get(ProductID)) / 100);
+								//	((TextView)(vRow).findViewById(R.id.txtVwRate)).setText(""+hmapStandardRateWholeSale.get(ProductID).toString());
+							} else {
+								StandardRate = Double.parseDouble(hmapStandardRateWholeSale.get(ProductID));
+								StandardRateBeforeTax = Double.parseDouble(hmapStandardRateBeforeTaxWholeSell.get(ProductID));
+								StandardTax = Double.parseDouble(hmapStandardTaxWholeSale.get(ProductID));
+								//((TextView)(vRow).findViewById(R.id.txtVwRate)).setText(""+hmapStandardRateWholeSale.get(ProductID).toString());
 							}
 
 						}
-						if(flgPriceApplyDiscountLevelType==2)
-						{
-							if(hmapflgWholeSellApplicable.containsKey(ProductID))
-							{
-								if(Double.parseDouble(hmapProductListOnWhichWholePriceNeedsToApplyIfRequired.get(ProductID))>=Double.parseDouble(hmapPriceRangeWholeSellApplicable.get(ProductID)))
-								{
-									if(Integer.parseInt(hmapProductflgPriceAva.get(ProductID))>0)
-									{
-										StandardRate=Double.parseDouble(hmapStandardRateWholeSale.get(ProductID));///((1+(Double.parseDouble(hmapProductRetailerMarginPercentage.get(ProductID))/100)));
-										StandardRateBeforeTax=StandardRate/(1+(Double.parseDouble(hmapProductVatTaxPerventage.get(ProductID))/100));
-										StandardTax=StandardRateBeforeTax*(Double.parseDouble(hmapProductVatTaxPerventage.get(ProductID))/100);
-										((TextView)(vRow).findViewById(R.id.txtVwRate)).setText(""+hmapStandardRateWholeSale.get(ProductID));
-									}
-									else
-									{
-										StandardRate=Double.parseDouble(hmapStandardRateWholeSale.get(ProductID));
-										StandardRateBeforeTax=Double.parseDouble(hmapStandardRateBeforeTaxWholeSell.get(ProductID));
-										StandardTax=Double.parseDouble(hmapStandardTaxWholeSale.get(ProductID));
-										((TextView)(vRow).findViewById(R.id.txtVwRate)).setText(""+hmapStandardRateWholeSale.get(ProductID));
+						if (flgPriceApplyDiscountLevelType == 2) {
+							if (hmapflgWholeSellApplicable.containsKey(ProductID)) {
+								if (Double.parseDouble(hmapProductListOnWhichWholePriceNeedsToApplyIfRequired.get(ProductID)) >= Double.parseDouble(hmapPriceRangeWholeSellApplicable.get(ProductID))) {
+									if (Integer.parseInt(hmapProductflgPriceAva.get(ProductID)) > 0) {
+										StandardRate = Double.parseDouble(hmapStandardRateWholeSale.get(ProductID));///((1+(Double.parseDouble(hmapProductRetailerMarginPercentage.get(ProductID))/100)));
+										StandardRateBeforeTax = StandardRate / (1 + (Double.parseDouble(hmapProductVatTaxPerventage.get(ProductID)) / 100));
+										StandardTax = StandardRateBeforeTax * (Double.parseDouble(hmapProductVatTaxPerventage.get(ProductID)) / 100);
+										//((TextView)(vRow).findViewById(R.id.txtVwRate)).setText(""+hmapStandardRateWholeSale.get(ProductID).toString());
+									} else {
+										StandardRate = Double.parseDouble(hmapStandardRateWholeSale.get(ProductID));
+										StandardRateBeforeTax = Double.parseDouble(hmapStandardRateBeforeTaxWholeSell.get(ProductID));
+										StandardTax = Double.parseDouble(hmapStandardTaxWholeSale.get(ProductID));
+										//	((TextView)(vRow).findViewById(R.id.txtVwRate)).setText(""+hmapStandardRateWholeSale.get(ProductID).toString());
 
 									}
-								}
-								else
-								{
+								} else {
 									if (Integer.parseInt(hmapProductflgPriceAva.get(ProductID)) > 0) {
 										StandardRate = Double.parseDouble(hmapProductStandardRate.get(ProductID));///((1+(Double.parseDouble(hmapProductRetailerMarginPercentage.get(ProductID))/100)));
 										StandardRateBeforeTax = StandardRate / (1 + (Double.parseDouble(hmapProductVatTaxPerventage.get(ProductID)) / 100));
@@ -4741,8 +4888,7 @@ public void loadPurchaseProductDefault()
 
 									}
 								}
-							}
-							else {
+							} else {
 								if (Integer.parseInt(hmapProductflgPriceAva.get(ProductID)) > 0) {
 									StandardRate = Double.parseDouble(hmapProductStandardRate.get(ProductID));///((1+(Double.parseDouble(hmapProductRetailerMarginPercentage.get(ProductID))/100)));
 									StandardRateBeforeTax = StandardRate / (1 + (Double.parseDouble(hmapProductVatTaxPerventage.get(ProductID)) / 100));
@@ -4787,13 +4933,12 @@ public void loadPurchaseProductDefault()
 				per=Double.parseDouble((perProduct.split(Pattern.quote("^"))[0]));
 			}*/
 
-						String value=hmapPrdctVolRatTax.get(ProductID).toString();
-						StringTokenizer tokens=new StringTokenizer(value,Pattern.quote("^"));
+						String value = hmapPrdctVolRatTax.get(ProductID).toString();
+						StringTokenizer tokens = new StringTokenizer(value, Pattern.quote("^"));
 						//Volume^Rate^TaxAmount
 						String prdVolume = tokens.nextElement().toString();
 
-						StandardRate=Double.parseDouble(new DecimalFormat("##.##").format(StandardRate));
-
+						StandardRate = Double.parseDouble(new DecimalFormat("##.##").format(StandardRate));
 
 
 						//		((TextView)(vRow).findViewById(R.id.txtVwRate)).setText(hmapProductStandardRateBeforeTax.get(ProductID));
@@ -4932,35 +5077,37 @@ public void loadPurchaseProductDefault()
 			else
 			{*/
 						//If No Percentage Discount or Flat Discount is Applicable Code Starts Here
-						ActualRateAfterDiscountBeforeTax=StandardRateBeforeTax;
-						DiscountAmount=0.00;
-						ActualTax=ActualRateAfterDiscountBeforeTax*(Double.parseDouble(hmapProductVatTaxPerventage.get(ProductID))/100);
-						ActualRateAfterDiscountAfterTax=ActualRateAfterDiscountBeforeTax*(1+(Double.parseDouble(hmapProductVatTaxPerventage.get(ProductID))/100));
+						ActualRateAfterDiscountBeforeTax = StandardRateBeforeTax;
+						DiscountAmount = 0.00;
+						ActualTax = ActualRateAfterDiscountBeforeTax * (Double.parseDouble(hmapProductVatTaxPerventage.get(ProductID)) / 100);
+						ActualRateAfterDiscountAfterTax = ActualRateAfterDiscountBeforeTax * (1 + (Double.parseDouble(hmapProductVatTaxPerventage.get(ProductID)) / 100));
 
-						Double DiscAmtOnPreQtyBasic=DiscountAmount*Double.parseDouble(hmapPrdctOdrQty.get(ProductID));
+						Double DiscAmtOnPreQtyBasic = DiscountAmount * Double.parseDouble(hmapPrdctOdrQty.get(ProductID));
 
-						Double DiscAmtOnPreQtyBasicToDisplay=0.00;//DiscAmtOnPreQtyBasic;
-						DiscAmtOnPreQtyBasicToDisplay=Double.parseDouble(new DecimalFormat("##.##").format(DiscAmtOnPreQtyBasicToDisplay));
-						((TextView)(vRow).findViewById(R.id.tv_DisVal)).setText(""+DiscAmtOnPreQtyBasicToDisplay);
-						hmapPrdctIdPrdctDscnt.put(ProductID,""+DiscAmtOnPreQtyBasicToDisplay);
+						Double DiscAmtOnPreQtyBasicToDisplay = 0.00;//DiscAmtOnPreQtyBasic;
+						DiscAmtOnPreQtyBasicToDisplay = Double.parseDouble(new DecimalFormat("##.##").format(DiscAmtOnPreQtyBasicToDisplay));
+						((TextView) (vRow).findViewById(R.id.tv_DisVal)).setText("" + DiscAmtOnPreQtyBasicToDisplay);
+						hmapPrdctIdPrdctDscnt.put(ProductID, "" + DiscAmtOnPreQtyBasicToDisplay);
 
-						TotalProductLevelDiscount=TotalProductLevelDiscount+DiscAmtOnPreQtyBasic;
-						TotTaxAmount=TotTaxAmount+(ActualTax * Double.parseDouble(hmapPrdctOdrQty.get(ProductID)));
+						TotalProductLevelDiscount = TotalProductLevelDiscount + DiscAmtOnPreQtyBasic;
+						TotTaxAmount = TotTaxAmount + (ActualTax * Double.parseDouble(hmapPrdctOdrQty.get(ProductID)));
 
-						Double TaxValue=ActualTax * Double.parseDouble(hmapPrdctOdrQty.get(ProductID));
-						TaxValue=Double.parseDouble(new DecimalFormat("##.##").format(TaxValue));
-						hmapProductTaxValue.put(ProductID, ""+TaxValue);
+						Double TaxValue = ActualTax * Double.parseDouble(hmapPrdctOdrQty.get(ProductID));
+						TaxValue = Double.parseDouble(new DecimalFormat("##.##").format(TaxValue));
+						hmapProductTaxValue.put(ProductID, "" + TaxValue);
 				/*if(hmapMinDlvrQtyQPTaxAmount.containsKey(ProductID))
 				{
 					hmapMinDlvrQtyQPTaxAmount.put(ProductID, ""+TaxValue);
 				}*/
-						Double OrderValPrdQtyBasis=ActualRateAfterDiscountAfterTax*Double.parseDouble(hmapPrdctOdrQty.get(ProductID));
-						Double OrderValPrdQtyBasisToDisplay=OrderValPrdQtyBasis;
-						OrderValPrdQtyBasisToDisplay=Double.parseDouble(new DecimalFormat("##.##").format(OrderValPrdQtyBasisToDisplay));
-						((TextView)(vRow).findViewById(R.id.tv_Orderval)).setText(""+OrderValPrdQtyBasisToDisplay);
-						hmapProductIdOrdrVal.put(ProductID, ""+OrderValPrdQtyBasis);
-						TotalOrderValBeforeTax=TotalOrderValBeforeTax+(ActualRateAfterDiscountBeforeTax*Double.parseDouble(hmapPrdctOdrQty.get(ProductID)));
-						TotOderValueAfterTax=TotOderValueAfterTax+OrderValPrdQtyBasis;
+						Double OrderValPrdQtyBasis = ActualRateAfterDiscountAfterTax * Double.parseDouble(hmapPrdctOdrQty.get(ProductID));
+						hmapLineValAftrTxAftrDscnt.put(ProductID, "" + OrderValPrdQtyBasis);
+						Double OrderValPrdQtyBasisToDisplay = OrderValPrdQtyBasis;
+						OrderValPrdQtyBasisToDisplay = Double.parseDouble(new DecimalFormat("##.##").format(OrderValPrdQtyBasisToDisplay));
+						((TextView) (vRow).findViewById(R.id.tv_Orderval)).setText("" + OrderValPrdQtyBasisToDisplay);
+						hmapProductIdOrdrVal.put(ProductID, "" + OrderValPrdQtyBasis);
+						TotalOrderValBeforeTax = TotalOrderValBeforeTax + (ActualRateAfterDiscountBeforeTax * Double.parseDouble(hmapPrdctOdrQty.get(ProductID)));
+						hmapLineValBfrTxAftrDscnt.put(ProductID, "" + ActualRateAfterDiscountBeforeTax * Double.parseDouble(hmapPrdctOdrQty.get(ProductID)));
+						TotOderValueAfterTax = TotOderValueAfterTax + OrderValPrdQtyBasis;
 						//If No Percentage Discount or Flat Discount is Applicable Code Ends Here
 						//}
 
@@ -4973,13 +5120,13 @@ public void loadPurchaseProductDefault()
 		}
 		//Now the its Time to Show the OverAll Summary Code Starts Here
 
-		tvFtotal.setText((""+ TotalFreeQTY).trim());
+		tvFtotal.setText(("" + TotalFreeQTY).trim());
 
-		TotalProductLevelDiscount=Double.parseDouble(new DecimalFormat("##.##").format(TotalProductLevelDiscount));
-		tvDis.setText((""+ TotalProductLevelDiscount).trim());
+		TotalProductLevelDiscount = Double.parseDouble(new DecimalFormat("##.##").format(TotalProductLevelDiscount));
+		tvDis.setText(("" + TotalProductLevelDiscount).trim());
 
-		TotalOrderValBeforeTax=Double.parseDouble(new DecimalFormat("##.##").format(TotalOrderValBeforeTax));
-		tv_NetInvValue.setText((""+ TotalOrderValBeforeTax).trim());
+		TotalOrderValBeforeTax = Double.parseDouble(new DecimalFormat("##.##").format(TotalOrderValBeforeTax));
+		tv_NetInvValue.setText(("" + TotalOrderValBeforeTax).trim());
 
 		/*String percentBenifitMax=dbengine.fnctnGetMaxAssignedBen8DscntApld1(storeID,strGlobalOrderID);
 		Double percentMax=0.00;
@@ -5018,17 +5165,17 @@ public void loadPurchaseProductDefault()
 		}
 
 */
-		tvAddDisc.setText(""+ "0.00");
+		tvAddDisc.setText("" + "0.00");
 
-		tv_NetInvAfterDiscount.setText(""+ TotalOrderValBeforeTax);
+		tv_NetInvAfterDiscount.setText("" + TotalOrderValBeforeTax);
 
-		TotTaxAmount=Double.parseDouble(new DecimalFormat("##.##").format(TotTaxAmount));
-		tvTAmt.setText(""+ TotTaxAmount);
-		Double totalGrossVALAfterDiscount = TotalOrderValBeforeTax;
+		TotTaxAmount = Double.parseDouble(new DecimalFormat("##.##").format(TotTaxAmount));
+		tvTAmt.setText("" + TotTaxAmount);
+		Double totalGrossVALAfterDiscount = TotalOrderValBeforeTax;//0.0;
 		/*Double totalGrossVALMaxPercentage=TotalOrderValBeforeTax-TotalOrderValBeforeTax*(percentMaxGross/100);
 		Double totalGrossrVALMaxAmount=TotalOrderValBeforeTax-amountMaxGross;
 
-		*//*if(totalGrossVALMaxPercentage!=totalGrossrVALMaxAmount)
+		if(totalGrossVALMaxPercentage!=totalGrossrVALMaxAmount)
 		{
 			totalGrossVALAfterDiscount=Math.min(totalGrossrVALMaxAmount, totalGrossVALMaxPercentage);
 		}
@@ -5044,12 +5191,12 @@ public void loadPurchaseProductDefault()
 		else if(totalGrossVALAfterDiscount==totalGrossVALMaxPercentage && percentMaxGross!=0.0)
 		{
 			dbengine.updatewhatAppliedFlag(1, storeID, Integer.parseInt(percentBenifitMaxGross.split(Pattern.quote("^"))[1]),strGlobalOrderID);
-		}
-*/
-		Double GrossInvValue=totalGrossVALAfterDiscount + TotTaxAmount;
-		GrossInvValue=Double.parseDouble(new DecimalFormat("##.##").format(GrossInvValue));
-		tv_GrossInvVal.setText(""+GrossInvValue);
+		}*/
 
+		Double GrossInvValue = totalGrossVALAfterDiscount + TotTaxAmount;
+		GrossInvValue = Double.parseDouble(new DecimalFormat("##.##").format(GrossInvValue));
+		tv_GrossInvVal.setText("" + TotOderValueAfterTax);
+		//tvAfterTaxValue.setText("" + TotOderValueAfterTax);
 		//Now the its Time to Show the OverAll Summary Code Starts Here
 	}
 	public void fnUpdateSchemeNameOnScehmeControl(String ProductIdOnClickedControl)
