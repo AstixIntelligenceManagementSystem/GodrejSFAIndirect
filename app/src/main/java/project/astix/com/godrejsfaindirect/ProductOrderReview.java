@@ -7585,7 +7585,7 @@ public void loadPurchaseProductDefault()
 							dbengine.UpdateStoreVisitMStrTable(storeID,3,StoreVisitCode);
 
 
-							dbengine.UpdateStoreVisitWiseTables(storeID, 3,StoreVisitCode,TmpInvoiceCodePDA);
+
 						}
 						else
 						{
@@ -7597,6 +7597,7 @@ public void loadPurchaseProductDefault()
 				}
 			}
 
+				dbengine.UpdateStoreVisitWiseTables(storeID, 3,StoreVisitCode,TmpInvoiceCodePDA);
 			    long  syncTIMESTAMP = System.currentTimeMillis();
 				Date dateobj = new Date(syncTIMESTAMP);
 				SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss",Locale.ENGLISH);
