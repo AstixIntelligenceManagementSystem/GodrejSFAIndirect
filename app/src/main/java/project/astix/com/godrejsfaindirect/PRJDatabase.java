@@ -4895,7 +4895,7 @@ public class PRJDatabase
 
     public void reCreateDB()
     {
-        // Log.w(TAG, "DB not present..");
+
 
         db.execSQL("DELETE FROM tblInvoiceDetails");
         db.execSQL("DELETE FROM tblTmpInvoiceHeader");
@@ -4909,11 +4909,7 @@ public class PRJDatabase
         db.execSQL("DELETE FROM tblTmpDistributorStock");
 
 
-        Log.w(TAG, "Re-Creating Table..");
-        //db.execSQL("DROP TABLE IF EXISTS tblRouteMstr");
 
-        //db.execSQL("DELETE FROM tblAvailableVersionMstr");
-        //	db.execSQL("DELETE FROM tblNotificationMstr");
         db.execSQL("DELETE FROM tblDayCheckIn");
         db.execSQL("DELETE FROM tblPriceApplyType");
         db.execSQL("DELETE FROM tblInvoiceCaption");

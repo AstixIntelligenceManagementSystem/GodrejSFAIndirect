@@ -329,7 +329,7 @@ public class SplashScreen extends BaseActivity implements  TaskListner
 
      //   imei="356808071063941";
 
-    //   imei="911577250038101";
+     // imei="911577250038101";
 
 
         CommonInfo.imei = imei;
@@ -1098,6 +1098,14 @@ public class SplashScreen extends BaseActivity implements  TaskListner
     private class CheckUpdateVersion extends AsyncTask<Void, Void, Void>
     {
         @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            dbengine.open();
+            dbengine.reCreateDB();
+            dbengine.close();
+        }
+
+        @Override
         protected Void doInBackground(Void... params)
         {
             try
@@ -1137,7 +1145,8 @@ public class SplashScreen extends BaseActivity implements  TaskListner
                 Toast.makeText(getApplicationContext(),getResources().getString(R.string.internetError), Toast.LENGTH_LONG).show();
                 finish();
             }
-            else {
+            else
+                {
 
                 dbengine.open();
                 int checkUserAuthenticate = dbengine.FetchflgUserAuthenticated();
@@ -1150,12 +1159,13 @@ public class SplashScreen extends BaseActivity implements  TaskListner
 
                 }
                 else
-                    {
+                 {
                     dbengine.open();
                     String getPDADate = dbengine.fnGetPdaDate();
                     String getServerDate = dbengine.fnGetServerDate();
                     dbengine.close();
-                    if (!getPDADate.equals("")) {
+                    if (!getPDADate.equals(""))
+                    {
                         if(!getServerDate.equals(getPDADate))
                         {
 
@@ -1181,100 +1191,109 @@ public class SplashScreen extends BaseActivity implements  TaskListner
                             }
                             else
                             {
-
+                                afterversioncheck();
                             }
 
-                           /* if(dbengine.fnCheckForPendingImages()==1)
-                            {
-                                getPrevioisDateData();
-                                return;
-                            }
-                            else if(dbengine.fnCheckForPendingXMLFilesInTable()==1)
-                            {
-                                getPrevioisDateData();
-                                return;
-                            }
-                            dbengine.deletetblStoreList();*/
 
                         }
+                        else
+                        {
+                            afterversioncheck();
+                        }
 
-                    }
-
-
-
-                }
-                dbengine.open();
-                int check=dbengine.FetchVersionDownloadStatus();  // 0 means-->new version installed  1 means-->new version not install
-                dbengine.close();
-                if(check==1)
-                {
-                    showNewVersionAvailableAlert();
-                }
-                else
-                {
-
-                    dbengine.open();
-                    dbengine.maintainSplashPDADate();
-                    String getPDADate=dbengine.fnGetPdaDate();
-                    String getServerDate=dbengine.fnGetServerDate();
-
-                    dbengine.close();
-                    if(!getServerDate.equals(getPDADate))
-                    {
-                        showAlertBox(getResources().getString(R.string.phnDateError));
-                        dbengine.open();
-                        dbengine.reCreateDB();
-                        dbengine.close();
-                        return;
-                    }
-
-                    int checkDataNotSync = dbengine.CheckUserDoneGetStoreOrNot();
-
-
-                    if (checkDataNotSync == 1)
-                    {
-                        dbengine.open();
-                        String rID = dbengine.GetActiveRouteID();
-                        dbengine.close();
-
-                        // Date date=new Date();
-                        Date date1 = new Date();
-                        sdf = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
-                        String fDateNew = sdf.format(date1).toString();
-                        //fDate = passDate.trim().toString();
-                        // In Splash Screen SP, we are sending this Format "dd-MMM-yyyy"
-                        // But InLauncher Screen SP, we are sending this Format "dd-MM-yyyy"
-                        Intent storeIntent = new Intent(SplashScreen.this, AllButtonActivity.class);
-                        storeIntent.putExtra("imei", imei);
-                        storeIntent.putExtra("userDate", fDate);
-                        storeIntent.putExtra("pickerDate", fDateNew);
-                        storeIntent.putExtra("rID", rID);
-                        startActivity(storeIntent);
-                        finish();
                     }
                     else
                     {
-                        dbengine.open();
-                        dbengine.fnFinaldropRoutesTBL();
-                        dbengine.createRouteTBL();
-                        dbengine.close();
-                        try
-                        {
-                            funGetRegistrationID(getResources().getString(R.string.regID));
-
-                            checkPlayServices();
-                        }
-                        catch (Exception e)
-                        {
-                            e.printStackTrace();
-                        }
+                        afterversioncheck();
                     }
 
 
 
                 }
 
+
             }
+
+        }
+    }
+
+
+    public void afterversioncheck()
+    {
+        dbengine.open();
+        int check=dbengine.FetchVersionDownloadStatus();  // 0 means-->new version installed  1 means-->new version not install
+        dbengine.close();
+        if(check==1)
+        {
+            showNewVersionAvailableAlert();
+        }
+        else
+        {
+
+
+            int checkDataNotSync = dbengine.CheckUserDoneGetStoreOrNot();
+
+
+            if (checkDataNotSync == 1)
+            {
+                dbengine.open();
+                String rID = dbengine.GetActiveRouteID();
+                dbengine.close();
+
+                // Date date=new Date();
+                Date date1 = new Date();
+                sdf = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
+                String fDateNew = sdf.format(date1).toString();
+                //fDate = passDate.trim().toString();
+                // In Splash Screen SP, we are sending this Format "dd-MMM-yyyy"
+                // But InLauncher Screen SP, we are sending this Format "dd-MM-yyyy"
+                Intent storeIntent = new Intent(SplashScreen.this, AllButtonActivity.class);
+                storeIntent.putExtra("imei", imei);
+                storeIntent.putExtra("userDate", fDate);
+                storeIntent.putExtra("pickerDate", fDateNew);
+                storeIntent.putExtra("rID", rID);
+                startActivity(storeIntent);
+                finish();
+            }
+            else
+            {
+
+                dbengine.open();
+                dbengine.maintainSplashPDADate();
+                String getPDADate=dbengine.fnGetPdaDate();
+                String getServerDate=dbengine.fnGetServerDate();
+
+                dbengine.close();
+                if(!getServerDate.equals(getPDADate))
+                {
+                    showAlertBox(getResources().getString(R.string.phnDateError));
+                    dbengine.open();
+                    dbengine.reCreateDB();
+                    dbengine.close();
+                    return;
+                }
+
+                dbengine.open();
+                dbengine.fnFinaldropRoutesTBL();
+                dbengine.createRouteTBL();
+                dbengine.close();
+                try
+                {
+                    funGetRegistrationID(getResources().getString(R.string.regID));
+
+                    checkPlayServices();
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+
+
+
+
+
+
 
         }
     }

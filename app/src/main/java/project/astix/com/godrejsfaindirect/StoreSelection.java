@@ -3064,7 +3064,130 @@ public void DayEndWithoutalert()
 		}
 
 
+
+		/*dbengine.open();
+		String getPDADate = dbengine.fnGetPdaDate();
+		String getServerDate = dbengine.fnGetServerDate();
+		dbengine.close();
+		if (!getPDADate.equals(""))
+		{
+			if(!getServerDate.equals(getPDADate))
+			{
+
+				if(dbengine.fnCheckForPendingImages()==1)
+				{
+					getPrevioisDateData();
+					return;
+				}
+				else if(checkImagesInFolder()>0)
+				{
+					getPrevioisDateData();
+					return;
+				}
+				else if(dbengine.fnCheckForPendingXMLFilesInTable()==1)
+				{
+					getPrevioisDateData();
+					return;
+				}
+				else if(checkXMLFilesInFolder()>0)
+				{
+					getPrevioisDateData();
+					return;
+				}
+				else
+				{
+                 finish();
+				}
+
+
+			}
+
+		}*/
 		
+	}
+
+	public int checkImagesInFolder()
+	{
+		int totalFiles=0;
+		File del = new File(Environment.getExternalStorageDirectory(), CommonInfo.ImagesFolder);
+
+		String [] AllFilesName= checkNumberOfFiles(del);
+
+		if(AllFilesName.length>0)
+		{
+			totalFiles=AllFilesName.length;
+		}
+		return totalFiles;
+	}
+
+	public int checkXMLFilesInFolder()
+	{
+		int totalFiles=0;
+		File del = new File(Environment.getExternalStorageDirectory(), CommonInfo.OrderXMLFolder);
+
+		String [] AllFilesName= checkNumberOfFiles(del);
+
+		if(AllFilesName.length>0)
+		{
+			totalFiles=AllFilesName.length;
+		}
+		return totalFiles;
+	}
+
+	public void getPrevioisDateData()
+	{
+		dbengine.open();
+		String getPDADate=dbengine.fnGetPdaDate();
+		dbengine.close();
+		if(!getPDADate.equals(""))
+		{
+            /*Date date2 = new Date();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
+            String fDate = sdf.format(date2).toString().trim();
+            if(!fDate.equals(getPDADate))
+            {*/
+			if (isOnline())
+			{
+				try
+				{
+					if(dbengine.fnCheckForPendingImages()==1)
+					{
+						new ImageUploadAsyncTask(this).execute();
+					}
+					else if(checkImagesInFolder()>0)
+					{
+						new ImageUploadFromFolderAsyncTask(this).execute();
+					}
+					else if(dbengine.fnCheckForPendingXMLFilesInTable()==1)
+					{
+						new XMLFileUploadAsyncTask(this).execute();
+					}
+					else if(checkXMLFilesInFolder()>0)
+					{
+						new XMLFileUploadFromFolderAsyncTask(this).execute();
+					}
+					else
+					{
+						dbengine.open();
+						dbengine.reCreateDB();
+						dbengine.close();
+						//SplashScreen.CheckUpdateVersion cuv = new SplashScreen.CheckUpdateVersion();
+						//cuv.execute();
+						finish();
+					}
+
+				}
+				catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			else
+			{
+
+			}
+
+			// }
+		}
 	}
 
 	private class GetInvoiceForDay extends AsyncTask<Void, Void, Void>
