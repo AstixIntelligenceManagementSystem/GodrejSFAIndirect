@@ -77,7 +77,7 @@ public class PRJDatabase
     //Amount Collection
     private static final String DATABASE_CREATE_TABLE_tblBankMaster="create table tblBankMaster (BankId text null, BankName text null, LoginIdIns text null, TimeStampIns text null, LoginIdUpd text null, TimeStampUpd text null);";
     private static final String DATABASE_CREATE_TABLE_tblInstrumentMaster="create table tblInstrumentMaster (InstrumentModeId text null, InstrumentMode text null, InstrumentType text null);";
-    private static final String DATABASE_CREATE_TABLE_tblAllCollectionData="create table tblAllCollectionData (StoreVisitCode text not null,StoreID text not null, PaymentMode text null,PaymentModeID text null, Amount text null, RefNoChequeNoTrnNo text null, Date text null, Bank text null,Sstat text null,TmpInvoiceCodePDA text null);";
+    private static final String DATABASE_CREATE_TABLE_tblAllCollectionData="create table tblAllCollectionData (StoreVisitCode text not null,StoreID text not null, PaymentMode text null,PaymentModeID text null, Amount text null, RefNoChequeNoTrnNo text null, Date text null, Bank text null,Sstat text null,TmpInvoiceCodePDA text null,CollectionCode text null);";
     //map distributor
     private static final String TABLE_tblDistribtorMstr = "tblDistribtorMstr";
     //private static final String DATABASE_CREATE_TABLE_tblAllCollectionData="create table tblAllCollectionData (StoreID text null, PaymentMode text null, Amount text null, RefNoChequeNoTrnNo text null, Date text null, Bank text null,Sstat text null,OrderPDAID text null);";
@@ -29400,7 +29400,7 @@ String fetchdate=fnGetDateTimeString();
     }
 
     public long savetblAllCollectionData(String StoreVisitCode,String StoreID, String paymentMode,String PaymentModeID, String Amount,
-                                         String RefNoChequeNoTrnNo, String Date, String Bank,String TmpInvoiceCodePDA)
+                                         String RefNoChequeNoTrnNo, String Date, String Bank,String TmpInvoiceCodePDA,String CollectionCode)
     {
 
         ContentValues initialValues = new ContentValues();
@@ -29415,7 +29415,9 @@ String fetchdate=fnGetDateTimeString();
         initialValues.put("Bank", Bank.toString().trim());
         initialValues.put("Sstat", "1");
 
+
         initialValues.put("TmpInvoiceCodePDA", TmpInvoiceCodePDA);
+        initialValues.put("CollectionCode", CollectionCode);
        /* initialValues.put("AmountChequesOrDD", AmountSecondString.toString().trim());
         initialValues.put("CashID", "1");
         initialValues.put("RefNoChequeNoTrnNo", ChequeNoSecondString.toString().trim());
@@ -32467,6 +32469,59 @@ close();
 
     }
 
+
+
+
+    public int fnGetCollectionOutSstat(String StoreID)
+    {
+        open();
+        Cursor cursorE2 = db.rawQuery("SELECT Sstat FROM  tblAllCollectionData where StoreID='"+StoreID+"'", null);
+        int StoreCurrentOutsStat = 0;
+
+        try {
+            if(cursorE2.getCount()>0)
+            {
+                if (cursorE2.moveToFirst())
+                {
+
+
+                    StoreCurrentOutsStat = (Integer.parseInt(cursorE2.getString(0).toString()));
+
+
+                }
+            }
+            return StoreCurrentOutsStat;
+        } finally {
+            if(cursorE2!=null) {
+                cursorE2.close();
+            }
+            close();
+        }
+
+    }
+
+
+
+
+    public String fnGetStoreCollectionCode(String StoreID)
+    {
+        open();
+        String StoreCollectionCode="NA";
+        Cursor cursor=db.rawQuery("Select CollectionCode from tblAllCollectionData Where StoreID='"+StoreID+"' AND Sstat=1",null);
+
+        if(cursor.getCount()>0)
+        {
+            if(cursor.moveToFirst())
+            {
+                StoreCollectionCode=cursor.getString(0);
+            }
+        }
+        if(cursor!=null) {
+            cursor.close();
+        }
+        close();
+        return StoreCollectionCode;
+    }
 }
 
 

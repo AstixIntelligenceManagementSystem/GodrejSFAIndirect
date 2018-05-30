@@ -23,23 +23,30 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.astix.Common.CommonInfo;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringTokenizer;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 public class CollectionActivityNew extends BaseActivity  implements DatePickerDialog.OnDateSetListener
 {
 
     public String StoreVisitCode="NA";
+    public String CollectionCode="NA";
     public String strGlobalInvoiceNumber="NA";
     public String TmpInvoiceCodePDA="NA";
     public int chkflgInvoiceAlreadyGenerated=0;
@@ -1144,18 +1151,20 @@ Double OverAllAmountCollected=0.0;
 
         if(!TextUtils.isEmpty(amountEdittextFirst.getText().toString()) || !TextUtils.isEmpty(amountEdittextSecond.getText().toString()) || !TextUtils.isEmpty(amountEdittextThird.getText().toString()))
         {
+            CollectionCode=getCollectionCode();
             dbengine.open();
             dbengine.deleteWhereStoreId(storeIDGlobal,strGlobalOrderID,TmpInvoiceCodePDA);
+
             if(!AmountFirstString.equals("0")){
-                dbengine.savetblAllCollectionData(StoreVisitCode,storeIDGlobal, paymentModeFirstString,"1", AmountFirstString,ChequeNoFirstString, "0", BankFirstString,TmpInvoiceCodePDA);
+                dbengine.savetblAllCollectionData(StoreVisitCode,storeIDGlobal, paymentModeFirstString,"1", AmountFirstString,ChequeNoFirstString, "0", BankFirstString,TmpInvoiceCodePDA,CollectionCode);
 
             }
             if(!AmountSecondString.equals("0")){
-                dbengine.savetblAllCollectionData(StoreVisitCode,storeIDGlobal, paymentModeSecondString,"2", AmountSecondString,ChequeNoSecondString, DateSecondString, BankSecondString,TmpInvoiceCodePDA);
+                dbengine.savetblAllCollectionData(StoreVisitCode,storeIDGlobal, paymentModeSecondString,"2", AmountSecondString,ChequeNoSecondString, DateSecondString, BankSecondString,TmpInvoiceCodePDA,CollectionCode);
 
             }
             if(!AmountThirdString.equals("0")){
-                dbengine.savetblAllCollectionData(StoreVisitCode,storeIDGlobal, paymentModeThirdString,"4", AmountThirdString,ChequeNoThirdString, DateThirdString, BankThirdString,TmpInvoiceCodePDA);
+                dbengine.savetblAllCollectionData(StoreVisitCode,storeIDGlobal, paymentModeThirdString,"4", AmountThirdString,ChequeNoThirdString, DateThirdString, BankThirdString,TmpInvoiceCodePDA,CollectionCode);
             }
            /* dbengine.savetblAllCollectionData(storeIDGlobal, paymentModeFirstString, AmountFirstString,
                     ChequeNoFirstString, DateFirstString, BankFirstString,
@@ -1512,5 +1521,48 @@ Double OverAllAmountCollected=0.0;
             }
         }
 
+    }
+
+    public String genCollectionCode()
+    {
+        long syncTIMESTAMP = System.currentTimeMillis();
+        Date dateobj = new Date(syncTIMESTAMP);
+        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss", Locale.ENGLISH);
+        String VisitStartTS = df.format(dateobj);
+        String cxz;
+        cxz = UUID.randomUUID().toString();
+
+
+        StringTokenizer tokens = new StringTokenizer(String.valueOf(cxz), "-");
+
+        String val1 = tokens.nextToken().trim();
+        String val2 = tokens.nextToken().trim();
+        String val3 = tokens.nextToken().trim();
+        String val4 = tokens.nextToken().trim();
+        cxz = tokens.nextToken().trim();
+
+        String IMEIid =  CommonInfo.imei.substring(9);
+        cxz = "Collection" + "-" +IMEIid +"-"+cxz+"-"+VisitStartTS.replace(" ", "").replace(":", "").trim();
+
+
+        return cxz;
+
+    }
+
+
+    public String  getCollectionCode()
+    {
+        int StoreCurrentOutsStat=dbengine.fnGetCollectionOutSstat(storeID);
+        if(StoreCurrentOutsStat!=1)
+        {
+
+            CollectionCode=genCollectionCode();
+
+        }
+        else
+        {
+            CollectionCode=dbengine.fnGetStoreCollectionCode(storeID);
+        }
+        return CollectionCode;
     }
 }
