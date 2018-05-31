@@ -336,7 +336,7 @@ public class DatabaseAssistant
 	private void exportCollection(final String tableName) throws IOException {
 		xmlBuilder.openTable(tableName);
 		//String sql = "select * from " + tableName;
-		String sql = "select StoreID,StoreVisitCode,PaymentMode,PaymentModeID,Amount,RefNoChequeNoTrnNo,Date,Bank,TmpInvoiceCodePDA,CollectionCode from " + tableName + " where Sstat = 3";//		// chk for flag - DB adapter
+		String sql = "select StoreID,StoreVisitCode,PaymentMode,PaymentModeID,Amount,RefNoChequeNoTrnNo,Date,Bank,TmpInvoiceCodePDA,CollectionCode  from " + tableName + " where Sstat = 3";//		// chk for flag - DB adapter
 		Cursor c = db.rawQuery(sql, new String[0]);
 		if (c.moveToFirst()) {
 			int cols = c.getColumnCount();
