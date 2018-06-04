@@ -1137,19 +1137,13 @@ if(flgCheckNewOldStore==1)
 
         helperDb.saveSOAPdataStoreListDetailsInNewTable(selStoreID, hmapStoreAddress.get("2"), hmapStoreAddress.get("1"), hmapStoreAddress.get("3"),1);
         helperDb.close();
-
-
         // new code
 
         try {
-
-
             File OrderXMLFolder = new File(Environment.getExternalStorageDirectory(), CommonInfo.OrderXMLFolder);
-
             if (!OrderXMLFolder.exists())
             {
                 OrderXMLFolder.mkdirs();
-
             }
             dbengine.open();
             String presentRoute=dbengine.GetActiveRouteID();
