@@ -12,7 +12,6 @@ public class CommonInfo
 
 
 
-/*
 
 	public static final String DistributorMapXMLFolder="GodrejDistributorMapXML";
 	public static final String DistributorStockXMLFolder="GodrejDistributorStockXML";
@@ -32,16 +31,16 @@ public class CommonInfo
 	public static String globalValueOfPaymentStage="0"+"_"+"0"+"_"+"0";
 	public static String WebServicePath="http://103.20.212.194/WebServiceAndroidGodrejLive/Service.asmx";
 	public static String VersionDownloadPath="http://103.20.212.194/downloads/";
-	public static String VersionDownloadAPKName="GodrejSFADev.apk";
+	public static String VersionDownloadAPKName="GodrejSFA.apk";
 	public static String DATABASE_NAME = "DbGodrejSFAApp";
 	public static int AnyVisit = 0;
-	public static int DATABASE_VERSIONID = 28;      // put this field value based on value in table on the server
-	public static String AppVersionID = "1.22";   // put this field value based on value in table on the server
+	public static int DATABASE_VERSIONID = 1;      // put this field value based on value in table on the server
+	public static String AppVersionID = "1.0";   // put this field value based on value in table on the server
 	public static int Application_TypeID = 2; //1=Parag Store Mapping,2=Parag SFA Indirect,3=Parag SFA Direct
 	public static String OrderSyncPath="http://103.20.212.194/ReadXML_GodrejLive/DefaultSFA.aspx";
 	public static String ImageSyncPath="http://103.20.212.194/ReadXML_GodrejImagesLive/Default.aspx";
 	public static String OrderTextSyncPath="http://103.20.212.194/ReadTxtFileForGodrejSFALive/default.aspx";
-	public static String OrderSyncPathDistributorMap="http://103.20.212.194/ReadXML_GodrejTest/DefaultSODistributorMapping.aspx";
+	public static String OrderSyncPathDistributorMap="http://103.20.212.194/ReadXML_GodrejLive/DefaultSODistributorMapping.aspx";
 	public static String InvoiceSyncPath="http://103.20.212.194/ReadXML_GodrejInvoiceLive/Default.aspx";
 	public static String DistributorSyncPath="http://103.20.212.194/ReadXML_GodrejSFADistributionLive/Default.aspx";
 	public static String WebStockOutUrl="http://103.20.212.194/godrejsfa/manageorder/frmStockTransferToVanDetail_PDA.aspx";
@@ -62,7 +61,6 @@ public class CommonInfo
 	public static int FlgDSRSO=0;
 	public static String ActiveRouteSM="0";
 
-*/
 
 
 	// Its for Test Path on 194 Server
@@ -145,6 +143,7 @@ public class CommonInfo
 	// Its for Dev Path on 194 Server
 
 
+/*
 
 	    public static final String DistributorMapXMLFolder="GodrejDistributorMapXML";
 	    public static final String DistributorStockXMLFolder="GodrejDistributorStockXML";
@@ -193,6 +192,7 @@ public class CommonInfo
 		public static int flgDataScope=0;
 		public static int FlgDSRSO=0;
 	    public static String ActiveRouteSM="0";
+*/
 
 
 
