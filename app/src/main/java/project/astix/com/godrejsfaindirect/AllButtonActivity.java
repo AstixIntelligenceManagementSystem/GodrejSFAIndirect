@@ -626,6 +626,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                     {
                         showAlertSingleButtonInfo(getResources().getString(R.string.NoPendingDataMsg));
 
+
                     }
 
             }
