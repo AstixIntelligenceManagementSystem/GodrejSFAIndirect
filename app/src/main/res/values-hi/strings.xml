@@ -3,8 +3,8 @@
     <string name="app_name">Godrej SFA</string>
     <!-- <string name="app_name">Godrej SFA Stagging</string>-->
     <!--<string name="app_name">Godrej SFA Test</string>-->
-   <!--  <string name="app_name">Godrej SFA Dev</string>-->
-
+  <!--   <string name="app_name">Godrej SFA Dev</string>
+-->
 
     <string name="WareHouseMsgWithoutInvoiceNumber">Stock loaded/adjusted recently will reflect after few minutes.</string>
 
@@ -341,6 +341,7 @@
     <string name="Save">सुरक्षित करना</string>
     <string name="SaveExit">सुरक्षित और बहार</string>
     <string name="Submit">डेटा भेजें</string>
+    <string name="Next">Next</string>
     <string name="CrBal">जमा शेष</string>
     <string name="prodlstSchmeApplicable">योजना लागू है</string>
     <string name="ProductName">उत्पाद का नाम</string>

@@ -66,7 +66,7 @@
 
 			android:orientation="horizontal">
 			<TextView android:layout_width="0dp"
-				android:text="Previous Outstanding Amt. :"
+				android:text="Previous Outstanding Amt. "
 				android:gravity="left|center"
 
 				android:id="@+id/tv_outstandingtext"
@@ -103,7 +103,7 @@
 
 			android:orientation="horizontal">
 			<TextView android:layout_width="0dp"
-				android:text="Current Invoice Value :"
+				android:text="Current Invoice Value "
 				android:gravity="left|center"
 				android:id="@+id/tv_crntInvoiceText"
 				android:focusable="true"
@@ -138,7 +138,7 @@
 
 			android:orientation="horizontal">
 			<TextView android:layout_width="0dp"
-				android:text="Total Outstanding :"
+				android:text="Total Outstanding "
 				android:gravity="left|center"
 				android:id="@+id/tv_totOutstandingText"
 				android:focusable="true"
@@ -196,12 +196,38 @@
 				android:textStyle="bold"
 				android:background="@color/blue"/>
 		</LinearLayout>
+
+
 	</LinearLayout>
-<LinearLayout android:layout_width="match_parent"
+
+	<LinearLayout
+		android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+     android:layout_marginTop="20dp"
+     android:background="@drawable/shadow_with_5dp"
+     android:gravity="center"
+     android:orientation="horizontal"
+		android:id="@+id/ll_collectionMandatory"
+		>
+
+     <CheckBox
+		 android:id="@+id/cb_collection"
+		 android:layout_width="wrap_content"
+		 android:layout_height="wrap_content"
+		 android:layout_margin="4dp"
+		 android:text="No Collection Today"
+		 android:textColor="#A6004E"
+		 android:textSize="15sp"
+		 android:textStyle="bold" />
+
+	</LinearLayout>
+
+	<LinearLayout android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:layout_marginTop="20dp"
     android:background="@drawable/shadow_with_5dp"
+		android:visibility="visible"
 	android:id="@+id/lnCollection">
    <LinearLayout android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -564,45 +590,45 @@
                               android:text="0.00"/>
                       </LinearLayout>
                       
-                      <LinearLayout 
-    android:layout_width="match_parent"
-    android:layout_height="33dp"
-        android:layout_marginTop="10dp"
-       android:visibility="visible"
-             android:layout_marginBottom="20dp"
-             android:orientation="horizontal" >
-   
-             <Button android:layout_width="0dp"
-                  android:layout_marginRight="20dp"
-                  android:textStyle="bold"
-                  android:text="Done &amp; Exit"
-                  
-                  android:id="@+id/Done_btn"
-                  android:textSize="11sp"
-                  android:textColor="#fff"
-                 android:layout_height="match_parent"
-                  android:background="@drawable/custom_button"
-                 android:layout_marginLeft="20dp"
-                 android:layout_weight="1"/>
-              <Button android:layout_width="0dp"
-                    android:layout_marginLeft="20dp"
-                     android:background="@drawable/custom_button"
-                    android:text="Cancel"
-                     android:id="@+id/cancleBtn"
-                     android:visibility="gone"
-                     android:textColor="#fff"
-                      android:textStyle="bold"
-                   android:textSize="11sp"
-                  android:layout_marginRight="20dp"
-                 android:layout_height="match_parent"
-                 android:layout_weight="1"/>
-         
-    
-    
 
-</LinearLayout>
    
 </LinearLayout>
-    
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="33dp"
+		android:layout_marginTop="10dp"
+		android:visibility="visible"
+		android:layout_marginBottom="20dp"
+		android:orientation="horizontal" >
+
+		<Button android:layout_width="0dp"
+			android:layout_marginRight="20dp"
+			android:textStyle="bold"
+			android:text="@string/Submit"
+
+			android:id="@+id/Done_btn"
+			android:textSize="11sp"
+			android:textColor="#fff"
+			android:layout_height="match_parent"
+			android:background="@drawable/custom_button"
+			android:layout_marginLeft="20dp"
+			android:layout_weight="1"/>
+		<Button android:layout_width="0dp"
+			android:layout_marginLeft="20dp"
+			android:background="@drawable/custom_button"
+			android:text="Cancel"
+			android:id="@+id/cancleBtn"
+			android:visibility="gone"
+			android:textColor="#fff"
+			android:textStyle="bold"
+			android:textSize="11sp"
+			android:layout_marginRight="20dp"
+			android:layout_height="match_parent"
+			android:layout_weight="1"/>
+
+
+
+
+	</LinearLayout>
 
 </LinearLayout>

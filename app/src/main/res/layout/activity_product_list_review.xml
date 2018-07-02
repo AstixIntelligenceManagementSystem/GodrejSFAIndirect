@@ -316,6 +316,7 @@
 <LinearLayout 
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/parentOfAll"
     android:layout_above="@+id/ll_buttonsnew"
     android:layout_below="@+id/ll_header"
     android:orientation="vertical"
@@ -555,6 +556,7 @@
 
 </LinearLayout>
 
+
 <LinearLayout 
     android:id="@+id/ll_buttonsnew"
     android:layout_width="match_parent"
@@ -565,6 +567,7 @@
     android:layout_alignParentStart="true"
     android:background="#f1f1f1"
     android:orientation="vertical">
+
 <Button 
              android:id="@+id/btn_OrderPayment"
         android:layout_width="match_parent"
@@ -592,7 +595,22 @@
         android:text="@string/CollectAmount"
         android:textColor="#ffffff"
         android:textSize="14sp"
-        android:visibility="visible"/>
+        android:visibility="gone"/>
+
+    <Button
+        android:id="@+id/btn_NextToCollection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2dp"
+
+        android:layout_marginLeft="2dp"
+        android:layout_weight="0.9"
+        android:background="@drawable/custom_button"
+        android:gravity="center"
+        android:text="@string/Next"
+        android:textColor="#ffffff"
+        android:textSize="14sp"
+        />
 <LinearLayout 
     android:id="@+id/ll_buttons"
     android:layout_width="match_parent"
@@ -646,6 +664,9 @@
         android:textColor="#ffffff"
         android:textSize="14sp"
        android:visibility="gone"/>
+
+
+
         <Button 
              android:id="@+id/btn_sbmt"
         android:layout_width="0dp"

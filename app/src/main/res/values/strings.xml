@@ -3,7 +3,7 @@
      <string name="app_name">Godrej SFA</string>
     <!-- <string name="app_name">Godrej SFA Stagging</string>-->
     <!--<string name="app_name">Godrej SFA Test</string>-->
-  <!--  <string name="app_name">Godrej SFA Dev</string>-->
+    <!--<string name="app_name">Godrej SFA Dev</string>-->
 
 
     <!--Alert Box message-->
@@ -353,6 +353,7 @@
     <string name="Save">Save</string>
     <string name="SaveExit">Save &amp; Exit</string>
     <string name="Submit">Submit</string>
+    <string name="Next">Next</string>
     <string name="CrBal">Cr.Bal.</string>
     <string name="prodlstSchmeApplicable">Scheme Applicable </string>
     <string name="ProductName">Product Name</string>

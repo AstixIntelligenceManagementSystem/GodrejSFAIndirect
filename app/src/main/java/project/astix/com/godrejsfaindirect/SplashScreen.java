@@ -327,7 +327,7 @@ public class SplashScreen extends BaseActivity implements  TaskListner
 
     //   imei="354010084603910";
 
-       // imei="356808071063941";
+     //   imei="354010084603910";
 
      // imei="911577250038101";
 
@@ -1100,9 +1100,9 @@ public class SplashScreen extends BaseActivity implements  TaskListner
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            dbengine.open();
+          /*  dbengine.open();
             dbengine.reCreateDB();
-            dbengine.close();
+            dbengine.close();*/
         }
 
         @Override

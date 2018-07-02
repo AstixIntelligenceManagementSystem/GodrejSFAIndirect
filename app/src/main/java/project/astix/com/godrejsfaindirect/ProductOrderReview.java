@@ -89,12 +89,12 @@ import java.util.regex.Pattern;
 
 public class ProductOrderReview extends BaseActivity implements OnItemSelectedListener, OnClickListener, OnFocusChangeListener, LocationListener,GoogleApiClient.ConnectionCallbacks,
 GoogleApiClient.OnConnectionFailedListener{
-	    private static final String TAG = "LocationActivity";
-	    private static final long INTERVAL = 1000 * 10;
-	    private static final long FASTEST_INTERVAL = 1000 * 5;
-		  private static final long MIN_TIME_BW_UPDATES = 1000  * 1; //1 second
-	    private final long startTime = 30000;
-	    private final long interval = 200;
+	private static final String TAG = "LocationActivity";
+	private static final long INTERVAL = 1000 * 10;
+	private static final long FASTEST_INTERVAL = 1000 * 5;
+	private static final long MIN_TIME_BW_UPDATES = 1000  * 1; //1 second
+	private final long startTime = 30000;
+	private final long interval = 200;
 	public int flgTransferStatus=0;
 	public String VisitTimeInSideStore="NA";
 	public String StoreVisitCode="NA";
@@ -808,9 +808,169 @@ public void loadPurchaseProductDefault()
 						
 					}
 			 });
-			
-			
+
+			Double outstandingvalue=dbengine.fnGetStoretblLastOutstanding(storeID);
+			outstandingvalue=Double.parseDouble(new DecimalFormat("##.##").format(outstandingvalue));
+
+			Double CollectionAmt=dbengine.fnTotCollectionAmtAgainstStore(storeID,TmpInvoiceCodePDA,StoreVisitCode);
+			CollectionAmt=Double.parseDouble(new DecimalFormat("##.##").format(CollectionAmt));
+
+			Double cntInvoceValue=dbengine.fetch_Store_InvValAmount(storeID,TmpInvoiceCodePDA);
+			cntInvoceValue=Double.parseDouble(new DecimalFormat("##.##").format(cntInvoceValue));
 			final Button btn_AmountCollect=(Button) findViewById(R.id.btn_collectAmount);
+			btn_AmountCollect.setVisibility(View.GONE);
+
+
+			final Button btn_Submit=(Button) findViewById(R.id.btn_sbmt);
+			btn_Submit.setTag("0_0");
+
+			btn_Submit.setVisibility(View.GONE);
+
+			final Button  btn_Save=(Button)findViewById(R.id.btn_save);
+			btn_Save.setTag("0_0");
+
+
+			btn_Save.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					if(ed_LastEditextFocusd!=null)
+					{
+						String tag=ed_LastEditextFocusd.getTag().toString();
+						if(tag.contains("etOrderQty"))
+						{
+							if(hmapPrdctOdrQty!=null && hmapPrdctOdrQty.containsKey(ProductIdOnClickedEdit))
+							{
+
+								int originalNetQntty=Integer.parseInt(hmapPrdctOdrQty.get(ProductIdOnClickedEdit));
+								int totalStockLeft=hmapDistPrdctStockCount.get(ProductIdOnClickedEdit);
+
+								if (originalNetQntty>totalStockLeft)
+								{
+
+									alertForOrderExceedStock(ProductIdOnClickedEdit,ed_LastEditextFocusd,ed_LastEditextFocusd,7);
+								}
+								else
+								{
+
+									if(mProgressDialog!=null) {
+										if (mProgressDialog.isShowing() == true) {
+											mProgressDialog.dismiss();
+										}
+									}
+
+									orderBookingTotalCalc();
+									nextStepAfterRetailerCreditBal(7);
+								}
+
+							}
+							else
+							{
+
+								orderBookingTotalCalc();
+								nextStepAfterRetailerCreditBal(7);
+							}
+						}
+
+
+						else
+						{
+							nextStepAfterRetailerCreditBal(7);
+						}
+
+
+
+					}
+					else
+					{
+						nextStepAfterRetailerCreditBal(7);
+					}
+
+
+
+				}
+			});
+
+
+			final Button btn_NextToCollection=(Button) findViewById(R.id.btn_NextToCollection);
+			if(outstandingvalue==0.0 && cntInvoceValue==0.0)
+			{
+				btn_NextToCollection.setVisibility(View.GONE);
+				dbengine.open();
+				dbengine.deleteWhereStoreId(storeID,strGlobalOrderID,TmpInvoiceCodePDA);
+				dbengine.close();
+				btn_Submit.setVisibility(View.VISIBLE);
+			}
+			else
+			{
+				btn_NextToCollection.setVisibility(View.VISIBLE);
+				btn_Submit.setVisibility(View.GONE);
+			}
+
+
+
+
+			btn_NextToCollection.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					if(ed_LastEditextFocusd!=null)
+					{
+						String tag=ed_LastEditextFocusd.getTag().toString();
+						if(tag.contains("etOrderQty"))
+						{
+							if(hmapPrdctOdrQty!=null && hmapPrdctOdrQty.containsKey(ProductIdOnClickedEdit))
+							{
+
+								int originalNetQntty=Integer.parseInt(hmapPrdctOdrQty.get(ProductIdOnClickedEdit));
+								int totalStockLeft=hmapDistPrdctStockCount.get(ProductIdOnClickedEdit);
+
+								if (originalNetQntty>totalStockLeft)
+								{
+
+									alertForOrderExceedStock(ProductIdOnClickedEdit,ed_LastEditextFocusd,ed_LastEditextFocusd,7);
+								}
+								else
+								{
+
+									if(mProgressDialog!=null) {
+										if (mProgressDialog.isShowing() == true) {
+											mProgressDialog.dismiss();
+										}
+									}
+
+									orderBookingTotalCalc();
+									nextStepAfterRetailerCreditBal(7);
+								}
+
+							}
+							else
+							{
+
+								orderBookingTotalCalc();
+								nextStepAfterRetailerCreditBal(7);
+							}
+						}
+
+
+						else
+						{
+							nextStepAfterRetailerCreditBal(7);
+						}
+
+
+
+					}
+					else
+					{
+						nextStepAfterRetailerCreditBal(7);
+					}
+
+
+
+				}
+			});
+
 			btn_AmountCollect.setOnClickListener(new OnClickListener() {
 
 				@Override
@@ -1006,20 +1166,12 @@ public void loadPurchaseProductDefault()
 
 		
 
-			  final Button btn_Submit=(Button) findViewById(R.id.btn_sbmt);
-			  btn_Submit.setTag("0_0");
+
 			/*btn_Submit.setEnabled(false);
 			btn_AmountCollect.setBackgroundColor(Color.parseColor("#2E7D32"));*/
 
 
-			Double outstandingvalue=dbengine.fnGetStoretblLastOutstanding(storeID);
-			outstandingvalue=Double.parseDouble(new DecimalFormat("##.##").format(outstandingvalue));
 
-			Double CollectionAmt=dbengine.fnTotCollectionAmtAgainstStore(storeID,TmpInvoiceCodePDA,StoreVisitCode);
-			CollectionAmt=Double.parseDouble(new DecimalFormat("##.##").format(CollectionAmt));
-
-			Double cntInvoceValue=dbengine.fetch_Store_InvValAmount(storeID,TmpInvoiceCodePDA);
-			cntInvoceValue=Double.parseDouble(new DecimalFormat("##.##").format(cntInvoceValue));
 
 
 			if(outstandingvalue<0.0)
@@ -5238,13 +5390,10 @@ public void loadPurchaseProductDefault()
 
 									FullSyncDataNow task = new FullSyncDataNow(ProductOrderReview.this);
 									 task.execute();
-
 								}
 							 else
 							 {
-
 								 dbengine.close();
-								
 								 appLocationService=new AppLocationService();
 								 
 								/* pm = (PowerManager) getSystemService(POWER_SERVICE);
@@ -5411,7 +5560,61 @@ public void loadPurchaseProductDefault()
 			finish();*/
 		 
 	 }
-	 
+
+
+		if(valBtnClickedFrom==4)//Next Button Click For Collection
+		{
+					/*butClickForGPS=8;
+					dbengine.open();
+					if ((dbengine.PrevLocChk(storeID.trim(),StoreVisitCode)) )
+					{
+						dbengine.close();*/
+						Intent AmtCollectIntent = new Intent(ProductOrderReview.this, CollectionActivityNew.class);   //
+						AmtCollectIntent.putExtra("storeID", storeID);
+						AmtCollectIntent.putExtra("imei", imei);
+						AmtCollectIntent.putExtra("userdate", date);
+						AmtCollectIntent.putExtra("pickerDate", pickerDate);
+						AmtCollectIntent.putExtra("SN", SN);
+						AmtCollectIntent.putExtra("OrderPDAID", strGlobalOrderID);
+						startActivity(AmtCollectIntent);
+						finish();
+					/*}
+					else
+					{
+						dbengine.close();
+						appLocationService=new AppLocationService();
+						pDialog2STANDBY=ProgressDialog.show(ProductOrderReview.this,getText(R.string.genTermPleaseWaitNew) ,getText(R.string.genTermRetrivingLocation), true);
+						pDialog2STANDBY.setIndeterminate(true);
+						pDialog2STANDBY.setCancelable(false);
+						pDialog2STANDBY.show();
+						if(isGooglePlayServicesAvailable()) {
+							createLocationRequest();
+
+							mGoogleApiClient = new GoogleApiClient.Builder(ProductOrderReview.this)
+									.addApi(LocationServices.API)
+									.addConnectionCallbacks(ProductOrderReview.this)
+									.addOnConnectionFailedListener(ProductOrderReview.this)
+									.build();
+							mGoogleApiClient.connect();
+						}
+						//startService(new Intent(DynamicActivity.this, AppLocationService.class));
+						startService(new Intent(ProductOrderReview.this, AppLocationService.class));
+						Location nwLocation=appLocationService.getLocation(locationManager,LocationManager.GPS_PROVIDER,location);
+						Location gpsLocation=appLocationService.getLocation(locationManager,LocationManager.NETWORK_PROVIDER,location);
+						countDownTimer2 = new CoundownClass2(startTime, interval);
+						countDownTimer2.start();
+
+
+
+
+					}*/
+
+
+
+
+
+
+		}
 	}
 
 
@@ -5755,154 +5958,7 @@ public void loadPurchaseProductDefault()
 
 	}
 
-		public void saveFreeProductDataWithSchemeToDatabase(HashMap<String, ArrayList<String>> hashMapSelectionFreeQty,String savProductIdOnClicked)
-		{
-			/*if(chkflgInvoiceAlreadyGenerated==0) {
 
-				dbengine.updatetblInvoiceCaption(storeID);
-
-				chkflgInvoiceAlreadyGenerated=1;
-			}*/
-			String freeProductID;
-			ArrayList<String> listFreeProdctQtyScheme;
-
-
-			for (Entry<String, ArrayList<String>> entry : hashMapSelectionFreeQty.entrySet())
-			{
-				freeProductID=entry.getKey();
-				listFreeProdctQtyScheme=entry.getValue();
-
-				for(String strFreeProdctQtyScheme: listFreeProdctQtyScheme)
-				{
-					//[10.0, 41, 60, 1, 500.0, 0, 4, 2, 6, 0, 10.0, 0, 0, 0, 0, 0, 0.0, 0.0, 2]
-
-					String[] arrayAllValues=strFreeProdctQtyScheme.split(Pattern.quote("~"));
-
-					int schemeId=Integer.parseInt(arrayAllValues[1]);
-
-					int schemeSlabId=Integer.parseInt(arrayAllValues[2]);
-
-					int schemeSlabBcktId=Integer.parseInt((arrayAllValues[3]));
-
-					Double schemeSlabSubBcktVal=Double.parseDouble(arrayAllValues[4]);
-
-					int schemeSubBucktValType=Integer.parseInt(arrayAllValues[5]);
-					//[10.0, 41, 60, 1, 500.0, 0, 4, 2, 6, 0, 10.0, 0, 0, 0, 0, 0, 0.0, 0.0, 2]
-					int schemeSlabSubBucktType=Integer.parseInt(arrayAllValues[6]);
-
-					int benifitRowId=Integer.parseInt(arrayAllValues[7]);
-
-					int benSubBucketType=Integer.parseInt(arrayAllValues[8]);
-
-					int freeProductId=Integer.parseInt(freeProductID);
-
-					Double benifitSubBucketValue=Double.parseDouble(arrayAllValues[10]);
-
-					Double benifitMaxValue=Double.parseDouble(arrayAllValues[11]);
-
-					Double benifitAssignedVal=Double.parseDouble(arrayAllValues[0]);
-
-					Double benifitAssignedValueType=Double.parseDouble(arrayAllValues[13]);
-
-					int benifitDiscountApplied=Integer.parseInt(arrayAllValues[14]);
-
-					String benifitCoupnCode=arrayAllValues[15];
-
-					Double per=Double.parseDouble(arrayAllValues[16]);
-
-					Double UOM=Double.parseDouble(arrayAllValues[17]);
-					int schSlbRowId=Integer.parseInt(arrayAllValues[18]);
-					int SchTypeId=Integer.parseInt(arrayAllValues[19]);
-
-					int WhatFinallyApplied=1;
-
-					if(benSubBucketType==1 || benSubBucketType==5)//Free Different Product  / Free Same Product
-					{
-
-						hmapPrdctFreeQty.put(""+freeProductId,""+benifitAssignedVal.intValue());
-						//hmapPrdctFreeQty.put(String.valueOf(freeProductId),((TextView)ll_prdct_detal.findViewWithTag("tvFreeQty_"+freeProductId)).getText().toString());
-						WhatFinallyApplied=1;
-					}
-
-					if(benSubBucketType==2 || benSubBucketType==6)//Discount in Percentage with other product  / Discount in Percentage with same product
-					{
-
-						hmapProductDiscountPercentageGive.put(""+freeProductId,""+benifitAssignedVal.intValue());
-						//hmapPrdctFreeQty.put(String.valueOf(freeProductId),((TextView)ll_prdct_detal.findViewWithTag("tvFreeQty_"+freeProductId)).getText().toString());
-						WhatFinallyApplied=1;
-					}
-						//((TextView)ll_prdct_detal.findViewWithTag("tvDiscountVal_"+AllProductInSchSlab[mm])).setText("0.00");
-
-					if(benSubBucketType==10)
-					{
-						WhatFinallyApplied=1;
-						//benifitAssignedVal=benifitSubBucketValue;
-						hmapProductVolumePer.put(""+freeProductId, ""+per);
-					}
-
-					//BenSubBucketType
-					//1. Free Other Product
-					//2. Discount in Percentage with other product
-					//3. Discount in Amount with other product
-					//4. Coupons
-					//5. Free Same Product
-					//6. Discount in Percentage with same product
-					//7. Discount in Amount with same product
-					//8. Percentage On Invoice
-					//9.  Amount On Invoice
-					//10. Volume Based Per KG
-
-					dbengine.fnsavetblStoreProductAppliedSchemesBenifitsRecords(storeID,Integer.parseInt(savProductIdOnClicked), schemeId, schemeSlabId,schemeSlabBcktId, schemeSlabSubBcktVal,schemeSubBucktValType,
-							schemeSlabSubBucktType,  benifitRowId,  benSubBucketType,
-							freeProductId,  benifitSubBucketValue,  benifitMaxValue,  benifitAssignedVal,  benifitAssignedValueType,  benifitDiscountApplied,  benifitCoupnCode,per,UOM,WhatFinallyApplied,schSlbRowId,SchTypeId,strGlobalOrderID,TmpInvoiceCodePDA);
-				}
-
-
-
-			}
-
-			//orderBookingTotalCalc();
-
-			if(alertOpens)
-			{
-				 if(flagClkdButton==1)
-			     {
-					 flagClkdButton=0;
-					 progressTitle=ProductOrderReview.this.getResources().getString(R.string.genTermPleaseWaitNew);
-		         new SaveData().execute("1~3");
-			     }
-
-			     else if(flagClkdButton==4)
-			     {
-			    	 flagClkdButton=0;
-			    	  progressTitle=ProductOrderReview.this.getResources().getString(R.string.WhileWeSave);
-					   new SaveData().execute("1~2");
-			     }
-
-			     else if(flagClkdButton==2)
-			     {
-			    	 flagClkdButton=0;
-			    	   progressTitle=ProductOrderReview.this.getResources().getString(R.string.WhileWeSaveExit);
-					   new SaveData().execute("2");
-			     }
-
-			     else if(flagClkdButton==3)
-			     {
-			    	 flagClkdButton=0;
-			    	 fnSaveFilledDataToDatabase(3);
-			     }
-
-			     else if(flagClkdButton==5)
-			     {
-			    	 flagClkdButton=0;
-			    	 progressTitle=ProductOrderReview.this.getResources().getString(R.string.WhileSave);
-
-					 new SaveData().execute("1");
-			     }
-
-
-			}
-		}
 
 		 public String genOutOrderID()
 			{
@@ -6545,10 +6601,20 @@ public void loadPurchaseProductDefault()
 			}
 
 		}
+		else  if(butClickForGPS==8)
+		{
+			butClickForGPS=0;
 
 
+			orderBookingTotalCalc();
+			if(!alertOpens)
+			{
+				progressTitle=ProductOrderReview.this.getResources().getString(R.string.WhileReview);
 
+				new SaveData().execute("1~7");
+			}
 
+		}
 	}
 		 
 	public void checkHighAccuracyLocationMode(Context context) {
@@ -6939,21 +7005,14 @@ public void loadPurchaseProductDefault()
 
 		else if(btnClkd==2) // btn submit clkd
 		{
-		/*	for(Entry<String,String> entry:hmapPrdctIdOutofStock.entrySet())
-			{
-				System.out.println("hmapPrdctIdOutofStock OrderReview= "+entry.getKey()+" : "+entry.getValue());
-				//dbengine.insertDistributorPDAOrderId(distID,TmpInvoiceCodePDA,entry.getKey(),entry.getValue(),btnClkd);
-				dbengine.insertDistributorPDAOrderId(distID,strFinalAllotedInvoiceIds,entry.getKey(),entry.getValue(),btnClkd);
-			}*/
-			//dbengine.updateOriginalStock(hmapDistPrdctStockCount,distID);
+
 			long StartClickTime = System.currentTimeMillis();
 			Date dateobj1 = new Date(StartClickTime);
 			SimpleDateFormat df1 = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss",Locale.ENGLISH);
 			String StartClickTimeFinal = df1.format(dateobj1);
 
 			String fileName=imei+"_"+storeID;
-			//StringBuffer content=new StringBuffer(imei+"_"+storeID+"_"+"Submit Button Click on Product List"+StartClickTimeFinal);
-			//File file = new File("/sdcard/MeijiIndirectTextFile/"+fileName);
+
 			File file = new File("/sdcard/"+CommonInfo.TextFileFolder+"/"+fileName);
 			if (!file.exists())
 			{
@@ -7132,20 +7191,22 @@ public void loadPurchaseProductDefault()
 			progressTitle=ProductOrderReview.this.getResources().getString(R.string.WhileSave);
 			new SaveData().execute("1~6");
 		}
-
-		/*else if(btnClkd==6) // btn Collection  clkd
+		/*else if(btnClkd==7)    //Delivery_Details_Activity
 		{
-			long StartClickTime = System.currentTimeMillis();
-			Date dateobj1 = new Date(StartClickTime);
-			SimpleDateFormat df1 = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss",Locale.ENGLISH);
-			String StartClickTimeFinal = df1.format(dateobj1);
+			progressTitle=ProductOrderReview.this.getResources().getString(R.string.WhileSave);
+			new SaveData().execute("1~7");
+		}*/
+		else if(btnClkd==7) // btn submit clkd
+		{
 
+			/*long StartClickTime = System.currentTimeMillis();
+			Date dateobj1 = new Date(StartClickTime);
+			SimpleDateFormat df1 = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss",Locale.ENGLISH);
+			String StartClickTimeFinal = df1.format(dateobj1);
 
 			String fileName=imei+"_"+storeID;
 
-			//StringBuffer content=new StringBuffer(imei+"_"+storeID+"_"+"Save Button Click on Product List"+StartClickTimeFinal);
 			File file = new File("/sdcard/"+CommonInfo.TextFileFolder+"/"+fileName);
-
 			if (!file.exists())
 			{
 				try
@@ -7159,9 +7220,7 @@ public void loadPurchaseProductDefault()
 				}
 			}
 
-
-			CommonInfo.fileContent=CommonInfo.fileContent+"     "+imei+"_"+storeID+"_"+"Save Button Click on Product List"+StartClickTimeFinal;
-
+			CommonInfo.fileContent=CommonInfo.fileContent+"     "+imei+"_"+storeID+"_"+"Submit Button Click on Product List"+StartClickTimeFinal;
 
 			FileWriter fw;
 			try
@@ -7174,43 +7233,48 @@ public void loadPurchaseProductDefault()
 				dbengine.open();
 				dbengine.savetblMessageTextFileContainer(fileName,0);
 				dbengine.close();
-
-
 			}
 			catch (IOException e1)
 			{
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
-			}
-
-
-
-
-			butClickForGPS=1;
-			flagClkdButton=5;
-			// dbengine.open();
-				  *//* if ((dbengine.PrevLocChk(storeID.trim())) )
-					{*//*
-
-			// dbengine.close();
-
-			if(ed_LastEditextFocusd!=null)
-			{
-							*//* if(!(ed_LastEditextFocusd.getText().toString()).equals(viewCurrentBoxValue))
-							   {*//*
-				getOrderData(ProductIdOnClickedEdit);
-							   *//*}*//*
-
-			}
+			}*/
 
 			orderBookingTotalCalc();
-			progressTitle=OrderReview.this.getResources().getString(R.string.WhileSave);
+			/*if(!alertOpens)
+			{
+				boolean isGPSEnabled2 = false;
+				boolean isNetworkEnabled2=false;
+				isGPSEnabled2 = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+				isNetworkEnabled2 = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
-			new SaveData().execute("1");
+				if(!isGPSEnabled2)
+				{
+					isGPSEnabled2 = false;
+				}
+				if(!isNetworkEnabled2)
+				{
+					isNetworkEnabled2 = false;
+				}
+				if(!isGPSEnabled2 && !isNetworkEnabled2)
+				{
+					try
+					{
+						showSettingsAlert();
+					}
+					catch(Exception e)
+					{
 
-		}*/
+					}
 
-
+					isGPSEnabled2 = false;
+					isNetworkEnabled2=false;
+				}
+				else{*/
+					fnSaveFilledDataToDatabase(4);
+				/*}
+			}*/
+		}
 
 	}
 
@@ -7908,6 +7972,19 @@ public void loadPurchaseProductDefault()
 				 AmtCollectIntent.putExtra("SN", SN);
 				 AmtCollectIntent.putExtra("OrderPDAID", strGlobalOrderID);
 				// AmtCollectIntent.putExtra("flgOrderType",flgOrderType);
+				 startActivity(AmtCollectIntent);
+				 finish();
+			 }
+			 else if(isReturnClkd==7)
+			 {
+				 Intent AmtCollectIntent = new Intent(ProductOrderReview.this, CollectionActivityNew.class);   //
+				 AmtCollectIntent.putExtra("storeID", storeID);
+				 AmtCollectIntent.putExtra("imei", imei);
+				 AmtCollectIntent.putExtra("userdate", date);
+				 AmtCollectIntent.putExtra("pickerDate", pickerDate);
+				 AmtCollectIntent.putExtra("SN", SN);
+				 AmtCollectIntent.putExtra("OrderPDAID", strGlobalOrderID);
+				 // AmtCollectIntent.putExtra("flgOrderType",flgOrderType);
 				 startActivity(AmtCollectIntent);
 				 finish();
 			 }

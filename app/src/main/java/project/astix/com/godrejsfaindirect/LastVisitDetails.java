@@ -59,7 +59,7 @@ import com.astix.Common.CommonInfo;
 
 public class LastVisitDetails extends BaseActivity
 {
-
+	public int flgVisitCollectionMarkedStatus=0;
 	public static int battLevel=0;
 	public  LinearLayout ll_gstDetails,ll_gstDependent;
 	public  RadioButton rb_gst_yes,rb_gst_no,rb_pending;
@@ -315,7 +315,7 @@ public class LastVisitDetails extends BaseActivity
 		{
 			String passdLevel = battLevel + "%";
 			StoreVisitCode=genStoreVisitCode();
-			dbengine.fnInsertOrUpdate_tblStoreVisitMstr(StoreVisitCode,storeID,1,getDateInMonthTextFormat(),"0","0",getDateAndTimeInMilliSecond(),getDateAndTimeInMilliSecond(),getDateAndTimeInMilliSecond(),getDateAndTimeInMilliSecond(),"","0",passdLevel,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+			dbengine.fnInsertOrUpdate_tblStoreVisitMstr(StoreVisitCode,storeID,1,getDateInMonthTextFormat(),"0","0",getDateAndTimeInMilliSecond(),getDateAndTimeInMilliSecond(),getDateAndTimeInMilliSecond(),getDateAndTimeInMilliSecond(),"","0",passdLevel,0,0,0,0,0,0,0,0,0,0,0,0,0,0,flgVisitCollectionMarkedStatus);
 
 			//dbengine.UpdateStoreVisitBattVisitWise(storeID,passdLevel,StoreVisitCode);
 		}
