@@ -1441,16 +1441,23 @@ public void DayEndWithoutalert()
 								break;
 						}
 					}*/
+					/*newservice = newservice.fnGetStockUploadedStatus(getApplicationContext(), fDate, imei);
+					if (!newservice.director.toString().trim().equals("1")) {
 
-					newservice = newservice.fnGetVanStockData(getApplicationContext(), CommonInfo.imei);
-					if (newservice.flagExecutedServiceSuccesfully != 39) {
 						serviceException = true;
-					}
+						break;*/
+
+				//	}
+
 					
 				}
 				
 				if(mm==2)
-				{  
+				{
+				/*	newservice = newservice.fnGetVanStockData(getApplicationContext(), CommonInfo.imei);
+					if (newservice.flagExecutedServiceSuccesfully != 39) {
+						serviceException = true;
+					}*/
 					/*if(isOnline())
 					{
 					

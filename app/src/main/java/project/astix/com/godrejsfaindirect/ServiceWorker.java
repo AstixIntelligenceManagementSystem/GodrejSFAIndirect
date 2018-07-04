@@ -18425,7 +18425,7 @@ int flgProcessedInvoice=0;
                         flgProcessedInvoice=Integer.parseInt(xmlParser.getCharacterDataFromElement(line));
                     }
                 }
-                dbengine.fnUpdateProcessedInvoiceflg(PDAOrderId,flgProcessedInvoice);
+
 				dbengine.insertDistributorLeftOrderId(DistID,PDAOrderId,flgProcessedInvoice);
 				//System.out.println("Column DESC TBL..."+IncId+"-"+ReportColumnName+"-"+DisplayColumnName);
 			}
@@ -19123,6 +19123,7 @@ int flgProcessedInvoice=0;
 						stID=xmlParser.getCharacterDataFromElement(line);
 					}
 				}
+
 
 				if(!element.getElementsByTagName("CatOrdr").equals(null))
 				{

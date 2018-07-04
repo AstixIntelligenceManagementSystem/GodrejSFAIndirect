@@ -12181,7 +12181,7 @@ public class PRJDatabase
         int affected = db.update("tblStoreVisitMstr", values, "StoreID=? AND StoreVisitCode=?",new String[] { StoreID,StoreVisitCode });
      //   int affected1 = db.update("tblStoreList", values, "StoreID=?",new String[] { StoreID });
       // int affected21 = db.update("tblOutletQuestAnsMstr", values,"OutletID=?", new String[] { StoreID });
-        //nitishdubey
+
       //  int affected261 = db.update("tblNewAddedStoreLocationDetails", values,"StoreID=?", new String[] { StoreID });
 
     }
@@ -12196,7 +12196,7 @@ public class PRJDatabase
         int affected = db.update("tblStoreVisitMstr", values, "StoreID=? AND StoreVisitCode=?",new String[] { StoreID,StoreVisitCode });
         int affected1 = db.update("tblStoreList", values, "StoreID=?",new String[] { StoreID });
         int affected21 = db.update("tblOutletQuestAnsMstr", values,"OutletID=?", new String[] { StoreID });
-        //nitishdubey
+
         int affected261 = db.update("tblNewAddedStoreLocationDetails", values,"StoreID=?", new String[] { StoreID });
 
     }
@@ -12629,7 +12629,7 @@ public class PRJDatabase
             int affected16 = db.update("tblStoreMaterialPhotoDetail", values,"StoreID=?", new String[] { sID });
             int affected17 = db.update("tblSalesQuotePersonMeetMstr", values,"StoreId=?", new String[] { sID });
             int affected21 = db.update("tblOutletQuestAnsMstr", values,"OutletID=?", new String[] { sID });
-            //nitishdubey
+
             int affected261 = db.update("tblNewAddedStoreLocationDetails", values,"StoreID=?", new String[] { sID });
 
             int affected23 = db.update("tblNewStoreSalesQuotePaymentDetails", values,"StoreId=?", new String[] { sID });
@@ -28218,6 +28218,7 @@ String fetchdate=fnGetDateTimeString();
         LinkedHashMap<String,String> hmapDistPrdctStockCount=new LinkedHashMap<>();
         int flgVal=flgConfirmedWareHouse();
         open();
+      //  updateInvoiceExecuted();
        // try {
 
             //tblTmpDistributorStock
@@ -28226,9 +28227,9 @@ String fetchdate=fnGetDateTimeString();
             Cursor cur=null;
             if(flgVal==0)//tblTmpDistributorStock
             {
-                //cur=db.rawQuery("Select  DISTINCT tblTmpDistributorStock.PrdctId,tblTmpDistributorStock.SKUName,(ifnull(tblTmpDistributorStock.StockQntty,0) - ifnull(SUM(tblInvoiceDetails.OrderQty),0)) AS StockQntty,OpeningStock,CycleAddedStock,(ifnull(tblTmpDistributorStock.NetSalesQty,0) + ifnull(SUM(tblInvoiceDetails.OrderQty),0))  AS NetSalesQty,CategoryID,CycleUnloadStk from tblTmpDistributorStock left outer join tblInvoiceDetails on  tblTmpDistributorStock.PrdctId=tblInvoiceDetails.ProdID  left outer join tblInvoiceHeader ON  tblInvoiceDetails.InvoiceNumber=tblInvoiceHeader.InvoiceNumber WHERE tblInvoiceHeader.flgProcessedInvoice=0 ",null);
-                cur=db.rawQuery(       " SELECT DISTINCT S.PrdctId,S.SKUName,S.StockQntty-ifnull(D.OrderQty,0) AS Stqty,S.OpeningStock,S.CycleAddedStock,S.NetSalesQty+ifnull(D.OrderQty,0) AS OrdQty,S.CategoryID,S.CycleUnloadStk FROM tblTmpDistributorStock S LEFT OUTER JOIN \n" +
-                        " (SELECT ID.ProdID,SUM(ID.OrderQty) OrderQty FROM tblInvoiceHeader AS I INNER JOIN tblInvoiceDetails AS ID ON ID.InvoiceNumber=I.InvoiceNumber  WHERE I.flgProcessedInvoice=0 GROUP BY ID.ProdID) D ON D.ProdID=S.PrdctId",null);
+                cur=db.rawQuery(" SELECT DISTINCT S.PrdctId,S.SKUName,(S.StockQntty-ifnull(X.OrderQty,0)) AS Stqty,S.OpeningStock,S.CycleAddedStock,S.NetSalesQty+ifnull(X.OrderQty,0) AS OrdQty,S.CategoryID,S.CycleUnloadStk FROM tblTmpDistributorStock S LEFT join tblDistributorStock ST ON S.PrdctId=ST.PrdctId LEFT OUTER JOIN (SELECT ID.ProdID,SUM(ID.OrderQty) OrderQty FROM tblInvoiceHeader AS I INNER JOIN tblInvoiceDetails AS ID ON ID.InvoiceNumber=I.InvoiceNumber  WHERE I.flgProcessedInvoice=0 GROUP BY ID.ProdID) D ON D.ProdID=S.PrdctId LEFT OUTER JOIN (SELECT ID.ProdID,SUM(ID.OrderQty) OrderQty FROM tblDistributorProductLeft AS D INNER JOIN tblInvoiceDetails AS ID ON ID.InvoiceNumber=D.OrderId WHERE D.flgProcessedInvoice=0 GROUP BY ID.ProdID) X",null);
+              /*  cur=db.rawQuery(       " SELECT DISTINCT S.PrdctId,S.SKUName,S.StockQntty-ifnull(D.OrderQty,0) AS Stqty,S.OpeningStock,S.CycleAddedStock,S.NetSalesQty+ifnull(D.OrderQty,0) AS OrdQty,S.CategoryID,S.CycleUnloadStk FROM tblTmpDistributorStock S LEFT OUTER JOIN \n" +
+                        " (SELECT ID.ProdID,SUM(ID.OrderQty) OrderQty FROM tblInvoiceHeader AS I INNER JOIN tblInvoiceDetails AS ID ON ID.InvoiceNumber=I.InvoiceNumber  WHERE I.flgProcessedInvoice=0 GROUP BY ID.ProdID) D ON D.ProdID=S.PrdctId",null);*/
             }
             else
             {
@@ -29789,10 +29790,21 @@ String fetchdate=fnGetDateTimeString();
 //PrdctId text null,StockQntty text null,DistributorNodeIdNodeType text null,SKUName text null,OpeningStock text null,TodaysAddedStock text null,CycleAddedStock text null,NetSalesQty text null,TodaysUnloadStk text null,CycleUnloadStk text null,CategoryID
         db.execSQL("INSERT INTO " + DATABASE_TABLE_DISTRIBUTOR_STOCK + " SELECT * FROM " + DATABASE_TABLE_TMP_DISTRIBUTOR_STOCK);
         db.execSQL("DELETE FROM tblTmpDistributorStock");
+        updateInvoiceExecuted();
         //DATABASE_TABLE_TMP_DISTRIBUTOR_STOCK
-        //  DATABASE_TABLE_DISTRIBUTOR_STOCK
+        //  DATABASE_TABE_DISTRIBUTOR_STOCK
 
         close();
+
+    }
+
+
+    public void updateInvoiceExecuted()
+    {
+       // flgProcessedInvoice,InvoiceNumber
+        //tblDistributorProductLeft(DistributorNodeIdNodeType text null,OrderId text null,flgProcessedInvoice int not null);";
+        //tblInvoiceHeader (StoreVisitCode text not null,InvoiceNumber int not null,TmpInvoiceCodePDA text null, StoreID text not null, InvoiceDate string not null, TotalBeforeTaxDis real not null, TaxAmt real not null, TotalDis real not null, InvoiceVal real not null, FreeTotal integer not null, Sstat integer not null, InvAfterDis real not null, AddDis real not null,  NoCoupon int null, TotalCoupunAmount real null,TransDate string not null,FlgInvoiceType text not null,flgWholeSellApplicable int null,flgProcessedInvoice int not null,CycleID  int not null);";
+        db.execSQL("UPDATE tblInvoiceHeader SET flgProcessedInvoice=(Select flgProcessedInvoice from tblDistributorProductLeft Where (tblInvoiceHeader.InvoiceNumber=tblDistributorProductLeft.OrderId))");
 
     }
 

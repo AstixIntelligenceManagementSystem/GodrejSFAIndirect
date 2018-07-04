@@ -624,8 +624,14 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                     }
                     else
                     {
-                        showAlertSingleButtonInfo(getResources().getString(R.string.NoPendingDataMsg));
-
+                        //showAlertSingleButtonInfo(getResources().getString(R.string.NoPendingDataMsg));
+                        if(isOnline()) {
+                            whereTo = "11";
+                            DayEndWithoutalert();
+                        }else
+                        {
+                            showAlertSingleButtonError(getResources().getString(R.string.NoDataConnectionFullMsg));
+                        }
 
                     }
 

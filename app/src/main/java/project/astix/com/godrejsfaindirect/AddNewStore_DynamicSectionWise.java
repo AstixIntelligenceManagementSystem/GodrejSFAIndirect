@@ -1579,7 +1579,7 @@ if(flgCheckNewOldStore==1)
             if (addresses != null && addresses.size() > 0){
                 if(addresses.get(0).getAddressLine(1)!=null){
                     addr=addresses.get(0).getAddressLine(1);
-                    address=addr;
+
                 }
 
 
@@ -1615,7 +1615,8 @@ if(flgCheckNewOldStore==1)
                         countryname=addresses.get(0).getCountryName();
                     }
 
-                    addr=  getAddressNewWay(addresses.get(0).getAddressLine(0),city,state,zipcode,countryname);
+                    address=  getAddressNewWay(addresses.get(0).getAddressLine(0),city,state,zipcode,countryname);
+                    addr=address;
                 }
 
 
