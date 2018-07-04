@@ -4924,7 +4924,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
             {
 
                 dbengine.deleteXmlTable("4");
-
+                dbengine.UpdateStoreVisitWiseTablesAfterSync(4);
                 GetVanStockForDay taskVanStock = new GetVanStockForDay(AllButtonActivity.this);
                 taskVanStock.execute();
 

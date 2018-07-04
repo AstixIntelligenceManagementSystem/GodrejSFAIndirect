@@ -405,8 +405,14 @@ public class StoreSelection extends BaseActivity implements com.google.android.g
 		Location loc =mCurrentLocation;
 		if (null != mCurrentLocation) {
 			String lat = String.valueOf(mCurrentLocation.getLatitude());
-			String lng = String.valueOf(mCurrentLocation.getLongitude());
+			if(lat.contains("E") || lat.contains("e")){
+				lat=convertExponential(mCurrentLocation.getLatitude());
+			}
 
+			String lng = String.valueOf(mCurrentLocation.getLongitude());
+			if(lng.contains("E") || lng.contains("e")){
+				lng=convertExponential(mCurrentLocation.getLongitude());
+			}
 			FusedLocationLatitude=lat;
 			FusedLocationLongitude=lng;
 			FusedLocationProvider=mCurrentLocation.getProvider();
@@ -4290,7 +4296,13 @@ public void DayEndWithoutalert()
 						GpsAddress="NA";
 					}
 					GPSLocationLatitude=""+lattitude;
+					if(GPSLocationLatitude.contains("E") || GPSLocationLatitude.contains("e")){
+						GPSLocationLatitude=	convertExponential(lattitude);
+					}
 					GPSLocationLongitude=""+longitude;
+					if(GPSLocationLongitude.contains("E") || GPSLocationLongitude.contains("e")){
+						GPSLocationLongitude=	convertExponential(longitude);
+					}
 					GPSLocationProvider="GPS";
 					GPSLocationAccuracy=""+accuracy;
 					AllProvidersLocation="GPS=Lat:"+lattitude+"Long:"+longitude+"Acc:"+accuracy;
@@ -4322,7 +4334,13 @@ public void DayEndWithoutalert()
 
 
 				NetworkLocationLatitude=""+lattitude1;
+				if(NetworkLocationLatitude.contains("E") || NetworkLocationLatitude.contains("e")){
+					NetworkLocationLatitude=	convertExponential(lattitude1);
+				}
 				NetworkLocationLongitude=""+longitude1;
+				if(NetworkLocationLongitude.contains("E") || NetworkLocationLongitude.contains("e")){
+					NetworkLocationLongitude=	convertExponential(longitude1);
+				}
 				NetworkLocationProvider="Network";
 				NetworkLocationAccuracy=""+accuracy1;
 				if(!AllProvidersLocation.equals(""))
@@ -5051,5 +5069,9 @@ public void DayEndWithoutalert()
 			}
 		}
 		return Totalfiles;
+	}
+	public String convertExponential(double firstNumber){
+		String secondNumberAsString = String.format("%.10f",firstNumber);
+		return secondNumberAsString;
 	}
 }

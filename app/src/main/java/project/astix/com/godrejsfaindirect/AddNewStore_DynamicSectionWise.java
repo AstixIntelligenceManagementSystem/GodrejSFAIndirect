@@ -1301,8 +1301,13 @@ if(flgCheckNewOldStore==1)
         Location loc =mCurrentLocation;
         if (null != mCurrentLocation) {
             String lat = String.valueOf(mCurrentLocation.getLatitude());
+            if(lat.contains("E") || lat.contains("e")){
+                lat=convertExponential(mCurrentLocation.getLatitude());
+            }
             String lng = String.valueOf(mCurrentLocation.getLongitude());
-
+            if(lng.contains("E") || lng.contains("e")){
+                lng=convertExponential(mCurrentLocation.getLongitude());
+            }
             FusedLocationLatitude=lat;
             FusedLocationLongitude=lng;
             FusedLocationProvider=mCurrentLocation.getProvider();
@@ -2719,7 +2724,13 @@ if(flgCheckNewOldStore==1)
                     }
 
                     GPSLocationLatitude=""+lattitude;
+                    if(GPSLocationLatitude.contains("E") || GPSLocationLatitude.contains("e")){
+                        GPSLocationLatitude=	convertExponential(lattitude);
+                    }
                     GPSLocationLongitude=""+longitude;
+                    if(GPSLocationLongitude.contains("E") || GPSLocationLongitude.contains("e")){
+                        GPSLocationLongitude=	convertExponential(longitude);
+                    }
                     GPSLocationProvider="GPS";
                     GPSLocationAccuracy=""+accuracy;
                     AllProvidersLocation="GPS=Lat:"+lattitude+"Long:"+longitude+"Acc:"+accuracy;
@@ -2750,7 +2761,13 @@ if(flgCheckNewOldStore==1)
                 }
 
                 NetworkLocationLatitude=""+lattitude1;
+                if(NetworkLocationLatitude.contains("E") || NetworkLocationLatitude.contains("e")){
+                    NetworkLocationLatitude=	convertExponential(lattitude1);
+                }
                 NetworkLocationLongitude=""+longitude1;
+                if(NetworkLocationLongitude.contains("E") || NetworkLocationLongitude.contains("e")){
+                    NetworkLocationLongitude=	convertExponential(longitude1);
+                }
                 NetworkLocationProvider="Network";
                 NetworkLocationAccuracy=""+accuracy1;
                 if(!AllProvidersLocation.equals(""))
@@ -3020,5 +3037,8 @@ if(flgCheckNewOldStore==1)
 
         }}
 
-
+    public String convertExponential(double firstNumber){
+        String secondNumberAsString = String.format("%.10f",firstNumber);
+        return secondNumberAsString;
+    }
 }
