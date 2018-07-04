@@ -166,8 +166,8 @@ public class CommonInfo
 		public static String VersionDownloadAPKName="GodrejSFADev.apk";
 		public static String DATABASE_NAME = "DbGodrejSFAApp";
 		public static int AnyVisit = 0;
-		public static int DATABASE_VERSIONID = 35;      // put this field value based on value in table on the server
-		public static String AppVersionID = "1.29";   // put this field value based on value in table on the server
+		public static int DATABASE_VERSIONID = 36;      // put this field value based on value in table on the server
+		public static String AppVersionID = "1.30";   // put this field value based on value in table on the server
 		public static int Application_TypeID = 2; //1=Parag Store Mapping,2=Parag SFA Indirect,3=Parag SFA Direct
 	    public static String OrderSyncPath="http://103.20.212.194/ReadXML_GodrejDevelopment/DefaultSFA.aspx";
 	    public static String ImageSyncPath="http://103.20.212.194/ReadXML_GodrejImagesDevelopment/Default.aspx";

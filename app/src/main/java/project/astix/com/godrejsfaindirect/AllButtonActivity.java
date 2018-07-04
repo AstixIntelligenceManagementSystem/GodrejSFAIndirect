@@ -4830,7 +4830,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
             }
 
 
-
+            showProgress(getResources().getString(R.string.SubmittingPndngDataMsg));
 
         }
 
@@ -4918,13 +4918,13 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-
+            dismissProgress();
 
             if(responseCode == 200)
             {
 
                 dbengine.deleteXmlTable("4");
-
+                dbengine.UpdateStoreVisitWiseTablesAfterSync(4);
                 GetVanStockForDay taskVanStock = new GetVanStockForDay(AllButtonActivity.this);
                 taskVanStock.execute();
 

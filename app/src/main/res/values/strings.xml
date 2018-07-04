@@ -166,6 +166,9 @@
     <string name="NoDataConnectionFullMsg">Your device has no Data Connection. \n Please ensure Internet is accessible to Continue.</string>
     <string name="RetrivingDataMsg">Retrieving Data…</string>
     <string name="SubmittingDataMsg">Submitting Data…</string>
+    <string name="SubmittingPndngDataMsg">Submitting Pending Data…</string>
+
+
 
     <string name="ValidatingMsg">Validating User</string>
 

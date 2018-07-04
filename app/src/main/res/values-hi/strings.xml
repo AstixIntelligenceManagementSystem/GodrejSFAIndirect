@@ -9,7 +9,7 @@
     <string name="WareHouseMsgWithoutInvoiceNumber">Stock loaded/adjusted recently will reflect after few minutes.</string>
 
 
-
+    <string name="SubmittingPndngDataMsg"> लंबित डेटा सबमिट करना…</string>
     <string name="genStoreListWhoseDataIsNotYetSubmitted">Following invoices are Not Submitted as Yet. Invoices only Saved but not Submitted now will be permanently lost.</string>
     <string name="VanStock">Van Stock</string>
     <!--Splash screen starts here-->
