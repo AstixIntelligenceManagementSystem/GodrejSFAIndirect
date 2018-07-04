@@ -144,7 +144,7 @@ public class StoreAndSKUWiseFragmentThreeTab<Context> extends Fragment
 		
 		
 		TextView total_discountValue=(TextView)rootView.findViewById(R.id.total_discountValue);
-		Double disc_val=Double.parseDouble(a7);
+		Double disc_val=Double.parseDouble(a6);
 		disc_val= Double.parseDouble(new DecimalFormat("##.##").format(disc_val));
 		total_discountValue.setText(""+disc_val.intValue());
 		
@@ -155,7 +155,7 @@ public class StoreAndSKUWiseFragmentThreeTab<Context> extends Fragment
 		
 		
 		TextView total_ValBeforeTax=(TextView)rootView.findViewById(R.id.total_ValBeforeTax);
-		Double ValBeforeTax=Double.parseDouble(a8);
+		Double ValBeforeTax=Double.parseDouble(a7);
 		ValBeforeTax=Double.parseDouble(new DecimalFormat("##.##").format(ValBeforeTax));
 		total_ValBeforeTax.setText(""+ValBeforeTax.intValue());
 		

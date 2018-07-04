@@ -4561,7 +4561,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         protected void onPreExecute()
         {
             super.onPreExecute();
-
+            showProgress(getResources().getString(R.string.SubmittingPndngDataMsg));
 
 
         }
@@ -4617,7 +4617,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         {
             super.onPostExecute(resultError);
 
-
+            dismissProgress();
 
 
 
