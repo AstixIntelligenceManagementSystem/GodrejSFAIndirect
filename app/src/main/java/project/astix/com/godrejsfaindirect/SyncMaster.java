@@ -2283,7 +2283,11 @@ if(NoOfOutletID.length>0)
 								timer2 = null;
 							}
 
-
+				/*	int Sstat=6;
+					db.open();
+					db.updateRecordsSyncd(Sstat);		// update syncd' records
+					db.close();*/
+							db.UpdateStoreVisitWiseTablesAfterSync(4);
 
 
 

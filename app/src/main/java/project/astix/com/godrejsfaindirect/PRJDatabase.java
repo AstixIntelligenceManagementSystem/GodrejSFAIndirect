@@ -18734,7 +18734,7 @@ open();
             cursor = db.rawQuery("Select tblTmpInvoiceDetails.StoreID,tblStoreList.StoreName,1 AS FlgRowType from  tblTmpInvoiceDetails inner join tblStoreList on  tblTmpInvoiceDetails.StoreID=tblStoreList.StoreID Where  (tblTmpInvoiceDetails.OrderQty>0 or tblTmpInvoiceDetails.FreeQty>0) and tblTmpInvoiceDetails.Sstat=" + DraftorNonSubmitted + " Group By tblTmpInvoiceDetails.StoreID,tblStoreList.StoreName", null);
         }
         if(flgReportFromTmpOrPermanent==1) {
-            cursor = db.rawQuery("Select tblInvoiceDetails.StoreID,tblStoreList.StoreName,1 AS FlgRowType from  tblInvoiceDetails inner join tblStoreList on  tblInvoiceDetails.StoreID=tblStoreList.StoreID Where  (tblInvoiceDetails.OrderQty>0 or tblInvoiceDetails.FreeQty>0) and tblInvoiceDetails.Sstat=" + DraftorNonSubmitted + " Group By tblInvoiceDetails.StoreID,tblStoreList.StoreName", null);
+            cursor = db.rawQuery("Select tblInvoiceDetails.StoreID,tblStoreList.StoreName,1 AS FlgRowType from  tblInvoiceDetails inner join tblStoreList on  tblInvoiceDetails.StoreID=tblStoreList.StoreID inner join tblStoreVisitMstr on tblStoreList.StoreID=tblStoreVisitMstr.StoreID Where  (tblInvoiceDetails.OrderQty>0 or tblInvoiceDetails.FreeQty>0) and tblStoreVisitMstr.Sstat=" + DraftorNonSubmitted + " Group By tblInvoiceDetails.StoreID,tblStoreList.StoreName", null);
         }
         try {
             if (cursor.getCount() > 0) {
