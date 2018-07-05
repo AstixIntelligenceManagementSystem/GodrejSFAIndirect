@@ -224,13 +224,13 @@ public class StoreAndSKUWiseFragmentOneTab<Context> extends Fragment
 		total_ValBeforeTax.setText(""+ValBeforeTax.intValue());
 		
 		TextView total_ValTax=(TextView)rootView.findViewById(R.id.total_ValTax);
-		Double ValTax=Double.parseDouble(a10);
+		Double ValTax=Double.parseDouble(a9);
 		ValTax=Double.parseDouble(new DecimalFormat("##.##").format(ValTax));
 		total_ValTax.setText(""+ValTax.intValue());
 		
 		
 		TextView total_ValAfterTax=(TextView)rootView.findViewById(R.id.total_ValAfterTax);
-		Double ValAfterTax=Double.parseDouble(a11);
+		Double ValAfterTax=Double.parseDouble(a10);
 		ValAfterTax=Double.parseDouble(new DecimalFormat("##.##").format(ValAfterTax));
 		total_ValAfterTax.setText(""+ValAfterTax.intValue());
 		
