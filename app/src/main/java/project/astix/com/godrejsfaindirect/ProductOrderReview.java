@@ -4432,8 +4432,8 @@ public void loadPurchaseProductDefault()
 					hmapPrdctFreeQty.put(ProductID, "0");
 					((TextView) (vRow).findViewById(R.id.tv_FreeQty)).setText(hmapPrdctFreeQty.get(ProductID).toString());
 					TotalFreeQTY = TotalFreeQTY + Integer.parseInt(hmapPrdctFreeQty.get(ProductID));
-					hmapProductTaxValue.put(ProductID, "0.00");
-					hmapMinDlvrQtyQPTaxAmount.put(ProductID, "0.00");
+					/*hmapProductTaxValue.put(ProductID, "0.00");
+					hmapMinDlvrQtyQPTaxAmount.put(ProductID, "0.00");*/
 
 					if (Integer.parseInt(hmapPrdctOdrQty.get(ProductID)) > 0) {
 
@@ -4594,8 +4594,8 @@ public void loadPurchaseProductDefault()
 
 				((TextView)(vRow).findViewById(R.id.tv_FreeQty)).setText(hmapPrdctFreeQty.get(ProductID).toString());
 				TotalFreeQTY=TotalFreeQTY+Integer.parseInt(hmapPrdctFreeQty.get(ProductID));
-				hmapProductTaxValue.put(ProductID, "0.00");
-				hmapMinDlvrQtyQPTaxAmount.put(ProductID, "0.00");
+				//hmapProductTaxValue.put(ProductID, "0.00");
+				//hmapMinDlvrQtyQPTaxAmount.put(ProductID, "0.00");
 				((TextView)(vRow).findViewById(R.id.tv_Orderval)).setText("0.00");
 				((TextView)(vRow).findViewById(R.id.tv_UnitQty)).setText("0.00");
 				if(Integer.parseInt(hmapPrdctOdrQty.get(ProductID))>0)
@@ -4992,8 +4992,8 @@ public void loadPurchaseProductDefault()
 					hmapPrdctFreeQty.put(ProductID, "0");
 					((TextView) (vRow).findViewById(R.id.tv_FreeQty)).setText(hmapPrdctFreeQty.get(ProductID).toString());
 					TotalFreeQTY = TotalFreeQTY + Integer.parseInt(hmapPrdctFreeQty.get(ProductID));
-					hmapProductTaxValue.put(ProductID, "0.00");
-					hmapMinDlvrQtyQPTaxAmount.put(ProductID, "0.00");
+					/*hmapProductTaxValue.put(ProductID, "0.00");
+					hmapMinDlvrQtyQPTaxAmount.put(ProductID, "0.00");*/
 					((TextView) (vRow).findViewById(R.id.tv_Orderval)).setText("0.00");
 					if (Integer.parseInt(hmapPrdctOdrQty.get(ProductID)) > 0) {
 						/*StandardRate=Double.parseDouble(hmapProductMRP.get(ProductID))/((1+(Double.parseDouble(hmapProductRetailerMarginPercentage.get(ProductID))/100)));
