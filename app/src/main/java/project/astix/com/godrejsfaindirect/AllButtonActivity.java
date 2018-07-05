@@ -4561,8 +4561,8 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         protected void onPreExecute()
         {
             super.onPreExecute();
-            showProgress(getResources().getString(R.string.SubmittingPndngDataMsg));
 
+            showProgress(getResources().getString(R.string.SubmittingPndngDataMsg));
 
         }
         @Override
@@ -4617,8 +4617,8 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         {
             super.onPostExecute(resultError);
 
-            dismissProgress();
 
+            dismissProgress();
 
 
             dbengine.fndeleteSbumittedStoreImagesOfSotre(4);

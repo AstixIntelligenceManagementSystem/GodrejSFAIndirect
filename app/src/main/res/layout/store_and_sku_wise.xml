@@ -267,11 +267,12 @@
          android:gravity="right|center_vertical"
          android:textSize="10sp"
         android:textStyle="bold"
-                 android:visibility="gone"
+
         android:textColor="#000000"/>
               <View 
         android:layout_width="1dp"
         android:layout_height="match_parent"
+                  android:visibility="gone"
         android:background="#000000"/>
        <TextView 
            android:id="@+id/total_ValBeforeTax"
@@ -280,6 +281,7 @@
         android:layout_weight="1"
         android:paddingRight="2dp"
         android:text=""
+           android:visibility="gone"
          android:gravity="right|center_vertical"
          android:textSize="10sp"
         android:textStyle="bold"

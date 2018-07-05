@@ -214,7 +214,7 @@ public class StoreAndSKUWiseFragmentOneTab<Context> extends Fragment
 		TextView total_StockValue=(TextView)rootView.findViewById(R.id.total_StockValue);
 		total_StockValue.setText(a4);*/
 		TextView total_discountValue=(TextView)rootView.findViewById(R.id.total_discountValue);
-		Double disc_val=Double.parseDouble(a8);
+		Double disc_val=Double.parseDouble(a7);
 		disc_val= Double.parseDouble(new DecimalFormat("##.##").format(disc_val));
 		total_discountValue.setText(""+disc_val.intValue());
 		
@@ -224,13 +224,13 @@ public class StoreAndSKUWiseFragmentOneTab<Context> extends Fragment
 		total_ValBeforeTax.setText(""+ValBeforeTax.intValue());
 		
 		TextView total_ValTax=(TextView)rootView.findViewById(R.id.total_ValTax);
-		Double ValTax=Double.parseDouble(a9);
+		Double ValTax=Double.parseDouble(a10);
 		ValTax=Double.parseDouble(new DecimalFormat("##.##").format(ValTax));
 		total_ValTax.setText(""+ValTax.intValue());
 		
 		
 		TextView total_ValAfterTax=(TextView)rootView.findViewById(R.id.total_ValAfterTax);
-		Double ValAfterTax=Double.parseDouble(a10);
+		Double ValAfterTax=Double.parseDouble(a11);
 		ValAfterTax=Double.parseDouble(new DecimalFormat("##.##").format(ValAfterTax));
 		total_ValAfterTax.setText(""+ValAfterTax.intValue());
 		
@@ -300,7 +300,7 @@ public class StoreAndSKUWiseFragmentOneTab<Context> extends Fragment
 				Double ValBeforeTax1=Double.parseDouble(s9);
 				ValBeforeTax1=Double.parseDouble(new DecimalFormat("##.##").format(ValBeforeTax1));
 				txt_store_sku_gross_val.setText(""+ValBeforeTax1.intValue());
-				
+				 txt_store_sku_gross_val.setVisibility(View.GONE);
 				
 				Double ValTax1=Double.parseDouble(s10);
 		 		ValTax1=Double.parseDouble(new DecimalFormat("##.##").format(ValTax1));
@@ -385,7 +385,7 @@ public class StoreAndSKUWiseFragmentOneTab<Context> extends Fragment
 				Double ValBeforeTax1=Double.parseDouble(s9);
 				ValBeforeTax1=Double.parseDouble(new DecimalFormat("##.##").format(ValBeforeTax1));
 				txt_gross_val.setText(""+ValBeforeTax1.intValue());
-				
+				 txt_gross_val.setVisibility(View.GONE);
 				
 				TextView txt_tac_val=(TextView) view.findViewById(R.id.txt_tac_val);
 				Double ValTax1=Double.parseDouble(s10);
