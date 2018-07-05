@@ -277,7 +277,7 @@ public class StoreWiseSummaryReportMTD extends BaseActivity
 	         String s15 = tokens1.nextToken().toString().trim();*/
 	         
 	         LayoutInflater inflater=(LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-				final View view=inflater.inflate(R.layout.list_store_wise,null);
+				final View view=inflater.inflate(R.layout.list_store_wise_mt,null);
 				if(i%2==0)
 				{
 					view.setBackgroundResource(R.drawable.card_background_summary);
@@ -315,6 +315,7 @@ public class StoreWiseSummaryReportMTD extends BaseActivity
 				
 				
 				TextView txt_gross_val=(TextView) view.findViewById(R.id.txt_gross_val);
+			    txt_gross_val.setVisibility(View.VISIBLE);
 				Double ValBeforeTax1=Double.parseDouble(s6);
 				ValBeforeTax1=Double.parseDouble(new DecimalFormat("##.##").format(ValBeforeTax1));
 				txt_gross_val.setText(""+ValBeforeTax1.intValue());

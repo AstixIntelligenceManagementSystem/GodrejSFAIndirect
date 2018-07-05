@@ -112,7 +112,7 @@
         android:layout_width="1dp"
         android:layout_height="match_parent"
         android:background="#000000"
-               android:visibility="gone"/>
+              />
        <TextView 
              android:id="@+id/txt_store_sku_gross_val"
         android:layout_width="0dp"
@@ -151,15 +151,17 @@
           <View 
         android:layout_width="1dp"
         android:layout_height="match_parent"
+
         android:background="#000000"/>
         
              <TextView 
                    android:id="@+id/txt_store_sku_net_val"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="2"
+        android:layout_weight="1"
         android:text="Net"
-        android:gravity="right|center_vertical"
+
+        android:gravity="center_horizontal|center_vertical"
          android:paddingTop="1dp"
         android:paddingBottom="1dp"
          android:textSize="10sp"

@@ -11,7 +11,6 @@ public class CommonInfo
 	// Its for Live Path on 194 Server
 
 
-/*
 
 
 	public static final String DistributorMapXMLFolder="GodrejDistributorMapXML";
@@ -62,7 +61,6 @@ public class CommonInfo
 	public static int FlgDSRSO=0;
 	public static String ActiveRouteSM="0";
 
-*/
 
 
 	// Its for Test Path on 194 Server
@@ -144,6 +142,7 @@ public class CommonInfo
 
 	// Its for Dev Path on 194 Server
 
+/*
 
 	    public static final String DistributorMapXMLFolder="GodrejDistributorMapXML";
 	    public static final String DistributorStockXMLFolder="GodrejDistributorStockXML";
@@ -193,6 +192,7 @@ public class CommonInfo
 		public static int FlgDSRSO=0;
 	    public static String ActiveRouteSM="0";
 
+*/
 
 
 }

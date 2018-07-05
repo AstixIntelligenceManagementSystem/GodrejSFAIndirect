@@ -311,7 +311,7 @@ public class SKUWiseSummaryReportMTD extends BaseActivity
 				//ValBeforeTax1=Math.round(ValBeforeTax1 * 100.0)/100.0;
 		 		ValBeforeTax1= Double.parseDouble(new DecimalFormat("##.##").format(ValBeforeTax1));
 		 		txt_store_sku_gross_val.setText(""+ValBeforeTax1.intValue());
-		 		
+				 txt_store_sku_gross_val.setVisibility(View.VISIBLE);
 		 		
 		 		Double ValTax1=Double.parseDouble(s11);
 		 		//ValTax1=Math.round(ValTax1 * 100.0)/100.0;
@@ -323,6 +323,7 @@ public class SKUWiseSummaryReportMTD extends BaseActivity
 		 		//ValAfterTax1=Math.round(ValAfterTax1 * 100.0)/100.0;
 		 		ValAfterTax1= Double.parseDouble(new DecimalFormat("##.##").format(ValAfterTax1));
 		 		txt_store_sku_net_val.setText(""+ValAfterTax1.intValue());
+			//	 txt_store_sku_net_val.setVisibility(View.VISIBLE);
 				
 				/*txt_sku_disc_val.setText(s9);
 				txt_store_sku_gross_val.setText(s10);
@@ -379,7 +380,7 @@ public class SKUWiseSummaryReportMTD extends BaseActivity
 				
 				TextView txt_gross_val=(TextView) view.findViewById(R.id.txt_gross_val);
 				//txt_gross_val.setText(s10);
-				
+				 txt_gross_val.setVisibility(View.VISIBLE);
 				
 				
 				TextView txt_tac_val=(TextView) view.findViewById(R.id.txt_tac_val);
@@ -412,8 +413,8 @@ public class SKUWiseSummaryReportMTD extends BaseActivity
 		 		Double ValAfterTax1=Double.parseDouble(s12);
 		 		//ValAfterTax1=Math.round(ValAfterTax1 * 100.0)/100.0;
 		 		ValAfterTax1= Double.parseDouble(new DecimalFormat("##.##").format(ValAfterTax1));
-		 		txt_net_val.setText(""+ValAfterTax1.intValue());
-				
+				 txt_net_val.setText(""+ValAfterTax1.intValue());
+				 txt_net_val.setVisibility(View.VISIBLE);
 				ll_store_sku.addView(view);
 	         }
 	         ll_Scroll_product.addView(viewParent);

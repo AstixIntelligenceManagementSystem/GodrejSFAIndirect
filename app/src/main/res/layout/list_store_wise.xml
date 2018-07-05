@@ -90,7 +90,7 @@
         android:layout_width="1dp"
         android:layout_height="match_parent"
         android:background="#000000"
-                 android:visibility="gone"/>
+                />
        <TextView 
              android:id="@+id/txt_gross_val"
         android:layout_width="0dp"

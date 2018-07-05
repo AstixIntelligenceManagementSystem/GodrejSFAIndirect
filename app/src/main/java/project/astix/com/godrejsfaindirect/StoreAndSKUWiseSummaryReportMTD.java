@@ -199,7 +199,8 @@ public class StoreAndSKUWiseSummaryReportMTD extends BaseActivity
 	
 	private void intializeFields() 
 	{
-		
+		TextView tvValBeforeTax=(TextView) findViewById(R.id.tvValBeforeTax);
+		tvValBeforeTax.setVisibility(View.GONE);
 		if(AllDataContainer.length>0)
 		{
 		
@@ -238,7 +239,7 @@ public class StoreAndSKUWiseSummaryReportMTD extends BaseActivity
 		total_LinesPerBill.setText(a3);
 		TextView total_StockValue=(TextView)rootView.findViewById(R.id.total_StockValue);
 		total_StockValue.setText(a4);*/
-		TextView total_discountValue=(TextView)findViewById(R.id.total_discountValue);
+		TextView total_discountValue=(TextView)findViewById(R.id.tvDisCount);
 		Double disc_val=Double.parseDouble(a8);
 		disc_val= Double.parseDouble(new DecimalFormat("##.##").format(disc_val));
 		total_discountValue.setText(""+disc_val.intValue());
@@ -248,7 +249,7 @@ public class StoreAndSKUWiseSummaryReportMTD extends BaseActivity
 		Double ValBeforeTax=Double.parseDouble(a9);
 		ValBeforeTax=Double.parseDouble(new DecimalFormat("##.##").format(ValBeforeTax));
 		total_ValBeforeTax.setText(""+ValBeforeTax.intValue());
-
+			total_ValBeforeTax.setVisibility(View.GONE);
 		TextView total_ValTax=(TextView)findViewById(R.id.total_ValTax);
 		Double ValTax=Double.parseDouble(a10);
 		ValTax=Double.parseDouble(new DecimalFormat("##.##").format(ValTax));
@@ -321,12 +322,16 @@ public class StoreAndSKUWiseSummaryReportMTD extends BaseActivity
 				Double disc_val1=Double.parseDouble(s8);
 				disc_val1= Double.parseDouble(new DecimalFormat("##.##").format(disc_val1));
 				txt_store_sku_discnt_val.setText(""+disc_val1.intValue());
+
 				
 				
 				Double ValBeforeTax1=Double.parseDouble(s9);
 				ValBeforeTax1=Double.parseDouble(new DecimalFormat("##.##").format(ValBeforeTax1));
 				txt_store_sku_gross_val.setText(""+ValBeforeTax1.intValue());
-
+				 txt_store_sku_gross_val.setVisibility(View.GONE);
+				/* if(txt_store_sku_gross_val.getVisibility()==View.GONE) {
+					 txt_store_sku_gross_val.setVisibility(View.VISIBLE);
+				 }*/
 				
 				Double ValTax1=Double.parseDouble(s10);
 		 		ValTax1=Double.parseDouble(new DecimalFormat("##.##").format(ValTax1));
@@ -349,7 +354,9 @@ public class StoreAndSKUWiseSummaryReportMTD extends BaseActivity
 				
 				 txt_store_sku.setVisibility(View.GONE);
 				 txt_store_sku_discnt_val.setVisibility(View.GONE);
-				 txt_store_sku_gross_val.setVisibility(View.GONE);
+				/* if(txt_store_sku_gross_val.getVisibility()==View.GONE) {
+					 txt_store_sku_gross_val.setVisibility(View.VISIBLE);
+				 }*/
 				 txt_store_sku_tac_val.setVisibility(View.GONE);
 				 txt_store_sku_net_val.setVisibility(View.GONE);
 					
