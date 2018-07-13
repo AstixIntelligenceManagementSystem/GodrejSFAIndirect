@@ -4897,6 +4897,7 @@ public class PRJDatabase
     {
 
 
+
         db.execSQL("DELETE FROM tblInvoiceDetails");
         db.execSQL("DELETE FROM tblTmpInvoiceHeader");
         db.execSQL("DELETE FROM tblStoreVisitMstr");

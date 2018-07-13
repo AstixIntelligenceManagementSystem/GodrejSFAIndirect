@@ -4156,7 +4156,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                     if(mm==42)
                     {
 
-                        newservice = newservice.getallStores(getApplicationContext(), fDate, imei, rID,RouteType);
+                        newservice = newservice.getallStores(getApplicationContext(), fDate, imei, rID,RouteType,1);
                         if(newservice.flagExecutedServiceSuccesfully!=1)
                         {
                             serviceException=true;

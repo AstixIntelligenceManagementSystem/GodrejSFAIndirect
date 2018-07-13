@@ -332,7 +332,7 @@ public class SplashScreen extends BaseActivity implements  TaskListner
 
      // imei="911577250038101";
 
-
+ //imei="356808071065136";
         CommonInfo.imei = imei;
         sPref=getSharedPreferences(CommonInfo.Preference, MODE_PRIVATE);
         Date date1 = new Date();

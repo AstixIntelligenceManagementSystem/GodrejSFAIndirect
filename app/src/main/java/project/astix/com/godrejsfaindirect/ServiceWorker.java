@@ -60,7 +60,7 @@ public class ServiceWorker
 	//private ServiceWorker _activity;
 	private ContextWrapper cw;
 	
-	public ServiceWorker getallStores(Context ctx, String dateVAL, String uuid, String rID,String RouteType) {
+	public ServiceWorker getallStores(Context ctx, String dateVAL, String uuid, String rID,String RouteType,int flgToDeletehmapOrNot) {
 		this.context = ctx;
 		
         PRJDatabase dbengine = new PRJDatabase(context);
@@ -72,6 +72,11 @@ public class ServiceWorker
 		hmapStoreIdSstat=dbengine.checkForStoreIdSstat();
 		//hmapStoreIdVisitStatus=dbengine.checkForStoreIdVisitStatus();
 
+		if(flgToDeletehmapOrNot==1)
+		{
+			hmapStoreIdVisitStatus.clear();
+			hmapStoreIdSstat.clear();
+		}
 		dbengine.Delete_tblStore_for_refreshDataButNotNewStore();
 		dbengine.fndeleteStoreAddressMapDetailsMstr();
 		

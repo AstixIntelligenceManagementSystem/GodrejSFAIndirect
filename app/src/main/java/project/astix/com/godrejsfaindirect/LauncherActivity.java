@@ -729,7 +729,7 @@ private void downloadapk()
 					System.out.println("bywww");
 					
 					
-				        newservice = newservice.getallStores(getApplicationContext(), fDate, imei, rID,RouteType);
+				        newservice = newservice.getallStores(getApplicationContext(), fDate, imei, rID,RouteType,1);
 						if(newservice.flagExecutedServiceSuccesfully!=1)
 						{
 							serviceException=true;

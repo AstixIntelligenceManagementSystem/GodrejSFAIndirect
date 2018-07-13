@@ -1514,7 +1514,7 @@ public void DayEndWithoutalert()
 					hmapStoreIdSstat=dbengine.checkForStoreIdSstat();
 
 					dbengine.close();*/
-						newservice = newservice.getallStores(getApplicationContext(), fDate, imei, rID,RouteType);
+						newservice = newservice.getallStores(getApplicationContext(), fDate, imei, rID,RouteType,2);
 						if(newservice.flagExecutedServiceSuccesfully!=1)
 						{
 							    serviceException=true;
