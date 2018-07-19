@@ -118,6 +118,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 
 
     public boolean serviceException=false;
+    public String serviceExceptionCode="";
     public String passDate;
     SharedPreferences sharedPref,sharedPrefReport;
     public String[] storeList;
@@ -3843,6 +3844,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                         newservice = newservice.getCategory(getApplicationContext(), imei);
                         if(newservice.flagExecutedServiceSuccesfully!=3)
                         {
+                            serviceExceptionCode=" for Category and Error Code is : "+newservice.exceptionCode;
                             serviceException=true;
                             break;
                         }
@@ -3919,6 +3921,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                         newservice = newservice.fnGetPDACollectionMaster(getApplicationContext(), fDate, imei, rID);
                         if(newservice.flagExecutedServiceSuccesfully!=40)
                         {
+                            serviceExceptionCode=" for Collection and Error Code is : "+newservice.exceptionCode;
                             System.out.println("GRLTyre = "+mm);
                             serviceException=true;
                             break;
@@ -4043,6 +4046,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                         newservice = newservice.GetLODDetailsOnLastSalesSummary(getApplicationContext(), fDate, imei, rID,RouteType);
                         if(newservice.flagExecutedServiceSuccesfully!=29)
                         {
+                            serviceExceptionCode=" for last summary and Error Code is : "+newservice.exceptionCode;
                             serviceException=true;
                             break;
                         }
@@ -4053,6 +4057,8 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                         newservice = newservice.GetCallspForPDAGetLastVisitDate(getApplicationContext(), fDate, imei, rID,RouteType);
                         if(newservice.flagExecutedServiceSuccesfully!=31)
                         {
+
+                            serviceExceptionCode=" for last visit and Error Code is : "+newservice.exceptionCode;
                             serviceException=true;
                             break;
                         }
@@ -4062,6 +4068,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                         newservice = newservice.GetCallspForPDAGetLastOrderDate(getApplicationContext(), fDate, imei, rID,RouteType);
                         if(newservice.flagExecutedServiceSuccesfully!=32)
                         {
+                            serviceExceptionCode=" for last order's and Error Code is : "+newservice.exceptionCode;
                             serviceException=true;
                             break;
                         }
@@ -4071,6 +4078,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                         newservice = newservice.GetCallspForPDAGetLastVisitDetails(getApplicationContext(), fDate, imei, rID,RouteType);
                         if(newservice.flagExecutedServiceSuccesfully!=33)
                         {
+                            serviceExceptionCode=" for last visit's and Error Code is : "+newservice.exceptionCode;
                             serviceException=true;
                             break;
                         }
@@ -4080,6 +4088,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                         newservice = newservice.GetCallspForPDAGetLastOrderDetails(getApplicationContext(), fDate, imei, rID,RouteType);
                         if(newservice.flagExecutedServiceSuccesfully!=34)
                         {
+                            serviceExceptionCode=" for last order detials and Error Code is : "+newservice.exceptionCode;
                             serviceException=true;
                             break;
                         }
@@ -4089,6 +4098,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                         newservice = newservice.GetCallspForPDAGetLastOrderDetails_TotalValues(getApplicationContext(), fDate, imei, rID,RouteType);
                         if(newservice.flagExecutedServiceSuccesfully!=35)
                         {
+                            serviceExceptionCode=" for last order total values and Error Code is : "+newservice.exceptionCode;
                             serviceException=true;
                             break;
                         }
@@ -4098,6 +4108,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                         newservice = newservice.GetCallspForPDAGetExecutionSummary(getApplicationContext(), fDate, imei, rID,RouteType);
                         if(newservice.flagExecutedServiceSuccesfully!=36)
                         {
+                            serviceExceptionCode=" for execution summary and Error Code is : "+newservice.exceptionCode;
                             serviceException=true;
                             break;
                         }
@@ -4159,6 +4170,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                         newservice = newservice.getallStores(getApplicationContext(), fDate, imei, rID,RouteType,1);
                         if(newservice.flagExecutedServiceSuccesfully!=1)
                         {
+                            serviceExceptionCode=" for getting all stores and Error Code is : "+newservice.exceptionCode;
                             serviceException=true;
                             break;
                         }
@@ -4193,7 +4205,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                 try
                 {
                     serviceException=false;
-                    showAlertException(getResources().getString(R.string.txtError),getResources().getString(R.string.txtErrorRetrievingData));
+                    showAlertException(getResources().getString(R.string.txtError),getResources().getString(R.string.txtErrorRetrievingData)+serviceExceptionCode);
                 }
 
                 catch(Exception e)
@@ -4227,7 +4239,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
     {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(AllButtonActivity.this);
         alertDialog.setTitle(title);
-        alertDialog.setMessage(msg);
+        alertDialog.setMessage(msg + serviceExceptionCode);
         alertDialog.setIcon(R.drawable.error);
         alertDialog.setCancelable(false);
         alertDialog.setPositiveButton(getResources().getString(R.string.txtRetry), new DialogInterface.OnClickListener() {
@@ -4473,6 +4485,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                                 newservice = newservice.fnGetVanStockData(getApplicationContext(), imei);
                                 if (newservice.flagExecutedServiceSuccesfully != 39) {
                                     chkFlgForErrorToCloseApp = 1;
+                                    serviceExceptionCode=" for Van stock and Error Code is : "+newservice.exceptionCode;
                                     serviceException=true;
                                     break;
                                 }

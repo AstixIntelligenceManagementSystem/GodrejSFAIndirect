@@ -56,6 +56,7 @@ public class ServiceWorker
 	DecimalFormat decimalFormat = (DecimalFormat)NumberFormat.getNumberInstance(locale);
 	String movie_name;
 	String director;
+	String exceptionCode;
 	private Context context;
 	//private ServiceWorker _activity;
 	private ContextWrapper cw;
@@ -155,6 +156,10 @@ public class ServiceWorker
 	        //   dbengine.open();
 			/*dbengine.Delete_tblInvoiceCaption();
 			dbengine.savetblInvoiceCaption("vanInv",11);*/
+				//throw new RuntimeException();
+
+
+
 
 	            NodeList tblUOMMstrNode = doc.getElementsByTagName("tblStoreListMaster");
 	            for (int i = 0; i < tblUOMMstrNode.getLength(); i++)
@@ -858,15 +863,18 @@ public class ServiceWorker
 				flagExecutedServiceSuccesfully=1;
 			hmapStoreIdSstat=null;
 			hmapStoreIdVisitStatus=null;
+		int dwq=1/0;
+			int dwq11=0/2;
 				return setmovie;
 			
 			
 		} catch (Exception e) {
-			
+
+			setmovie.exceptionCode=e.getCause().getMessage();
 			setmovie.director = e.toString();
 			setmovie.movie_name = e.toString();
 			flagExecutedServiceSuccesfully=0;
-			dbengine.close();		
+			dbengine.close();
 			return setmovie;
 		}
 
@@ -1173,6 +1181,7 @@ public class ServiceWorker
 		} catch (Exception e) {
 			
 			// System.out.println("Aman Exception occur in GetIMEIVersionDetailStatusNew :"+e.toString());
+			setmovie.exceptionCode=e.getCause().getMessage();
 			setmovie.director = e.toString();
 			setmovie.movie_name = e.toString();
 			dbengine.close();
@@ -2294,7 +2303,7 @@ String RouteType="0";
 			
 			
 		} catch (Exception e) {
-			
+			setmovie.exceptionCode=e.getCause().getMessage();
 			setmovie.director = e.toString();
 			setmovie.movie_name = e.toString();
 			flagExecutedServiceSuccesfully=0;
@@ -2486,8 +2495,8 @@ String RouteType="0";
 
 		} catch (Exception e)
 		   {
-			
-			
+
+			   setmovie.exceptionCode=e.getCause().getMessage();
 			setmovie.director = e.toString();
 			setmovie.movie_name = e.toString();
 			flagExecutedServiceSuccesfully=0;
@@ -2990,6 +2999,7 @@ String RouteType="0";
 		} catch (Exception e) {
 			
 			// System.out.println("Aman Exception occur in GetIMEIVersionDetailStatus :"+e.toString());
+			setmovie.exceptionCode=e.getCause().getMessage();
 			setmovie.director = e.toString();
 			setmovie.movie_name = e.toString();
 			flagExecutedServiceSuccesfully=0;
@@ -3121,6 +3131,7 @@ String RouteType="0";
 		} catch (Exception e) {
 			
 			// System.out.println("Aman Exception occur in GetIMEIVersionDetailStatus :"+e.toString());
+			setmovie.exceptionCode=e.getCause().getMessage();
 			setmovie.director = e.toString();
 			setmovie.movie_name = e.toString();
 			dbengine.close();
@@ -3399,6 +3410,7 @@ String RouteType="0";
 		} catch (Exception e) {
 
 			//System.out.println("Aman Exception occur in GetIMEIVersionDetailStatusNew :"+e.toString());
+			setmovie.exceptionCode=e.getCause().getMessage();
 			if(e.toString().contains("SocketTimeoutException") ||e.toString().contains("ConnectException")||e.toString().contains("SocketException"))
 			{
 				setmovie.director = "100";
@@ -3571,6 +3583,7 @@ String RouteType="0";
 		} catch (Exception e) {
 			
 			// System.out.println("aman getAvailbNotification "+e.toString());
+			setmovie.exceptionCode=e.getCause().getMessage();
 			setmovie.director = e.toString();
 			setmovie.movie_name = e.toString();
 			dbengine.close();	
@@ -4478,6 +4491,7 @@ String RouteType="0";
 		} catch (Exception e) 
 		{
 			 dbengine.close();
+			setmovie.exceptionCode=e.getCause().getMessage();
 			System.out.println("Aman Exception occur in fnSingleCallAllWebService :"+e.toString());
 			setmovie.director = e.toString();
 			setmovie.movie_name = e.toString();
@@ -4673,6 +4687,7 @@ String RouteType="0";
 		} catch (Exception e)
 		{
 			dbengine.close();
+			setmovie.exceptionCode=e.getCause().getMessage();
 			System.out.println("Aman Exception occur in fnDistributor :"+e.toString());
 			setmovie.director = e.toString();
 			setmovie.movie_name = e.toString();
@@ -5429,6 +5444,7 @@ String RouteType="0";
 		catch (Exception e)
 		{
 		    // System.out.println("Aman Exception occur in GetStoreListMR :"+e.toString());
+			setmovie.exceptionCode=e.getCause().getMessage();
 			setmovie.director = e.toString();
 			setmovie.movie_name = e.toString();
 			flagExecutedServiceSuccesfully=0;
@@ -6458,6 +6474,7 @@ String RouteType="0";
 		} catch (Exception e) {
 
 			// System.out.println("Aman Exception occur in GetProductListMRNew :"+e.toString());
+			setmovie.exceptionCode=e.getCause().getMessage();
 			setmovie.director = e.toString();
 			setmovie.movie_name = e.toString();
 			flagExecutedServiceSuccesfully=0;
@@ -6610,6 +6627,7 @@ String RouteType="0";
 		} catch (Exception e) {
 			
 			// System.out.println("Aman Exception occur in GetForPDAProductPriceMR :"+e.toString());
+			setmovie.exceptionCode=e.getCause().getMessage();
 			setmovie.director = e.toString();
 			setmovie.movie_name = e.toString();
 			dbengine.close();
@@ -6810,6 +6828,7 @@ String RouteType="0";
 			
 			
 			// System.out.println("Aman Exception occur in GetSchemeList :"+e.toString());
+			setmovie.exceptionCode=e.getCause().getMessage();
 			setmovie.director = e.toString();
 			setmovie.movie_name = e.toString();
 			dbengine.close();	
@@ -7030,6 +7049,7 @@ String RouteType="0";
 		} catch (Exception e) {
 			
 			// System.out.println("Aman Exception occur in fnGetOutLetInfoOnQuadVolumeCategoryBasis :"+e.toString());
+			setmovie.exceptionCode=e.getCause().getMessage();
 			setmovie.director = e.toString();
 			setmovie.movie_name = e.toString();
 			dbengine.close();	
@@ -7157,6 +7177,7 @@ String RouteType="0";
 			
 			
 			// System.out.println("Aman Exception occur in GetSchemeDetails :"+e.toString());
+			setmovie.exceptionCode=e.getCause().getMessage();
 			setmovie.director = e.toString();
 			setmovie.movie_name = e.toString();
 			dbengine.close();	
@@ -7511,6 +7532,7 @@ String RouteType="0";
 			
 			
 			// System.out.println("Aman Exception occur in GetlastTransactionDetails :"+e.toString());
+			setmovie.exceptionCode=e.getCause().getMessage();
 			setmovie.director = e.toString();
 			setmovie.movie_name = e.toString();
 			dbengine.close();
@@ -7612,6 +7634,7 @@ String RouteType="0";
 			
 			
 			// System.out.println("Aman Exception occur in GetSchemeStoreTypeMap :"+e.toString());
+			setmovie.exceptionCode=e.getCause().getMessage();
 			setmovie.director = e.toString();
 			setmovie.movie_name = e.toString();
 			dbengine.close();	
@@ -7735,8 +7758,8 @@ String RouteType="0";
 			
 			
 		// System.out.println("Aman Exception occur in GetSchemeProductMap :"+e.toString());
-			
-			
+
+			setmovie.exceptionCode=e.getCause().getMessage();
 			setmovie.director = e.toString();
 			setmovie.movie_name = e.toString();
 			dbengine.close();
@@ -7923,7 +7946,7 @@ String RouteType="0";
 			
 			
 			// System.out.println("Aman Exception occur in GetPDALastTranDetForSecondPage :"+e.toString());
-			
+			setmovie.exceptionCode=e.getCause().getMessage();
 				setmovie.director = e.toString();
 			setmovie.movie_name = e.toString();
 			dbengine.close();	
@@ -8099,9 +8122,9 @@ String RouteType="0";
 			return setmovie;
 //return counts;
 		} catch (Exception e) {
-			
-			
-			
+
+
+			setmovie.exceptionCode=e.getCause().getMessage();
 			// System.out.println("Aman Exception occur in GetForPDASchemeApplicableList :"+e.toString());
 			setmovie.director = e.toString();
 			flagExecutedServiceSuccesfully=0;
@@ -8228,8 +8251,8 @@ String RouteType="0";
 			return setmovie;
 //return counts;
 		} catch (Exception e) {
-			
-			
+
+			setmovie.exceptionCode=e.getCause().getMessage();
 			// System.out.println("Aman Exception occur in GetSoreType :"+e.toString());
 			setmovie.director = e.toString();
 			setmovie.movie_name = e.toString();
@@ -8632,8 +8655,8 @@ String RouteType="0";
 //return counts;
 		} catch (Exception e) {
 			
-			dbengine.close();	
-			
+			dbengine.close();
+			setmovie.exceptionCode=e.getCause().getMessage();
 			// System.out.println("Aman Exception occur in GetPDALastInvoiceDet :"+e.toString());
 			//////// System.out.println("aman getallProduct: 13 "+e.toString());
 			setmovie.director = e.toString();
@@ -8768,8 +8791,8 @@ String RouteType="0";
 			return setmovie;
 //return counts;
 		} catch (Exception e) {
-			
-			
+
+			setmovie.exceptionCode=e.getCause().getMessage();
 			// System.out.println("Aman Exception occur in GetPDATargetQtyForSecondPage :"+e.toString());
 			//////// System.out.println("aman getallProduct: 14 "+e.toString());
 			setmovie.director = e.toString();
@@ -8922,8 +8945,8 @@ String RouteType="0";
 			return setmovie;
 //return counts;
 		} catch (Exception e) {
-			
-			
+
+			setmovie.exceptionCode=e.getCause().getMessage();
 			// System.out.println("Aman Exception occur in GetSyncSummuryDetails :"+e.toString());
 			//////// System.out.println("aman getallProduct: 16 "+e.toString());
 			setmovie.director = e.toString();
@@ -9053,8 +9076,8 @@ String RouteType="0";
 			return setmovie;
 //return counts;
 		} catch (Exception e) {
-			
-			
+
+			setmovie.exceptionCode=e.getCause().getMessage();
 			// System.out.println("Aman Exception occur in GetPDAIsSchemeApplicable :"+e.toString());
 			dbengine.SavePDAIsSchemeApplicable(0);
 			dbengine.close();	
@@ -9215,7 +9238,7 @@ String RouteType="0";
 			return setmovie;
 //return counts;
 		} catch (Exception e) {
-			
+			setmovie.exceptionCode=e.getCause().getMessage();
 			// System.out.println("Aman Exception occur in GetSyncSummuryForProductDetails :"+e.toString());
 			setmovie.director = e.toString();
 			setmovie.movie_name = e.toString();
@@ -9475,8 +9498,8 @@ String RouteType="0";
 			return setmovie;
 //return counts;
 		} catch (Exception e) {
-			
-			
+
+			setmovie.exceptionCode=e.getCause().getMessage();
 			// System.out.println("Aman Exception occur in GetSchemeCoupon :"+e.toString());
 			////// System.out.println("aman getallProduct: 20 "+e.toString());
 			setmovie.director = e.toString();
@@ -9608,8 +9631,8 @@ String RouteType="0";
 			return setmovie;
 //return counts;
 		} catch (Exception e) {
-			
-			
+
+			setmovie.exceptionCode=e.getCause().getMessage();
 			// System.out.println("Aman Exception occur in GetSchemeCouponSlab :"+e.toString());
 			////// System.out.println("aman getallProduct: 21 "+e.toString());
 			setmovie.director = e.toString();
@@ -9889,8 +9912,8 @@ String RouteType="0";
 			return setmovie;
 //return counts;
 		} catch (Exception e) {
-			
-			
+
+			setmovie.exceptionCode=e.getCause().getMessage();
 			// System.out.println("Aman Exception occur in GetDaySummaryNew :"+e.toString());
 			//////// System.out.println("aman getallProduct: 16 "+e.toString());
 			setmovie.director = e.toString();
@@ -10145,8 +10168,8 @@ String RouteType="0";
 			return setmovie;
 //return counts;
 		} catch (Exception e) {
-			
-			
+
+			setmovie.exceptionCode=e.getCause().getMessage();
 			// System.out.println("Aman Exception occur in GetInvoiceButtonStoreMstr :"+e.toString());
 			////// System.out.println("aman getallProduct: 16 "+e.toString());
 			setmovie.director = e.toString();
@@ -10275,8 +10298,8 @@ String RouteType="0";
 				return setmovie;
 	//return counts;
 			} catch (Exception e) {
-				
-				
+
+				setmovie.exceptionCode=e.getCause().getMessage();
 				// System.out.println("Aman Exception occur in GetInvoiceButtonProductMstr :"+e.toString());
 				////// System.out.println("aman getallProduct: 16 "+e.toString());
 				setmovie.director = e.toString();
@@ -10542,8 +10565,8 @@ String RouteType="0";
 			return setmovie;
 //return counts;
 		} catch (Exception e) {
-			
-			
+
+			setmovie.exceptionCode=e.getCause().getMessage();
 			// System.out.println("Aman Exception occur in GetInvoiceButtonStoreProductwiseOrder :"+e.toString());
 			////// System.out.println("aman getallProduct: 16 "+e.toString());
 			setmovie.director = e.toString();
@@ -10750,8 +10773,8 @@ String RouteType="0";
 			return setmovie;
 //return counts;
 		} catch (Exception e) {
-			
-			
+
+			setmovie.exceptionCode=e.getCause().getMessage();
 			//// System.out.println("Aman Exception occur in GetSyncSummuryDetails :"+e.toString());
 			////// System.out.println("aman getallProduct: 16 "+e.toString());
 			setmovie.director = e.toString();
@@ -10932,8 +10955,8 @@ String RouteType="0";
 			return setmovie;
 //return counts;
 		} catch (Exception e) {
-			
-			
+
+			setmovie.exceptionCode=e.getCause().getMessage();
 			//// System.out.println("Aman Exception occur in GetSyncSummuryDetails :"+e.toString());
 			////// System.out.println("aman getallProduct: 16 "+e.toString());
 			setmovie.director = e.toString();
@@ -11119,8 +11142,8 @@ String RouteType="0";
 			return setmovie;
 //return counts;
 		} catch (Exception e) {
-			
-			
+
+			setmovie.exceptionCode=e.getCause().getMessage();
 			//// System.out.println("Aman Exception occur in GetSyncSummuryDetails :"+e.toString());
 			////// System.out.println("aman getallProduct: 16 "+e.toString());
 			setmovie.director = e.toString();
@@ -11276,8 +11299,8 @@ String RouteType="0";
 			return setmovie;
 //return counts;
 		} catch (Exception e) {
-			
-			
+
+			setmovie.exceptionCode=e.getCause().getMessage();
 			//// System.out.println("Aman Exception occur in GetSyncSummuryDetails :"+e.toString());
 			////// System.out.println("aman getallProduct: 16 "+e.toString());
 			setmovie.director = e.toString();
@@ -11436,8 +11459,8 @@ String RouteType="0";
 			return setmovie;
 //return counts;
 		} catch (Exception e) {
-			
-			
+
+			setmovie.exceptionCode=e.getCause().getMessage();
 			//// System.out.println("Aman Exception occur in GetSyncSummuryDetails :"+e.toString());
 			////// System.out.println("aman getallProduct: 16 "+e.toString());
 			setmovie.director = e.toString();
@@ -11620,8 +11643,8 @@ String RouteType="0";
 			return setmovie;
 //return counts;
 		} catch (Exception e) {
-			
-			
+
+			setmovie.exceptionCode=e.getCause().getMessage();
 			//// System.out.println("Aman Exception occur in GetSyncSummuryDetails :"+e.toString());
 			////// System.out.println("aman getallProduct: 16 "+e.toString());
 			setmovie.director = e.toString();
@@ -11801,8 +11824,8 @@ String RouteType="0";
 			return setmovie;
 //return counts;
 		} catch (Exception e) {
-			
-			
+
+			setmovie.exceptionCode=e.getCause().getMessage();
 			//// System.out.println("Aman Exception occur in GetSyncSummuryDetails :"+e.toString());
 			////// System.out.println("aman getallProduct: 16 "+e.toString());
 			setmovie.director = e.toString();
@@ -11961,8 +11984,8 @@ String RouteType="0";
 			return setmovie;
 //return counts;
 		} catch (Exception e) {
-			
-			
+
+			setmovie.exceptionCode=e.getCause().getMessage();
 			//// System.out.println("Aman Exception occur in GetSyncSummuryDetails :"+e.toString());
 			////// System.out.println("aman getallProduct: 16 "+e.toString());
 			setmovie.director = e.toString();
@@ -12160,8 +12183,8 @@ String RouteType="0";
 			return setmovie;
 //return counts;
 		} catch (Exception e) {
-			
-			
+
+			setmovie.exceptionCode=e.getCause().getMessage();
 			//// System.out.println("Aman Exception occur in GetSyncSummuryDetails :"+e.toString());
 			////// System.out.println("aman getallProduct: 16 "+e.toString());
 			setmovie.director = e.toString();
@@ -12316,7 +12339,7 @@ String RouteType="0";
 //return counts;
 		} catch (Exception e) 
 		{
-			
+			setmovie.exceptionCode=e.getCause().getMessage();
 			// System.out.println("Arjun getStoreTypeMstr: 2 "+e.toString());
 			setmovie.director = e.toString();
 			setmovie.movie_name = e.toString();
@@ -12475,7 +12498,7 @@ String RouteType="0";
 //return counts;
 		} catch (Exception e) 
 		{
-			
+			setmovie.exceptionCode=e.getCause().getMessage();
 			// System.out.println("Arjun getStoreTypeMstr: 2 "+e.toString());
 			setmovie.director = e.toString();
 			setmovie.movie_name = e.toString();
@@ -12683,7 +12706,7 @@ String RouteType="0";
 //return counts;
 		} catch (Exception e) 
 		{
-			
+			setmovie.exceptionCode=e.getCause().getMessage();
 			// System.out.println("Arjun getDistributorTypeMstr: 3 "+e.toString());
 			setmovie.director = e.toString();
 			setmovie.movie_name = e.toString();
@@ -13013,7 +13036,7 @@ String RouteType="0";
 				return setmovie;
 	//return counts;
 			} catch (Exception e) {
-				
+				setmovie.exceptionCode=e.getCause().getMessage();
 			// System.out.println("Aman Exception occur in CallspRptGetSKUWiseDaySummary :"+e.toString());
 				setmovie.director = e.toString();
 				setmovie.movie_name = e.toString();
@@ -13253,7 +13276,7 @@ String RouteType="0";
 				return setmovie;
 	//return counts;
 			} catch (Exception e) {
-				
+				setmovie.exceptionCode=e.getCause().getMessage();
 			// System.out.println("Aman Exception occur in GetStoreListMR :"+e.toString());
 				setmovie.director = e.toString();
 				setmovie.movie_name = e.toString();
@@ -13565,7 +13588,7 @@ String RouteType="0";
 				return setmovie;
 	//return counts;
 			} catch (Exception e) {
-				
+				setmovie.exceptionCode=e.getCause().getMessage();
 			// System.out.println("Aman Exception occur in GetStoreListMR :"+e.toString());
 				setmovie.director = e.toString();
 				setmovie.movie_name = e.toString();
@@ -13728,7 +13751,7 @@ String RouteType="0";
 				return setmovie;
 	//return counts;
 			} catch (Exception e) {
-				
+				setmovie.exceptionCode=e.getCause().getMessage();
 			// System.out.println("Aman Exception occur in GetStoreListMR :"+e.toString());
 				setmovie.director = e.toString();
 				setmovie.movie_name = e.toString();
@@ -14056,7 +14079,7 @@ String RouteType="0";
 				return setmovie;
 	//return counts;
 			} catch (Exception e) {
-				
+				setmovie.exceptionCode=e.getCause().getMessage();
 			// System.out.println("Aman Exception occur in CallspRptGetSKUWiseDaySummary :"+e.toString());
 				setmovie.director = e.toString();
 				setmovie.movie_name = e.toString();
@@ -14295,7 +14318,7 @@ String RouteType="0";
 				return setmovie;
 	//return counts;
 			} catch (Exception e) {
-				
+				setmovie.exceptionCode=e.getCause().getMessage();
 			// System.out.println("Aman Exception occur in GetStoreListMR :"+e.toString());
 				setmovie.director = e.toString();
 				setmovie.movie_name = e.toString();
@@ -14610,7 +14633,7 @@ String RouteType="0";
 				return setmovie;
 	//return counts;
 			} catch (Exception e) {
-				
+				setmovie.exceptionCode=e.getCause().getMessage();
 			// System.out.println("Aman Exception occur in GetStoreListMR :"+e.toString());
 				setmovie.director = e.toString();
 				setmovie.movie_name = e.toString();
@@ -15160,7 +15183,7 @@ String RouteType="0";
 			} 
 			catch (Exception e) 
 			{
-				
+				setmovie.exceptionCode=e.getCause().getMessage();
 				// System.out.println("Getting Response by Shivam Exception occur in getNewStoreInfo :"+e.toString());
 				setmovie.director = e.toString();
 				setmovie.movie_name = e.toString();
@@ -15448,7 +15471,7 @@ String RouteType="0";
 			} 
 			catch (Exception e) 
 			{
-				
+				setmovie.exceptionCode=e.getCause().getMessage();
 				// System.out.println("Getting Response by Shivam Exception occur in getNewStoreInfo :"+e.toString());
 				setmovie.director = e.toString();
 				setmovie.movie_name = e.toString();
@@ -15559,7 +15582,7 @@ String RouteType="0";
 				return setmovie;
 	//return counts;
 			} catch (Exception e) {
-				
+				setmovie.exceptionCode=e.getCause().getMessage();
 				// System.out.println("Aman Exception occur in GetProductListMRNew :"+e.toString());
 				setmovie.director = e.toString();
 				setmovie.movie_name = e.toString();
@@ -15700,7 +15723,7 @@ String RouteType="0";
 	//return counts;
 			} catch (Exception e) 
 			{
-				
+				setmovie.exceptionCode=e.getCause().getMessage();
 				// System.out.println("Arjun getDistributorTypeMstr: 3 "+e.toString());
 				setmovie.director = e.toString();
 				setmovie.movie_name = e.toString();
@@ -15863,7 +15886,7 @@ String RouteType="0";
 	//return counts;
 			} catch (Exception e) 
 			{
-				
+				setmovie.exceptionCode=e.getCause().getMessage();
 				// System.out.println("Arjun getStoreTypeMstr: 2 "+e.toString());
 				setmovie.director = e.toString();
 				setmovie.movie_name = e.toString();
@@ -16003,7 +16026,7 @@ String RouteType="0";
 	//return counts;
 			} catch (Exception e) 
 			{
-				
+				setmovie.exceptionCode=e.getCause().getMessage();
 				// System.out.println("Arjun getStoreTypeMstr: 2 "+e.toString());
 				setmovie.director = e.toString();
 				setmovie.movie_name = e.toString();
@@ -16201,7 +16224,7 @@ String RouteType="0";
 				return setmovie;
 
 			} catch (Exception e) {
-				
+				setmovie.exceptionCode=e.getCause().getMessage();
 				// System.out.println("Aman Exception occur in GetIMEIVersionDetailStatus :"+e.toString());
 				setmovie.director = e.toString();
 				setmovie.movie_name = e.toString();
@@ -16578,6 +16601,7 @@ String RouteType="0";
 
 		} catch (Exception e)
 		{
+			setmovie.exceptionCode=e.getCause().getMessage();
 			dbengine.close();
 			System.out.println("Aman Exception occur in fnSingleCallAllWebService :"+e.toString());
 			setmovie.director = e.toString();
@@ -16720,6 +16744,7 @@ String RouteType="0";
 
 		} catch (Exception e)
 		{
+			setmovie.exceptionCode=e.getCause().getMessage();
 			dbengine.close();
 			System.out.println("Aman Exception occur in fnSingleCallAllWebService :"+e.toString());
 			setmovie.director = e.toString();
@@ -17099,6 +17124,7 @@ String RouteType="0";
 		}
 		catch (Exception e)
 		{
+			setmovie.exceptionCode=e.getCause().getMessage();
 			dbengine.close();
 			System.out.println("Aman Exception occur in fnIncentive :"+e.toString());
 
@@ -17294,7 +17320,7 @@ String RouteType="0";
 			return setmovie;
 			//return counts;
 		} catch (Exception e) {
-
+			setmovie.exceptionCode=e.getCause().getMessage();
 			// System.out.println("Aman Exception occur in GetStoreListMR :"+e.toString());
 			setmovie.director = e.toString();
 			setmovie.movie_name = e.toString();
@@ -17561,7 +17587,7 @@ String RouteType="0";
 			return setmovie;
 
 		} catch (Exception e) {
-
+			setmovie.exceptionCode=e.getCause().getMessage();
 			// System.out.println("Aman Exception occur in GetIMEIVersionDetailStatusNew :"+e.toString());
 			setmovie.director = e.toString();
 			setmovie.movie_name = e.toString();
@@ -17968,7 +17994,7 @@ String RouteType="0";
 			return setmovie;
 
 		} catch (Exception e) {
-
+			setmovie.exceptionCode=e.getCause().getMessage();
 			setmovie.director = e.toString();
 			setmovie.movie_name = e.toString();
 			dbengine.close();
@@ -18232,7 +18258,7 @@ String RouteType="0";
 
 
 		} catch (Exception e) {
-
+			setmovie.exceptionCode=e.getCause().getMessage();
 			setmovie.director = e.toString();
 			setmovie.movie_name = e.toString();
 			flagExecutedServiceSuccesfully=0;
@@ -19169,7 +19195,7 @@ int flgProcessedInvoice=0;
 			setmovie.director = "1";
 			return setmovie;
 		} catch (Exception e) {
-
+			setmovie.exceptionCode=e.getCause().getMessage();
 			setmovie.director = e.toString();
 			setmovie.movie_name = e.toString();
 			flagExecutedServiceSuccesfully=0;
@@ -19310,6 +19336,7 @@ int flgProcessedInvoice=0;
 		}
 		catch (Exception e)
 		{
+			setmovie.exceptionCode=e.getCause().getMessage();
 			dbengine.close();
 			System.out.println("Aman Exception occur in fnIncentive :"+e.toString());
 
@@ -19413,6 +19440,7 @@ int flgProcessedInvoice=0;
 		}
 		catch (Exception e)
 		{
+			setmovie.exceptionCode=e.getCause().getMessage();
 			dbengine.close();
 			System.out.println("Aman Exception occur in fnIncentive :"+e.toString());
 
@@ -19648,7 +19676,7 @@ int flgProcessedInvoice=0;
 			return setmovie;
 //return counts;
 		} catch (Exception e) {
-
+			setmovie.exceptionCode=e.getCause().getMessage();
 			// System.out.println("Aman Exception occur in GetProductListMRNew :"+e.toString());
 			setmovie.director = e.toString();
 			setmovie.movie_name = e.toString();
@@ -19776,7 +19804,7 @@ int flgProcessedInvoice=0;
 			return setmovie;
 //return counts;
 		} catch (Exception e) {
-
+			setmovie.exceptionCode=e.getCause().getMessage();
 			// System.out.println("Aman Exception occur in GetProductListMRNew :"+e.toString());
 			setmovie.director = e.toString();
 			setmovie.movie_name = e.toString();

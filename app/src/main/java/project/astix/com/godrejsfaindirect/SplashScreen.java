@@ -152,8 +152,7 @@ public class SplashScreen extends BaseActivity implements  TaskListner
             }
             else
             {
-                CheckUpdateVersion cuv = new CheckUpdateVersion();
-                cuv.execute();
+                afterversioncheck();
             }
         }
 
@@ -165,8 +164,7 @@ public class SplashScreen extends BaseActivity implements  TaskListner
              }
             else
             {
-                CheckUpdateVersion cuv = new CheckUpdateVersion();
-                cuv.execute();
+                afterversioncheck();
             }
         }
 
@@ -178,8 +176,7 @@ public class SplashScreen extends BaseActivity implements  TaskListner
             }
             else
             {
-                CheckUpdateVersion cuv = new CheckUpdateVersion();
-                cuv.execute();
+                afterversioncheck();
             }
         }
         if(returnFrom==4) // 4---> means uploading XML From the Folder and get Response
@@ -190,8 +187,7 @@ public class SplashScreen extends BaseActivity implements  TaskListner
             }
             else
             {
-                CheckUpdateVersion cuv = new CheckUpdateVersion();
-                cuv.execute();
+               afterversioncheck();
             }
         }
     }
@@ -332,7 +328,7 @@ public class SplashScreen extends BaseActivity implements  TaskListner
 
      // imei="911577250038101";
 
- //imei="356808071065136";
+      //  imei="356808071065136";
         CommonInfo.imei = imei;
         sPref=getSharedPreferences(CommonInfo.Preference, MODE_PRIVATE);
         Date date1 = new Date();
