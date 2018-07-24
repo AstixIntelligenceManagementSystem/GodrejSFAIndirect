@@ -5151,6 +5151,23 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 					{
 						new XMLFileUploadFromFolderAsyncTask(this).execute();
 					}
+					else
+                    {
+                        if(mProgressDialog != null)
+                        {
+                            if(mProgressDialog.isShowing())
+                            {
+                                mProgressDialog.dismiss();
+                            }
+                        }
+                        StoreSelection.flgChangeRouteOrDayEnd=1;
+                        Intent syncIntent = new Intent(AllButtonActivity.this, SyncMaster.class);
+                        syncIntent.putExtra("xmlPathForSync", Environment.getExternalStorageDirectory() + "/" + CommonInfo.OrderXMLFolder + "/" + newfullFileName + ".xml");
+                        syncIntent.putExtra("OrigZipFileName", newfullFileName);
+                        syncIntent.putExtra("whereTo", whereTo);
+                        startActivity(syncIntent);
+                        finish();
+                    }
 					/*else
 					{
 						dbengine.open();

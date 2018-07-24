@@ -34,6 +34,7 @@ import android.widget.Toast;
 
 
 import com.astix.Common.CommonInfo;
+import com.bugsense.trace.BugSenseHandler;
 import com.example.gcm.ApplicationConstants;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -340,6 +341,7 @@ public class SplashScreen extends BaseActivity implements  TaskListner
      // imei="911577250038101";
 
        // imei="356808071063941";
+      //  imei="352801088236109";
         CommonInfo.imei = imei;
         sPref=getSharedPreferences(CommonInfo.Preference, MODE_PRIVATE);
         Date date1 = new Date();
@@ -577,7 +579,7 @@ public class SplashScreen extends BaseActivity implements  TaskListner
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
   //      BugSenseHandler.setup(this, "1f12b9fe");
-
+        BugSenseHandler.setup(this, "a146e5d0");
         // Initalization New Relic Tool
        // NewRelic.withApplicationToken("AA650dd750f0d8d87061719815bd7514decb5fb129").start(this.getApplication());
 

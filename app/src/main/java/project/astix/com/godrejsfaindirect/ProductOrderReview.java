@@ -93,7 +93,7 @@ GoogleApiClient.OnConnectionFailedListener{
 	private static final long INTERVAL = 1000 * 10;
 	private static final long FASTEST_INTERVAL = 1000 * 5;
 	private static final long MIN_TIME_BW_UPDATES = 1000  * 1; //1 second
-	private final long startTime = 30000;
+	private final long startTime = 10000;
 	private final long interval = 200;
 	public int flgTransferStatus=0;
 	public String VisitTimeInSideStore="NA";

@@ -1422,7 +1422,8 @@
 			android:layout_weight="1"
 			android:background="@drawable/custom_button"
 			android:text="No Sales"
-			android:textColor="#ffffff"/>
+			android:textColor="#ffffff"
+			android:visibility="gone"/>
 
 
 		<Button
@@ -1433,6 +1434,7 @@
 			android:layout_weight="1.2"
 			android:background="@drawable/custom_button"
 			android:text="@string/StrClosed"
+
 			android:textColor="#ffffff"/>
 
 

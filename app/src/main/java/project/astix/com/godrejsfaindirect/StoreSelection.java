@@ -100,6 +100,8 @@ import org.json.JSONObject;
 public class StoreSelection extends BaseActivity implements com.google.android.gms.location.LocationListener,GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener,TaskListner
 {
 	//public static HashMap<String, String> hmapStoreIdSstat=new HashMap<String, String>();
+	public int flgforPendingData=0;
+	public int btnClickPendingDataOrDayEnd=0;
 	public String currSysDate;
 	public int chkFlgForErrorToCloseApp=0;
 	Spinner spinner_manager;
@@ -614,12 +616,13 @@ public class StoreSelection extends BaseActivity implements com.google.android.g
 			}
 			flgChangeRouteOrDayEnd=valDayEndOrChangeRoute;
 
-			Intent syncIntent = new Intent(StoreSelection.this, SyncMaster.class);
+			/*Intent syncIntent = new Intent(StoreSelection.this, SyncMaster.class);
 			syncIntent.putExtra("xmlPathForSync", Environment.getExternalStorageDirectory() + "/" + CommonInfo.OrderXMLFolder + "/" + newfullFileName + ".xml");
 			syncIntent.putExtra("OrigZipFileName", newfullFileName);
 			syncIntent.putExtra("whereTo", whereTo);
 			startActivity(syncIntent);
-			finish();
+			finish();*/
+			getUploadedData();
 		}
 		catch (IOException e)
 		{
@@ -915,7 +918,13 @@ public void DayEndWithoutalert()
 
 		dbengine.UpdateTblDayStartEndDetails(Integer.parseInt(rID), valDayEndOrChangeRoute);
 		dbengine.close();
-		
+		mProgressDialog = new ProgressDialog(StoreSelection.this);
+		mProgressDialog.setTitle(getResources().getString(R.string.genTermPleaseWaitNew));
+		mProgressDialog.setMessage("Uploading Pending Data before DayEnd");
+
+		mProgressDialog.setIndeterminate(true);
+		mProgressDialog.setCancelable(false);
+		mProgressDialog.show();
 		SyncNow();
 	
     }
@@ -3391,6 +3400,7 @@ public void DayEndWithoutalert()
 				 mProgressDialog.setIndeterminate(true);
 				 mProgressDialog.setCancelable(false);
 				 mProgressDialog.show();
+				 btnClickPendingDataOrDayEnd=1;
 				 uploadPendingData();
 
 			 }
@@ -3593,89 +3603,12 @@ public void DayEndWithoutalert()
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
 					//checking that dsr fill registration form or not for flag 0
-				/*String	PersonNameAndFlgRegistered=  dbengine.fnGetPersonNameAndFlgRegistered();
-					String personName="";
-					String FlgRegistered="";
-					int DsrRegTableCount=0;
-					DsrRegTableCount=dbengine.fngetcounttblDsrRegDetails();
-					if(!PersonNameAndFlgRegistered.equals("0")) {
-						 personName = PersonNameAndFlgRegistered.split(Pattern.quote("^"))[0];
-						 FlgRegistered = PersonNameAndFlgRegistered.split(Pattern.quote("^"))[1];
-					}*/
 
-					/*if( FlgRegistered.equals("0")&& DsrRegTableCount==0)
-					{
-						AlertDialog.Builder alertDialogNoConn = new AlertDialog.Builder(StoreSelection.this);
-						alertDialogNoConn.setTitle(getResources().getString(R.string.genTermNoDataConnection));
-						alertDialogNoConn.setMessage(getResources().getString(R.string.Dsrmessage));
-						alertDialogNoConn.setCancelable(false);
-						alertDialogNoConn.setNeutralButton(getResources().getString(R.string.AlertDialogOkButton),new DialogInterface.OnClickListener()
-						{
-							public void onClick(DialogInterface dialog, int which)
-							{
-								dialog.dismiss();
-								Intent intent=new Intent(StoreSelection.this,DSR_Registration.class);
-								intent.putExtra("IntentFrom", "DAYEND");
-								intent.putExtra("imei", imei);
-								intent.putExtra("userDate", userDate);
-								intent.putExtra("pickerDate", pickerDate);
-
-								startActivity(intent);
-								finish();
-
-							}
-						});
-						alertDialogNoConn.setIcon(R.drawable.info_ico);
-						AlertDialog alert = alertDialogNoConn.create();
-						alert.show();
-
-					}
-					else{*/
 						but_day_end.setBackgroundColor(Color.GREEN);
 						closeList = 0;
 						valDayEndOrChangeRoute=1;
-						//checkbuttonclick=2;
-
-						/*if(isOnline())
-						{
-
-						}
-						else
-						{
-							showAlertSingleButtonError(getResources().getString(R.string.NoDataConnectionFullMsg));
-							return;
-
-						}
-						dbengine.open();
-						whereTo = "11";
-						//////System.out.println("Abhinav store Selection  Step 1");
-						//////System.out.println("StoreList2Procs(before): " + StoreList2Procs.length);
-						StoreList2Procs = dbengine.ProcessStoreReq();
-						//////System.out.println("StoreList2Procs(after): " + StoreList2Procs.length);
-
-						if (StoreList2Procs.length != 0) {
-							//whereTo = "22";
-							//////System.out.println("Abhinav store Selection  Step 2");
-							midPart();
-							dayEndCustomAlert(1);
-							//showPendingStorelist(1);
-							dbengine.close();
-
-						} else if (dbengine.GetLeftStoresChk() == true)
-						{
-							//////System.out.println("Abhinav store Selection  Step 7");
-							//enableGPSifNot();
-							// showChangeRouteConfirm();
-							DayEnd();
-							dbengine.close();
-						}
-
-						else {
-							DayEndWithoutalert();
-						}*/
-
-
-					File del = new File(Environment.getExternalStorageDirectory(), CommonInfo.OrderXMLFolder);
+					btnClickPendingDataOrDayEnd=2;
+					/*					File del = new File(Environment.getExternalStorageDirectory(), CommonInfo.OrderXMLFolder);
 
 // check number of files in folder
 					final String [] AllFilesNameNotSync= checkNumberOfFiles(del);
@@ -3725,6 +3658,65 @@ public void DayEndWithoutalert()
 					else
 					{
 						showAlertSingleButtonInfo(getResources().getString(R.string.NoPendingDataMsg));
+
+					}*/
+					File del = new File(Environment.getExternalStorageDirectory(), CommonInfo.OrderXMLFolder);
+
+// check number of files in folder
+					final String [] AllFilesNameNotSync= checkNumberOfFiles(del);
+
+					String xmlfileNames = dbengine.fnGetXMLFile("3");
+					// String xmlfileNamesStrMap=dbengineSo.fnGetXMLFile("3");
+
+					dbengine.open();
+					String[] SaveStoreList = dbengine.SaveStoreList();
+					dbengine.close();
+					if(xmlfileNames.length()>0 || SaveStoreList.length != 0)
+					{
+						if(isOnline())
+						{
+
+
+
+							whereTo = "11";
+
+							dbengine.open();
+
+							StoreList2Procs = dbengine.ProcessStoreReq();
+							if (StoreList2Procs.length != 0)
+							{
+
+								midPart();
+								dayEndCustomAlert(1);
+								dbengine.close();
+
+							} else if (dbengine.GetLeftStoresChk() == true)
+							{
+								DayEnd();
+
+							}
+
+							else {
+								DayEndWithoutalert();
+							}
+						}
+						else
+						{
+							showAlertSingleButtonError(getResources().getString(R.string.NoDataConnectionFullMsg));
+
+
+						}
+					}
+					else
+					{
+						//showAlertSingleButtonInfo(getResources().getString(R.string.NoPendingDataMsg));
+						if(isOnline()) {
+							whereTo = "11";
+							DayEndWithoutalert();
+						}else
+						{
+							showAlertSingleButtonError(getResources().getString(R.string.NoDataConnectionFullMsg));
+						}
 
 					}
 						dialog.dismiss();
@@ -5093,9 +5085,12 @@ public void DayEndWithoutalert()
 	}
 	public void uploadPendingData()
 	{
+
 		if(dbengine.fnCheckForPendingImages()==1)
 		{
+			flgforPendingData=1;
 			getUploadedData();
+
 
 		}
 		/*if(checkImagesInFolder()>0)
@@ -5105,8 +5100,12 @@ public void DayEndWithoutalert()
 		}*/
 		if(dbengine.fnCheckForPendingXMLFilesInTable()==1)
 		{
+			flgforPendingData=1;
 			getUploadedData();
 
+		}
+		if(flgforPendingData==0) {
+			showUploadMsgSucessfullIfNoPendingData();
 		}
 		/*if(checkXMLFilesInFolder()>0)
 		{
@@ -5127,22 +5126,24 @@ public void DayEndWithoutalert()
             String fDate = sdf.format(date2).toString().trim();
             if(!fDate.equals(getPDADate))
             {*/
-			if (isOnline())
+            if(btnClickPendingDataOrDayEnd==1)
 			{
-				try
+				if (isOnline())
 				{
-					if(dbengine.fnCheckForPendingImages()==1)
+					try
 					{
-						new ImageUploadAsyncTask(this).execute();
-					}
+						if(dbengine.fnCheckForPendingImages()==1)
+						{
+							new ImageUploadAsyncTask(this).execute();
+						}
 				/*	else if(checkImagesInFolder()>0)
 					{
 						new ImageUploadFromFolderAsyncTask(this).execute();
 					}*/
-					else if(dbengine.fnCheckForPendingXMLFilesInTable()==1)
-					{
-						new XMLFileUploadAsyncTask(this).execute();
-					}
+						if(dbengine.fnCheckForPendingXMLFilesInTable()==1)
+						{
+							new XMLFileUploadAsyncTask(this).execute();
+						}
 				/*	else if(checkXMLFilesInFolder()>0)
 					{
 						new XMLFileUploadFromFolderAsyncTask(this).execute();
@@ -5157,6 +5158,63 @@ public void DayEndWithoutalert()
 						finish();
 					}
 */
+						//btnClickPendingDataOrDayEnd=0;
+					}
+					catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+				else
+				{
+
+				}
+
+			}
+		if(btnClickPendingDataOrDayEnd==2)
+		{
+			if (isOnline())
+			{
+				try
+				{
+					if(dbengine.fnCheckForPendingImages()==1)
+					{
+						new ImageUploadAsyncTask(this).execute();
+					}
+					else if(checkImagesInFolder()>0)
+					{
+						new ImageUploadFromFolderAsyncTask(this).execute();
+					}
+					else if(dbengine.fnCheckForPendingXMLFilesInTable()==1)
+					{
+						new XMLFileUploadAsyncTask(this).execute();
+					}
+					else if(checkXMLFilesInFolder()>0)
+					{
+						new XMLFileUploadFromFolderAsyncTask(this).execute();
+					}
+					else {
+						if (mProgressDialog != null) {
+							if (mProgressDialog.isShowing()) {
+								mProgressDialog.dismiss();
+							}
+						}
+						btnClickPendingDataOrDayEnd=0;
+						StoreSelection.flgChangeRouteOrDayEnd = 1;
+						syncTIMESTAMP = System.currentTimeMillis();
+						Date dateobj = new Date(syncTIMESTAMP);
+						dbengine.open();
+						String presentRoute = dbengine.GetActiveRouteID();
+						dbengine.close();
+						SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy.HH.mm.ss", Locale.ENGLISH);
+
+						String newfullFileName = imei + "." + presentRoute + "." + df.format(dateobj);
+						Intent syncIntent = new Intent(StoreSelection.this, SyncMaster.class);
+						syncIntent.putExtra("xmlPathForSync", Environment.getExternalStorageDirectory() + "/" + CommonInfo.OrderXMLFolder + "/" + newfullFileName + ".xml");
+						syncIntent.putExtra("OrigZipFileName", newfullFileName);
+						syncIntent.putExtra("whereTo", whereTo);
+						startActivity(syncIntent);
+						finish();
+					}
 				}
 				catch (Exception e) {
 					e.printStackTrace();
@@ -5166,6 +5224,8 @@ public void DayEndWithoutalert()
 			{
 
 			}
+
+		}
 
 			// }
 	//	}
@@ -5221,26 +5281,50 @@ public void DayEndWithoutalert()
 				afterversioncheck();
 			}
 		}*/
-		if(returnFrom!=3)
-		{
-			getUploadedData();
-		}
-		else
-		{
-			if(mProgressDialog != null)
-			{
-				if(mProgressDialog.isShowing())
-				{
-					mProgressDialog.dismiss();
+		if(btnClickPendingDataOrDayEnd==1) {
+			if (returnFrom != 3) {
+				getUploadedData();
+			} else {
+				if (mProgressDialog != null) {
+					if (mProgressDialog.isShowing()) {
+						mProgressDialog.dismiss();
+					}
 				}
+				flgforPendingData = 0;
+				btnClickPendingDataOrDayEnd=0;
+				showDayEndSucessfull(0);
 			}
-			showDayEndSucessfull();
+		}
+		if(btnClickPendingDataOrDayEnd==2) {
+			if (returnFrom != 4) {
+				getUploadedData();
+			} else {
+				if (mProgressDialog != null) {
+					if (mProgressDialog.isShowing()) {
+						mProgressDialog.dismiss();
+					}
+				}
+				flgforPendingData = 0;
+				btnClickPendingDataOrDayEnd=0;
+				getUploadedData();
+			}
 		}
 
 	}
+public void showUploadMsgSucessfullIfNoPendingData()
+{
+	if(mProgressDialog != null)
+	{
+		if(mProgressDialog.isShowing())
+		{
+			mProgressDialog.dismiss();
+		}
+	}
+	flgforPendingData=0;
+	showDayEndSucessfull(1);
+}
 
-
-	public void showDayEndSucessfull(){
+	public void showDayEndSucessfull(int flgForMsg){
 		android.app.AlertDialog.Builder alertDialogGps = new android.app.AlertDialog.Builder(this);
 
 		// Setting Dialog Title
@@ -5248,7 +5332,14 @@ public void DayEndWithoutalert()
 		alertDialogGps.setIcon(R.drawable.error_info_ico);
 		alertDialogGps.setCancelable(false);
 		// Setting Dialog Message
-		alertDialogGps.setMessage("Data Uploaded Sucessfully");
+		if(flgForMsg==1)
+		{
+			alertDialogGps.setMessage("There is no pending data for upload");
+		}
+		else {
+			alertDialogGps.setMessage("Data Uploaded Sucessfully");
+		}
+
 
 		// On pressing Settings button
 		alertDialogGps.setPositiveButton("OK", new DialogInterface.OnClickListener() {
