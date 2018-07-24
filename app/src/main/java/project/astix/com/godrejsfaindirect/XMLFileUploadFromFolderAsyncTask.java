@@ -105,7 +105,7 @@ class XMLFileUploadFromFolderAsyncTask extends AsyncTask<Void,Void,Boolean>
                 for(int vdo=0;vdo<AllFilesName.length;vdo++)
                 {
                     String fileUri=  AllFilesName[vdo];
-
+                    responseCode=200;
                     if(fileUri.contains(".zip"))
                     {
                         File file = new File(Environment.getExternalStorageDirectory().getPath()+ "/" + CommonInfo.OrderXMLFolder + "/" +fileUri);
@@ -115,15 +115,20 @@ class XMLFileUploadFromFolderAsyncTask extends AsyncTask<Void,Void,Boolean>
                     {
                         String f1=Environment.getExternalStorageDirectory().getPath()+ "/" + CommonInfo.OrderXMLFolder + "/" +fileUri;
                         // System.out.println("Sunil Again each file full path"+f1);
-                        try
-                        {
-                            responseCode= upLoad2Server(f1,fileUri);
-                        }
-                        catch (Exception e)
-                        {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
-                        }
+                        File file = new File(Environment.getExternalStorageDirectory().getPath()+ "/" + CommonInfo.OrderXMLFolder + "/" +fileUri);
+                      if(file.exists())
+                      {
+                          try
+                          {
+                              responseCode= upLoad2Server(f1,fileUri);
+                          }
+                          catch (Exception e)
+                          {
+                              // TODO Auto-generated catch block
+                              e.printStackTrace();
+                          }
+                      }
+
                     }
                     if(responseCode!=200)
                     {

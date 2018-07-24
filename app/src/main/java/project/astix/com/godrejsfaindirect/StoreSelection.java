@@ -97,7 +97,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class StoreSelection extends BaseActivity implements com.google.android.gms.location.LocationListener,GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener
+public class StoreSelection extends BaseActivity implements com.google.android.gms.location.LocationListener,GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener,TaskListner
 {
 	//public static HashMap<String, String> hmapStoreIdSstat=new HashMap<String, String>();
 	public String currSysDate;
@@ -3377,7 +3377,24 @@ public void DayEndWithoutalert()
 			 }
 		 });
 
+		 final Button btnuploadPendingData = (Button) dialog.findViewById(R.id.uploadPendingData);
+		 btnuploadPendingData.setOnClickListener(new OnClickListener()
+		 {
+			 @Override
+			 public void onClick(View v)
+			 {
+				 dialog.dismiss();
+				 mProgressDialog = new ProgressDialog(StoreSelection.this);
+				 mProgressDialog.setTitle(getResources().getString(R.string.genTermPleaseWaitNew));
+				 mProgressDialog.setMessage("Uploading Pending Data");
 
+				 mProgressDialog.setIndeterminate(true);
+				 mProgressDialog.setCancelable(false);
+				 mProgressDialog.show();
+				 uploadPendingData();
+
+			 }
+		 });
 		 final   Button btnRemainingStockStatus = (Button) dialog.findViewById(R.id.btnRemainingStockStatus);
 		 btnRemainingStockStatus.setOnClickListener(new OnClickListener()
 		 {
@@ -5074,4 +5091,173 @@ public void DayEndWithoutalert()
 		String secondNumberAsString = String.format("%.10f",firstNumber);
 		return secondNumberAsString;
 	}
+	public void uploadPendingData()
+	{
+		if(dbengine.fnCheckForPendingImages()==1)
+		{
+			getUploadedData();
+
+		}
+		/*if(checkImagesInFolder()>0)
+		{
+			getUploadedData();
+
+		}*/
+		if(dbengine.fnCheckForPendingXMLFilesInTable()==1)
+		{
+			getUploadedData();
+
+		}
+		/*if(checkXMLFilesInFolder()>0)
+		{
+			getPrevioisDateData();
+			return;
+		}*/
+	}
+
+	public void getUploadedData()
+	{
+	/*	dbengine.open();
+		String getPDADate=dbengine.fnGetPdaDate();
+		dbengine.close();
+		if(!getPDADate.equals(""))
+		{*/
+            /*Date date2 = new Date();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
+            String fDate = sdf.format(date2).toString().trim();
+            if(!fDate.equals(getPDADate))
+            {*/
+			if (isOnline())
+			{
+				try
+				{
+					if(dbengine.fnCheckForPendingImages()==1)
+					{
+						new ImageUploadAsyncTask(this).execute();
+					}
+				/*	else if(checkImagesInFolder()>0)
+					{
+						new ImageUploadFromFolderAsyncTask(this).execute();
+					}*/
+					else if(dbengine.fnCheckForPendingXMLFilesInTable()==1)
+					{
+						new XMLFileUploadAsyncTask(this).execute();
+					}
+				/*	else if(checkXMLFilesInFolder()>0)
+					{
+						new XMLFileUploadFromFolderAsyncTask(this).execute();
+					}*/
+					/*else
+					{
+						dbengine.open();
+						dbengine.reCreateDB();
+						dbengine.close();
+						//SplashScreen.CheckUpdateVersion cuv = new SplashScreen.CheckUpdateVersion();
+						//cuv.execute();
+						finish();
+					}
+*/
+				}
+				catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			else
+			{
+
+			}
+
+			// }
+	//	}
+	}
+
+
+	@Override
+	public void onTaskFinish(boolean serviceException,int returnFrom)
+	{
+		/*if(returnFrom==1)  // 1---> means uploading images Based on table and get Response
+		{
+			if(serviceException)
+			{
+				Toast.makeText(getApplicationContext(),getResources().getString(R.string.internetError), Toast.LENGTH_LONG).show();
+			}
+			else
+			{
+				afterversioncheck();
+			}
+		}
+
+		if(returnFrom==2)  // 2---> means uploading images From the Folder and get Response
+		{
+			if(serviceException)
+			{
+				Toast.makeText(getApplicationContext(),getResources().getString(R.string.internetError), Toast.LENGTH_LONG).show();
+			}
+			else
+			{
+				afterversioncheck();
+			}
+		}
+
+		if(returnFrom==3)  // 3---> means uploading XML Files Async Task Response
+		{
+			if(serviceException)
+			{
+				Toast.makeText(getApplicationContext(),getResources().getString(R.string.internetError), Toast.LENGTH_LONG).show();
+			}
+			else
+			{
+				afterversioncheck();
+			}
+		}
+		if(returnFrom==4) // 4---> means uploading XML From the Folder and get Response
+		{
+			if(serviceException)
+			{
+				Toast.makeText(getApplicationContext(),getResources().getString(R.string.internetError), Toast.LENGTH_LONG).show();
+			}
+			else
+			{
+				afterversioncheck();
+			}
+		}*/
+		if(returnFrom!=3)
+		{
+			getUploadedData();
+		}
+		else
+		{
+			if(mProgressDialog != null)
+			{
+				if(mProgressDialog.isShowing())
+				{
+					mProgressDialog.dismiss();
+				}
+			}
+			showDayEndSucessfull();
+		}
+
+	}
+
+
+	public void showDayEndSucessfull(){
+		android.app.AlertDialog.Builder alertDialogGps = new android.app.AlertDialog.Builder(this);
+
+		// Setting Dialog Title
+		alertDialogGps.setTitle("Information");
+		alertDialogGps.setIcon(R.drawable.error_info_ico);
+		alertDialogGps.setCancelable(false);
+		// Setting Dialog Message
+		alertDialogGps.setMessage("Data Uploaded Sucessfully");
+
+		// On pressing Settings button
+		alertDialogGps.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+			}
+		});
+
+		alertDialogGps.show();
+	}
+
 }

@@ -1413,6 +1413,18 @@
 			android:text="@string/AlertDialogCancelButton"
 			android:textColor="#ffffff" />
 
+
+		<Button
+			android:id="@+id/btn_NoSales"
+			android:layout_width="0dp"
+			android:layout_height="match_parent"
+			android:layout_marginLeft="8dp"
+			android:layout_weight="1"
+			android:background="@drawable/custom_button"
+			android:text="No Sales"
+			android:textColor="#ffffff"/>
+
+
 		<Button
 			android:id="@+id/btn_CloseStore"
 			android:layout_width="0dp"
@@ -1422,6 +1434,8 @@
 			android:background="@drawable/custom_button"
 			android:text="@string/StrClosed"
 			android:textColor="#ffffff"/>
+
+
 	</LinearLayout>
 
 

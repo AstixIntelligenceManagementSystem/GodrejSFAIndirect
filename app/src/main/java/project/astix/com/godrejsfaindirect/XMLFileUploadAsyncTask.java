@@ -231,14 +231,14 @@ class XMLFileUploadAsyncTask extends AsyncTask<Void,Void,Boolean>
     @Override
     protected void onPostExecute(Boolean isErrorExist)
     {
-        if(checkXMLFilesInFolder()>0)
+      /*  if(checkXMLFilesInFolder()>0)
          {
             new XMLFileUploadFromFolderAsyncTask(mContext).execute();
          }
          else
-        {
+        {*/
             mTaskListner.onTaskFinish(isErrorExist,3);
-        }
+       // }
 
     }
     public int checkXMLFilesInFolder()

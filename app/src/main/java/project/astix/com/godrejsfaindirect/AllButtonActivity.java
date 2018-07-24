@@ -107,7 +107,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 
-public class AllButtonActivity extends BaseActivity implements LocationListener,GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener{
+public class AllButtonActivity extends BaseActivity implements LocationListener,GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener,TaskListner{
 
 
 
@@ -115,7 +115,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
     public String userDate;
     int flgStockAlert=0;
 
-
+    ProgressDialog mProgressDialog;
 
     public boolean serviceException=false;
     public String serviceExceptionCode="";
@@ -1074,12 +1074,14 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
             }
             flgChangeRouteOrDayEnd=valDayEndOrChangeRoute;
 
-            Intent syncIntent = new Intent(AllButtonActivity.this, SyncMaster.class);
-             syncIntent.putExtra("xmlPathForSync", Environment.getExternalStorageDirectory() + "/" + CommonInfo.OrderXMLFolder + "/" + newfullFileName + ".xml");
-            syncIntent.putExtra("OrigZipFileName", newfullFileName);
-            syncIntent.putExtra("whereTo", whereTo);
-            startActivity(syncIntent);
-            finish();
+//            Intent syncIntent = new Intent(AllButtonActivity.this, SyncMaster.class);
+//             syncIntent.putExtra("xmlPathForSync", Environment.getExternalStorageDirectory() + "/" + CommonInfo.OrderXMLFolder + "/" + newfullFileName + ".xml");
+//            syncIntent.putExtra("OrigZipFileName", newfullFileName);
+//            syncIntent.putExtra("whereTo", whereTo);
+//            startActivity(syncIntent);
+//            finish();
+
+            getUploadedData();
         }
         catch (IOException e)
         {
@@ -1234,6 +1236,13 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         dbengine.UpdateTblDayStartEndDetails(Integer.parseInt(rID), valDayEndOrChangeRoute);
         dbengine.close();
 
+        mProgressDialog = new ProgressDialog(AllButtonActivity.this);
+        mProgressDialog.setTitle(getResources().getString(R.string.genTermPleaseWaitNew));
+        mProgressDialog.setMessage("Uploading Pending Data before DayEnd");
+
+        mProgressDialog.setIndeterminate(true);
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.show();
         SyncNow();
 
     }
@@ -3914,7 +3923,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                     }
                     if(mm==8)
                     {
-                        newservice = newservice.getfnGetStoreWiseTarget(getApplicationContext(), fDate, imei, rID,RouteType);
+                      //  newservice = newservice.getfnGetStoreWiseTarget(getApplicationContext(), fDate, imei, rID,RouteType);
                     }
                     if(mm==9)
                     {
@@ -5116,5 +5125,152 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         file.delete();
         File file1 = new File(delPath.toString().replace(".xml", ".zip"));
         file1.delete();
+    }
+
+
+    public void getUploadedData()
+    {
+
+            if (isOnline())
+            {
+                try
+                {
+                    if(dbengine.fnCheckForPendingImages()==1)
+                    {
+                        new ImageUploadAsyncTask(this).execute();
+                    }
+					else if(checkImagesInFolder()>0)
+					{
+						new ImageUploadFromFolderAsyncTask(this).execute();
+					}
+                    else if(dbengine.fnCheckForPendingXMLFilesInTable()==1)
+                    {
+                        new XMLFileUploadAsyncTask(this).execute();
+                    }
+					else if(checkXMLFilesInFolder()>0)
+					{
+						new XMLFileUploadFromFolderAsyncTask(this).execute();
+					}
+					/*else
+					{
+						dbengine.open();
+						dbengine.reCreateDB();
+						dbengine.close();
+						//SplashScreen.CheckUpdateVersion cuv = new SplashScreen.CheckUpdateVersion();
+						//cuv.execute();
+						finish();
+					}
+*/
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            else
+            {
+
+            }
+
+
+    }
+
+    public int checkImagesInFolder()
+    {
+        int totalFiles=0;
+        File del = new File(Environment.getExternalStorageDirectory(), CommonInfo.ImagesFolder);
+
+        String [] AllFilesName= checkNumberOfFiles(del);
+
+        if(AllFilesName.length>0)
+        {
+            totalFiles=AllFilesName.length;
+        }
+        return totalFiles;
+    }
+
+    public int checkXMLFilesInFolder()
+    {
+        int totalFiles=0;
+        File del = new File(Environment.getExternalStorageDirectory(), CommonInfo.OrderXMLFolder);
+
+        String [] AllFilesName= checkNumberOfFiles(del);
+
+        if(AllFilesName.length>0)
+        {
+            totalFiles=AllFilesName.length;
+        }
+        return totalFiles;
+    }
+    @Override
+    public void onTaskFinish(boolean serviceException,int returnFrom)
+    {
+		/*if(returnFrom==1)  // 1---> means uploading images Based on table and get Response
+		{
+			if(serviceException)
+			{
+				Toast.makeText(getApplicationContext(),getResources().getString(R.string.internetError), Toast.LENGTH_LONG).show();
+			}
+			else
+			{
+				afterversioncheck();
+			}
+		}
+
+		if(returnFrom==2)  // 2---> means uploading images From the Folder and get Response
+		{
+			if(serviceException)
+			{
+				Toast.makeText(getApplicationContext(),getResources().getString(R.string.internetError), Toast.LENGTH_LONG).show();
+			}
+			else
+			{
+				afterversioncheck();
+			}
+		}
+
+		if(returnFrom==3)  // 3---> means uploading XML Files Async Task Response
+		{
+			if(serviceException)
+			{
+				Toast.makeText(getApplicationContext(),getResources().getString(R.string.internetError), Toast.LENGTH_LONG).show();
+			}
+			else
+			{
+				afterversioncheck();
+			}
+		}
+		if(returnFrom==4) // 4---> means uploading XML From the Folder and get Response
+		{
+			if(serviceException)
+			{
+				Toast.makeText(getApplicationContext(),getResources().getString(R.string.internetError), Toast.LENGTH_LONG).show();
+			}
+			else
+			{
+				afterversioncheck();
+			}
+		}*/
+        if(returnFrom!=3)
+        {
+            getUploadedData();
+        }
+        else
+        {
+            if(mProgressDialog != null)
+            {
+                if(mProgressDialog.isShowing())
+                {
+                    mProgressDialog.dismiss();
+                }
+            }
+            StoreSelection.flgChangeRouteOrDayEnd=1;
+            Intent syncIntent = new Intent(AllButtonActivity.this, SyncMaster.class);
+             syncIntent.putExtra("xmlPathForSync", Environment.getExternalStorageDirectory() + "/" + CommonInfo.OrderXMLFolder + "/" + newfullFileName + ".xml");
+            syncIntent.putExtra("OrigZipFileName", newfullFileName);
+            syncIntent.putExtra("whereTo", whereTo);
+            startActivity(syncIntent);
+            finish();
+        }
+
     }
 }

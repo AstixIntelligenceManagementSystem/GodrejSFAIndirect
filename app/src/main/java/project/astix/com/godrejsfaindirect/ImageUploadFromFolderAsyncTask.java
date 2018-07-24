@@ -91,24 +91,30 @@ class ImageUploadFromFolderAsyncTask extends AsyncTask<Void,Void,Boolean>
                 {
                     String fileUri=  AllFilesName[vdo];
 
-
+                    isErrorExist=false;
                     String f1=Environment.getExternalStorageDirectory().getPath()+ "/" + CommonInfo.ImagesFolder + "/" +fileUri;
+                    File fdelete = new File(f1);
+
                     // System.out.println("Sunil Again each file full path"+f1);
-                    try
+                    if(fdelete.exists())
                     {
-                        responseCode= upLoad2Server(f1,fileUri);
-                    }
-                    catch (Exception e)
-                    {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
+                        try
+                        {
+                            responseCode= upLoad2Server(f1,fileUri);
+                        }
+                        catch (Exception e)
+                        {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+
+                        //if(responseCode!=200)
+                        if(!the_string_response.equals("Abhinav"))
+                        {
+                            break;
+                        }
                     }
 
-                    //if(responseCode!=200)
-                    if(!the_string_response.equals("Abhinav"))
-                    {
-                        break;
-                    }
 
                 }
 
@@ -139,7 +145,7 @@ class ImageUploadFromFolderAsyncTask extends AsyncTask<Void,Void,Boolean>
     @Override
     protected void onPostExecute(Boolean isErrorExist)
     {
-        if(dbengine.fnCheckForPendingXMLFilesInTable()==1)
+       /* if(dbengine.fnCheckForPendingXMLFilesInTable()==1)
         {
             new XMLFileUploadAsyncTask(mContext).execute();
         }
@@ -148,9 +154,9 @@ class ImageUploadFromFolderAsyncTask extends AsyncTask<Void,Void,Boolean>
             new XMLFileUploadFromFolderAsyncTask(mContext).execute();
         }
         else
-        {
+        {*/
             mTaskListner.onTaskFinish(isErrorExist,2);
-        }
+        //}
     }
 
 

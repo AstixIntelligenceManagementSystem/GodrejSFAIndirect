@@ -144,16 +144,16 @@ public class SplashScreen extends BaseActivity implements  TaskListner
     public void onTaskFinish(boolean serviceException,int returnFrom)
     {
 
-        if(returnFrom==1)  // 1---> means uploading images Based on table and get Response
-        {
-            if(serviceException)
-            {
-                Toast.makeText(getApplicationContext(),getResources().getString(R.string.internetError), Toast.LENGTH_LONG).show();
-            }
-            else
-            {
-                afterversioncheck();
-            }
+      /*  if(returnFrom==1)  // 1---> means uploading images Based on table and get Response
+                {
+                    if(serviceException)
+                    {
+                        Toast.makeText(getApplicationContext(),getResources().getString(R.string.internetError), Toast.LENGTH_LONG).show();
+                    }
+                    else
+                    {
+                        afterversioncheck();
+                    }
         }
 
         if(returnFrom==2)  // 2---> means uploading images From the Folder and get Response
@@ -189,6 +189,14 @@ public class SplashScreen extends BaseActivity implements  TaskListner
             {
                afterversioncheck();
             }
+        }*/
+        if(returnFrom!=4)
+        {
+            getPrevioisDateData();
+        }
+        else
+        {
+            afterversioncheck();
         }
     }
 
@@ -277,16 +285,19 @@ public class SplashScreen extends BaseActivity implements  TaskListner
                         }
                         else
                         {
-                            dbengine.open();
+                         /*   dbengine.open();
                             dbengine.reCreateDB();
                             dbengine.close();
                             CheckUpdateVersion cuv = new CheckUpdateVersion();
-                            cuv.execute();
+                            cuv.execute();*/
+                            afterversioncheck();
                         }
 
                     }
                     catch (Exception e) {
                         e.printStackTrace();
+                        Log.i("Exception", "Exception 1");
+
                     }
                 }
                 else
@@ -324,11 +335,11 @@ public class SplashScreen extends BaseActivity implements  TaskListner
       // imei="354010084603910";
 
 
-     //   imei="354010084603910";
+      //  imei="354010084603910";
 
      // imei="911577250038101";
 
-      //  imei="356808071065136";
+       // imei="356808071063941";
         CommonInfo.imei = imei;
         sPref=getSharedPreferences(CommonInfo.Preference, MODE_PRIVATE);
         Date date1 = new Date();
@@ -372,7 +383,9 @@ public class SplashScreen extends BaseActivity implements  TaskListner
             }
             catch (Exception e) {
                 e.printStackTrace();
+                Log.i("Exception", "Exception 2");
             }
+
         }
         else
         {
@@ -526,6 +539,7 @@ public class SplashScreen extends BaseActivity implements  TaskListner
                         } catch (IOException e1) {
                             // TODO Auto-generated catch block
                             e1.printStackTrace();
+                            Log.i("Exception", "Exception 3");
                         }
                         try
                         {
@@ -545,7 +559,7 @@ public class SplashScreen extends BaseActivity implements  TaskListner
                         }
                         catch(Exception e)
                         {
-
+                            Log.i("Exception", "Exception 5");
                         }
 
 
@@ -598,7 +612,6 @@ public class SplashScreen extends BaseActivity implements  TaskListner
 
     public  boolean checkingPermission()
     {
-
             if ((checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) )
             {
                 return false;
@@ -646,6 +659,7 @@ public class SplashScreen extends BaseActivity implements  TaskListner
                 catch(IOException ex)
                 {
                     msg = getResources().getString(R.string.errorTxt) + ex.getMessage();
+                    Log.i("Exception", "Exception 6");
                 }
                 return msg;
             }
@@ -664,6 +678,7 @@ public class SplashScreen extends BaseActivity implements  TaskListner
                 catch (Exception e)
                 {
                     e.printStackTrace();
+                    Log.i("Exception", "Exception 7");
                 }
 
 
@@ -966,6 +981,7 @@ public class SplashScreen extends BaseActivity implements  TaskListner
         {
             // TODO Auto-generated catch block
             e1.printStackTrace();
+            Log.i("Exception", "Exception 9");
             //java.io.FileNotFoundException: /359648069495987.2.21.04.2016.12.44.02: open failed: EROFS (Read-only file system)
         }
 
@@ -1122,7 +1138,10 @@ public class SplashScreen extends BaseActivity implements  TaskListner
 
             }
             catch (Exception e)
-            {}
+            {
+
+                Log.i("Exception", "Exception 10");
+            }
 
             finally
             {}
@@ -1166,7 +1185,7 @@ public class SplashScreen extends BaseActivity implements  TaskListner
                         if(!getServerDate.equals(getPDADate))
                         {
 
-                            if(dbengine.fnCheckForPendingImages()==1)
+                           /* if(dbengine.fnCheckForPendingImages()==1)
                             {
                                 getPrevioisDateData();
                                 return;
@@ -1187,9 +1206,9 @@ public class SplashScreen extends BaseActivity implements  TaskListner
                                 return;
                             }
                             else
-                            {
+                            {*/
                                 afterversioncheck();
-                            }
+                           // }
 
 
                         }
@@ -1283,6 +1302,7 @@ public class SplashScreen extends BaseActivity implements  TaskListner
                 catch (Exception e)
                 {
                     e.printStackTrace();
+                    Log.i("Exception", "Exception 11");
                 }
             }
 
@@ -1568,7 +1588,7 @@ public class SplashScreen extends BaseActivity implements  TaskListner
 
                     }
 
-                }, 1000); // time in milliseconds (1 second = 1000 milliseconds) until the run() method will be called
+                }, 2000); // time in milliseconds (1 second = 1000 milliseconds) until the run() method will be called
                       /* // dbengine.open();
                       //  dbengine.reCreateDB();
                       //  dbengine.close();
@@ -1673,6 +1693,7 @@ public class SplashScreen extends BaseActivity implements  TaskListner
             {
 
                 e.printStackTrace();
+                Log.i("Exception", "Exception 12");
                 if(pDialogGetStores.isShowing())
                 {
                     pDialogGetStores.dismiss();
@@ -1704,7 +1725,7 @@ public class SplashScreen extends BaseActivity implements  TaskListner
             }
             catch(Exception e)
             {
-
+                Log.i("Exception", "Exception 13");
             }
 
 
@@ -1789,6 +1810,7 @@ public class SplashScreen extends BaseActivity implements  TaskListner
                         {
                             // TODO Auto-generated catch block
                             e.printStackTrace();
+                            Log.i("Exception", "Exception 13");
                         }
                     }
 

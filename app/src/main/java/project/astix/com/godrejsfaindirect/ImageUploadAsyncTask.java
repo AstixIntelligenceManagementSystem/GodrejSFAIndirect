@@ -111,7 +111,7 @@ class ImageUploadAsyncTask extends AsyncTask<Void,Void,Boolean>
     @Override
     protected void onPostExecute(Boolean isErrorExist)
     {
-        if(checkImagesInFolder()>0)
+       /* if(checkImagesInFolder()>0)
         {
             new ImageUploadFromFolderAsyncTask(mContext).execute();
         }
@@ -124,9 +124,9 @@ class ImageUploadAsyncTask extends AsyncTask<Void,Void,Boolean>
             new XMLFileUploadFromFolderAsyncTask(mContext).execute();
         }
         else
-        {
+        {*/
             mTaskListner.onTaskFinish(isErrorExist,1);
-        }
+       // }
     }
 
     public int checkImagesInFolder()
