@@ -2172,7 +2172,16 @@ public void setInvoiceData(){
 			@Override
 			public void onClick(View v) {
 				getStoreVisitCode();
-				TmpInvoiceCodePDA=genTempInvoiceCodePDA();
+				int chkflgInvoiceAlreadyGenerated=dbengine.fnCheckForNewCollectionValue(storeID,StoreVisitCode);//0=Need to Generate Invoice Number,1=No Need of Generating Invoice Number
+				if(chkflgInvoiceAlreadyGenerated==1)
+				{
+					TmpInvoiceCodePDA=dbengine.fnGetCollectionCodePDA(storeID,StoreVisitCode);
+
+				}
+				else
+				{
+					TmpInvoiceCodePDA=genTempInvoiceCodePDA();
+				}
 
 				if(isStrCls)
 				{

@@ -29912,12 +29912,12 @@ String fetchdate=fnGetDateTimeString();
         }
     }
 
-    public Double fetch_Store_MaxCollectionAmount(String StoreID,String TmpInvoiceCodePDA)
+    public Double fetch_Store_MaxCollectionAmount(String StoreID,String TmpInvoiceCodePDA,String StoreVisitCode)
     {
 //tv_GrossInvVal
         open();
         Double dblMaxCollectionAmount = 0.0;
-        Cursor	cursor = db.rawQuery("SELECT ifnull(tblLastOutstanding.Outstanding,'0.0'),tblTmpInvoiceHeader.InvoiceVal from tblTmpInvoiceHeader left outer join tblLastOutstanding on tblTmpInvoiceHeader.StoreID=tblLastOutstanding.StoreID WHERE tblTmpInvoiceHeader.StoreID='"+StoreID+"' AND tblTmpInvoiceHeader.TmpInvoiceCodePDA='"+TmpInvoiceCodePDA+"'", null); //order by AutoIdOutlet Desc
+        Cursor	cursor = db.rawQuery("SELECT ifnull(tblLastOutstanding.Outstanding,'0.0'),ifnull(tblTmpInvoiceHeader.InvoiceVal,'0.0') from tblLastOutstanding inner join tblStoreList ON tblLastOutstanding.StoreID=tblStoreList.StoreID left outer join tblTmpInvoiceHeader on tblTmpInvoiceHeader.StoreID=tblStoreList.StoreID  WHERE tblStoreList.StoreID='"+StoreID+"' AND tblTmpInvoiceHeader.StoreVisitCode='"+StoreVisitCode+"'", null); //order by AutoIdOutlet Desc
         try
         {
             if(cursor.getCount()>0)
@@ -29956,7 +29956,7 @@ String fetchdate=fnGetDateTimeString();
 //tv_GrossInvVal
         open();
         Double dblMaxCollectionAmount = 0.0;
-        Cursor	cursor = db.rawQuery("SELECT tblTmpInvoiceHeader.InvoiceVal from tblTmpInvoiceHeader WHERE tblTmpInvoiceHeader.StoreID='"+StoreID+"' AND TmpInvoiceCodePDA='"+TmpInvoiceCodePDA+"'", null); //order by AutoIdOutlet Desc
+        Cursor	cursor = db.rawQuery("SELECT ifnull(tblTmpInvoiceHeader.InvoiceVal,'0.0') from tblTmpInvoiceHeader WHERE tblTmpInvoiceHeader.StoreID='"+StoreID+"' AND TmpInvoiceCodePDA='"+TmpInvoiceCodePDA+"'", null); //order by AutoIdOutlet Desc
         try
         {
             if(cursor.getCount()>0)
@@ -32713,7 +32713,48 @@ close();
         db.execSQL("DELETE FROM tblReasonForNoSales");
     }
 
+    public String fnGetCollectionCodePDA (String StoreID,String StoreVisitCode)
+    {
+        open();
+        Cursor cursorE2 = db.rawQuery("SELECT TmpInvoiceCodePDA FROM tblAllCollectionData WHERE StoreID='" + StoreID + "' AND StoreVisitCode='"+StoreVisitCode+"' AND Sstat=1", null);
+        String InvoiceCodePDA = "0";
+        try {
+            if(cursorE2.getCount()>0)
+            {
+                if (cursorE2.moveToFirst()) {
+                    InvoiceCodePDA = cursorE2.getString(0).toString();
+                }
+            }
+        } finally {
+            if(cursorE2!=null) {
+                cursorE2.close();
+            }
+            close();
+        }
+        return InvoiceCodePDA;
+    }
 
+
+    public int fnCheckForNewCollectionValue(String StoreID,String StoreVisitCode)
+    {
+        open();
+        Cursor cursorE2 = db.rawQuery("SELECT * FROM tblAllCollectionData WHERE StoreID='" + StoreID + "' AND StoreVisitCode='"+StoreVisitCode+"' AND Sstat=1", null);
+        int chkI = 0;
+        try {
+            if(cursorE2.getCount()>0)
+            {
+                if (cursorE2.moveToFirst()) {
+                    chkI = 1;
+                }
+            }
+        } finally {
+            if(cursorE2!=null) {
+                cursorE2.close();
+            }
+            close();
+        }
+        return chkI;
+    }
 }
 
 

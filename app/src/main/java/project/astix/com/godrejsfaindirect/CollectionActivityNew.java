@@ -154,7 +154,7 @@ LinearLayout lnCollection,ll_collectionMandatory;
     TextView totaltextview,dateTextViewFirst,dateTextViewSecond,dateTextViewThird,pymtModeTextView,AmountTextview,chequeNoTextview,DateLabelTextview,BankLabelTextview;
 
     TextView BankSpinnerSecond,BankSpinnerThird;
-Double OverAllAmountCollected=0.0;
+public Double OverAllAmountCollected=0.0;
     TextView paymentModeSpinnerFirst,paymentModeSpinnerSecond,paymentModeSpinnerThird;
     AlertDialog.Builder alertDialog;
     AlertDialog ad;
@@ -434,6 +434,9 @@ Double OverAllAmountCollected=0.0;
         SN = passedvals.getStringExtra("SN");
         flgOrderType = passedvals.getIntExtra("flgOrderType",0);
         strGlobalOrderID=passedvals.getStringExtra("OrderPDAID");
+        if(passedvals.hasExtra("TmpInvoiceCodePDA")) {
+            TmpInvoiceCodePDA = passedvals.getStringExtra("TmpInvoiceCodePDA");
+        }
 
         storeIDGlobal=storeID;
         StoreVisitCode=dbengine.fnGetStoreVisitCode(storeID);
@@ -1519,19 +1522,33 @@ Double OverAllAmountCollected=0.0;
     }
     private boolean validateCollectionAmt()
     {
-       Double  OverAllAmountCollectedLimit=dbengine.fetch_Store_MaxCollectionAmount(storeID,TmpInvoiceCodePDA);
-        OverAllAmountCollectedLimit=Double.parseDouble(new DecimalFormat("##.##").format(OverAllAmountCollectedLimit));
+        Double outstandingvalue=dbengine.fnGetStoretblLastOutstanding(storeID);
+        outstandingvalue=Double.parseDouble(new DecimalFormat("##.##").format(outstandingvalue));
+
+
+
+        Double cntInvoceValue=dbengine.fetch_Store_InvValAmount(storeID,TmpInvoiceCodePDA);
+        cntInvoceValue=Double.parseDouble(new DecimalFormat("##.##").format(cntInvoceValue));
+
+       Double  OverAllAmountCollectedLimit=0.0;//dbengine.fetch_Store_MaxCollectionAmount(storeID,TmpInvoiceCodePDA,StoreVisitCode);
+        OverAllAmountCollectedLimit=outstandingvalue+cntInvoceValue;//Double.parseDouble(new DecimalFormat("##.##").format(OverAllAmountCollectedLimit));
+
+
         OverAllAmountCollected=Double.parseDouble(new DecimalFormat("##.##").format(OverAllAmountCollected));
 
         Double MinCollectionvalue=dbengine.fnGetStoretblLastOutstanding(storeID);
         MinCollectionvalue=Double.parseDouble(new DecimalFormat("##.##").format(MinCollectionvalue));
-        if(ll_collectionMandatory.getVisibility()==View.VISIBLE && cb_collection.isChecked()==false && lnCollection.getVisibility()==View.VISIBLE && (OverAllAmountCollected>=0.0))
+        if(ll_collectionMandatory.getVisibility()==View.VISIBLE && cb_collection.isChecked()==false && lnCollection.getVisibility()==View.VISIBLE  && OverAllAmountCollected==0.0)
         {
             showAlertSingleButtonError("If there is no Collection for today then  please Tick on 'No Collection Today' before click on Submit");
 
             //Collected amount is less than the minimum collection amount , current invoice cannot be made.Click CANCEL & EXIT to close Invoice and exit current visit, Click on UPDATE PAYMENT to update Collection amount
 
             return false;
+        }
+        else if(ll_collectionMandatory.getVisibility()==View.VISIBLE && cb_collection.isChecked()==true && lnCollection.getVisibility()==View.INVISIBLE && OverAllAmountCollected==0.0)
+        {
+            return true;
         }
         else
         {
@@ -1960,11 +1977,16 @@ Double OverAllAmountCollected=0.0;
 
             Double outstandingvalue=dbengine.fnGetStoretblLastOutstanding(storeID);
             outstandingvalue=Double.parseDouble(new DecimalFormat("##.##").format(outstandingvalue));
-            dbengine.updateOutstandingOfStore(storeID,0.0);
+
+            if(OverAllAmountCollected>=outstandingvalue) {
+
+                dbengine.updateOutstandingOfStore(storeID, 0.0);
+            }
 
             Double CollectionAmtAgainstStore=dbengine.fnTotCollectionAmtAgainstStore(storeID.trim(),TmpInvoiceCodePDA,StoreVisitCode);
 
             dbengine.updateStoreQuoteSubmitFlgInStoreMstr(storeID.trim(),0,StoreVisitCode);
+
             if(dbengine.checkCountIntblStoreSalesOrderPaymentDetails(storeID,strGlobalOrderID,TmpInvoiceCodePDA)==0)
             {
                 String strDefaultPaymentStageForStore=dbengine.fnGetDefaultStoreOrderPAymentDetails(storeID);
