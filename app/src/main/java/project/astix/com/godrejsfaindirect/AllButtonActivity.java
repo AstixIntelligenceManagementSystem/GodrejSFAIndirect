@@ -3938,7 +3938,14 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                     }
                     if(mm==10)
                     {
-
+                        newservice = newservice.getReasonForNoSales(getApplicationContext(), imei);
+                        if(newservice.flagExecutedServiceSuccesfully!=3)
+                        {
+                            serviceExceptionCode=" for No Reason Sales and Error Code is : "+newservice.exceptionCode;
+                            System.out.println("GRLTyre = "+mm);
+                            serviceException=true;
+                            break;
+                        }
                     }
                     if(mm==11)
                     {

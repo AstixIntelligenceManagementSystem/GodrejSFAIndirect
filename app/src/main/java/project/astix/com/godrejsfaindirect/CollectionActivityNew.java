@@ -78,6 +78,7 @@ import java.util.regex.Pattern;
 public class CollectionActivityNew extends BaseActivity  implements DatePickerDialog.OnDateSetListener, LocationListener,GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener
 {
+    String intentFrom;
 /* For Location Srvices Start*/
 public String VisitTimeInSideStore="NA";
     public  int flgRestartOrderReview=0;
@@ -302,7 +303,7 @@ Double OverAllAmountCollected=0.0;
         }
         else if(outstandingvalue>0.0 && cntInvoceValue==0.0)
         {
-            ll_collectionMandatory.setVisibility(View.GONE);
+            ll_collectionMandatory.setVisibility(View.VISIBLE);
             lnCollection.setVisibility(View.VISIBLE);
         }
 
@@ -436,6 +437,7 @@ Double OverAllAmountCollected=0.0;
 
         storeIDGlobal=storeID;
         StoreVisitCode=dbengine.fnGetStoreVisitCode(storeID);
+        intentFrom=passedvals.getStringExtra("intentFrom");
     }
     public void EdittextInitialization()
     {
@@ -1175,16 +1177,33 @@ Double OverAllAmountCollected=0.0;
 
                 // Showing Alert Message
                 alertDialog.show();*/
-                Intent ide=new Intent(CollectionActivityNew.this,ProductOrderReview.class);
-                ide.putExtra("SN", SN);
-                ide.putExtra("storeID", storeID);
-                ide.putExtra("imei", imei);
-                ide.putExtra("userdate", date);
-                ide.putExtra("pickerDate", pickerDate);
-                ide.putExtra("flgOrderType", flgOrderType);
+                if(intentFrom.equals("LastVisitDetails"))
+                {
+                    Intent fireBackDetPg=new Intent(CollectionActivityNew.this,LastVisitDetails.class);
+                    fireBackDetPg.putExtra("storeID", storeID);
+                    fireBackDetPg.putExtra("SN", SN);
+                    fireBackDetPg.putExtra("bck", 1);
+                    fireBackDetPg.putExtra("imei", imei);
+                    fireBackDetPg.putExtra("userdate", date);
+                    fireBackDetPg.putExtra("pickerDate", pickerDate);
+                    //fireBackDetPg.putExtra("rID", routeID);
+                    startActivity(fireBackDetPg);
+                    finish();
+                }
+                else
+                {
+                    Intent ide=new Intent(CollectionActivityNew.this,ProductOrderReview.class);
+                    ide.putExtra("SN", SN);
+                    ide.putExtra("storeID", storeID);
+                    ide.putExtra("imei", imei);
+                    ide.putExtra("userdate", date);
+                    ide.putExtra("pickerDate", pickerDate);
+                    ide.putExtra("flgOrderType", flgOrderType);
 
-                startActivity(ide);
-                finish();
+                    startActivity(ide);
+                    finish();
+                }
+
             }
         });
 
@@ -1506,7 +1525,7 @@ Double OverAllAmountCollected=0.0;
 
         Double MinCollectionvalue=dbengine.fnGetStoretblLastOutstanding(storeID);
         MinCollectionvalue=Double.parseDouble(new DecimalFormat("##.##").format(MinCollectionvalue));
-        if(ll_collectionMandatory.getVisibility()==View.VISIBLE && cb_collection.isChecked()==false && lnCollection.getVisibility()==View.VISIBLE && OverAllAmountCollected==0.0)
+        if(ll_collectionMandatory.getVisibility()==View.VISIBLE && cb_collection.isChecked()==false && lnCollection.getVisibility()==View.VISIBLE && (OverAllAmountCollected>=0.0))
         {
             showAlertSingleButtonError("If there is no Collection for today then  please Tick on 'No Collection Today' before click on Submit");
 
@@ -1710,17 +1729,33 @@ Double OverAllAmountCollected=0.0;
         alertDialog.setNegativeButton("Cancel & Exit", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which) {
                 dialog.dismiss();
-                Intent ide=new Intent(CollectionActivityNew.this,ProductOrderReview.class);
-                ide.putExtra("SN", SN);
-                ide.putExtra("storeID", storeID);
-                ide.putExtra("imei", imei);
-                ide.putExtra("userdate", date);
-                ide.putExtra("pickerDate", pickerDate);
-                ide.putExtra("flgOrderType", flgOrderType);
-                ide.putExtra("OrderPDAID", strGlobalOrderID);
+                if(intentFrom.equals("LastVisitDetails"))
+                {
+                    Intent fireBackDetPg=new Intent(CollectionActivityNew.this,LastVisitDetails.class);
+                    fireBackDetPg.putExtra("storeID", storeID);
+                    fireBackDetPg.putExtra("SN", SN);
+                    fireBackDetPg.putExtra("bck", 1);
+                    fireBackDetPg.putExtra("imei", imei);
+                    fireBackDetPg.putExtra("userdate", date);
+                    fireBackDetPg.putExtra("pickerDate", pickerDate);
+                    //fireBackDetPg.putExtra("rID", routeID);
+                    startActivity(fireBackDetPg);
+                    finish();
+                }
+                else
+                {
+                    Intent ide=new Intent(CollectionActivityNew.this,ProductOrderReview.class);
+                    ide.putExtra("SN", SN);
+                    ide.putExtra("storeID", storeID);
+                    ide.putExtra("imei", imei);
+                    ide.putExtra("userdate", date);
+                    ide.putExtra("pickerDate", pickerDate);
+                    ide.putExtra("flgOrderType", flgOrderType);
+                    ide.putExtra("OrderPDAID", strGlobalOrderID);
 
-                startActivity(ide);
-                finish();
+                    startActivity(ide);
+                    finish();
+                }
             }
         });
 
@@ -2448,7 +2483,6 @@ Double OverAllAmountCollected=0.0;
     protected void startLocationUpdates()
     {
         PendingResult<Status> pendingResult = LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-
     }
 
     @Override

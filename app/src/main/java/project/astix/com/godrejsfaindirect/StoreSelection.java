@@ -2266,6 +2266,7 @@ public void DayEndWithoutalert()
 		setContentView(R.layout.activity_store_selection);
 		tl2 = (TableLayout) findViewById(R.id.dynprodtable);
 		Intent getStorei = getIntent();
+		StoreSelection.flgChangeRouteOrDayEnd=0;
 		if(getStorei !=null)
 		{
 		imei = getStorei.getStringExtra("imei").trim();

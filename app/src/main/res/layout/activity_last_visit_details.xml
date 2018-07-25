@@ -1392,16 +1392,7 @@
 
 			/>
 
-		<Button
-			android:id="@+id/nxtP4"
-			android:layout_width="0dp"
-			android:layout_height="match_parent"
-			android:layout_marginLeft="8dp"
-			android:layout_weight="0.8"
-			android:background="@drawable/custom_button"
 
-			android:text="@string/lastvisitdetails_next"
-			android:textColor="#ffffff" />
 
 		<Button
 			android:id="@+id/btn_Cancel"
@@ -1413,7 +1404,16 @@
 			android:text="@string/AlertDialogCancelButton"
 			android:textColor="#ffffff" />
 
+		<Button
+			android:id="@+id/nxtP4"
+			android:layout_width="0dp"
+			android:layout_height="match_parent"
+			android:layout_marginLeft="8dp"
+			android:layout_weight="0.8"
+			android:background="@drawable/custom_button"
 
+			android:text="@string/Invoice"
+			android:textColor="#ffffff" />
 		<Button
 			android:id="@+id/btn_NoSales"
 			android:layout_width="0dp"
@@ -1433,7 +1433,7 @@
 			android:layout_marginLeft="8dp"
 			android:layout_weight="1.2"
 			android:background="@drawable/custom_button"
-			android:text="@string/StrClosed"
+			android:text="@string/NoInvoice"
 
 			android:textColor="#ffffff"/>
 

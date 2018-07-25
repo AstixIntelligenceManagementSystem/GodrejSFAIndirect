@@ -19815,4 +19815,160 @@ int flgProcessedInvoice=0;
 
 	}
 
+	public ServiceWorker getReasonForNoSales(Context ctx, String uuid)
+	{
+		this.context = ctx;
+
+		ServiceWorker setmovie = new ServiceWorker();
+		PRJDatabase dbengine = new PRJDatabase(context);
+		dbengine.open();
+
+		final String SOAP_ACTION = "http://tempuri.org/GetReasonForNoSales";
+		final String METHOD_NAME = "GetReasonForNoSales";
+		final String NAMESPACE = "http://tempuri.org/";
+		final String URL = UrlForWebService;
+
+		SoapObject table = null; // Contains table of dataset that returned
+		// through SoapObject
+		SoapObject client = null; // Its the client petition to the web service
+		SoapObject tableRow = null; // Contains row of table
+		SoapObject responseBody = null; // Contains XML content of dataset
+
+		//SoapObject param
+		HttpTransportSE transport = null; // That call webservice
+		SoapSerializationEnvelope sse = null;
+
+		sse = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+		sse.addMapping(NAMESPACE, "ServiceWorker", this.getClass());
+		// Note if class name isn't "ABC_CLASS_NAME" ,you must change
+		sse.dotNet = true; // if WebService written .Net is result=true
+		HttpTransportSE androidHttpTransport = new HttpTransportSE(
+				URL,timeout);
+
+
+
+		try {
+			client = new SoapObject(NAMESPACE, METHOD_NAME);
+
+
+			sse.setOutputSoapObject(client);
+			sse.bodyOut = client;
+			androidHttpTransport.call(SOAP_ACTION, sse);
+
+			// This step: get file XML
+			responseBody = (SoapObject) sse.getResponse();
+
+
+			SoapObject soDiffg = (SoapObject) responseBody.getProperty("diffgram");
+
+			if(soDiffg.hasProperty("NewDataSet"))
+			{
+				// remove information XML,only retrieved results that returned
+				responseBody = (SoapObject) responseBody.getProperty(1);
+
+				// get information XMl of tables that is returned
+				table = (SoapObject) responseBody.getProperty(0);
+			}
+			else
+			{
+
+			}
+
+			int chkTblCategoryListContainsRow=0;
+
+			if(soDiffg.hasProperty("NewDataSet"))
+			{
+				chkTblCategoryListContainsRow=1;
+				dbengine.Delete_tblReasonForNoSales_for_refreshData();
+			}
+			////// System.out.println("chkTblStoreListContainsRow: for Category "+ chkTblStoreListContainsRow);
+
+			if(chkTblCategoryListContainsRow==1)
+			{
+				//////// System.out.println("h1");
+				////// System.out.println("Arjun Calling category webservice 4");
+				//////// System.out.println("table.getPropertyCount()"+table.getPropertyCount());
+				if(table.getPropertyCount()>0)
+				{
+					//////// System.out.println("h2");
+					for(int i = 0; i <= table.getPropertyCount() -1 ; i++)
+					{
+
+						//////// System.out.println("table - prop count: "+ table.getPropertyCount());
+						tableRow = (SoapObject) table.getProperty(i);
+
+
+
+						int ReasonID = 0;
+						String ReasonDescr = "NA";
+						int SeqNo=0;
+
+						if((tableRow.hasProperty("ReasonID")))
+						{
+							if (tableRow.getProperty("ReasonID").toString().isEmpty() )
+							{
+								ReasonID=0;
+							}
+							else
+							{
+								ReasonID =Integer.parseInt( tableRow.getProperty("ReasonID").toString().trim());
+							}
+						}
+
+						if((tableRow.hasProperty("ReasonDescr")))
+						{
+							if (tableRow.getProperty("ReasonDescr").toString().isEmpty() )
+							{
+								ReasonDescr="NA";
+							}
+							else
+							{
+								ReasonDescr = tableRow.getProperty("ReasonDescr").toString().trim();
+							}
+						}
+
+
+						if (tableRow.hasProperty("SeqNo") )
+						{
+							if (tableRow.getProperty("SeqNo").toString().isEmpty() )
+							{
+								SeqNo=0;
+							}
+							else
+							{
+								SeqNo =Integer.parseInt(tableRow.getProperty("SeqNo").toString().trim());
+
+							}
+						}
+
+
+						dbengine.savetblReasonForNoSales(ReasonID, ReasonDescr.trim(),SeqNo);
+
+
+
+					}
+				}
+			} //aa
+			//dbengine.close();
+
+
+			dbengine.close();		// #4
+
+			setmovie.director = "1";
+			flagExecutedServiceSuccesfully=3;
+			// System.out.println("ServiceWorkerNitish getCategory Inside");
+			return setmovie;
+
+		} catch (Exception e) {
+
+			// System.out.println("Aman Exception occur in GetCategoryMstr :"+e.toString());
+			setmovie.director = e.toString();
+			setmovie.movie_name = e.toString();
+			flagExecutedServiceSuccesfully=0;
+			dbengine.close();
+			return setmovie;
+		}
+
+	}
+
 }

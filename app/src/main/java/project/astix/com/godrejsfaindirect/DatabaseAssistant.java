@@ -550,7 +550,7 @@ public class DatabaseAssistant
 	private void exportTableStoreVisit(final String tableName) throws IOException {
 		xmlBuilder.openTable(tableName);
 
-		String sql = "select IMEINumber,StoreID,StoreVisitCode,ForDate,ActualLatitude,ActualLongitude,VisitTimeOutSideStore, VisitTimeInSideStore,VisitTimeCheckStore,VisitEndTS,LocProvider,Accuracy,BateryLeftStatus,StoreClose,StoreNextDay,ISNewStore,IsNewStoreDataCompleteSaved,flgFromWhereSubmitStatus,flgSubmitFromQuotation,flgLocationServicesOnOff,flgGPSOnOff,flgNetworkOnOff,flgFusedOnOff,flgInternetOnOffWhileLocationTracking,flgStoreOrder,flgRetailerCreditBalnce,VisitTypeStatus,flgVisitCollectionMarkedStatus from " + tableName + " where Sstat = 3";		// chk for flag - DB adapter
+		String sql = "select IMEINumber,StoreID,StoreVisitCode,ForDate,ActualLatitude,ActualLongitude,VisitTimeOutSideStore, VisitTimeInSideStore,VisitTimeCheckStore,VisitEndTS,LocProvider,Accuracy,BateryLeftStatus,StoreClose,StoreNextDay,ISNewStore,IsNewStoreDataCompleteSaved,flgFromWhereSubmitStatus,flgSubmitFromQuotation,flgLocationServicesOnOff,flgGPSOnOff,flgNetworkOnOff,flgFusedOnOff,flgInternetOnOffWhileLocationTracking,flgStoreOrder,flgRetailerCreditBalnce,VisitTypeStatus,flgVisitCollectionMarkedStatus,flgNoInvoiceButtonClick,ReasonIdForNoInvoice from " + tableName + " where Sstat = 3";		// chk for flag - DB adapter
 		Cursor c = db.rawQuery(sql, new String[0]);
 		if (c.moveToFirst()) {
 			int cols = c.getColumnCount();

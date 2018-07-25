@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="5dp"
+    android:orientation="vertical">
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:orientation="horizontal"
+        android:background="@drawable/custom_header_color"
+        >
+
+
+
+        <TextView   android:id="@+id/bardd"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="No Invoice Reason"
+            android:textStyle="bold"
+
+            android:textColor="#ffffff"
+            android:typeface="normal"
+            android:paddingLeft="10dp"
+            android:gravity="center"
+            android:textSize="18sp" />
+
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/card_background_white"
+        android:layout_marginTop="5dp"
+        android:padding="16dp">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:textSize="14sp"
+        android:text="Store Closed"/>
+        <RadioGroup
+            android:id="@+id/rg_Yes_No"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <RadioButton
+                android:id="@+id/rb_SC_Yes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Yes"/>
+            <RadioButton
+                android:id="@+id/rb_SC_No"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="No"/>
+        </RadioGroup>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_other_reason"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp"
+        android:padding="16dp">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            android:text="Other reason for no invoice"/>
+        <Spinner
+            android:id="@+id/spnr_rsn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:background="@drawable/spinner_boundary"
+            android:spinnerMode="dialog"></Spinner>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:orientation="horizontal">
+    <Button
+        android:id="@+id/btn_cancel"
+    android:layout_width="0dp"
+    android:layout_weight="1"
+    android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:background="@drawable/custom_button"
+        android:text="Cancel"/>
+        <Button
+            android:id="@+id/btn_sbmt"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:background="@drawable/custom_button_disable"
+            android:enabled="false"
+            android:text="Submit"/>
+    </LinearLayout>
+</LinearLayout>

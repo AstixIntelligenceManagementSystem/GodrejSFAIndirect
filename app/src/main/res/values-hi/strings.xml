@@ -11,6 +11,8 @@
     <string name="SubmittingPndngDataMsg"> लंबित डेटा सबमिट करना…</string>
     <string name="genStoreListWhoseDataIsNotYetSubmitted">Following invoices are Not Submitted as Yet. Invoices only Saved but not Submitted now will be permanently lost.</string>
     <string name="VanStock">Van Stock</string>
+    <string name="NoInvoice">No Invoice</string>
+    <string name="Invoice">Invoice</string>
     <!--Splash screen starts here-->
     <string name="genTermNoDataConnection">जानकारी</string>
     <string name="AlertDialogOkButton">ठीक</string>

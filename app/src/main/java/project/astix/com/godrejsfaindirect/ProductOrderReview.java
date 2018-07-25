@@ -5576,6 +5576,7 @@ public void loadPurchaseProductDefault()
 						AmtCollectIntent.putExtra("pickerDate", pickerDate);
 						AmtCollectIntent.putExtra("SN", SN);
 						AmtCollectIntent.putExtra("OrderPDAID", strGlobalOrderID);
+			AmtCollectIntent.putExtra("intentFrom", "ProductOrderReview");
 						startActivity(AmtCollectIntent);
 						finish();
 					/*}
@@ -7957,7 +7958,7 @@ public void loadPurchaseProductDefault()
 				 AmtCollectIntent.putExtra("pickerDate", pickerDate);
 				 AmtCollectIntent.putExtra("SN", SN);
 				 AmtCollectIntent.putExtra("OrderPDAID", strGlobalOrderID);
-
+				 AmtCollectIntent.putExtra("intentFrom", "ProductOrderReview");
 				// AmtCollectIntent.putExtra("flgOrderType",flgOrderType);
 				 startActivity(AmtCollectIntent);
 				 finish();
@@ -7984,6 +7985,7 @@ public void loadPurchaseProductDefault()
 				 AmtCollectIntent.putExtra("pickerDate", pickerDate);
 				 AmtCollectIntent.putExtra("SN", SN);
 				 AmtCollectIntent.putExtra("OrderPDAID", strGlobalOrderID);
+				 AmtCollectIntent.putExtra("intentFrom", "ProductOrderReview");
 				 // AmtCollectIntent.putExtra("flgOrderType",flgOrderType);
 				 startActivity(AmtCollectIntent);
 				 finish();

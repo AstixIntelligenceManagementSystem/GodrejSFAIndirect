@@ -1,9 +1,9 @@
 <resources>
 
-     <string name="app_name">Godrej SFA</string>
+    <!-- <string name="app_name">Godrej SFA</string>-->
     <!-- <string name="app_name">Godrej SFA Stagging</string>-->
    <!-- <string name="app_name">Godrej SFA Test</string>-->
-  <!-- <string name="app_name">Godrej SFA Dev</string>-->
+   <string name="app_name">Godrej SFA Dev</string>
 
 
     <!--Alert Box message-->
@@ -748,6 +748,8 @@
 
     <!--newly added for store close activity-->
     <string name="StrClosed">Store Closed</string>
+    <string name="NoInvoice">No Invoice</string>
+    <string name="Invoice">Invoice</string>
     <string name="StrClosedHeader">Store Closed Information</string>
     <string name="StrClosedReason">Store Closed Reason</string>
     <string name="alertSaveMsg">Please save data before leaving or changes done will not be saved.</string>

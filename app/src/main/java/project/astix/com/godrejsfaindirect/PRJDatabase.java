@@ -40,8 +40,12 @@ public class PRJDatabase
     private static final String DATABASE_TABLE_MAIN210 = "tblTmpInvoiceDetails";//DATABASE_TABLE_TMPINVOICE_DETAILS
     private static final String DATABASE_TABLE_STOREVISIT="tblStoreVisitMstr";
     private static final String  DATABASE_TABLE_INVOICE_HEADER = "tblInvoiceHeader";//DATABASE_TABLE_MAIN32,DATABASE_CREATE_TABLE_32
+
+    private static final String DATABASE_TABLE_tblReasonForNoSales="tblReasonForNoSales";
+    private static final String DATABASE_CREATE_TABLE_tblReasonForNoSales="create table tblReasonForNoSales(ReasonID text null,ReasonDescr text null,SeqNo int null);";
+
     private static final String DATABASE_CREATE_TABLE_INVOICE_HEADER = "create table tblInvoiceHeader (StoreVisitCode text not null,InvoiceNumber int not null,TmpInvoiceCodePDA text null, StoreID text not null, InvoiceDate string not null, TotalBeforeTaxDis real not null, TaxAmt real not null, TotalDis real not null, InvoiceVal real not null, FreeTotal integer not null, Sstat integer not null, InvAfterDis real not null, AddDis real not null,  NoCoupon int null, TotalCoupunAmount real null,TransDate string not null,FlgInvoiceType text not null,flgWholeSellApplicable int null,flgProcessedInvoice int not null,CycleID  int not null);";
-    private static final String DATABASE_CREATE_TABLE_STOREVISIT="create table tblStoreVisitMstr(IMEINumber text null,StoreVisitCode text null,StoreID text not null, Sstat integer not null, ForDate string not null, ActualLatitude text null, ActualLongitude text null,VisitTimeOutSideStore text null,VisitTimeInSideStore text null,VisitTimeCheckStore text null, VisitEndTS text null, LocProvider text null, Accuracy text null,BateryLeftStatus text null,StoreClose integer null,StoreNextDay integer null,ISNewStore int null,IsNewStoreDataCompleteSaved int null,flgFromWhereSubmitStatus int null,flgSubmitFromQuotation int null,flgLocationServicesOnOff int null,flgGPSOnOff int null,flgNetworkOnOff int null,flgFusedOnOff int null,flgInternetOnOffWhileLocationTracking int null,flgStoreOrder int null,flgRetailerCreditBalnce integer null,VisitTypeStatus text null,flgVisitCollectionMarkedStatus int null);";
+    private static final String DATABASE_CREATE_TABLE_STOREVISIT="create table tblStoreVisitMstr(IMEINumber text null,StoreVisitCode text null,StoreID text not null, Sstat integer not null, ForDate string not null, ActualLatitude text null, ActualLongitude text null,VisitTimeOutSideStore text null,VisitTimeInSideStore text null,VisitTimeCheckStore text null, VisitEndTS text null, LocProvider text null, Accuracy text null,BateryLeftStatus text null,StoreClose integer null,StoreNextDay integer null,ISNewStore int null,IsNewStoreDataCompleteSaved int null,flgFromWhereSubmitStatus int null,flgSubmitFromQuotation int null,flgLocationServicesOnOff int null,flgGPSOnOff int null,flgNetworkOnOff int null,flgFusedOnOff int null,flgInternetOnOffWhileLocationTracking int null,flgStoreOrder int null,flgRetailerCreditBalnce integer null,VisitTypeStatus text null,flgVisitCollectionMarkedStatus int null,flgNoInvoiceButtonClick int null,ReasonIdForNoInvoice int null);";
     private static final String  DATABASE_TABLE_DayCheckIn = "tblDayCheckIn";//DATABASE_TABLE_MAIN32,DATABASE_CREATE_TABLE_32
     private static final String DATABASE_CREATE_TABLE_DayCheckIn = "create table tblDayCheckIn (DateOfDayCheckIn text not null,flgDayDayCheckIn int not null);";
     private static final String DATABASE_TABLE_NewAddedStoreLocationDetails="tblNewAddedStoreLocationDetails";
@@ -4897,7 +4901,7 @@ public class PRJDatabase
     {
 
 
-
+        db.execSQL("DELETE FROM tblReasonForNoSales");
         db.execSQL("DELETE FROM tblInvoiceDetails");
         db.execSQL("DELETE FROM tblTmpInvoiceHeader");
         db.execSQL("DELETE FROM tblStoreVisitMstr");
@@ -30674,7 +30678,7 @@ String fetchdate=fnGetDateTimeString();
         return StoreVisitCode;
     }
 
-    public void fnInsertOrUpdate_tblStoreVisitMstr(String StoreVisitCode,String StoreID,int Sstat,String ForDate,String ActualLatitude,String ActualLongitude,String VisitTimeOutSideStore,String VisitTimeInSideStore,String VisitTimeCheckStore,String VisitEndTS,String LocProvider,String Accuracy,String BateryLeftStatus,int StoreClose,int StoreNextDay,int ISNewStore,int IsNewStoreDataCompleteSaved,int flgFromWhereSubmitStatus,int flgSubmitFromQuotation,int flgLocationServicesOnOff,int flgGPSOnOff,int flgNetworkOnOff,int flgFusedOnOff,int flgInternetOnOffWhileLocationTracking,int flgStoreOrder,int flgRetailerCreditBalnce,int VisitTypeStatus,int flgVisitCollectionMarkedStatus)
+   /* public void fnInsertOrUpdate_tblStoreVisitMstr(String StoreVisitCode,String StoreID,int Sstat,String ForDate,String ActualLatitude,String ActualLongitude,String VisitTimeOutSideStore,String VisitTimeInSideStore,String VisitTimeCheckStore,String VisitEndTS,String LocProvider,String Accuracy,String BateryLeftStatus,int StoreClose,int StoreNextDay,int ISNewStore,int IsNewStoreDataCompleteSaved,int flgFromWhereSubmitStatus,int flgSubmitFromQuotation,int flgLocationServicesOnOff,int flgGPSOnOff,int flgNetworkOnOff,int flgFusedOnOff,int flgInternetOnOffWhileLocationTracking,int flgStoreOrder,int flgRetailerCreditBalnce,int VisitTypeStatus,int flgVisitCollectionMarkedStatus)
     {
 
         open();
@@ -30726,7 +30730,63 @@ String fetchdate=fnGetDateTimeString();
         } finally {
             close();
         }
-    }
+    }*/
+   public void fnInsertOrUpdate_tblStoreVisitMstr(String StoreVisitCode,String StoreID,int Sstat,String ForDate,String ActualLatitude,String ActualLongitude,String VisitTimeOutSideStore,String VisitTimeInSideStore,String VisitTimeCheckStore,String VisitEndTS,String LocProvider,String Accuracy,String BateryLeftStatus,int StoreClose,int StoreNextDay,int ISNewStore,int IsNewStoreDataCompleteSaved,int flgFromWhereSubmitStatus,int flgSubmitFromQuotation,int flgLocationServicesOnOff,int flgGPSOnOff,int flgNetworkOnOff,int flgFusedOnOff,int flgInternetOnOffWhileLocationTracking,int flgStoreOrder,int flgRetailerCreditBalnce,int VisitTypeStatus,int flgVisitCollectionMarkedStatus,int flgNoInvoiceButtonClick,int ReasonIdForNoInvoice)
+   {
+
+       open();
+       try {
+           Cursor cursor = db.rawQuery("SELECT StoreVisitCode FROM tblStoreVisitMstr where StoreVisitCode='"+StoreVisitCode +"' AND StoreID='"+StoreID+"' AND Sstat=1" , null);
+           ContentValues initialValues = new ContentValues();
+           initialValues.put("IMEINumber", CommonInfo.imei.toString());
+           initialValues.put("Sstat", Sstat);
+
+           initialValues.put("VisitEndTS", VisitEndTS);
+           initialValues.put("flgFromWhereSubmitStatus", flgFromWhereSubmitStatus);
+           //flgFromWhereSubmitStatus
+           if(cursor.getCount()>0)
+           {
+               int affected = db.update(DATABASE_TABLE_STOREVISIT, initialValues, "StoreID=? AND StoreVisitCode=?",new String[] {StoreID,StoreVisitCode});
+           }
+           else
+           {
+               initialValues.put("BateryLeftStatus", BateryLeftStatus);
+               initialValues.put("IsNewStoreDataCompleteSaved", 0);
+               initialValues.put("StoreVisitCode", StoreVisitCode);
+               initialValues.put("StoreID", StoreID);
+               initialValues.put("ForDate", ForDate);
+               initialValues.put("ActualLatitude", ActualLatitude);
+               initialValues.put("ActualLongitude", ActualLongitude);
+               initialValues.put("VisitTimeOutSideStore", VisitTimeOutSideStore);
+               initialValues.put("VisitTimeInSideStore", VisitTimeInSideStore);
+               initialValues.put("VisitTimeCheckStore", VisitTimeCheckStore);//01-JAN-1900
+               initialValues.put("LocProvider", LocProvider);
+               initialValues.put("Accuracy", Accuracy);
+               initialValues.put("StoreClose", StoreClose);
+               initialValues.put("StoreNextDay", StoreNextDay);
+               initialValues.put("ISNewStore", ISNewStore);
+               // initialValues.put("IsNewStoreDataCompleteSaved", IsNewStoreDataCompleteSaved);
+               initialValues.put("flgSubmitFromQuotation", flgSubmitFromQuotation);
+               initialValues.put("flgLocationServicesOnOff", flgLocationServicesOnOff);
+               initialValues.put("flgGPSOnOff", flgGPSOnOff);
+               initialValues.put("flgNetworkOnOff", flgNetworkOnOff);
+               initialValues.put("flgFusedOnOff", flgFusedOnOff);
+               initialValues.put("flgInternetOnOffWhileLocationTracking", flgInternetOnOffWhileLocationTracking);
+               initialValues.put("flgStoreOrder", flgStoreOrder);
+               initialValues.put("flgRetailerCreditBalnce", flgRetailerCreditBalnce);
+               initialValues.put("flgInternetOnOffWhileLocationTracking", flgInternetOnOffWhileLocationTracking);
+               initialValues.put("VisitTypeStatus", VisitTypeStatus);
+               initialValues.put("flgVisitCollectionMarkedStatus", flgVisitCollectionMarkedStatus);
+               initialValues.put("flgNoInvoiceButtonClick", flgNoInvoiceButtonClick);
+               initialValues.put("ReasonIdForNoInvoice", ReasonIdForNoInvoice);
+
+               db.insert(DATABASE_TABLE_STOREVISIT, null, initialValues);
+           }
+       } finally {
+           close();
+       }
+   }
+
 
     public LinkedHashMap<String, String> fngetStoreBasicDetails(String StoreID)
     {
@@ -31981,6 +32041,7 @@ close();
             try
             {
                 //
+                db.execSQL(DATABASE_CREATE_TABLE_tblReasonForNoSales);
                 db.execSQL(DATABASE_CREATE_TABLE_DayCheckIn);
                 db.execSQL(DATABASE_CREATE_TABLE_TEMP_DISTRIBUTOR_STOCK);
                 db.execSQL(DATABASE_CREATE_TABLE_CYCLEID);
@@ -32242,6 +32303,8 @@ close();
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             try
             {
+                db.execSQL("DROP TABLE IF EXISTS tblReasonForNoSales");
+
                 db.execSQL("DROP TABLE IF EXISTS tblDayCheckIn");
                 db.execSQL("DROP TABLE IF EXISTS tblTmpDistributorStock");
                 db.execSQL("DROP TABLE IF EXISTS tblCycleID");
@@ -32576,6 +32639,81 @@ close();
         int affected1 = db.update("tblStoreVisitMstr", values,"StoreID=? AND StoreVisitCode=?", new String[] { storeID,StoreVisitCode });
         close();
     }
+
+    public void fnUpdateflgVisitNoInvoiceClick(String storeID,String StoreVisitCode,int flgNoInvoiceButtonClick,int ReasonIdForNoInvoice)
+    {
+        // Cursor cursor = db.rawQuery("SELECT flgVisitCollectionMarkedStatus FROM tblStoreVisitMstr WHERE  StoreID ='"+ StoreID + "' and StoreVisitCode='"+StoreVisitCode+"'", null);
+        open();
+        final ContentValues values = new ContentValues();
+        values.put("flgNoInvoiceButtonClick", flgNoInvoiceButtonClick);
+        values.put("ReasonIdForNoInvoice", ReasonIdForNoInvoice);
+        int affected1 = db.update("tblStoreVisitMstr", values,"StoreID=? AND StoreVisitCode=?", new String[] { storeID,StoreVisitCode });
+        close();
+    }
+
+
+    public void savetblReasonForNoSales(int ReasonID,String ReasonDescr,int SeqNo)
+    {
+
+        ContentValues values=new ContentValues();
+        values.put("ReasonID", ReasonID);
+        values.put("ReasonDescr", ReasonDescr);
+        values.put("SeqNo", SeqNo);
+
+        db.insert(DATABASE_TABLE_tblReasonForNoSales, null, values);
+
+    }
+
+
+
+
+    public LinkedHashMap<String, String> fetch_ReasonForNoSales()
+    {
+        open();
+        // System.out.println("Abhinav Raj is 1");
+        LinkedHashMap<String, String> hmapReasonForNoSales = new LinkedHashMap<String, String>();
+        Cursor cursor = db.rawQuery("SELECT ReasonID,ReasonDescr FROM tblReasonForNoSales order by SeqNo",null);
+        try
+        {
+
+            if(cursor.getCount()>0)
+            {
+                if (cursor.moveToFirst())
+                {
+
+                    for (int i = 0; i <= (cursor.getCount() - 1); i++)
+                    {
+                        if(i==0)
+                        {
+                            hmapReasonForNoSales.put("Select Reason","0");
+                        }
+                        hmapReasonForNoSales.put(cursor.getString(1).toString(),cursor.getString(0).toString());
+                        cursor.moveToNext();
+                    }
+                }
+
+            }
+
+            else
+            {
+                hmapReasonForNoSales.put("No Reason", "0");
+            }
+            // System.out.println("Abhinav Raj is 3");
+            return hmapReasonForNoSales;
+        }
+        finally
+        {
+            cursor.close();
+            close();
+        }
+    }
+
+    public void Delete_tblReasonForNoSales_for_refreshData()
+    {
+        db.execSQL("DELETE FROM tblReasonForNoSales");
+    }
+
+
 }
 
 

@@ -570,6 +570,11 @@ public class SyncMaster extends Activity
 		{
 			alertDialogSyncOK.setMessage(getText(R.string.syncAlertStoreQuotationOKMsg));
 		}
+		else if(StoreSelection.flgChangeRouteOrDayEnd==4)
+		{
+			alertDialogSyncOK.setMessage("Store No Invoice submission was successfull");
+
+		}
 		else
 		{
 			alertDialogSyncOK.setMessage(getText(R.string.syncAlertOKMsg));
@@ -978,7 +983,12 @@ public class SyncMaster extends Activity
 				}else if(StoreSelection.flgChangeRouteOrDayEnd==2)
 				{
 				 pDialogGetStores.setMessage(getResources().getString(R.string.txtChangeRoute));
-				}else if(StoreSelection.flgChangeRouteOrDayEnd==3)
+				}
+				else if(StoreSelection.flgChangeRouteOrDayEnd==4)
+				{
+					pDialogGetStores.setMessage("Submitting No Invoice Details");
+				}
+				else if(StoreSelection.flgChangeRouteOrDayEnd==3)
 				{
 					 pDialogGetStores.setMessage(getResources().getString(R.string.txtSubmitQuoteDetail));
 					}
