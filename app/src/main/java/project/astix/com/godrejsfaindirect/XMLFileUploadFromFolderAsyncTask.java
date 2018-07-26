@@ -40,7 +40,10 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -61,6 +64,7 @@ class XMLFileUploadFromFolderAsyncTask extends AsyncTask<Void,Void,Boolean>
 
     boolean isErrorExist=false;
     int serverResponseCode = 0;
+    SharedPreferences pref;
 
     public XMLFileUploadFromFolderAsyncTask(Context context)
     {
@@ -68,6 +72,7 @@ class XMLFileUploadFromFolderAsyncTask extends AsyncTask<Void,Void,Boolean>
         dbengine = new PRJDatabase(mContext);
         //this.imei=imei;
         // this.fDate=fDate;
+        pref=context.getSharedPreferences(CommonInfo.LastTrackPreference,context.MODE_PRIVATE);
         mTaskListner=(TaskListner)context;
     }
 
@@ -266,7 +271,7 @@ class XMLFileUploadFromFolderAsyncTask extends AsyncTask<Void,Void,Boolean>
             {
                 //syncFLAG = 1;
 
-
+                updateSharePref();
                 dbengine.upDateTblXmlFile(fileName);
                 delXML(xmlForWeb[0].toString());
 
@@ -391,6 +396,15 @@ class XMLFileUploadFromFolderAsyncTask extends AsyncTask<Void,Void,Boolean>
             mContext.sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED,
                     Uri.parse("file://" + Environment.getExternalStorageDirectory())));
         }
+    }
+
+    public void updateSharePref()
+    {
+        long syncTIMESTAMP = System.currentTimeMillis();
+        Date dateobj = new Date(syncTIMESTAMP);
+        SimpleDateFormat df = new SimpleDateFormat("dd/MMM HH:mm:ss", Locale.ENGLISH);
+        String lstDataSync = df.format(dateobj);
+        pref.edit().putString("LastSync",lstDataSync ).commit();
     }
 }
 

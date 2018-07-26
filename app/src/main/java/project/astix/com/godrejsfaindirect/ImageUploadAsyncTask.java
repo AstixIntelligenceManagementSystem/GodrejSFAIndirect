@@ -2,6 +2,7 @@ package project.astix.com.godrejsfaindirect;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaScannerConnection;
@@ -30,13 +31,16 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 import java.util.regex.Pattern;
 
 class ImageUploadAsyncTask extends AsyncTask<Void,Void,Boolean>
 {
     PRJDatabase dbengine;
-
+    SharedPreferences pref;
     InputStream inputStream;
    // public String imei=null;
    // public String fDate=null;
@@ -51,6 +55,7 @@ class ImageUploadAsyncTask extends AsyncTask<Void,Void,Boolean>
         dbengine = new PRJDatabase(mContext);
         //this.imei=imei;
        // this.fDate=fDate;
+        pref=context.getSharedPreferences(CommonInfo.LastTrackPreference,context.MODE_PRIVATE);
         mTaskListner=(TaskListner)context;
     }
 
@@ -222,7 +227,7 @@ class ImageUploadAsyncTask extends AsyncTask<Void,Void,Boolean>
             {
                 dbengine.updateSSttImage(fileName, 4);
                 dbengine.fndeleteSbumittedStoreImagesOfSotre(4);
-
+                updateSharePref();
                 String file_dj_path = Environment.getExternalStorageDirectory() + "/"+CommonInfo.ImagesFolder+"/"+fileName;
                 File fdelete = new File(file_dj_path);
                 if (fdelete.exists()) {
@@ -324,6 +329,16 @@ class ImageUploadAsyncTask extends AsyncTask<Void,Void,Boolean>
         byte [] arr=baos.toByteArray();
         String result= Base64.encodeToString(arr, Base64.DEFAULT);
         return result;
+    }
+
+
+    public void updateSharePref()
+    {
+        long syncTIMESTAMP = System.currentTimeMillis();
+        Date dateobj = new Date(syncTIMESTAMP);
+        SimpleDateFormat df = new SimpleDateFormat("dd/MMM HH:mm:ss", Locale.ENGLISH);
+        String lstDataSync = df.format(dateobj);
+        pref.edit().putString("LastSync",lstDataSync ).commit();
     }
 }
 

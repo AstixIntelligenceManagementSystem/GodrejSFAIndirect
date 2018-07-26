@@ -300,7 +300,7 @@
 
     <!-- Check DatabaseData Activity starts -->
     <string name="txtTodaySubmitData">आज के जमा किए गए डेटा</string>
-    <string name="txtTodayInvoices">Today Invoices</string>
+    <string name="txtTodayInvoices">Today Invoices/Collections</string>
     <!-- Check DatabaseData Activity starts -->
 
 
@@ -620,7 +620,7 @@
     <string name="Summary">सारांश</string>
     <string name="TargetVsAchieved">लक्ष्य बनाम हासिल</string>
     <string name="VersionNo">संस्करण संख्या-V</string>
-    <string name="CheckTodayOrder">आज का ऑर्डर देखें</string>
+    <string name="CheckTodayOrder">आज का ऑर्डर/संग्रह देखें</string>
 
 
 

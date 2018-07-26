@@ -37,6 +37,7 @@ public class DetailReportSummaryActivity extends BaseActivity
 {
 	TableLayout tbl_inflate;
 
+	TextView txt_alrtOffline;
 	LinkedHashMap<String, LinkedHashMap<String, String>> hmapSummaryDataNew=new LinkedHashMap<String, LinkedHashMap<String, String>>();
 
 	String date_value="";
@@ -129,7 +130,8 @@ public class DetailReportSummaryActivity extends BaseActivity
 		setContentView(R.layout.activity_day_summary);
 		tbl_inflate= (TableLayout) findViewById(R.id.tbl_inflate);
 		Intent extras = getIntent();
-
+		txt_alrtOffline= (TextView) findViewById(R.id.txt_alrtOffline);
+		txt_alrtOffline.setVisibility(View.GONE);
 		bck = extras.getIntExtra("bck", 0);
 
 
@@ -184,7 +186,8 @@ public class DetailReportSummaryActivity extends BaseActivity
 		}
 		else
 		{
-			Toast.makeText(DetailReportSummaryActivity.this,getResources().getString(R.string.NoDataConnectionFullMsg) , Toast.LENGTH_SHORT).show();
+			txt_alrtOffline.setVisibility(View.VISIBLE);
+			//Toast.makeText(DetailReportSummaryActivity.this,getResources().getString(R.string.NoDataConnectionFullMsg) , Toast.LENGTH_SHORT).show();
 		}
 
 

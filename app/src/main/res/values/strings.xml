@@ -318,7 +318,7 @@
 
     <!-- Check DatabaseData Activity starts -->
     <string name="txtTodaySubmitData">Today Submit Data</string>
- <string name="txtTodayInvoices">Today Invoices</string>
+ <string name="txtTodayInvoices">Today Invoices/Collections</string>
     <!-- Check DatabaseData Activity ends -->
 
     <!-- Notification Activity starts -->
@@ -650,7 +650,7 @@
     <string name="Summary">Summary</string>
     <string name="TargetVsAchieved">Target Vs Achieved</string>
     <string name="VersionNo">Version No-V</string>
-    <string name="CheckTodayOrder">Check Today Invoice</string>
+    <string name="CheckTodayOrder">Check Today Invoice/Collection</string>
 
 
     <!-- Selection header ends -->

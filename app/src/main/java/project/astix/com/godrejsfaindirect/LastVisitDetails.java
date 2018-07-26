@@ -25,6 +25,7 @@ import java.util.regex.Pattern;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
@@ -90,6 +91,7 @@ public class LastVisitDetails extends BaseActivity implements LocationListener,G
 		GoogleApiClient.OnConnectionFailedListener
 {
 
+	SharedPreferences pref;
 	int flgNoInvoiceButtonClick=0,ReasonIdForNoInvoice=0;
 	LinkedHashMap<String, String> hmapReasonForNoSales ;
 	String TmpInvoiceCodePDA;
@@ -429,6 +431,7 @@ public class LastVisitDetails extends BaseActivity implements LocationListener,G
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_last_visit_details);
 
+		pref=getSharedPreferences(CommonInfo.LastTrackPreference,MODE_PRIVATE);
 		CommonInfo.ActiveRouteSM="0";
 
 
@@ -500,7 +503,13 @@ public class LastVisitDetails extends BaseActivity implements LocationListener,G
 		Date dateobj = new Date(syncTIMESTAMP);
 		SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy",Locale.ENGLISH);
 		fullTS = df.format(dateobj);
-		
+
+
+
+		SimpleDateFormat simpleDateFormatf = new SimpleDateFormat("dd/MMM HH:mm:ss", Locale.ENGLISH);
+		String lstDataSync = simpleDateFormatf.format(dateobj);
+		pref.edit().putString("LastVisit",lstDataSync ).commit();
+
 		ll_InvoiceLastVisit=(LinearLayout) findViewById(R.id.ll_InvoiceLastVisit);
 		ll_inflateInvoiceData=(LinearLayout) findViewById(R.id.ll_inflateInvoiceData);
 

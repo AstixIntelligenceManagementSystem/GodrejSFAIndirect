@@ -2,6 +2,7 @@ package project.astix.com.godrejsfaindirect;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaScannerConnection;
@@ -49,6 +50,7 @@ class ImageUploadFromFolderAsyncTask extends AsyncTask<Void,Void,Boolean>
     boolean isErrorExist=false;
 
     private Context mContext;
+    SharedPreferences pref;
 
     public ImageUploadFromFolderAsyncTask(Context context)
     {
@@ -56,6 +58,7 @@ class ImageUploadFromFolderAsyncTask extends AsyncTask<Void,Void,Boolean>
         dbengine = new PRJDatabase(mContext);
         //this.imei=imei;
         // this.fDate=fDate;
+        pref=context.getSharedPreferences(CommonInfo.LastTrackPreference,context.MODE_PRIVATE);
         mTaskListner=(TaskListner)context;
     }
 
@@ -224,6 +227,7 @@ class ImageUploadFromFolderAsyncTask extends AsyncTask<Void,Void,Boolean>
             //  if(serverResponseCode == 200)
             if(the_string_response.equals("Abhinav"))
             {
+                updateSharePref();
 
                 String file_dj_path = Environment.getExternalStorageDirectory() + "/" + CommonInfo.ImagesFolder + "/" +currentImageFileName.toString().trim();
 
@@ -428,6 +432,16 @@ class ImageUploadFromFolderAsyncTask extends AsyncTask<Void,Void,Boolean>
         byte [] arr=baos.toByteArray();
         String result= Base64.encodeToString(arr, Base64.DEFAULT);
         return result;
+    }
+
+
+    public void updateSharePref()
+    {
+        long syncTIMESTAMP = System.currentTimeMillis();
+        Date dateobj = new Date(syncTIMESTAMP);
+        SimpleDateFormat df = new SimpleDateFormat("dd/MMM HH:mm:ss", Locale.ENGLISH);
+        String lstDataSync = df.format(dateobj);
+        pref.edit().putString("LastSync",lstDataSync ).commit();
     }
 }
 

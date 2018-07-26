@@ -3,6 +3,7 @@ package project.astix.com.godrejsfaindirect;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaScannerConnection;
@@ -39,7 +40,10 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -57,11 +61,13 @@ class XMLFileUploadAsyncTask extends AsyncTask<Void,Void,Boolean>
     public String[] xmlForWeb = new String[1];
     int serverResponseCode = 0;
     private Context mContext;
+    SharedPreferences pref;
 
     public XMLFileUploadAsyncTask(Context context)
     {
         mContext = context;
         dbengine = new PRJDatabase(mContext);
+        pref=context.getSharedPreferences(CommonInfo.LastTrackPreference,context.MODE_PRIVATE);
         //this.imei=imei;
         // this.fDate=fDate;
         mTaskListner=(TaskListner)context;
@@ -186,7 +192,7 @@ class XMLFileUploadAsyncTask extends AsyncTask<Void,Void,Boolean>
                             dbengine.upDateTblXmlFile(xmlFileName);
                             dbengine.deleteXmlTable("4");
 
-
+                            updateSharePref();
                             deleteViewdXml(CommonInfo.OrderXMLFolder + "/" + xmlFileName + ".xml");
                             deleteViewdXml(CommonInfo.OrderXMLFolder + "/" + xmlFileName + ".zip");
 
@@ -342,6 +348,15 @@ class XMLFileUploadAsyncTask extends AsyncTask<Void,Void,Boolean>
             mContext.sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED,
                     Uri.parse("file://" + Environment.getExternalStorageDirectory())));
         }
+    }
+
+    public void updateSharePref()
+    {
+        long syncTIMESTAMP = System.currentTimeMillis();
+        Date dateobj = new Date(syncTIMESTAMP);
+        SimpleDateFormat df = new SimpleDateFormat("dd/MMM HH:mm:ss", Locale.ENGLISH);
+        String lstDataSync = df.format(dateobj);
+        pref.edit().putString("LastSync",lstDataSync ).commit();
     }
 }
 

@@ -30,6 +30,7 @@ import org.xml.sax.InputSource;
 
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.SharedPreferences;
 
 import com.astix.Common.CommonInfo;
 
@@ -39,6 +40,7 @@ public class ServiceWorker
 	
 	public static int flagExecutedServiceSuccesfully=0;
 	public int chkTblStoreListContainsRow=1;
+
 	
     //Live Path WebServiceAndroidParagSFATesting
 	//public String UrlForWebService="http://115.124.126.184/WebServiceAndroidParagSFA/Service.asmx";
@@ -4576,6 +4578,9 @@ String RouteType="0";
 			InputSource is = new InputSource();
 			is.setCharacterStream(new StringReader(name));
 			Document doc = db.parse(is);
+
+			//nitishdubey
+			StoreSelection.flgChangeRouteOrDayEnd=0;
 
 			//  dbengine.deleteDistributorStockTbles();
 

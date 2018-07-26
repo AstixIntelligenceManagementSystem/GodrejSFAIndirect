@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
@@ -79,6 +80,7 @@ public class CollectionActivityNew extends BaseActivity  implements DatePickerDi
         GoogleApiClient.OnConnectionFailedListener
 {
     String intentFrom;
+    SharedPreferences   pref;
 /* For Location Srvices Start*/
 public String VisitTimeInSideStore="NA";
     public  int flgRestartOrderReview=0;
@@ -202,6 +204,7 @@ public Double OverAllAmountCollected=0.0;
 
         locationManager=(LocationManager) this.getSystemService(LOCATION_SERVICE);
 
+        pref=getSharedPreferences(CommonInfo.LastTrackPreference, MODE_PRIVATE);
         boolean isGPSok = false;
         boolean isNWok=false;
         isGPSok = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -2055,8 +2058,15 @@ public Double OverAllAmountCollected=0.0;
             }
             try
             {
+              //nitishdubey
                 StoreSelection.flgChangeRouteOrDayEnd=0;
+                long syncTIMESTAMP = System.currentTimeMillis();
+                Date dateobj = new Date(syncTIMESTAMP);
+                SimpleDateFormat df = new SimpleDateFormat("dd/MMM HH:mm:ss", Locale.ENGLISH);
+                String lstDataSync = df.format(dateobj);
+                pref.edit().putString("LastInvoice",lstDataSync ).commit();
                 Intent syncIntent = new Intent(CollectionActivityNew.this, SyncMaster.class);
+
                 //syncIntent.putExtra("xmlPathForSync", Environment.getExternalStorageDirectory() + "/RSPLSFAXml/" + newfullFileName + ".xml");
                 syncIntent.putExtra("xmlPathForSync", Environment.getExternalStorageDirectory() + "/" + CommonInfo.OrderXMLFolder + "/" + newfullFileName + ".xml");
                 syncIntent.putExtra("OrigZipFileName", newfullFileName);

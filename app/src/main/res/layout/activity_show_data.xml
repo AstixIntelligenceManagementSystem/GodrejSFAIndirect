@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    >
     
     
     <RelativeLayout 
@@ -51,8 +51,87 @@
 >
 
 </RelativeLayout>
-    
-     <ListView 
+
+    <LinearLayout
+        android:id="@+id/ll_Sctn"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/rtv_hdr"
+        android:padding="16dp"
+        android:layout_above="@+id/ll_syncedDtls"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:padding="2dp"
+            android:background="@drawable/card_background_invoice"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:padding="2dp"
+                android:background="@drawable/card_background_alert_dayend"
+                android:text="Today Invoice"/>
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fadeScrollbars="false"
+                android:scrollbarFadeDuration="0">
+            <LinearLayout
+                android:id="@+id/ll_todayInvoice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+               >
+
+            </LinearLayout>
+            </ScrollView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="2dp"
+            android:orientation="vertical"
+            android:padding="2dp"
+
+            android:background="@drawable/card_background_collection"
+            android:layout_weight="1">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:padding="2dp"
+                android:background="@drawable/card_background_alert_dayend"
+                android:text="Today Collection"/>
+
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fadeScrollbars="false"
+               >
+                <LinearLayout
+                    android:id="@+id/ll_todayCllctn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    >
+
+                </LinearLayout>
+            </ScrollView>
+        </LinearLayout>
+
+    </LinearLayout>
+    <!-- <ListView
      android:id="@+id/listView1" 
      android:layout_width="match_parent"
      android:layout_height="match_parent" 
@@ -61,6 +140,96 @@
      android:divider="#F5DEA0"
      android:dividerHeight="1dp"
      />
-    
+    -->
 
-</LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_syncedDtls"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="2dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/card_background_alert_dayend"
+            android:orientation="horizontal">
+            <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="#000000"
+
+            android:text="Last Stock Confirm"/>
+            <TextView
+                android:id="@+id/txt_lsc"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="#000000"
+                android:text=": NA"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/card_background_alert_dayend"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="#000000"
+                android:text="Last Invoice Generated"/>
+            <TextView
+                android:id="@+id/txt_lstSyncdData"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="#000000"
+                android:text=": NA"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/card_background_alert_dayend"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="#000000"
+                android:text="Last Data Synced"/>
+            <TextView
+                android:id="@+id/txt_lstInvcSyncd"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="#000000"
+                android:text=": NA"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/card_background_alert_dayend"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="#000000"
+                android:text="Last Visit Time"/>
+            <TextView
+                android:id="@+id/txt_lstVisitTime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="#000000"
+                android:text=": NA"/>
+
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

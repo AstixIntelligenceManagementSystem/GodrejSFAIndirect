@@ -38,6 +38,7 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 
+import android.content.SharedPreferences;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -62,7 +63,7 @@ public class SyncMaster extends Activity
 
 	public Timer timerForDataSubmission;
 	public	MyTimerTaskForDataSubmission myTimerTaskForDataSubmission;
-
+	SharedPreferences pref;
 
 
 	// New Sync way
@@ -772,7 +773,7 @@ public class SyncMaster extends Activity
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_sync_master);
-
+		pref=getSharedPreferences(CommonInfo.LastTrackPreference, MODE_PRIVATE);
 		_activity = this;
 		//System.out.println("Induwati 0");
 		Intent syncIntent = getIntent();
@@ -2264,6 +2265,11 @@ if(NoOfOutletID.length>0)
 			        	}
 			        	else
 			        	{
+							long syncTIMESTAMP = System.currentTimeMillis();
+							Date dateobj = new Date(syncTIMESTAMP);
+							SimpleDateFormat df = new SimpleDateFormat("dd/MMM HH:mm:ss", Locale.ENGLISH);
+							String lstDataSync = df.format(dateobj);
+							pref.edit().putString("LastSync",lstDataSync ).commit();
 							if(pDialogGetStores.isShowing())
 							{
 								pDialogGetStores.dismiss();

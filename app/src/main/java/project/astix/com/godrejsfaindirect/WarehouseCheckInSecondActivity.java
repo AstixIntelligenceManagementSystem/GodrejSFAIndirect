@@ -58,6 +58,7 @@ import java.util.zip.ZipOutputStream;
 
 public class WarehouseCheckInSecondActivity extends BaseActivity implements CategoryCommunicator {
 
+    SharedPreferences pref;
     LinkedHashMap<String, String> hmapctgry_details = new LinkedHashMap<String, String>();
     public int StoreCurrentStoreType=0;
     LinkedHashMap<String, String> hmapctgry_detaeils=new LinkedHashMap<String, String>();
@@ -121,7 +122,7 @@ public TextView tv_MsgIfNoRecords;
         setContentView(R.layout.activity_warehouse_entry);
 
         dbengine=new PRJDatabase(WarehouseCheckInSecondActivity.this);
-
+        pref=getSharedPreferences(CommonInfo.LastTrackPreference, MODE_PRIVATE);
 
         hmapDistPrdctStockCount=dbengine.getDistStockCountName();
         CounttblDistributorProductLeft=dbengine.fnCounttblDistributorProductLeft();
@@ -308,6 +309,7 @@ void conFirmBtn(){
             if(!userId.equals("0"))
             {
               //
+
                 new FullSyncDataNow(WarehouseCheckInSecondActivity.this).execute();
             }
 
@@ -395,6 +397,11 @@ void conFirmBtn(){
                 alertToRePopulateData();
             }
             else {
+                long syncTIMESTAMP = System.currentTimeMillis();
+                Date dateobj = new Date(syncTIMESTAMP);
+                SimpleDateFormat df = new SimpleDateFormat("dd/MMM HH:mm:ss", Locale.ENGLISH);
+                String stkSync = df.format(dateobj);
+                pref.edit().putString("StockSyncData",stkSync).commit();
                 dbengine.insertConfirmWArehouse(userId,"1");
                 dbengine.inserttblDayCheckIn(1);
                 Intent i=new Intent(WarehouseCheckInSecondActivity.this,AllButtonActivity.class);

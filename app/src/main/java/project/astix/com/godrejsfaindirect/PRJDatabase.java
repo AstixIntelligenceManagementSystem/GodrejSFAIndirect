@@ -20307,45 +20307,7 @@ open();
         }
     }
 
-    public LinkedHashMap<String, String> fetch_StoreInvoiceWiseData_List()
-    {
-        int incoiceCount=fetch_Store_invoiceCount();
 
-        open();
-        LinkedHashMap<String,String>hmapInvoiceCaptionPrefixAndSuffix=fetch_InvoiceCaptionPrefixAndSuffix();
-        LinkedHashMap<String, String> hmapCatgry = new LinkedHashMap<String, String>();
-
-
-        Cursor cursor = db.rawQuery("SELECT tblInvoiceHeader.StoreID, tblStoreList.StoreName,IFNULL(tblInvoiceHeader.InvoiceVal,0),tblInvoiceHeader.InvoiceNumber FROM tblInvoiceHeader inner join tblStoreList on tblInvoiceHeader.StoreID=tblStoreList.StoreID WHERE tblInvoiceHeader.StoreID=tblStoreList.StoreID AND  tblInvoiceHeader.Sstat=3 OR tblInvoiceHeader.Sstat=4 OR tblInvoiceHeader.Sstat=5 OR tblInvoiceHeader.Sstat=6", null); //order by AutoIdOutlet Desc
-
-        try
-        {
-            if(cursor.getCount()>0)
-            {
-                if (cursor.moveToFirst())
-                {
-
-                    for (int i = 0; i <= (cursor.getCount() - 1); i++)
-                    {
-                        hmapCatgry.put((i+1)+")  "+cursor.getString(1).toString() + " [ Invoice Number:->"+hmapInvoiceCaptionPrefixAndSuffix.get("INVPrefix")+"-"+cursor.getString(3).toString()+"/"+hmapInvoiceCaptionPrefixAndSuffix.get("INVSuffix")+" ]" + " [ Invoice Value:->"+cursor.getString(2).toString()+" ]",cursor.getString(0).toString());
-                        cursor.moveToNext();
-                    }
-                }
-            }
-            else
-            {
-                hmapCatgry.put("No Submitted Invoices", "0");
-            }
-            return hmapCatgry;
-        }
-        finally
-        {
-            if(cursor!=null) {
-                cursor.close();
-            }
-            close();
-        }
-    }
 
     public long savetblMessageTextFileContainer(String FileName,int FileFlag)
     {
@@ -32712,6 +32674,155 @@ close();
     {
         db.execSQL("DELETE FROM tblReasonForNoSales");
     }
+
+    public LinkedHashMap<String, ArrayList<String>> fetch_StoreInvoiceWiseCollection_List()
+    {
+
+
+        open();
+        LinkedHashMap<String,String>hmapInvoiceCaptionPrefixAndSuffix=fetch_InvoiceCaptionPrefixAndSuffix();
+        LinkedHashMap<String, String> hmapCatgry = new LinkedHashMap<String, String>();
+        LinkedHashMap<String, ArrayList<String>> hmapStoreList = new LinkedHashMap<String, ArrayList<String>>();
+        ArrayList<String> collectionRecords=new ArrayList<String>();
+        String currentKey="";
+        String preVisouKey="";
+//       tblAllCollectionData (StoreVisitCode text not null,StoreID text not null, PaymentMode text null,PaymentModeID text null, Amount text null, RefNoChequeNoTrnNo text null, Date text null, Bank text null,Sstat text null,TmpInvoiceCodePDA text null,CollectionCode text null);";
+        Cursor cursor = db.rawQuery("SELECT tblAllCollectionData.StoreID, tblStoreList.StoreName,Sum(IFNULL(tblAllCollectionData.Amount,0)),tblAllCollectionData.CollectionCode,tblAllCollectionData.Sstat FROM tblAllCollectionData inner join tblStoreList on tblAllCollectionData.StoreID=tblStoreList.StoreID  WHERE tblAllCollectionData.StoreID=tblStoreList.StoreID AND  tblAllCollectionData.Sstat=3 OR tblAllCollectionData.Sstat=4 OR tblAllCollectionData.Sstat=5 OR tblAllCollectionData.Sstat=6 Group by tblAllCollectionData.StoreVisitCode,tblAllCollectionData.CollectionCode,tblAllCollectionData.Sstat", null); //order by AutoIdOutlet Desc
+
+        try
+        {
+            if(cursor.getCount()>0)
+            {
+                if (cursor.moveToFirst())
+                {
+
+                    for (int i = 0; i <= (cursor.getCount() - 1); i++)
+                    {
+                       /* if(!hmapStoreList.containsKey(cursor.getString(0).toString()+"^"+cursor.getString(1).toString()))
+                        {
+
+                        }
+                        hmapCatgry.put((i+1)+")  "+cursor.getString(1).toString() + " [ Invoice Number:->"+hmapInvoiceCaptionPrefixAndSuffix.get("INVPrefix")+"-"+cursor.getString(3).toString()+"/"+hmapInvoiceCaptionPrefixAndSuffix.get("INVSuffix")+" ]" + " [ Invoice Value:->"+cursor.getString(2).toString()+" ]",cursor.getString(0).toString());
+                        cursor.moveToNext();*/
+                        currentKey= cursor.getString(0).toString()+"^"+cursor.getString(1).toString();
+                        if(i==0)
+                        {
+                            preVisouKey= currentKey;
+                            //collectionRecords.add(hmapInvoiceCaptionPrefixAndSuffix.get("INVPrefix")+"-"+cursor.getString(3).toString()+"/"+hmapInvoiceCaptionPrefixAndSuffix.get("INVSuffix")+"^"+cursor.getString(2).toString()+"^"+cursor.getString(4).toString());
+                            collectionRecords.add(cursor.getString(3).toString().substring(38,48)+"^"+cursor.getString(2).toString()+"^"+cursor.getString(4).toString());
+                        }
+                        else if(preVisouKey.equals(currentKey))
+                        {
+                            collectionRecords.add(cursor.getString(3).toString().substring(38,48)+"^"+cursor.getString(2).toString()+"^"+cursor.getString(4).toString());
+                        }
+                        else
+                        {
+                            hmapStoreList.put(preVisouKey, collectionRecords);
+                            collectionRecords=new ArrayList<String>();
+                            preVisouKey=currentKey;
+                            collectionRecords.add(cursor.getString(3).toString().substring(38,48)+"^"+cursor.getString(2).toString()+"^"+cursor.getString(4).toString());
+
+                        }
+                        if(i==cursor.getCount() - 1)
+                        {
+                            hmapStoreList.put(preVisouKey, collectionRecords);
+                        }
+
+
+                        cursor.moveToNext();
+                    }
+                }
+            }
+            else
+            {
+
+            }
+            return hmapStoreList;
+        }
+        finally
+        {
+            if(cursor!=null) {
+                cursor.close();
+            }
+            close();
+        }
+    }
+
+    public LinkedHashMap<String, ArrayList<String>> fetch_StoreInvoiceWiseData_List()
+    {
+        int incoiceCount=fetch_Store_invoiceCount();
+
+        open();
+        LinkedHashMap<String,String>hmapInvoiceCaptionPrefixAndSuffix=fetch_InvoiceCaptionPrefixAndSuffix();
+        LinkedHashMap<String, String> hmapCatgry = new LinkedHashMap<String, String>();
+        LinkedHashMap<String, ArrayList<String>> hmapStoreList = new LinkedHashMap<String, ArrayList<String>>();
+        ArrayList<String> invoiceRecords=new ArrayList<String>();
+        String currentKey="";
+        String preVisouKey="";
+        Cursor cursor = db.rawQuery("SELECT tblInvoiceHeader.StoreID, tblStoreList.StoreName,IFNULL(tblInvoiceHeader.InvoiceVal,0),tblInvoiceHeader.InvoiceNumber,tblInvoiceHeader.Sstat FROM tblInvoiceHeader inner join tblStoreList on tblInvoiceHeader.StoreID=tblStoreList.StoreID WHERE  tblInvoiceHeader.Sstat=3 OR tblInvoiceHeader.Sstat=4 OR tblInvoiceHeader.Sstat=5 OR tblInvoiceHeader.Sstat=6", null); //order by AutoIdOutlet Desc
+
+        try
+        {
+            if(cursor.getCount()>0)
+            {
+                if (cursor.moveToFirst())
+                {
+
+                    for (int i = 0; i <= (cursor.getCount() - 1); i++)
+                    {
+                       /* if(!hmapStoreList.containsKey(cursor.getString(0).toString()+"^"+cursor.getString(1).toString()))
+                        {
+
+                        }
+                        hmapCatgry.put((i+1)+")  "+cursor.getString(1).toString() + " [ Invoice Number:->"+hmapInvoiceCaptionPrefixAndSuffix.get("INVPrefix")+"-"+cursor.getString(3).toString()+"/"+hmapInvoiceCaptionPrefixAndSuffix.get("INVSuffix")+" ]" + " [ Invoice Value:->"+cursor.getString(2).toString()+" ]",cursor.getString(0).toString());
+                        cursor.moveToNext();*/
+                        currentKey= cursor.getString(0).toString()+"^"+cursor.getString(1).toString();
+                        if(i==0)
+                        {
+                            preVisouKey= currentKey;
+                            //invoiceRecords.add(hmapInvoiceCaptionPrefixAndSuffix.get("INVPrefix")+"-"+cursor.getString(3).toString()+"/"+hmapInvoiceCaptionPrefixAndSuffix.get("INVSuffix")+"^"+cursor.getString(2).toString()+"^"+cursor.getString(4).toString());
+                            invoiceRecords.add(cursor.getString(3).toString()+"^"+cursor.getString(2).toString()+"^"+cursor.getString(4).toString());
+                        }
+                        else if(preVisouKey.equals(currentKey))
+                        {
+                            invoiceRecords.add(cursor.getString(3).toString()+"^"+cursor.getString(2).toString()+"^"+cursor.getString(4).toString());
+                        }
+                        else
+                        {
+                            hmapStoreList.put(preVisouKey, invoiceRecords);
+                            invoiceRecords=new ArrayList<String>();
+                            preVisouKey=currentKey;
+                            invoiceRecords.add(cursor.getString(3).toString()+"^"+cursor.getString(2).toString()+"^"+cursor.getString(4).toString());
+
+                        }
+                        if(i==cursor.getCount() - 1)
+                        {
+                            hmapStoreList.put(preVisouKey, invoiceRecords);
+                        }
+
+
+                        cursor.moveToNext();
+                    }
+                }
+            }
+            else
+            {
+
+            }
+            return hmapStoreList;
+        }
+        finally
+        {
+            if(cursor!=null) {
+                cursor.close();
+            }
+            close();
+        }
+    }
+
+
+
+
 
     public String fnGetCollectionCodePDA (String StoreID,String StoreVisitCode)
     {
