@@ -1,9 +1,9 @@
 <resources>
 
-    <!-- <string name="app_name">Godrej SFA</string>-->
+    <string name="app_name">Godrej SFA</string>
     <!-- <string name="app_name">Godrej SFA Stagging</string>-->
    <!-- <string name="app_name">Godrej SFA Test</string>-->
-   <string name="app_name">Godrej SFA Dev</string>
+  <!-- <string name="app_name">Godrej SFA Dev</string>-->
 
 
     <!--Alert Box message-->

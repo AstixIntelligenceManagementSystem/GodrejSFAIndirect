@@ -31288,7 +31288,7 @@ close();
         try
         {
             open();
-            cursorE2 = db.rawQuery("SELECT COUNT(*) FROM tblStoreList", null);
+            cursorE2 = db.rawQuery("SELECT COUNT(*) FROM tblStoreList where ISNewStore<>1", null);
 
             if (cursorE2.moveToFirst())
             {

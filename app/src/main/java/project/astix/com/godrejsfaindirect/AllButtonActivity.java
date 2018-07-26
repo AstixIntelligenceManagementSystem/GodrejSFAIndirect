@@ -4220,6 +4220,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
             {
                 try
                 {
+
                     serviceException=false;
                     showAlertException(getResources().getString(R.string.txtError),getResources().getString(R.string.txtErrorRetrievingData)+serviceExceptionCode);
                 }
