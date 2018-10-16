@@ -15,6 +15,9 @@ import java.util.regex.Pattern;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
 import android.view.Gravity;
 import android.view.View;
@@ -38,7 +41,7 @@ public class CheckDatabaseData extends BaseActivity
 	SharedPreferences pref;
 	ArrayAdapter<String> dataAdapter = null;
 	 String[] storeNames;
-	 LinearLayout ll_todayInvoice,ll_todayCllctn;
+	 RecyclerView rcyclrVw_InvcCllctnDetails;
 	 TextView txt_lsc,txt_lstSyncdData,txt_lstInvcSyncd,txt_lstVisitTime;
 	 LinkedHashMap<String, String> hmapStore_details=new LinkedHashMap<String, String>();
 	LinkedHashMap<String, ArrayList<String>> hmapStoreCollection;
@@ -79,14 +82,15 @@ public class CheckDatabaseData extends BaseActivity
 		 getAllStoreListDetail();
 		 
 		 initialization();
-        inflateStoreData();
+      //  inflateStoreData();
 	}
 	
 
 	private void getAllStoreListDetail() 
 	{
-		hmapStoreCollection=dbengine.fetch_StoreInvoiceWiseCollection_List();
-		hmapStoreInvoice=dbengine.fetch_StoreInvoiceWiseData_List();
+		//hmapStoreCollection=dbengine.fetch_StoreInvoiceWiseCollection_List();
+		//hmapStoreInvoice=dbengine.fetch_StoreInvoiceWiseData_List();
+		hmapStoreInvoice=dbengine.fnCheckInvoiceCollectionReports();
 			
 
 	    	
@@ -95,9 +99,9 @@ public class CheckDatabaseData extends BaseActivity
 	
 	public void initialization()
 	{
-		
-		 ll_todayCllctn=(LinearLayout)findViewById(R.id.ll_todayCllctn);
-		 ll_todayInvoice=(LinearLayout)findViewById(R.id.ll_todayInvoice);
+
+		rcyclrVw_InvcCllctnDetails=(RecyclerView) findViewById(R.id.rcyclrVw_InvcCllctnDetails);
+
 		 txt_lsc=(TextView) findViewById(R.id.txt_lsc);
 		 txt_lstSyncdData=(TextView)findViewById(R.id.txt_lstSyncdData);
 		 txt_lstInvcSyncd=(TextView) findViewById(R.id.txt_lstInvcSyncd);
@@ -144,81 +148,13 @@ public class CheckDatabaseData extends BaseActivity
 				
 			}
 		});
-		
-		
 
 
-
-	}
-
-	public void inflateStoreData()
-	{
-		ll_todayInvoice.removeAllViews();
-		if(hmapStoreInvoice!=null && hmapStoreInvoice.size()>0)
-		{
-			for(Map.Entry<String,ArrayList<String>> entryInvoice:hmapStoreInvoice.entrySet())
-			{
-				View viewStoreInfo=getLayoutInflater().inflate(R.layout.store_report_info, null);
-				TextView txt_StoreName= (TextView) viewStoreInfo.findViewById(R.id.txt_StoreName);
-				LinearLayout ll_reportDesc= (LinearLayout) viewStoreInfo.findViewById(R.id.ll_reportDesc);
-				txt_StoreName.setText(entryInvoice.getKey().split(Pattern.quote("^"))[1]);
-				TextView txtInvoiceNumHdr=getTextView("Invoice Number",true);
-				TextView txtInvoiceValHdr=getTextView("Invoice Value",true);
-				//TextView txtInvoiceStatusHdr=getTextView("Status",true);
-				//txtInvoiceStatusHdr
-				LinearLayout ll_headerForInvoiceHdr=getLinearLayoutHorizontal2Desc(txtInvoiceNumHdr,txtInvoiceValHdr);
-				ll_reportDesc.addView(ll_headerForInvoiceHdr);
-				ArrayList<String> listStrInvcDtls=entryInvoice.getValue();
-				if(listStrInvcDtls!=null && listStrInvcDtls.size()>0)
-				{
-					for(String invoiceInfo:listStrInvcDtls)
-					{
-						TextView txtInvoiceNum=getTextView(invoiceInfo.split(Pattern.quote("^"))[0],false);
-						TextView txtInvoiceVal=getTextView(invoiceInfo.split(Pattern.quote("^"))[1],false);
-						//TextView txtInvoiceStatus=getTextView(invoiceInfo.split(Pattern.quote("^"))[2],false);
-						//txtInvoiceStatus
-						LinearLayout ll_headerForInvoice=getLinearLayoutHorizontal2Desc(txtInvoiceNum,txtInvoiceVal);
-						ll_reportDesc.addView(ll_headerForInvoice);
-					}
-				}
-
-				ll_todayInvoice.addView(viewStoreInfo);
-			}
-		}
-
-		if(hmapStoreCollection!=null && hmapStoreCollection.size()>0)
-		{
-			for(Map.Entry<String,ArrayList<String>> entryCollection:hmapStoreCollection.entrySet())
-			{
-				View viewStoreInfo=getLayoutInflater().inflate(R.layout.store_report_info, null);
-				TextView txt_StoreName= (TextView) viewStoreInfo.findViewById(R.id.txt_StoreName);
-				LinearLayout ll_reportDesc= (LinearLayout) viewStoreInfo.findViewById(R.id.ll_reportDesc);
-				txt_StoreName.setText(entryCollection.getKey().split(Pattern.quote("^"))[1]);
-				TextView txtInvoiceNumHdr=getTextView("Collection Code",true);
-				TextView txtInvoiceValHdr=getTextView("Collection Value",true);
-				//TextView txtInvoiceStatusHdr=getTextView("Status",true);
-				//txtInvoiceStatusHdr
-				LinearLayout ll_headerForInvoiceHdr=getLinearLayoutHorizontal2Desc(txtInvoiceNumHdr,txtInvoiceValHdr);
-				ll_reportDesc.addView(ll_headerForInvoiceHdr);
-				ArrayList<String> listStrInvcDtls=entryCollection.getValue();
-				if(listStrInvcDtls!=null && listStrInvcDtls.size()>0)
-				{
-					for(String invoiceInfo:listStrInvcDtls)
-					{
-						TextView txtInvoiceNum=getTextView(invoiceInfo.split(Pattern.quote("^"))[0],false);
-						TextView txtInvoiceVal=getTextView(invoiceInfo.split(Pattern.quote("^"))[1],false);
-						//TextView txtInvoiceStatus=getTextView(invoiceInfo.split(Pattern.quote("^"))[2],false);
-						//txtInvoiceStatus
-						LinearLayout ll_headerForCollection=getLinearLayoutHorizontal2Desc(txtInvoiceNum,txtInvoiceVal);
-						ll_reportDesc.addView(ll_headerForCollection);
-					}
-				}
-
-				ll_todayCllctn.addView(viewStoreInfo);
-			}
-		}
-
-
+		InvoiceCollectionInfoAdapter mAdapter = new InvoiceCollectionInfoAdapter(CheckDatabaseData.this,hmapStoreInvoice);
+		RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+		rcyclrVw_InvcCllctnDetails.setLayoutManager(mLayoutManager);
+		rcyclrVw_InvcCllctnDetails.setItemAnimator(new DefaultItemAnimator());
+		rcyclrVw_InvcCllctnDetails.setAdapter(mAdapter);
 
 
 	}
@@ -248,6 +184,7 @@ public class CheckDatabaseData extends BaseActivity
 
 		return txtVw_ques;
 	}
+
 
 	//, TextView lay3
 	private LinearLayout getLinearLayoutHorizontal2Desc(TextView lay1, TextView lay2) {

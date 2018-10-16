@@ -32866,6 +32866,72 @@ close();
         }
         return chkI;
     }
+
+
+    public LinkedHashMap<String, ArrayList<String>>  fnCheckInvoiceCollectionReports()
+    {
+
+        LinkedHashMap<String, ArrayList<String>> hmapStoreList = new LinkedHashMap<String, ArrayList<String>>();
+        ArrayList<String> arrAllRecords=new ArrayList<String>();
+        String currentKey="";
+        String preVisouKey="";
+        open();
+     //   Cursor cursorE2 = db.rawQuery("SELECT tblStoreVisitMstr.StoreID,tblStoreList.StoreName,ifnull(tblInvoiceHeader.InvoiceNumber,'NA') AS InvoiceNumber,CASE WHEN SUM(ifnull(tblInvoiceDetails.OrderQty,0))=0 THEN 'NA' ELSE SUM(tblInvoiceDetails.OrderQty) END  AS OrderQty,ifnull(tblInvoiceHeader.InvoiceVal,'NA') AS InvoiceVal,CASE WHEN SUM(ifnull(tblAllCollectionData.Amount,0))=0 THEN 'NA' ELSE SUM(tblAllCollectionData.Amount) END  AS Amount FROM tblStoreVisitMstr Left Outer JOIN tblStoreList ON tblStoreVisitMstr.StoreID=tblStoreList.StoreID Left outer JOIN tblInvoiceHeader ON tblStoreVisitMstr.StoreVisitCode=tblInvoiceHeader.StoreVisitCode left outer JOIN tblAllCollectionData ON tblStoreVisitMstr.StoreVisitCode=tblAllCollectionData.StoreVisitCode Inner JOIN tblInvoiceDetails ON tblInvoiceHeader.InvoiceNumber=tblInvoiceDetails.InvoiceNumber WHERE (tblStoreVisitMstr.Sstat=3 OR tblStoreVisitMstr.Sstat=4 OR tblStoreVisitMstr.Sstat=5 OR tblStoreVisitMstr.Sstat=6)", null);
+        Cursor cursor = db.rawQuery("SELECT tblStoreVisitMstr.StoreID,tblStoreList.StoreName,InvHdr.InvoiceNumber AS InvoiceNumber1,SUM(InvDtl.OrderQty) AS OrderQty1,InvHdr.InvoiceVal AS InvoiceVal1,SUM(ClctnData.Amount) AS Amount1 FROM tblStoreVisitMstr Inner JOIN tblStoreList ON tblStoreVisitMstr.StoreID=tblStoreList.StoreID Left outer JOIN (Select tblInvoiceHeader.InvoiceNumber from tblInvoiceHeader Where tblInvoiceHeader.Sstat=3 OR tblInvoiceHeader.Sstat=4 OR tblInvoiceHeader.Sstat=5 OR tblInvoiceHeader.Sstat=6) InvHdr ON tblStoreVisitMstr.StoreVisitCode=InvHdr.StoreVisitCode left outer JOIN (Select tblAllCollectionData.Amount from tblAllCollectionData Where tblAllCollectionData.Sstat=3 OR tblAllCollectionData.Sstat=4 OR tblAllCollectionData.Sstat=5 OR tblAllCollectionData.Sstat=6) ClctnData ON tblStoreVisitMstr.StoreVisitCode=ClctnData.StoreVisitCode inner join (Select OrderQty from tblInvoiceDetails) InvDtl ON InvHdr.InvoiceNumber=InvDtl.InvoiceNumber WHERE ((tblStoreVisitMstr.Sstat=3 OR tblStoreVisitMstr.Sstat=4 OR tblStoreVisitMstr.Sstat=5 OR tblStoreVisitMstr.Sstat=6))", null);
+
+        try
+        {
+            if(cursor.getCount()>0)
+            {
+                if (cursor.moveToFirst())
+                {
+
+                    for (int i = 0; i <= (cursor.getCount() - 1); i++)
+                    {
+
+                        currentKey= cursor.getString(0).toString()+"^"+cursor.getString(1).toString();
+                        if(i==0)
+                        {
+                            preVisouKey= currentKey;
+                            arrAllRecords.add(cursor.getString(2)+"^"+cursor.getString(3).toString()+"^"+cursor.getString(4).toString()+"^"+cursor.getString(5).toString());
+                        }
+                        else if(preVisouKey.equals(currentKey))
+                        {
+                            arrAllRecords.add(cursor.getString(2)+"^"+cursor.getString(3).toString()+"^"+cursor.getString(4).toString()+"^"+cursor.getString(5).toString());
+                        }
+                        else
+                        {
+                            hmapStoreList.put(preVisouKey, arrAllRecords);
+                            arrAllRecords=new ArrayList<String>();
+                            preVisouKey=currentKey;
+                            arrAllRecords.add(cursor.getString(2)+"^"+cursor.getString(3).toString()+"^"+cursor.getString(4).toString()+"^"+cursor.getString(5).toString());
+
+                        }
+                        if(i==cursor.getCount() - 1)
+                        {
+                            hmapStoreList.put(preVisouKey, arrAllRecords);
+                        }
+
+
+                        cursor.moveToNext();
+                    }
+                }
+            }
+            else
+            {
+
+            }
+            return hmapStoreList;
+        }
+        finally
+        {
+            if(cursor!=null) {
+                cursor.close();
+            }
+            close();
+        }
+
+    }
 }
 
 

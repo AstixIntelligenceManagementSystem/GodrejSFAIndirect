@@ -53,100 +53,10 @@
 </RelativeLayout>
 
     <LinearLayout
-        android:id="@+id/ll_Sctn"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/rtv_hdr"
-        android:padding="16dp"
-        android:layout_above="@+id/ll_syncedDtls"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:padding="2dp"
-            android:background="@drawable/card_background_invoice"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                android:textSize="14sp"
-                android:padding="2dp"
-                android:background="@drawable/card_background_alert_dayend"
-                android:text="Today Invoice"/>
-
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fadeScrollbars="false"
-                android:scrollbarFadeDuration="0">
-            <LinearLayout
-                android:id="@+id/ll_todayInvoice"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-               >
-
-            </LinearLayout>
-            </ScrollView>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="2dp"
-            android:orientation="vertical"
-            android:padding="2dp"
-
-            android:background="@drawable/card_background_collection"
-            android:layout_weight="1">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                android:textSize="14sp"
-                android:padding="2dp"
-                android:background="@drawable/card_background_alert_dayend"
-                android:text="Today Collection"/>
-
-
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fadeScrollbars="false"
-               >
-                <LinearLayout
-                    android:id="@+id/ll_todayCllctn"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    >
-
-                </LinearLayout>
-            </ScrollView>
-        </LinearLayout>
-
-    </LinearLayout>
-    <!-- <ListView
-     android:id="@+id/listView1" 
-     android:layout_width="match_parent"
-     android:layout_height="match_parent" 
-     android:background="#FBF1D8"
-     android:layout_marginTop="10dp"
-     android:divider="#F5DEA0"
-     android:dividerHeight="1dp"
-     />
-    -->
-
-    <LinearLayout
         android:id="@+id/ll_syncedDtls"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/rtv_hdr"
         android:orientation="vertical">
 
         <LinearLayout
@@ -156,12 +66,12 @@
             android:background="@drawable/card_background_alert_dayend"
             android:orientation="horizontal">
             <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textColor="#000000"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="#000000"
 
-            android:text="Last Stock Confirm"/>
+                android:text="Last Stock Confirm"/>
             <TextView
                 android:id="@+id/txt_lsc"
                 android:layout_width="0dp"
@@ -232,4 +142,62 @@
 
         </LinearLayout>
     </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_invoiceCllctnHdr"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll_syncedDtls"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/black"
+            android:gravity="center"
+            android:background="@drawable/table_row_last_bg"
+            android:text="Str Name"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/black"
+            android:gravity="center"
+            android:background="@drawable/table_row_last_bg"
+            android:text="Inv Num"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:background="@drawable/table_row_last_bg"
+            android:text="Inv Val"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/black"
+            android:gravity="center"
+            android:background="@drawable/table_row_last_bg"
+            android:text="Prdct Qty"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:background="@drawable/table_row_last_bg"
+            android:text="Collection"/>
+    </LinearLayout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rcyclrVw_InvcCllctnDetails"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical"
+       android:layout_below="@+id/ll_invoiceCllctnHdr"
+        >
+
+
+    </android.support.v7.widget.RecyclerView>
+
 </RelativeLayout>
